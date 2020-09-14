@@ -1,11 +1,9 @@
 const resolvers = {
   Major: {
-    faculties: (major, _, { dataSources }) => {
-      // ({ code }, args, { dataSources }) => {
-      return major.faculties.map((faculty) =>
+    faculties: ({ faculties }, _, { dataSources }) => {
+      return faculties.map((faculty) =>
         dataSources.facultyAPI.getFaculty(faculty)
       );
-      // return context.dataSources.majorsAPI.getMajor(code);
     },
   },
   Query: {
