@@ -9,6 +9,8 @@ import {
 } from "./datasources/person";
 
 import TestAPI from "./datasources/test";
+import FacultiesAPI from "./datasources/faculties";
+import MajorsAPI from "./datasources/majors";
 import createStore from "./utils";
 
 const createApolloServer = async (): Promise<
@@ -21,6 +23,8 @@ const createApolloServer = async (): Promise<
   const dataSources = () => ({
     testAPI: new TestAPI({ store }),
     personAPI: new PersonAPI(store.Person),
+    facultiesAPI: new FacultiesAPI(),
+    majorsAPI: new MajorsAPI(),
   });
 
   // the function that sets up the global context for each resolver, using the req

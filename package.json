@@ -16,6 +16,7 @@
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
     "apollo-datasource": "^0.7.2",
+    "apollo-datasource-rest": "^0.9.3",
     "apollo-link-http": "^1.5.17",
     "apollo-server": "^2.17.0",
     "apollo-server-micro": "^2.17.0",
