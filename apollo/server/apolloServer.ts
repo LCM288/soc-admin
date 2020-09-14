@@ -43,6 +43,7 @@ const createApolloServer = async (): Promise<
     dataSources,
     context,
   });
+
   return apolloServer;
 };
 

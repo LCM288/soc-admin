@@ -1,7 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
 import { Client } from "pg";
-import { MemberFactory } from "../../models/member";
-import { RegistrationFactory } from "../../models/registration";
+import { PersonFactory } from "../../models/Person";
 
 const createStore = async () => {
   const socAdminDB = `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDB}`;
@@ -18,7 +17,7 @@ const createStore = async () => {
     });
   };
 
-  await createDB();
+  // await createDB();
 
   const db = new Sequelize(socAdminDB);
 
@@ -28,11 +27,10 @@ const createStore = async () => {
       allowNull: false,
     },
   });
-  const members = MemberFactory(db);
-  const registrations = RegistrationFactory(db);
-  await db.sync();
+  const Person = PersonFactory(db);
+  // await db.sync();
 
-  return { db, tests, members, registrations };
+  return { db, Person };
 };
 
 export default createStore;
