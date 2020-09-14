@@ -1,20 +1,28 @@
+import { DataSource } from "apollo-datasource";
 import { majors } from "./Majors.json";
-import { Faculty } from "./faculty";
 
 export type Major = {
   code: string;
   chinese_name: string;
   english_name: string;
-  faculties: Faculty[];
+  faculties: string[];
 };
 
-const MajorAPI = {
+class MajorAPI extends DataSource {
+  majors: Major[];
+
+  constructor() {
+    super();
+    this.majors = majors;
+  }
+
   getMajor(code: string): Major {
-    return majors.find((m) => m.code === code);
-  },
+    return this.majors.find((m) => m.code === code);
+  }
+
   getMajors(): Major[] {
-    return majors;
-  },
-};
+    return this.majors;
+  }
+}
 
 export default MajorAPI;

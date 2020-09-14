@@ -22,8 +22,8 @@ const createApolloServer = async (): Promise<
   // set up any dataSources our resolvers need
   const dataSources = () => ({
     testAPI: new TestAPI({ store }),
-    facultyAPI: FacultyAPI,
-    majorAPI: MajorAPI,
+    facultyAPI: new FacultyAPI(),
+    majorAPI: new MajorAPI(),
     personAPI: new PersonAPI(store.Person),
   });
 

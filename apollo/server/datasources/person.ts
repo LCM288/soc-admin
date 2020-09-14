@@ -1,14 +1,16 @@
 import { gql } from "apollo-server";
+import { DataSource } from "apollo-datasource";
 import {
   Person,
   PersonAttributes,
   PersonCreationAttributes,
 } from "../../../models/Person";
 
-export class PersonAPI {
+export class PersonAPI extends DataSource {
   private Person: typeof Person;
 
   constructor(person: typeof Person) {
+    super();
     this.Person = person;
   }
 
