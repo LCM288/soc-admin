@@ -1,6 +1,15 @@
 import { DataSource } from "apollo-datasource";
 
+export type Test = {
+  id: string;
+  message: string;
+};
+
 class TestAPI extends DataSource {
+  store: any;
+
+  context: any;
+
   constructor({ store }) {
     super();
     this.store = store;
@@ -16,19 +25,15 @@ class TestAPI extends DataSource {
     this.context = config.context;
   }
 
-  async findTests(): Test[] {
+  async findTests(): Promise<Test[]> {
     const tests = await this.store.tests.findAll();
     return tests || [];
   }
 
-  async insertTestMessage({ message }: { message: string }): Test {
+  async insertTestMessage({ message }: { message: string }): Promise<Test> {
     const test = await this.store.tests.create({ message });
     return test;
   }
 }
 
 export default TestAPI;
-export type Test = {
-  id: string;
-  message: string;
-};

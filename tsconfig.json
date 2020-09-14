@@ -14,11 +14,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "alwaysStrict": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
     "typeRoots": ["./types", "node_modules/@types"]
   },
   "extends": "@tsconfig/recommended/tsconfig.json",
   "exclude": ["node_modules", "types"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"]
+  "include": ["next-env.d.ts", ".eslintrc.js", "**/*.ts", "**/*.tsx", "**/*.js"]
 }
