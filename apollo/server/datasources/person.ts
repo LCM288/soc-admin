@@ -13,7 +13,7 @@ export class PersonAPI {
   }
 
   private static transformData(person: Person): PersonAttributes {
-    return <PersonAttributes>person.dataValues;
+    return person.get({ plain: true });
   }
 
   async findPeople(): Promise<PersonAttributes[]> {
