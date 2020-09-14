@@ -1,11 +1,11 @@
 const resolvers = {
   Major: {
     faculties: (major, _, { dataSources }) => {
-      //({ code }, args, { dataSources }) => {
+      // ({ code }, args, { dataSources }) => {
       return major.faculties.map((faculty) =>
-        dataSources.facultiesAPI.getFaculty(faculty)
+        dataSources.facultyAPI.getFaculty(faculty)
       );
-      //return context.dataSources.majorsAPI.getMajor(code);
+      // return context.dataSources.majorsAPI.getMajor(code);
     },
   },
   Query: {
@@ -16,16 +16,16 @@ const resolvers = {
       return dataSources.testAPI.findTests();
     },
     faculties: async (_, __, { dataSources }) => {
-      return dataSources.facultiesAPI.getFaculties();
+      return dataSources.facultyAPI.getFaculties();
     },
     faculty: async (_, { code }, { dataSources }) => {
-      return dataSources.facultiesAPI.getFaculty(code);
+      return dataSources.facultyAPI.getFaculty(code);
     },
     majors: async (_, __, { dataSources }) => {
-      return dataSources.majorsAPI.getMajors();
+      return dataSources.majorAPI.getMajors();
     },
     major: async (_, { code }, { dataSources }) => {
-      return dataSources.majorsAPI.getMajor(code);
+      return dataSources.majorAPI.getMajor(code);
     },
   },
   Mutation: {
