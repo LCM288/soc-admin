@@ -38,6 +38,11 @@ interface PersonAPIContext {
 }
 
 export const resolvers = {
+  Person: {
+    major: ({ major }, _, { dataSources }) => {
+      return dataSources.majorAPI.getMajor(major);
+    },
+  },
   Query: {
     people: (_, __, { dataSources }: PersonAPIContext) => {
       return dataSources.personAPI.findPeople();
@@ -77,6 +82,10 @@ export const typeDefs = gql`
       dateOfEntry: String!
       expectedGraduationDate: String!
     ): PersonUpdateResponse!
+  }
+
+  extend type Person {
+    major: Major
   }
 
   type PersonUpdateResponse {
