@@ -1,6 +1,12 @@
 import * as apolloServerMicro from "apollo-server-micro";
 import typeDefs from "./schema";
+import { typeDefs as personTypeDefs } from "../../models/Person";
 import resolvers from "./resolvers";
+import {
+  typeDefs as personExtendDefs,
+  resolvers as personResolvers,
+  PersonAPI,
+} from "./datasources/person";
 
 import TestAPI from "./datasources/test";
 import createStore from "./utils";
@@ -14,6 +20,7 @@ const createApolloServer = async (): Promise<
   // set up any dataSources our resolvers need
   const dataSources = () => ({
     testAPI: new TestAPI({ store }),
+    personAPI: new PersonAPI(store.Person),
   });
 
   // the function that sets up the global context for each resolver, using the req
@@ -22,9 +29,13 @@ const createApolloServer = async (): Promise<
     return {};
   };
 
+  const schema = apolloServerMicro.makeExecutableSchema({
+    typeDefs: [typeDefs, personTypeDefs, personExtendDefs],
+    resolvers: [resolvers, personResolvers],
+  });
+
   const apolloServer = new apolloServerMicro.ApolloServer({
-    typeDefs,
-    resolvers,
+    schema,
     dataSources,
     context,
   });
