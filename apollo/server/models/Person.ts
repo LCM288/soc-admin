@@ -33,6 +33,7 @@ export interface PersonAttributes {
   major: string;
   dateOfEntry: Date;
   expectedGraduationDate: Date;
+  memberSince: Date | null;
 }
 
 // Some attributes are optional in `Person.build` and `Person.create` calls
@@ -64,6 +65,8 @@ export class Person
   public dateOfEntry!: Date;
 
   public expectedGraduationDate!: Date;
+
+  public memberSince!: Date | null;
 
   // timestamps!
   public readonly createdAt!: Date;
@@ -122,6 +125,9 @@ export const PersonFactory = (sequelize: Sequelize): typeof Person => {
         type: DataTypes.DATE,
         allowNull: false,
       },
+      memberSince: {
+        type: DataTypes.DATE,
+      },
     },
     {
       sequelize,
@@ -162,5 +168,6 @@ export const typeDefs = gql`
     college: College!
     dateOfEntry: String!
     expectedGraduationDate: String!
+    memberSince: String
   }
 `;

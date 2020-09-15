@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import Head from "next/head";
 import Link from "next/link";
 import styles from "./layout.module.css";

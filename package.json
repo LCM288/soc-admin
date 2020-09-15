@@ -8,7 +8,9 @@
     "start": "next start -p $PORT",
     "format": "prettier --ignore-path .gitignore --write \"**/*.{js,jsx,ts,tsx,html,json,css,scss,gql}\"",
     "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore .",
-    "lintfix": "tsc --noEmit && eslint --fix --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore ."
+    "lintfix": "tsc --noEmit && eslint --fix --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore .",
+    "migrate": "node ./migrations/index.js",
+    "newdb": "node ./migrations/create_db.js"
   },
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",
