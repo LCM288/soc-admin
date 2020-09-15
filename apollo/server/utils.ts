@@ -1,12 +1,17 @@
 import { Sequelize } from "sequelize";
 import { Client } from "pg";
-import { PersonFactory } from "./models/Person";
+import { PersonFactory, Person } from "./models/Person";
 
-const createStore = () => {
+type Store = {
+  sequelize: Sequelize;
+  person: typeof Person;
+};
+
+const createStore = (): Store => {
   if (process.env.NODE_ENV === "development") {
     const client = new Client({ database: "postgres" });
     client.connect();
-    client.query(`CREATE DATABASE ${process.env.PGDB}`, (err) => {
+    client.query(`CREATE DATABASE ${process.env.PGDB}`, () => {
       // create user's db ignoring any error
       client.end(); // close the connection
     });
@@ -16,10 +21,10 @@ const createStore = () => {
 
   const sequelize = new Sequelize(socAdminDB);
 
-  const Person = PersonFactory(sequelize);
+  const person = PersonFactory(sequelize);
   // sequelize.sync({ force: true });
 
-  return { sequelize, Person };
+  return { sequelize, person };
 };
 
 export default createStore;

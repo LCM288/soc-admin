@@ -35,11 +35,11 @@ const store = createStore();
 const dataSources = () => ({
   facultyAPI: new FacultyAPI(),
   majorAPI: new MajorAPI(),
-  personAPI: new PersonAPI(store.Person),
+  personAPI: new PersonAPI(store.person),
 });
 
 // the function that sets up the global context for each resolver, using the req
-const context = async ({ req }) => {
+const context = async () => {
   // TODO: check auth
   return {};
 };
