@@ -79,7 +79,7 @@ export const typeDefs = gql`
 
   type PersonUpdateResponse {
     success: Boolean!
-    message: String
+    message: String!
     person: Person
   }
 `;

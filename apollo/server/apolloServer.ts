@@ -14,6 +14,14 @@ import {
   resolvers as personResolvers,
 } from "./resolvers/person";
 import {
+  typeDefs as executiveExtendDefs,
+  resolvers as executiveResolvers,
+} from "./resolvers/executive";
+import {
+  typeDefs as socSettingExtendDefs,
+  resolvers as socSettingResolvers,
+} from "./resolvers/socSetting";
+import {
   typeDefs as facultyExtendDefs,
   resolvers as facultyResolvers,
 } from "./resolvers/faculty";
@@ -65,13 +73,21 @@ const apolloServer = new apolloServerMicro.ApolloServer({
     personTypeDefs,
     personExtendDefs,
     executiveTypeDefs,
+    executiveExtendDefs,
     socSettingTypeDefs,
+    socSettingExtendDefs,
     majorTypeDefs,
     majorExtendDefs,
     facultyTypeDefs,
     facultyExtendDefs,
   ],
-  resolvers: [personResolvers, facultyResolvers, majorResolvers],
+  resolvers: [
+    personResolvers,
+    executiveResolvers,
+    socSettingResolvers,
+    facultyResolvers,
+    majorResolvers,
+  ],
   dataSources,
   context,
 });
