@@ -2,12 +2,16 @@ import { IResolvers } from "apollo-server";
 import FacultyAPI from "../datasources/faculty";
 import MajorAPI from "../datasources/major";
 import PersonAPI from "../datasources/person";
+import ExecutiveAPI from "../datasources/executive";
+import SocSettingAPI from "../datasources/socSetting";
 import { Major } from "../models/Major";
 import { Person } from "../models/Person";
 import { ContextBase } from "./datasources";
 
 export interface ResolverDatasource {
   personAPI: PersonAPI;
+  executiveAPI: ExecutiveAPI;
+  socSettingAPI: SocSettingAPI;
   majorAPI: MajorAPI;
   facultyAPI: FacultyAPI;
 }

@@ -6,6 +6,10 @@ import {
 } from "../models/Person";
 import { ContextBase } from "../types/datasources";
 
+const transformData = (person: Person): PersonAttributes => {
+  return person.get({ plain: true });
+};
+
 export default class PersonAPI extends DataSource<ContextBase> {
   private store: typeof Person;
 
@@ -14,17 +18,15 @@ export default class PersonAPI extends DataSource<ContextBase> {
     this.store = person;
   }
 
-  private static transformData(person: Person): PersonAttributes {
-    return person.get({ plain: true });
-  }
-
-  async findPeople(): Promise<PersonAttributes[]> {
+  public async findPeople(): Promise<PersonAttributes[]> {
     const people = await this.store.findAll();
-    return people.map(PersonAPI.transformData);
+    return people.map(transformData);
   }
 
-  async addNewPerson(arg: PersonCreationAttributes): Promise<PersonAttributes> {
+  public async addNewPerson(
+    arg: PersonCreationAttributes
+  ): Promise<PersonAttributes> {
     const person = await this.store.create(arg);
-    return PersonAPI.transformData(person);
+    return transformData(person);
   }
 }

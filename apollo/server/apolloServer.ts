@@ -3,6 +3,8 @@ import { gql } from "apollo-server";
 
 // models
 import { typeDefs as personTypeDefs } from "./models/Person";
+import { typeDefs as executiveTypeDefs } from "./models/Executive";
+import { typeDefs as socSettingTypeDefs } from "./models/SocSetting";
 import { typeDefs as majorTypeDefs } from "./models/Major";
 import { typeDefs as facultyTypeDefs } from "./models/Faculty";
 
@@ -22,6 +24,8 @@ import {
 
 // datasources
 import PersonAPI from "./datasources/person";
+import ExecutiveAPI from "./datasources/executive";
+import SocSettingAPI from "./datasources/socSetting";
 import FacultyAPI from "./datasources/faculty";
 import MajorAPI from "./datasources/major";
 
@@ -36,6 +40,8 @@ const dataSources = () => ({
   facultyAPI: new FacultyAPI(),
   majorAPI: new MajorAPI(),
   personAPI: new PersonAPI(store.person),
+  executiveAPI: new ExecutiveAPI(store.executive),
+  socSettingAPI: new SocSettingAPI(store.socSetting),
 });
 
 // the function that sets up the global context for each resolver, using the req
@@ -58,6 +64,8 @@ const apolloServer = new apolloServerMicro.ApolloServer({
     dummyTypeDefs,
     personTypeDefs,
     personExtendDefs,
+    executiveTypeDefs,
+    socSettingTypeDefs,
     majorTypeDefs,
     majorExtendDefs,
     facultyTypeDefs,
