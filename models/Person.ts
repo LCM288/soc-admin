@@ -2,8 +2,8 @@ import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import { gql } from "apollo-server";
 
 enum Gender {
-  Male = "M",
-  Female = "F",
+  Male = "Male",
+  Female = "Female",
 }
 
 enum College {

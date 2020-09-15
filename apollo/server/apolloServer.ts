@@ -10,7 +10,7 @@ import {
 
 import TestAPI from "./datasources/test";
 import FacultyAPI from "./datasources/faculty";
-import MajorAPI from "./datasources/major";
+import { MajorAPI } from "./datasources/major";
 import createStore from "./utils";
 
 const createApolloServer = async (): Promise<
@@ -33,13 +33,9 @@ const createApolloServer = async (): Promise<
     return {};
   };
 
-  const schema = apolloServerMicro.makeExecutableSchema({
+  const apolloServer = new apolloServerMicro.ApolloServer({
     typeDefs: [typeDefs, personTypeDefs, personExtendDefs],
     resolvers: [resolvers, personResolvers],
-  });
-
-  const apolloServer = new apolloServerMicro.ApolloServer({
-    schema,
     dataSources,
     context,
   });

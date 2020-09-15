@@ -5,13 +5,15 @@ import {
   PersonAttributes,
   PersonCreationAttributes,
 } from "../../../models/Person";
+import { MajorAPI, Major } from "./major";
+import { Context } from "../type";
 
-export class PersonAPI extends DataSource {
-  private Person: typeof Person;
+export class PersonAPI extends DataSource<Context> {
+  private store: typeof Person;
 
   constructor(person: typeof Person) {
     super();
-    this.Person = person;
+    this.store = person;
   }
 
   private static transformData(person: Person): PersonAttributes {
@@ -19,48 +21,63 @@ export class PersonAPI extends DataSource {
   }
 
   async findPeople(): Promise<PersonAttributes[]> {
-    const people = await this.Person.findAll();
+    const people = await this.store.findAll();
     return people.map(PersonAPI.transformData);
   }
 
   async addNewPerson(arg: PersonCreationAttributes): Promise<PersonAttributes> {
-    const person = await this.Person.create(arg);
+    const person = await this.store.create(arg);
     return PersonAPI.transformData(person);
   }
 }
 
 interface PersonAPIDatasource {
   personAPI: PersonAPI;
+  majorAPI: MajorAPI;
 }
 
-interface PersonAPIContext {
+interface PersonAPIContext extends Context {
   dataSources: PersonAPIDatasource;
 }
 
-export const resolvers = {
-  Person: {
-    major: ({ major }, _, { dataSources }) => {
-      return dataSources.majorAPI.getMajor(major);
-    },
-  },
-  Query: {
-    people: (_, __, { dataSources }: PersonAPIContext) => {
-      return dataSources.personAPI.findPeople();
-    },
-  },
-  Mutation: {
-    newPerson: async (
-      _,
-      arg: PersonCreationAttributes,
-      { dataSources }: PersonAPIContext
-    ) => {
-      const person = await dataSources.personAPI.addNewPerson(arg);
-      if (!person) {
-        return { success: false, message: "Something wrong happened" };
-      }
-      return { success: true, message: "success", person };
-    },
-  },
+type ResolverFn<Parent, Args, Result> = (
+  parent: Parent,
+  args: Args,
+  context: PersonAPIContext
+) => Result | Promise<Result>;
+
+type PersonUpdateResponse = {
+  success: boolean;
+  message: string;
+  person?: PersonAttributes;
+};
+
+const majorResolver: ResolverFn<Person, unkwon, Major> = (
+  { major },
+  _,
+  { dataSources }
+) => {
+  return dataSources.majorAPI.getMajor(major);
+};
+
+const peopleResolver: ResolverFn<unkwon, unkwon, PersonAttributes[]> = (
+  _,
+  __,
+  { dataSources }
+) => {
+  return dataSources.personAPI.findPeople();
+};
+
+const newPersonResolver: ResolverFn<
+  unkwon,
+  PersonCreationAttributes,
+  PersonUpdateResponse
+> = async (_, arg, { dataSources }) => {
+  const person = await dataSources.personAPI.addNewPerson(arg);
+  if (!person) {
+    return { success: false, message: "Something wrong happened" };
+  }
+  return { success: true, message: "success", person };
 };
 
 export const typeDefs = gql`
@@ -94,3 +111,15 @@ export const typeDefs = gql`
     person: Person
   }
 `;
+
+export const resolvers = {
+  Person: {
+    major: majorResolver,
+  },
+  Query: {
+    people: peopleResolver,
+  },
+  Mutation: {
+    newPerson: newPersonResolver,
+  },
+};

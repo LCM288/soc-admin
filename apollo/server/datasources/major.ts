@@ -8,7 +8,7 @@ export type Major = {
   faculties: string[];
 };
 
-class MajorAPI extends DataSource {
+export class MajorAPI extends DataSource {
   majors: Major[];
 
   constructor() {
@@ -24,5 +24,3 @@ class MajorAPI extends DataSource {
     return this.majors;
   }
 }
-
-export default MajorAPI;

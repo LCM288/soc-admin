@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes } from "sequelize";
+import { Sequelize } from "sequelize";
 import { Client } from "pg";
 import { PersonFactory } from "../../models/Person";
 
@@ -17,18 +17,12 @@ const createStore = async () => {
     });
   };
 
-  // await createDB();
+  if (process.env.NODE_ENV === "development") await createDB();
 
   const db = new Sequelize(socAdminDB);
 
-  const tests = db.define("test", {
-    message: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  });
   const Person = PersonFactory(db);
-  // await db.sync();
+  // await db.sync({ force: true });
 
   return { db, Person };
 };
