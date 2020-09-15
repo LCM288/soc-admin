@@ -67,14 +67,14 @@ async function up(queryInterface) {
           allowNull: false,
         },
         memberSince: {
-          type: Sequelize.DATE,
+          type: DataTypes.DATE,
         },
         createdAt: {
-          type: Sequelize.DATE,
+          type: DataTypes.DATE,
           allowNull: false,
         },
         updatedAt: {
-          type: Sequelize.DATE,
+          type: DataTypes.DATE,
           allowNull: false,
         },
       },
@@ -103,11 +103,11 @@ async function up(queryInterface) {
           type: DataTypes.STRING(20),
         },
         createdAt: {
-          type: Sequelize.DATE,
+          type: DataTypes.DATE,
           allowNull: false,
         },
         updatedAt: {
-          type: Sequelize.DATE,
+          type: DataTypes.DATE,
           allowNull: false,
         },
       },
@@ -134,11 +134,11 @@ async function up(queryInterface) {
           allowNull: false,
         },
         createdAt: {
-          type: Sequelize.DATE,
+          type: DataTypes.DATE,
           allowNull: false,
         },
         updatedAt: {
-          type: Sequelize.DATE,
+          type: DataTypes.DATE,
           allowNull: false,
         },
       },
