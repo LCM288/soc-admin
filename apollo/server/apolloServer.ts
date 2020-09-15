@@ -28,50 +28,44 @@ import MajorAPI from "./datasources/major";
 // store
 import createStore from "./utils";
 
-const createApolloServer = async (): Promise<
-  apolloServerMicro.ApolloServer
-> => {
-  // creates a sequelize connection once. NOT for every request
-  const store = await createStore();
+// creates a sequelize connection once. NOT for every request
+const store = createStore();
 
-  // set up any dataSources our resolvers need
-  const dataSources = () => ({
-    facultyAPI: new FacultyAPI(),
-    majorAPI: new MajorAPI(),
-    personAPI: new PersonAPI(store.Person),
-  });
+// set up any dataSources our resolvers need
+const dataSources = () => ({
+  facultyAPI: new FacultyAPI(),
+  majorAPI: new MajorAPI(),
+  personAPI: new PersonAPI(store.Person),
+});
 
-  // the function that sets up the global context for each resolver, using the req
-  const context = async ({ req }) => {
-    // TODO: check auth
-    return {};
-  };
-
-  const dummyTypeDefs = gql`
-    type Mutation {
-      dummy: Boolean
-    }
-    type Query {
-      dummy: Boolean
-    }
-  `;
-
-  const apolloServer = new apolloServerMicro.ApolloServer({
-    typeDefs: [
-      dummyTypeDefs,
-      personTypeDefs,
-      personExtendDefs,
-      majorTypeDefs,
-      majorExtendDefs,
-      facultyTypeDefs,
-      facultyExtendDefs,
-    ],
-    resolvers: [personResolvers, facultyResolvers, majorResolvers],
-    dataSources,
-    context,
-  });
-
-  return apolloServer;
+// the function that sets up the global context for each resolver, using the req
+const context = async ({ req }) => {
+  // TODO: check auth
+  return {};
 };
 
-export default createApolloServer;
+const dummyTypeDefs = gql`
+  type Mutation {
+    dummy: Boolean
+  }
+  type Query {
+    dummy: Boolean
+  }
+`;
+
+const apolloServer = new apolloServerMicro.ApolloServer({
+  typeDefs: [
+    dummyTypeDefs,
+    personTypeDefs,
+    personExtendDefs,
+    majorTypeDefs,
+    majorExtendDefs,
+    facultyTypeDefs,
+    facultyExtendDefs,
+  ],
+  resolvers: [personResolvers, facultyResolvers, majorResolvers],
+  dataSources,
+  context,
+});
+
+export default apolloServer;
