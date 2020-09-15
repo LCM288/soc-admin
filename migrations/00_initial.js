@@ -151,9 +151,9 @@ async function up(queryInterface) {
 
 async function down(queryInterface) {
   await queryInterface.sequelize.transaction(async (t) => {
-    await queryInterface.dropTable("people", { transaction: t });
-    await queryInterface.dropTable("executives", { transaction: t });
     await queryInterface.dropTable("soc_settings", { transaction: t });
+    await queryInterface.dropTable("executives", { transaction: t });
+    await queryInterface.dropTable("people", { transaction: t });
   });
 }
 
