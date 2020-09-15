@@ -17,7 +17,9 @@ const createStore = (): Store => {
     });
   }
 
-  const socAdminDB = `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDB}`;
+  const socAdminDB =
+    process.env.DATABASE_URL ||
+    `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDB}`;
 
   const sequelize = new Sequelize(socAdminDB);
 
