@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import { Client } from "pg";
-import { PersonFactory } from "../../models/Person";
+import { PersonFactory } from "./models/Person";
 
 const createStore = async () => {
   const socAdminDB = `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDB}`;

@@ -2,6 +2,6 @@ export interface User {
   sid: string;
 }
 
-export type Context = {
+export type ContextBase = {
   user: User;
 };

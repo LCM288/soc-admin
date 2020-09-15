@@ -1,13 +1,8 @@
 import { DataSource } from "apollo-datasource";
+import { Faculty } from "../models/Faculty";
 import { faculties } from "./Faculties.json";
 
-export type Faculty = {
-  code: string;
-  chinese_name: string;
-  english_name: string;
-};
-
-class FacultyAPI extends DataSource {
+export default class FacultyAPI extends DataSource {
   faculties: Faculty[];
 
   constructor() {
@@ -23,5 +18,3 @@ class FacultyAPI extends DataSource {
     return this.faculties;
   }
 }
-
-export default FacultyAPI;

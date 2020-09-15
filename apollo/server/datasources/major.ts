@@ -1,14 +1,8 @@
 import { DataSource } from "apollo-datasource";
+import { Major } from "../models/Major";
 import { majors } from "./Majors.json";
 
-export type Major = {
-  code: string;
-  chinese_name: string;
-  english_name: string;
-  faculties: string[];
-};
-
-export class MajorAPI extends DataSource {
+export default class MajorAPI extends DataSource {
   majors: Major[];
 
   constructor() {
