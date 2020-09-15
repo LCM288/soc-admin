@@ -52,7 +52,7 @@ type PersonUpdateResponse = {
   person?: PersonAttributes;
 };
 
-const majorResolver: ResolverFn<Person, unkwon, Major> = (
+const majorResolver: ResolverFn<Person, unknown, Major> = (
   { major },
   _,
   { dataSources }
@@ -60,7 +60,7 @@ const majorResolver: ResolverFn<Person, unkwon, Major> = (
   return dataSources.majorAPI.getMajor(major);
 };
 
-const peopleResolver: ResolverFn<unkwon, unkwon, PersonAttributes[]> = (
+const peopleResolver: ResolverFn<unknown, unknown, PersonAttributes[]> = (
   _,
   __,
   { dataSources }
@@ -69,7 +69,7 @@ const peopleResolver: ResolverFn<unkwon, unkwon, PersonAttributes[]> = (
 };
 
 const newPersonResolver: ResolverFn<
-  unkwon,
+  unknown,
   PersonCreationAttributes,
   PersonUpdateResponse
 > = async (_, arg, { dataSources }) => {
