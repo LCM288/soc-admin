@@ -14,12 +14,12 @@ const createStore = () => {
 
   const socAdminDB = `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDB}`;
 
-  const db = new Sequelize(socAdminDB);
+  const sequelize = new Sequelize(socAdminDB);
 
-  const Person = PersonFactory(db);
-  // db.sync({ force: true });
+  const Person = PersonFactory(sequelize);
+  // sequelize.sync({ force: true });
 
-  return { db, Person };
+  return { sequelize, Person };
 };
 
 export default createStore;

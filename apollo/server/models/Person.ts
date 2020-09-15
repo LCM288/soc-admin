@@ -75,7 +75,7 @@ export const PersonFactory = (sequelize: Sequelize): typeof Person => {
   Person.init(
     {
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
       },

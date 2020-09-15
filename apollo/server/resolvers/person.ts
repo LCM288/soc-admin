@@ -1,5 +1,5 @@
 import { gql } from "apollo-server";
-import { ResolverFn } from "../types/resolver";
+import { ResolverFn, Resolvers } from "../types/resolver";
 import {
   Person,
   PersonAttributes,
@@ -13,15 +13,15 @@ type PersonUpdateResponse = {
   person?: PersonAttributes;
 };
 
-const majorResolver: ResolverFn<Person, unknown, Major> = (
-  { major },
+const majorResolver: ResolverFn<unknown, Major> = (
+  { major }: Person,
   _,
   { dataSources }
 ) => {
   return dataSources.majorAPI.getMajor(major);
 };
 
-const peopleResolver: ResolverFn<unknown, unknown, PersonAttributes[]> = (
+const peopleResolver: ResolverFn<unknown, PersonAttributes[]> = (
   _,
   __,
   { dataSources }
@@ -30,7 +30,6 @@ const peopleResolver: ResolverFn<unknown, unknown, PersonAttributes[]> = (
 };
 
 const newPersonResolver: ResolverFn<
-  unknown,
   PersonCreationAttributes,
   PersonUpdateResponse
 > = async (_, arg, { dataSources }) => {
@@ -41,7 +40,7 @@ const newPersonResolver: ResolverFn<
   return { success: true, message: "success", person };
 };
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   Person: {
     major: majorResolver,
   },

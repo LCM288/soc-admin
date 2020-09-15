@@ -1,12 +1,12 @@
 import { gql } from "apollo-server";
-import { ResolverFn } from "../types/resolver";
+import { ResolverFn, Resolvers } from "../types/resolver";
 import { Faculty } from "../models/Faculty";
 
 interface FacultyResolverArgs {
   code: string;
 }
 
-const facultiesResolver: ResolverFn<unknown, unknown, Faculty[]> = (
+const facultiesResolver: ResolverFn<unknown, Faculty[]> = (
   _,
   __,
   { dataSources }
@@ -14,7 +14,7 @@ const facultiesResolver: ResolverFn<unknown, unknown, Faculty[]> = (
   return dataSources.facultyAPI.getFaculties();
 };
 
-const facultyResolver: ResolverFn<unknown, FacultyResolverArgs, Faculty> = (
+const facultyResolver: ResolverFn<FacultyResolverArgs, Faculty> = (
   _,
   { code },
   { dataSources }
@@ -22,7 +22,7 @@ const facultyResolver: ResolverFn<unknown, FacultyResolverArgs, Faculty> = (
   return dataSources.facultyAPI.getFaculty(code);
 };
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   Query: {
     faculties: facultiesResolver,
     faculty: facultyResolver,
