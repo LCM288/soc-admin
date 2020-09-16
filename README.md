@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/LCM288/soc-admin.svg?branch=master)](https://travis-ci.com/LCM288/soc-admin)
+
 # For dev
 
 1. install `postgresql`, `node.js` and `yarn`
