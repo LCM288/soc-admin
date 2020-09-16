@@ -1,9 +1,9 @@
-[![License](https://badgen.net/github/license/LCM288/soc-admin)](https://github.com/LCM288/soc-admin/blob/master/LICENSE)
-[![Commits](https://badgen.net/github/commits/LCM288/soc-admin)](https://github.com/LCM288/soc-admin)
-[![Last Commit](https://badgen.net/github/last-commit/LCM288/soc-admin)](https://github.com/LCM288/soc-admin)
-[![Build Status](https://badgen.net/travis/LCM288/soc-admin)](https://travis-ci.com/LCM288/soc-admin)
-[![Open Issues](https://badgen.net/github/open-issues/LCM288/soc-admin)](https://github.com/LCM288/soc-admin/issues)
-[![Open PRs](https://badgen.net/github/open-prs/LCM288/soc-admin)](https://github.com/LCM288/soc-admin/pulls)
+[![License](https://badgen.net/github/license/LCM288/soc-admin?cache=600)](https://github.com/LCM288/soc-admin/blob/master/LICENSE)
+[![Commits](https://badgen.net/github/commits/LCM288/soc-admin?cache=600)](https://github.com/LCM288/soc-admin)
+[![Last Commit](https://badgen.net/github/last-commit/LCM288/soc-admin?cache=600)](https://github.com/LCM288/soc-admin)
+[![Build Status](https://badgen.net/travis/LCM288/soc-admin?cache=600)](https://travis-ci.com/LCM288/soc-admin)
+[![Open Issues](https://badgen.net/github/open-issues/LCM288/soc-admin?cache=600)](https://github.com/LCM288/soc-admin/issues)
+[![Open PRs](https://badgen.net/github/open-prs/LCM288/soc-admin?cache=600)](https://github.com/LCM288/soc-admin/pulls)
 
 # For dev
 
