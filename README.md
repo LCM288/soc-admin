@@ -1,4 +1,4 @@
-[![License](https://badgen.net/github/license/LCM288/soc-admin)](https://github.com/LCM288/soc-admin)
+[![License](https://badgen.net/github/license/LCM288/soc-admin)](https://github.com/LCM288/soc-admin/blob/master/LICENSE)
 [![Commits](https://badgen.net/github/commits/LCM288/soc-admin)](https://github.com/LCM288/soc-admin)
 [![Last Commit](https://badgen.net/github/last-commit/LCM288/soc-admin)](https://github.com/LCM288/soc-admin)
 [![Build Status](https://badgen.net/travis/LCM288/soc-admin)](https://travis-ci.com/LCM288/soc-admin)
