@@ -31,8 +31,10 @@ socSetting.findOne({ where: { key: "jwt_secret" } }).then(function (obj) {
   if (obj) {
     // update
     obj.update(newSetting);
+    console.log("Update new jwt_secret");
   } else {
     // insert
     socSetting.create(newSetting);
+    console.log("Insert new jwt_secret");
   }
 });
