@@ -38,18 +38,15 @@ import FacultyAPI from "./datasources/faculty";
 import MajorAPI from "./datasources/major";
 
 // store
-import { createStore } from "./utils";
-
-// creates a sequelize connection once. NOT for every request
-const store = createStore();
+import { personStore, executiveStore, socSettingStore } from "./utils";
 
 // set up any dataSources our resolvers need
 const dataSources = () => ({
   facultyAPI: new FacultyAPI(),
   majorAPI: new MajorAPI(),
-  personAPI: new PersonAPI(store.person),
-  executiveAPI: new ExecutiveAPI(store.executive),
-  socSettingAPI: new SocSettingAPI(store.socSetting),
+  personAPI: new PersonAPI(personStore),
+  executiveAPI: new ExecutiveAPI(executiveStore),
+  socSettingAPI: new SocSettingAPI(socSettingStore),
 });
 
 // the function that sets up the global context for each resolver, using the req

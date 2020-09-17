@@ -13,9 +13,9 @@ const transformData = (socSetting: SocSetting): SocSettingAttributes => {
 export default class SocSettingAPI extends DataSource<ContextBase> {
   private store: typeof SocSetting;
 
-  constructor(socSetting: typeof SocSetting) {
+  constructor(socSettingStore: typeof SocSetting) {
     super();
-    this.store = socSetting;
+    this.store = socSettingStore;
   }
 
   public async findSocSettings(): Promise<SocSettingAttributes[]> {

@@ -1,2 +1,1 @@
-release: yarn migrate
-release: yarn generate
+release: node ./scripts/release.js

@@ -13,9 +13,9 @@ const transformData = (person: Person): PersonAttributes => {
 export default class PersonAPI extends DataSource<ContextBase> {
   private store: typeof Person;
 
-  constructor(person: typeof Person) {
+  constructor(personStore: typeof Person) {
     super();
-    this.store = person;
+    this.store = personStore;
   }
 
   public async findPeople(): Promise<PersonAttributes[]> {

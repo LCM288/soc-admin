@@ -13,9 +13,9 @@ const transformData = (executive: Executive): ExecutiveAttributes => {
 export default class ExecutiveAPI extends DataSource<ContextBase> {
   private store: typeof Executive;
 
-  constructor(executive: typeof Executive) {
+  constructor(executiveStore: typeof Executive) {
     super();
-    this.store = executive;
+    this.store = executiveStore;
   }
 
   public async findExecutives(): Promise<ExecutiveAttributes[]> {

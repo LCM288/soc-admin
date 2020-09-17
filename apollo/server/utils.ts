@@ -1,36 +1,26 @@
 import { Sequelize } from "sequelize";
-import fs from "fs";
-import { PersonFactory, Person } from "./models/Person";
-import { ExecutiveFactory, Executive } from "./models/Executive";
-import { SocSettingFactory, SocSetting } from "./models/SocSetting";
+import { PersonFactory } from "./models/Person";
+import { ExecutiveFactory } from "./models/Executive";
+import { SocSettingFactory } from "./models/SocSetting";
 
-type Store = {
-  sequelize: Sequelize;
-  person: typeof Person;
-  executive: typeof Executive;
-  socSetting: typeof SocSetting;
-};
+const socAdminDB =
+  process.env.DATABASE_URL ||
+  `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDB}`;
 
-export const createStore = (): Store => {
-  const socAdminDB =
-    process.env.DATABASE_URL ||
-    `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDB}`;
+export const sequelize = new Sequelize(socAdminDB);
 
-  const sequelize = new Sequelize(socAdminDB);
+export const personStore = PersonFactory(sequelize);
 
-  const person = PersonFactory(sequelize);
+export const executiveStore = ExecutiveFactory(sequelize);
 
-  const executive = ExecutiveFactory(sequelize);
+export const socSettingStore = SocSettingFactory(sequelize);
 
-  const socSetting = SocSettingFactory(sequelize);
-
-  return { sequelize, person, executive, socSetting };
-};
-
-export const getJwtSecret = (): string | undefined => {
+export const getJwtSecret = async (): Promise<string | undefined> => {
   try {
-    const jwtSecret = fs.readFileSync(`./.jwt_secret`);
-    return jwtSecret.toString();
+    const entry = await socSettingStore.findOne({
+      where: { key: "jwt_secret" },
+    });
+    return entry.getDataValue("value");
   } catch {
     return undefined;
   }

@@ -74,7 +74,7 @@ export default async (
     return;
   }
 
-  const jwtSecret = getJwtSecret();
+  const jwtSecret = await getJwtSecret();
 
   if (!jwtSecret) {
     res.status(500).end("Cannot find jwtSecret.");

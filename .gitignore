@@ -27,6 +27,3 @@ yarn-error.log*
 
 # eslint cache
 .eslintcache
-
-# jwt secret
-.jwt_secret
