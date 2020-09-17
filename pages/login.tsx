@@ -4,6 +4,7 @@ import { GetServerSideProps } from "next";
 import Router from "next/router";
 import { parseCookies } from "nookies";
 import jwt from "jsonwebtoken";
+import { User } from "../apollo/server/types/datasources";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { host } = ctx.req.headers;

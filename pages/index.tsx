@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { GetServerSideProps } from "next";
-import { parseCookies, destroyCookie } from "nookies";
+import { parseCookies } from "nookies";
 import jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
 import { User } from "../apollo/server/types/datasources";
