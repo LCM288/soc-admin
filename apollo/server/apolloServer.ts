@@ -38,7 +38,7 @@ import FacultyAPI from "./datasources/faculty";
 import MajorAPI from "./datasources/major";
 
 // store
-import createStore from "./utils";
+import { createStore } from "./utils";
 
 // creates a sequelize connection once. NOT for every request
 const store = createStore();

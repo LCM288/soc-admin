@@ -1,1 +1,2 @@
-release: node migrations/index.js
+release: yarn migrate
+release: yarn generate

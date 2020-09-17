@@ -1,6 +1,9 @@
 import axios from "axios";
 import qs from "qs";
+import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getJwtSecret } from "../../apollo/server/utils";
+import { User } from "../../apollo/server/types/datasources";
 
 const getAccessToken = async (
   baseUrl: string,
@@ -30,7 +33,7 @@ const getAccessToken = async (
   }
 };
 
-const getSid = async (accessToken: string): Promise<string | undefined> => {
+const getUser = async (accessToken: string): Promise<User | undefined> => {
   try {
     const userDataResponse = await axios.get(
       "https://graph.microsoft.com/v1.0/me",
@@ -39,7 +42,8 @@ const getSid = async (accessToken: string): Promise<string | undefined> => {
       }
     );
     const [sid] = userDataResponse.data.userPrincipalName.split("@");
-    return sid;
+    const name = userDataResponse.data.displayName;
+    return { sid, name };
   } catch {
     return undefined;
   }
@@ -51,6 +55,7 @@ export default async (
 ): Promise<void> => {
   if (!req.body.code) {
     res.status(400).end("No authorization code recieved.");
+    return;
   }
   const { host } = req.headers;
   const protocol = /^localhost/g.test(host) ? "http" : "https";
@@ -59,13 +64,28 @@ export default async (
 
   if (!accessToken) {
     res.status(401).end("No access token recieved.");
+    return;
   }
 
-  const sid = await getSid(accessToken);
+  const user = await getUser(accessToken);
 
-  if (!sid) {
+  if (!user) {
     res.status(401).end("Cannot access user data.");
+    return;
   }
 
-  res.status(200).json({ sid });
+  const jwtSecret = getJwtSecret();
+
+  if (!jwtSecret) {
+    res.status(500).end("Cannot find jwtSecret.");
+    return;
+  }
+
+  const token = jwt.sign(user, jwtSecret, { expiresIn: "30m" });
+
+  res.setHeader(
+    "Set-Cookie",
+    `__jwt=${token}; Max-Age=1800; Path=/; HttpOnly; SameSite=Strict`
+  );
+  res.redirect("/");
 };

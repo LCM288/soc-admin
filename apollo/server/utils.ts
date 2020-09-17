@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+import fs from "fs";
 import { PersonFactory, Person } from "./models/Person";
 import { ExecutiveFactory, Executive } from "./models/Executive";
 import { SocSettingFactory, SocSetting } from "./models/SocSetting";
@@ -10,7 +11,7 @@ type Store = {
   socSetting: typeof SocSetting;
 };
 
-const createStore = (): Store => {
+export const createStore = (): Store => {
   const socAdminDB =
     process.env.DATABASE_URL ||
     `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDB}`;
@@ -26,4 +27,11 @@ const createStore = (): Store => {
   return { sequelize, person, executive, socSetting };
 };
 
-export default createStore;
+export const getJwtSecret = (): string | undefined => {
+  try {
+    const jwtSecret = fs.readFileSync(`./.jwt_secret`);
+    return jwtSecret.toString();
+  } catch {
+    return undefined;
+  }
+};
