@@ -3,6 +3,7 @@ import qs from "qs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/types/datasources";
 import { issureJwt, setJwtHeader } from "utils/auth";
+import { getClientIp } from "request-ip";
 
 const getAccessToken = async (
   baseUrl: string,
@@ -32,7 +33,10 @@ const getAccessToken = async (
   }
 };
 
-const getUser = async (accessToken: string): Promise<User | null> => {
+const getUser = async (
+  req: NextApiRequest,
+  accessToken: string
+): Promise<User | null> => {
   try {
     const userDataResponse = await axios.get(
       "https://graph.microsoft.com/v1.0/me",
@@ -42,7 +46,8 @@ const getUser = async (accessToken: string): Promise<User | null> => {
     );
     const [sid] = userDataResponse.data.userPrincipalName.split("@");
     const name = userDataResponse.data.displayName;
-    return { sid, name };
+    const addr = getClientIp(req);
+    return { sid, name, addr };
   } catch {
     return null;
   }
@@ -66,7 +71,7 @@ export default async (
     return;
   }
 
-  const user = await getUser(accessToken);
+  const user = await getUser(req, accessToken);
 
   if (!user) {
     res.status(401).end("Cannot access user data.");

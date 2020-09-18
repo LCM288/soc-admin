@@ -14,7 +14,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "alwaysStrict": true,
-    "typeRoots": ["./types", "node_modules/@types"],
+    "noImplicitAny": true,
+    "typeRoots": ["node_modules/@types"],
     "baseUrl": ".",
     "paths": { "@/*": ["apollo/server/*"] }
   },
