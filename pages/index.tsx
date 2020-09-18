@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { GetServerSideProps } from "next";
-import { parseCookies } from "nookies";
-import jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
+import { getUser } from "../apollo/server/utils";
 import { User } from "../apollo/server/types/datasources";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { __jwt: token } = parseCookies(ctx);
-  const user: User = jwt.decode(token);
+  const user = await getUser(ctx);
+  if (!user) {
+    ctx.res.statusCode = 307;
+    ctx.res.setHeader("Location", "/login");
+  }
   return {
     props: { user }, // will be passed to the page component as props
   };
@@ -15,12 +17,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 export default function Index({ user }: { user: User }): React.ReactElement {
   const router = useRouter();
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-  });
-
   const logout = () => {
     router.push("/api/logout");
   };

@@ -1,37 +1,25 @@
-import React, { useEffect } from "react";
+import React from "react";
 import qs from "qs";
 import { GetServerSideProps } from "next";
-import Router from "next/router";
-import { parseCookies } from "nookies";
-import jwt from "jsonwebtoken";
-import { User } from "../apollo/server/types/datasources";
+import { getUser } from "../apollo/server/utils";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { host } = ctx.req.headers;
   const protocol = /^localhost/g.test(host) ? "http" : "https";
   const baseUrl = `${protocol}://${ctx.req.headers.host}`;
-  const { __jwt: token } = parseCookies(ctx);
-  const user: User = jwt.decode(token);
+  const user = await getUser(ctx);
+  if (user) {
+    ctx.res.statusCode = 307;
+    ctx.res.setHeader("Location", "/");
+  }
   return {
     props: {
       baseUrl,
-      user,
     },
   };
 };
 
-function MicrosoftLogin({
-  baseUrl,
-  user,
-}: {
-  baseUrl: string;
-  user: User;
-}): React.ReactElement {
-  useEffect(() => {
-    if (user) {
-      Router.push("/");
-    }
-  });
+function MicrosoftLogin({ baseUrl }: { baseUrl: string }): React.ReactElement {
   /* TODO put CLIENT_ID to database */
   const TENANT = "link.cuhk.edu.hk";
   const CLIENT_ID = "373b4ec9-6336-4955-90cf-b7cbd9e3426f";

@@ -4,9 +4,16 @@ export default async (
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> => {
-  res.setHeader(
-    "Set-Cookie",
-    `__jwt=; Max-Age=1; Path=/; HttpOnly; SameSite=Strict`
-  );
-  res.redirect("/");
+  if (process.env.NODE_ENV === "development") {
+    res.setHeader(
+      "Set-Cookie",
+      `jwt=; Max-Age=1; Path=/; HttpOnly; SameSite=Strict`
+    );
+  } else {
+    res.setHeader(
+      "Set-Cookie",
+      `__Host-jwt=; Max-Age=1; Path=/; HttpOnly; Secure; SameSite=Strict`
+    );
+  }
+  res.end("<script>window.location.href='/'</script>");
 };

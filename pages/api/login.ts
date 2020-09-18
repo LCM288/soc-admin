@@ -83,9 +83,16 @@ export default async (
 
   const token = jwt.sign(user, jwtSecret, { expiresIn: "30m" });
 
-  res.setHeader(
-    "Set-Cookie",
-    `__jwt=${token}; Max-Age=1800; Path=/; HttpOnly; SameSite=Strict`
-  );
-  res.redirect("/");
+  if (process.env.NODE_ENV === "development") {
+    res.setHeader(
+      "Set-Cookie",
+      `jwt=${token}; Max-Age=1800; Path=/; HttpOnly; SameSite=Strict`
+    );
+  } else {
+    res.setHeader(
+      "Set-Cookie",
+      `__Host-jwt=${token}; Max-Age=1800; Path=/; HttpOnly; Secure; SameSite=Strict`
+    );
+  }
+  res.end("<script>window.location.href='/'</script>");
 };
