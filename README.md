@@ -13,7 +13,8 @@
 2. put a `.env` file in root following the variables in `.env.example`
 3. run `yarn install` to install all dependencies
 4. run `yarn newdb` then `yarn migrate` to set up the database
-5. run `yarn dev` to start the server
+5. run `yarn generate` to generate jwt secret
+6. run `yarn dev` to start the server
 
 ## Useful docs
 - Database: [Sequelize](https://sequelize.org/master/index.html) / [Umzug](https://github.com/sequelize/umzug/tree/v2.x)
