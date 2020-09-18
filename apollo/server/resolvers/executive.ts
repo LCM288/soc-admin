@@ -1,9 +1,9 @@
 import { gql } from "apollo-server";
-import { ResolverFn, Resolvers } from "../types/resolver";
+import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
   ExecutiveAttributes,
   ExecutiveCreationAttributes,
-} from "../models/Executive";
+} from "@/models/Executive";
 
 type ExecutiveUpdateResponse = {
   success: boolean;

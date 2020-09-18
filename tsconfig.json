@@ -14,9 +14,11 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "alwaysStrict": true,
-    "typeRoots": ["./types", "node_modules/@types"]
+    "typeRoots": ["./types", "node_modules/@types"],
+    "baseUrl": ".",
+    "paths": { "@/*": ["apollo/server/*"] }
   },
   "extends": "@tsconfig/recommended/tsconfig.json",
-  "exclude": ["node_modules", "types"],
+  "exclude": ["node_modules"],
   "include": ["next-env.d.ts", ".eslintrc.js", "**/*.ts", "**/*.tsx", "**/*.js"]
 }

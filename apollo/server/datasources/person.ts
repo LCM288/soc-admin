@@ -3,8 +3,8 @@ import {
   Person,
   PersonAttributes,
   PersonCreationAttributes,
-} from "../models/Person";
-import { ContextBase } from "../types/datasources";
+} from "@/models/Person";
+import { ContextBase } from "@/types/datasources";
 
 const transformData = (person: Person): PersonAttributes => {
   return person.get({ plain: true });

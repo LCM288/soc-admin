@@ -1,11 +1,11 @@
 import { gql } from "apollo-server";
-import { ResolverFn, Resolvers } from "../types/resolver";
+import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
   Person,
   PersonAttributes,
   PersonCreationAttributes,
-} from "../models/Person";
-import { Major } from "../models/Major";
+} from "@/models/Person";
+import { Major } from "@/models/Major";
 
 type PersonUpdateResponse = {
   success: boolean;

@@ -1,14 +1,13 @@
 import axios from "axios";
 import qs from "qs";
-import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getJwtSecret } from "../../apollo/server/utils";
-import { User } from "../../apollo/server/types/datasources";
+import { User } from "@/types/datasources";
+import { issureJwt, setJwtHeader } from "utils/auth";
 
 const getAccessToken = async (
   baseUrl: string,
   code: string
-): Promise<string | undefined> => {
+): Promise<string | null> => {
   /* TODO put CLIENT_ID and CLIENT_SECRET to database */
   const TENANT = "link.cuhk.edu.hk";
   const CLIENT_ID = "373b4ec9-6336-4955-90cf-b7cbd9e3426f";
@@ -29,11 +28,11 @@ const getAccessToken = async (
     const tokenResponse = await axios.post(link, body);
     return tokenResponse.data.access_token;
   } catch {
-    return undefined;
+    return null;
   }
 };
 
-const getUser = async (accessToken: string): Promise<User | undefined> => {
+const getUser = async (accessToken: string): Promise<User | null> => {
   try {
     const userDataResponse = await axios.get(
       "https://graph.microsoft.com/v1.0/me",
@@ -45,7 +44,7 @@ const getUser = async (accessToken: string): Promise<User | undefined> => {
     const name = userDataResponse.data.displayName;
     return { sid, name };
   } catch {
-    return undefined;
+    return null;
   }
 };
 
@@ -74,25 +73,13 @@ export default async (
     return;
   }
 
-  const jwtSecret = await getJwtSecret();
+  const token = await issureJwt(user);
 
-  if (!jwtSecret) {
-    res.status(500).end("Cannot find jwtSecret.");
+  if (!token) {
+    res.status(500).end("Cannot find issue jwt.");
     return;
   }
 
-  const token = jwt.sign(user, jwtSecret, { expiresIn: "30m" });
-
-  if (process.env.NODE_ENV === "development") {
-    res.setHeader(
-      "Set-Cookie",
-      `jwt=${token}; Max-Age=1800; Path=/; HttpOnly; SameSite=Strict`
-    );
-  } else {
-    res.setHeader(
-      "Set-Cookie",
-      `__Host-jwt=${token}; Max-Age=1800; Path=/; HttpOnly; Secure; SameSite=Strict`
-    );
-  }
+  setJwtHeader(token, res);
   res.end("<script>window.location.href='/'</script>");
 };

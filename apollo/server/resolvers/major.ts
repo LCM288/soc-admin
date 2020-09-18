@@ -1,7 +1,7 @@
 import { gql } from "apollo-server";
-import { ResolverFn, Resolvers } from "../types/resolver";
-import { Major } from "../models/Major";
-import { Faculty } from "../models/Faculty";
+import { ResolverFn, Resolvers } from "@/types/resolver";
+import { Major } from "@/models/Major";
+import { Faculty } from "@/models/Faculty";
 
 interface MajorResolverArgs {
   code: string;

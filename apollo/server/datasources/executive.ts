@@ -3,8 +3,8 @@ import {
   Executive,
   ExecutiveAttributes,
   ExecutiveCreationAttributes,
-} from "../models/Executive";
-import { ContextBase } from "../types/datasources";
+} from "@/models/Executive";
+import { ContextBase } from "@/types/datasources";
 
 const transformData = (executive: Executive): ExecutiveAttributes => {
   return executive.get({ plain: true });

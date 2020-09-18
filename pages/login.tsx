@@ -1,7 +1,7 @@
 import React from "react";
 import qs from "qs";
 import { GetServerSideProps } from "next";
-import { getUser } from "../apollo/server/utils";
+import { getUser } from "utils/auth";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { host } = ctx.req.headers;

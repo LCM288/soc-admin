@@ -1,6 +1,6 @@
 import { DataSource } from "apollo-datasource";
-import { Major } from "../models/Major";
-import { majors } from "../json/Majors.json";
+import { Major } from "@/models/Major";
+import { majors } from "@/json/Majors.json";
 
 export default class MajorAPI extends DataSource {
   majors: Major[];

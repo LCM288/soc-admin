@@ -1,9 +1,9 @@
 import { gql } from "apollo-server";
-import { ResolverFn, Resolvers } from "../types/resolver";
+import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
   SocSettingAttributes,
   SocSettingCreationAttributes,
-} from "../models/SocSetting";
+} from "@/models/SocSetting";
 
 type SocSettingUpdateResponse = {
   success: boolean;

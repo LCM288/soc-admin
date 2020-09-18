@@ -3,8 +3,8 @@ import {
   SocSetting,
   SocSettingAttributes,
   SocSettingCreationAttributes,
-} from "../models/SocSetting";
-import { ContextBase } from "../types/datasources";
+} from "@/models/SocSetting";
+import { ContextBase } from "@/types/datasources";
 
 const transformData = (socSetting: SocSetting): SocSettingAttributes => {
   return socSetting.get({ plain: true });

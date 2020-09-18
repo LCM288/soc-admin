@@ -1,8 +1,8 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { getUser } from "../apollo/server/utils";
-import { User } from "../apollo/server/types/datasources";
+import { User } from "@/types/datasources";
+import { getUser } from "utils/auth";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const user = await getUser(ctx);
