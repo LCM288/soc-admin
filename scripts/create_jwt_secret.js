@@ -24,7 +24,7 @@ const socSetting = sequelize.define("soc_settings", {
 
 const newSetting = {
   key: "jwt_secret",
-  value: crypto.randomBytes(127).toString("base64"),
+  value: crypto.randomBytes(32).toString("base64"),
 };
 
 socSetting.findOne({ where: { key: "jwt_secret" } }).then(function (obj) {
