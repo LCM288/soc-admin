@@ -51,7 +51,7 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
   /**
    * Find executive by sid
    * @async
-   * @returns {Promise<ExecutiveAttributes>} An instance of executive
+   * @returns An instance of executive or undefined if not found
    */
   public async findExecutive(
     sid: string
