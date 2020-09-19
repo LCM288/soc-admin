@@ -1,7 +1,7 @@
 import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import { gql } from "apollo-server";
 
-// These are all the attributes in the Executive model
+/** All the attributes in the Executive model */
 export interface ExecutiveAttributes {
   id: number;
   sid: string;
@@ -9,9 +9,10 @@ export interface ExecutiveAttributes {
   pos: string | null;
 }
 
-// Some attributes are optional in `Executive.build` and `Executive.create` calls
+/** All the attributes needed to create an instance of the Executive model */
 export type ExecutiveCreationAttributes = Optional<ExecutiveAttributes, "id">;
 
+/** A class for the Executive model */
 export class Executive
   extends Model<ExecutiveAttributes, ExecutiveCreationAttributes>
   implements ExecutiveAttributes {
@@ -24,6 +25,10 @@ export class Executive
   public pos!: string | null;
 }
 
+/** A helper function to create a store for the Executive model
+ * @param {Sequelize} sequelize - the database connection
+ * @returns {typeof Executive} The created store
+ */
 export const ExecutiveFactory = (sequelize: Sequelize): typeof Executive => {
   Executive.init(
     {
@@ -53,6 +58,7 @@ export const ExecutiveFactory = (sequelize: Sequelize): typeof Executive => {
   return Executive;
 };
 
+/** The graphql schema definition for the Executive type */
 export const typeDefs = gql`
   type Executive {
     id: ID!

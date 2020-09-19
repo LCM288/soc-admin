@@ -19,7 +19,7 @@ enum College {
   None = "None",
 }
 
-// These are all the attributes in the Person model
+/** All the attributes in the Person model */
 export interface PersonAttributes {
   id: number;
   sid: string;
@@ -36,9 +36,10 @@ export interface PersonAttributes {
   memberSince: Date | null;
 }
 
-// Some attributes are optional in `Person.build` and `Person.create` calls
+/** All the attributes needed to create an instance of the Person model */
 export type PersonCreationAttributes = Optional<PersonAttributes, "id">;
 
+/** A class for the Person model */
 export class Person
   extends Model<PersonAttributes, PersonCreationAttributes>
   implements PersonAttributes {
@@ -74,6 +75,10 @@ export class Person
   public readonly updatedAt!: Date;
 }
 
+/** A helper function to create a store for the Person model
+ * @param {Sequelize} sequelize - the database connection
+ * @returns {typeof Person} The created store
+ */
 export const PersonFactory = (sequelize: Sequelize): typeof Person => {
   Person.init(
     {
@@ -137,6 +142,7 @@ export const PersonFactory = (sequelize: Sequelize): typeof Person => {
   return Person;
 };
 
+/** The graphql schema definition for the Person type and related enums */
 export const typeDefs = gql`
   enum Gender {
     Male

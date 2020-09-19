@@ -1,5 +1,6 @@
 import { gql } from "apollo-server";
 
+/** The type for a major program */
 export type Major = {
   code: string;
   chinese_name: string;
@@ -7,6 +8,7 @@ export type Major = {
   faculties: string[];
 };
 
+/** The graphql schema definition for the Major type */
 export const typeDefs = gql`
   type Major {
     code: String!

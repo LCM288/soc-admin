@@ -1,16 +1,17 @@
 import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import { gql } from "apollo-server";
 
-// These are all the attributes in the Executive model
+/** All the attributes in the SocSetting model */
 export interface SocSettingAttributes {
   id: number;
   key: string;
   value: string;
 }
 
-// Some attributes are optional in `Executive.build` and `Executive.create` calls
+/** All the attributes needed to create an instance of the SocSetting model */
 export type SocSettingCreationAttributes = Optional<SocSettingAttributes, "id">;
 
+/** A class for the SocSetting model */
 export class SocSetting
   extends Model<SocSettingAttributes, SocSettingCreationAttributes>
   implements SocSettingAttributes {
@@ -21,6 +22,10 @@ export class SocSetting
   public value!: string;
 }
 
+/** A helper function to create a store for the SocSetting model
+ * @param {Sequelize} sequelize - the database connection
+ * @returns {typeof SocSetting} The created store
+ */
 export const SocSettingFactory = (sequelize: Sequelize): typeof SocSetting => {
   SocSetting.init(
     {
@@ -48,6 +53,7 @@ export const SocSettingFactory = (sequelize: Sequelize): typeof SocSetting => {
   return SocSetting;
 };
 
+/** The graphql schema definition for the SocSetting type */
 export const typeDefs = gql`
   type SocSetting {
     id: ID!
