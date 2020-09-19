@@ -18,7 +18,7 @@ import { ContextBase } from "@/types/datasources";
  * @returns {ExecutiveAttributes} Plain attributes for the Executive instance
  */
 const transformData = (executive: Executive): ExecutiveAttributes => {
-  return executive.get({ plain: true });
+  return executive?.get({ plain: true });
 };
 
 /** An API to retrieve data from the Executive store */
@@ -33,6 +33,16 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
   constructor(executiveStore: typeof Executive) {
     super();
     this.store = executiveStore;
+  }
+
+  /**
+   * Find executive by sid
+   * @async
+   * @returns {Promise<ExecutiveAttributes>} An instance of executive
+   */
+  public async findExecutive(sid: string): Promise<ExecutiveAttributes> {
+    const executive = await this.store.findOne({ where: { sid } });
+    return transformData(executive);
   }
 
   /**

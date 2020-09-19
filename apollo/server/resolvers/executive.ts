@@ -20,6 +20,10 @@ interface ExecutiveUpdateResponse {
   executive?: ExecutiveAttributes;
 }
 
+/** The input arguments for the faculty query's resolver */
+interface ExecutiveResolverArgs {
+  sid: string;
+}
 // Query resolvers
 
 /**
@@ -34,6 +38,19 @@ const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = (
   { dataSources }
 ): Promise<ExecutiveAttributes[]> => {
   return dataSources.executiveAPI.findExecutives();
+};
+
+/**
+ * The resolver for executive Query
+ * @async
+ * @returns Executive
+ * @category Query Resolver
+ */
+const executiveResolver: ResolverFn<
+  ExecutiveResolverArgs,
+  ExecutiveAttributes
+> = (_, { sid }, { dataSources }): Promise<ExecutiveAttributes | null> => {
+  return dataSources.executiveAPI.findExecutive(sid);
 };
 
 // Mutation resolvers
@@ -61,6 +78,8 @@ export const resolvers: Resolvers = {
   Query: {
     /** see {@link executivesResolver} */
     executives: executivesResolver,
+    /** see {@link executiveBySidResolver} */
+    executive: executiveResolver,
   },
   Mutation: {
     /** see {@link newExecutiveResolver} */
@@ -75,6 +94,7 @@ export const resolvers: Resolvers = {
 export const resolverTypeDefs = gql`
   extend type Query {
     executives: [Executive!]!
+    executive(sid: String): Executive
   }
 
   extend type Mutation {
