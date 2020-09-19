@@ -1,13 +1,13 @@
 import React from "react";
 import qs from "qs";
 import { GetServerSideProps } from "next";
-import { getUser } from "utils/auth";
+import { getUserAndRefreshToken } from "utils/auth";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { host } = ctx.req.headers;
   const protocol = /^localhost/g.test(host) ? "http" : "https";
   const baseUrl = `${protocol}://${ctx.req.headers.host}`;
-  const user = await getUser(ctx);
+  const user = await getUserAndRefreshToken(ctx);
   if (user) {
     ctx.res.statusCode = 307;
     ctx.res.setHeader("Location", "/");

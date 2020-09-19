@@ -1,5 +1,7 @@
 import * as apolloServerMicro from "apollo-server-micro";
 import { gql } from "apollo-server";
+import { NextApiRequest } from "next";
+import { getUser } from "utils/auth";
 
 // models
 import { typeDefs as personTypeDefs } from "@/models/Person";
@@ -37,8 +39,9 @@ import SocSettingAPI from "@/datasources/socSetting";
 import FacultyAPI from "@/datasources/faculty";
 import MajorAPI from "@/datasources/major";
 
-// store
+// others
 import { personStore, executiveStore, socSettingStore } from "@/store";
+import { ContextBase } from "./types/datasources";
 
 /**
  * Sets up any dataSources our resolvers need
@@ -53,10 +56,13 @@ const dataSources = () => ({
   socSettingAPI: new SocSettingAPI(socSettingStore),
 });
 
-// the function that sets up the global context for each resolver, using the req
-const context = async () => {
-  // TODO: check auth
-  return {};
+/**
+ * The function that sets up the global context for each resolver, using the req
+ * @internal
+ */
+const context = async (req: NextApiRequest): Promise<ContextBase> => {
+  const user = await getUser(req);
+  return { user };
 };
 
 /**

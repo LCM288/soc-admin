@@ -2,10 +2,10 @@ import React from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { User } from "@/types/datasources";
-import { getUser } from "utils/auth";
+import { getUserAndRefreshToken } from "utils/auth";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const user = await getUser(ctx);
+  const user = await getUserAndRefreshToken(ctx);
   if (!user) {
     ctx.res.statusCode = 307;
     ctx.res.setHeader("Location", "/login");

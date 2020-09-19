@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext } from "next";
+import { GetServerSidePropsContext, NextApiRequest } from "next";
 import { ServerResponse } from "http";
 import { parseCookies } from "nookies";
 import jwt from "jsonwebtoken";
@@ -62,12 +62,12 @@ export const setJwtHeader = (token: string, res: ServerResponse): void => {
 };
 
 /**
- * Get user through the header and update the token
+ * Get user through the cookie and update the token
  * @async
  * @param {GetServerSidePropsContext} ctx - The server side props context
  * @returns {Promise<User | null>} decoded user or null if invalid
  */
-export const getUser = async (
+export const getUserAndRefreshToken = async (
   ctx: GetServerSidePropsContext
 ): Promise<User | null> => {
   const cookies = parseCookies(ctx);
@@ -85,6 +85,25 @@ export const getUser = async (
     const newToken = await issureJwt(user, jwtSecret);
     setJwtHeader(newToken, ctx.res);
 
+    return user;
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * Get user from the request using the authorization header
+ * @async
+ * @param {string} token - The jwt token
+ * @returns {Promise<User | null>} decoded user or null if invalid
+ */
+export const getUser = async (req: NextApiRequest): Promise<User | null> => {
+  const jwtSecret = await getJwtSecret();
+  const addr = getClientIp(req);
+  const token = req.headers.authorization || "";
+  try {
+    const user = <User>jwt.verify(token, jwtSecret);
+    if (addr !== user.addr) return null;
     return user;
   } catch {
     return null;
