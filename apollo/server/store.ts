@@ -3,6 +3,10 @@ import { PersonFactory } from "@/models/Person";
 import { ExecutiveFactory } from "@/models/Executive";
 import { SocSettingFactory } from "@/models/SocSetting";
 
+/**
+ * The url to the database
+ * @internal
+ */
 const socAdminDB =
   process.env.DATABASE_URL ||
   `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDB}`;

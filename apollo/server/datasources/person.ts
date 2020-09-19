@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module Person
+ */
+
 import { DataSource } from "apollo-datasource";
 import {
   Person,
@@ -6,6 +11,12 @@ import {
 } from "@/models/Person";
 import { ContextBase } from "@/types/datasources";
 
+/**
+ * Transforms the data from the Person model to plain attributes
+ * @internal
+ * @param {Person} person - An instance of the Person model
+ * @returns {PersonAttributes} Plain attributes for the Person instance
+ */
 const transformData = (person: Person): PersonAttributes => {
   return person.get({ plain: true });
 };

@@ -1,11 +1,18 @@
+/**
+ * @packageDocumentation
+ * @module Executive
+ */
+
 import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import { gql } from "apollo-server";
 
 /** All the attributes in the Executive model */
 export interface ExecutiveAttributes {
   id: number;
+  /** Thd student id of the executive member */
   sid: string;
   nickname: string | null;
+  /** Thd position of the executive member */
   pos: string | null;
 }
 
@@ -18,11 +25,18 @@ export class Executive
   implements ExecutiveAttributes {
   public id!: number;
 
+  /** Thd student id of the executive member */
   public sid!: string;
 
   public nickname!: string | null;
 
+  /** Thd position of the executive member */
   public pos!: string | null;
+
+  // timestamps!
+  public readonly createdAt!: Date;
+
+  public readonly updatedAt!: Date;
 }
 
 /** A helper function to create a store for the Executive model

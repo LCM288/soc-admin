@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module SocSetting
+ */
+
 import { DataSource } from "apollo-datasource";
 import {
   SocSetting,
@@ -6,6 +11,12 @@ import {
 } from "@/models/SocSetting";
 import { ContextBase } from "@/types/datasources";
 
+/**
+ * Transforms the data from the SocSetting model to plain attributes
+ * @internal
+ * @param {SocSetting} socSetting - An instance of the SocSetting model
+ * @returns {SocSettingAttributes} Plain attributes for the SocSetting instance
+ */
 const transformData = (socSetting: SocSetting): SocSettingAttributes => {
   return socSetting.get({ plain: true });
 };

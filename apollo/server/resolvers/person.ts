@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module Person
+ */
+
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
@@ -7,11 +12,15 @@ import {
 } from "@/models/Person";
 import { Major } from "@/models/Major";
 
-type PersonUpdateResponse = {
+/** The response when mutating a single person */
+interface PersonUpdateResponse {
+  /** Whether the mutation is successful or not */
   success: boolean;
+  /** Additional information about the mutation */
   message: string;
+  /** The new person's attributes */
   person?: PersonAttributes;
-};
+}
 
 const majorResolver: ResolverFn<unknown, Major> = (
   { major }: Person,
@@ -40,6 +49,7 @@ const newPersonResolver: ResolverFn<
   return { success: true, message: "success", person };
 };
 
+/** The resolvers associated with the Executive model */
 export const resolvers: Resolvers = {
   Person: {
     major: majorResolver,
@@ -52,7 +62,8 @@ export const resolvers: Resolvers = {
   },
 };
 
-export const typeDefs = gql`
+/** The graphql schema associated with the Executive model's resolvers */
+export const resolverTypeDefs = gql`
   extend type Query {
     people: [Person!]!
   }

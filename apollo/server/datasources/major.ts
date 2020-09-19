@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module Major
+ */
+
 import { DataSource } from "apollo-datasource";
 import { Major } from "@/models/Major";
 import { majors } from "@/json/Majors.json";

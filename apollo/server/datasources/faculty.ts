@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module Faculty
+ */
+
 import { DataSource } from "apollo-datasource";
 import { Faculty } from "@/models/Faculty";
 import { faculties } from "@/json/Faculties.json";

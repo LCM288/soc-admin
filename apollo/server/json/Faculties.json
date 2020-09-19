@@ -2,53 +2,53 @@
   "faculties": [
     {
       "code": "ART",
-      "english_name": "Faculty of Arts",
-      "chinese_name": "文學院"
+      "englishName": "Faculty of Arts",
+      "chineseName": "文學院"
     },
     {
       "code": "BAF",
-      "english_name": "Faculty of Business Administration",
-      "chinese_name": "工商管理學院"
+      "englishName": "Faculty of Business Administration",
+      "chineseName": "工商管理學院"
     },
     {
       "code": "EDU",
-      "english_name": "Faculty of Education",
-      "chinese_name": "教育學院"
+      "englishName": "Faculty of Education",
+      "chineseName": "教育學院"
     },
     {
       "code": "ENF",
-      "english_name": "Faculty of Engineering",
-      "chinese_name": "工程學院"
+      "englishName": "Faculty of Engineering",
+      "chineseName": "工程學院"
     },
     {
       "code": "SLAW",
-      "english_name": "Faculty of Law",
-      "chinese_name": "法律學院"
+      "englishName": "Faculty of Law",
+      "chineseName": "法律學院"
     },
     {
       "code": "MED",
-      "english_name": "Faculty of Medicine",
-      "chinese_name": "醫學院"
+      "englishName": "Faculty of Medicine",
+      "chineseName": "醫學院"
     },
     {
       "code": "SCF",
-      "english_name": "Faculty of Science",
-      "chinese_name": "理學院"
+      "englishName": "Faculty of Science",
+      "chineseName": "理學院"
     },
     {
       "code": "SSF",
-      "english_name": "Faculty of Social Science",
-      "chinese_name": "社會科學院"
+      "englishName": "Faculty of Social Science",
+      "chineseName": "社會科學院"
     },
     {
       "code": "DDP",
-      "english_name": "Double Degree Programmes",
-      "chinese_name": "雙學位課程"
+      "englishName": "Double Degree Programmes",
+      "chineseName": "雙學位課程"
     },
     {
       "code": "IDM",
-      "english_name": "Interdisciplinary Major Programmes",
-      "chinese_name": "跨學科主修課程"
+      "englishName": "Interdisciplinary Major Programmes",
+      "chineseName": "跨學科主修課程"
     }
   ]
 }

@@ -1,8 +1,14 @@
+/**
+ * @packageDocumentation
+ * @module Major
+ */
+
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import { Major } from "@/models/Major";
 import { Faculty } from "@/models/Faculty";
 
+/** The input arguments for the major query's resolver */
 interface MajorResolverArgs {
   code: string;
 }
@@ -31,6 +37,7 @@ const majorResolver: ResolverFn<MajorResolverArgs, Major> = (
   return dataSources.majorAPI.getMajor(code);
 };
 
+/** The resolvers associated with the Major model */
 export const resolvers: Resolvers = {
   Major: {
     faculties: facultiesResolver,
@@ -41,7 +48,8 @@ export const resolvers: Resolvers = {
   },
 };
 
-export const typeDefs = gql`
+/** The graphql schema associated with the Major model's resolvers */
+export const resolverTypeDefs = gql`
   extend type Query {
     majors: [Major!]!
     major(code: String): Major

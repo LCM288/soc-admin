@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module SocSetting
+ */
+
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
@@ -5,11 +10,15 @@ import {
   SocSettingCreationAttributes,
 } from "@/models/SocSetting";
 
-type SocSettingUpdateResponse = {
+/** The response when mutating a single socSetting */
+interface SocSettingUpdateResponse {
+  /** Whether the mutation is successful or not */
   success: boolean;
+  /** Additional information about the mutation */
   message: string;
+  /** The new soc setting's attributes */
   socSetting?: SocSettingAttributes;
-};
+}
 
 const socSettingsResolver: ResolverFn<unknown, SocSettingAttributes[]> = (
   _,
@@ -30,6 +39,7 @@ const newSocSettingResolver: ResolverFn<
   return { success: true, message: "success", socSetting };
 };
 
+/** The resolvers associated with the SocSetting model */
 export const resolvers: Resolvers = {
   Query: {
     socSettings: socSettingsResolver,
@@ -39,7 +49,8 @@ export const resolvers: Resolvers = {
   },
 };
 
-export const typeDefs = gql`
+/** The graphql schema associated with the SocSetting model's resolvers */
+export const resolverTypeDefs = gql`
   extend type Query {
     socSettings: [SocSetting!]!
   }

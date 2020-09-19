@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module Executive
+ */
+
 import { DataSource } from "apollo-datasource";
 import {
   Executive,
@@ -6,6 +11,12 @@ import {
 } from "@/models/Executive";
 import { ContextBase } from "@/types/datasources";
 
+/**
+ * Transforms the data from the Executive model to plain attributes
+ * @internal
+ * @param {Executive} executive - An instance of the Executive model
+ * @returns {ExecutiveAttributes} Plain attributes for the Executive instance
+ */
 const transformData = (executive: Executive): ExecutiveAttributes => {
   return executive.get({ plain: true });
 };

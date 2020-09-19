@@ -1,10 +1,19 @@
+/**
+ * @packageDocumentation
+ * @module Major
+ */
+
 import { gql } from "apollo-server";
 
 /** The type for a major program */
 export type Major = {
+  /** Major program code */
   code: string;
-  chinese_name: string;
-  english_name: string;
+  /** Major program's Chinese name */
+  chineseName: string;
+  /** Major program's English name */
+  englishName: string;
+  /** The faculties that the major program belongs to */
   faculties: string[];
 };
 
@@ -12,8 +21,8 @@ export type Major = {
 export const typeDefs = gql`
   type Major {
     code: String!
-    chinese_name: String
-    english_name: String
+    chineseName: String
+    englishName: String
     faculties: [Faculty]
   }
 `;

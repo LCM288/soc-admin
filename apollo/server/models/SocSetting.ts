@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module SocSetting
+ */
+
 import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import { gql } from "apollo-server";
 
@@ -20,6 +25,11 @@ export class SocSetting
   public key!: string;
 
   public value!: string;
+
+  // timestamps!
+  public readonly createdAt!: Date;
+
+  public readonly updatedAt!: Date;
 }
 
 /** A helper function to create a store for the SocSetting model

@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module Person
+ */
+
 import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import { gql } from "apollo-server";
 
@@ -6,6 +11,7 @@ enum Gender {
   Female = "Female",
 }
 
+/** The enum for the nine collges plus the option None */
 enum College {
   CC = "CC",
   UC = "UC",
@@ -22,6 +28,7 @@ enum College {
 /** All the attributes in the Person model */
 export interface PersonAttributes {
   id: number;
+  /** The student id of the student */
   sid: string;
   chineseName: string | null;
   englishName: string;
@@ -30,9 +37,15 @@ export interface PersonAttributes {
   email: string | null;
   phone: string | null;
   college: College;
+  /** The major program's code of the student */
   major: string;
+  /** The date that the student entered the university */
   dateOfEntry: Date;
   expectedGraduationDate: Date;
+  /**
+   * The date that the student became a member of the society
+   * Null for non-member
+   */
   memberSince: Date | null;
 }
 
@@ -45,6 +58,7 @@ export class Person
   implements PersonAttributes {
   public id!: number;
 
+  /** The student id of the student */
   public sid!: string;
 
   public chineseName!: string | null;
@@ -61,12 +75,18 @@ export class Person
 
   public college!: College;
 
+  /** The major program's code of the student */
   public major!: string;
 
+  /** The date that the student entered the university */
   public dateOfEntry!: Date;
 
   public expectedGraduationDate!: Date;
 
+  /**
+   * The date that the student became a member of the society. \
+   * Null for non-member
+   */
   public memberSince!: Date | null;
 
   // timestamps!

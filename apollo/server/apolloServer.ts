@@ -10,23 +10,23 @@ import { typeDefs as facultyTypeDefs } from "@/models/Faculty";
 
 // resolvers
 import {
-  typeDefs as personExtendDefs,
+  resolverTypeDefs as personResolverTypeDefs,
   resolvers as personResolvers,
 } from "@/resolvers/person";
 import {
-  typeDefs as executiveExtendDefs,
+  resolverTypeDefs as executiveResolverTypeDefs,
   resolvers as executiveResolvers,
 } from "@/resolvers/executive";
 import {
-  typeDefs as socSettingExtendDefs,
+  resolverTypeDefs as socSettingResolverTypeDefs,
   resolvers as socSettingResolvers,
 } from "@/resolvers/socSetting";
 import {
-  typeDefs as facultyExtendDefs,
+  resolverTypeDefs as facultyResolverTypeDefs,
   resolvers as facultyResolvers,
 } from "@/resolvers/faculty";
 import {
-  typeDefs as majorExtendDefs,
+  resolverTypeDefs as majorResolverTypeDefs,
   resolvers as majorResolvers,
 } from "@/resolvers/major";
 
@@ -43,6 +43,7 @@ import { personStore, executiveStore, socSettingStore } from "@/store";
 /**
  * Sets up any dataSources our resolvers need
  * @returns a datasource object
+ * @internal
  */
 const dataSources = () => ({
   facultyAPI: new FacultyAPI(),
@@ -60,6 +61,7 @@ const context = async () => {
 
 /**
  * A dummy type def for graphql so that Mutation and Query can be extended
+ * @internal
  */
 const dummyTypeDefs = gql`
   type Mutation {
@@ -70,19 +72,22 @@ const dummyTypeDefs = gql`
   }
 `;
 
+/**
+ * A micro Apollo server that would resolve any graphql queries
+ */
 const apolloServer = new apolloServerMicro.ApolloServer({
   typeDefs: [
     dummyTypeDefs,
     personTypeDefs,
-    personExtendDefs,
+    personResolverTypeDefs,
     executiveTypeDefs,
-    executiveExtendDefs,
+    executiveResolverTypeDefs,
     socSettingTypeDefs,
-    socSettingExtendDefs,
+    socSettingResolverTypeDefs,
     majorTypeDefs,
-    majorExtendDefs,
+    majorResolverTypeDefs,
     facultyTypeDefs,
-    facultyExtendDefs,
+    facultyResolverTypeDefs,
   ],
   resolvers: [
     personResolvers,

@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module Executive
+ */
+
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
@@ -5,11 +10,15 @@ import {
   ExecutiveCreationAttributes,
 } from "@/models/Executive";
 
-type ExecutiveUpdateResponse = {
+/** The response when mutating a single executive */
+interface ExecutiveUpdateResponse {
+  /** Whether the mutation is successful or not */
   success: boolean;
+  /** Additional information about the mutation */
   message: string;
+  /** The new executive's attributes */
   executive?: ExecutiveAttributes;
-};
+}
 
 const executivesResolver: ResolverFn<unknown, ExecutiveAttributes[]> = (
   _,
@@ -30,6 +39,7 @@ const newExecutiveResolver: ResolverFn<
   return { success: true, message: "success", executive };
 };
 
+/** The resolvers associated with the Executive model */
 export const resolvers: Resolvers = {
   Query: {
     executives: executivesResolver,
@@ -39,7 +49,8 @@ export const resolvers: Resolvers = {
   },
 };
 
-export const typeDefs = gql`
+/** The graphql schema associated with the Executive model's resolvers */
+export const resolverTypeDefs = gql`
   extend type Query {
     executives: [Executive!]!
   }
