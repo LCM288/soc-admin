@@ -23,7 +23,7 @@ const transformData = (person: Person): PersonAttributes => {
 
 /** An API to retrieve data from the Person store */
 export default class PersonAPI extends DataSource<ContextBase> {
-  /** The Person store */
+  /** The {@link Person} store */
   private store: typeof Person;
 
   /**

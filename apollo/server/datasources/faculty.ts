@@ -9,7 +9,7 @@ import { faculties } from "@/json/Faculties.json";
 
 /** An API to retrieve data from the Faculty store */
 export default class FacultyAPI extends DataSource {
-  /** The Executive store */
+  /** The Faculty store */
   private faculties: Faculty[];
 
   /**

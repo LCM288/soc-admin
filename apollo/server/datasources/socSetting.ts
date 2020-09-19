@@ -23,7 +23,7 @@ const transformData = (socSetting: SocSetting): SocSettingAttributes => {
 
 /** An API to retrieve data from the SocSetting store */
 export default class SocSettingAPI extends DataSource<ContextBase> {
-  /** The SocSetting store */
+  /** The {@link SocSetting} store */
   private store: typeof SocSetting;
 
   /**

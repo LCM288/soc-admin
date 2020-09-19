@@ -36,7 +36,7 @@ const transformDataOptional = (
 
 /** An API to retrieve data from the Executive store */
 export default class ExecutiveAPI extends DataSource<ContextBase> {
-  /** The Executive store */
+  /** The {@link Executive} store */
   private store: typeof Executive;
 
   /**

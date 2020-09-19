@@ -9,6 +9,7 @@ import { majors } from "@/json/Majors.json";
 
 /** An API to retrieve data from the Major store */
 export default class MajorAPI extends DataSource {
+  /** The Major store */
   private majors: Major[];
 
   /**
