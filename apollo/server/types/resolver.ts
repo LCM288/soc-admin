@@ -10,10 +10,15 @@ import { ContextBase } from "./datasources";
 
 /** The data source for a resolver */
 export interface ResolverDatasource {
+  /** The API for Person */
   personAPI: PersonAPI;
+  /** The API for Executive */
   executiveAPI: ExecutiveAPI;
+  /** The API for SocSetting */
   socSettingAPI: SocSettingAPI;
+  /** The API for Major */
   majorAPI: MajorAPI;
+  /** The API for Faculty */
   facultyAPI: FacultyAPI;
 }
 
@@ -22,6 +27,7 @@ export type ResolverParent = Person | Major | null;
 
 /** The context of a resolver */
 export interface ResolverContext extends ContextBase {
+  /** The data source for a resolver */
   dataSources: ResolverDatasource;
 }
 
