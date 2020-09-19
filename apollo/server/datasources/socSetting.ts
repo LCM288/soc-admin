@@ -8,7 +8,6 @@ import {
   SocSetting,
   SocSettingAttributes,
   SocSettingCreationAttributes,
-  SocSettingDestroyAttributes,
 } from "@/models/SocSetting";
 import { ContextBase } from "@/types/datasources";
 
@@ -62,12 +61,10 @@ export default class SocSettingAPI extends DataSource<ContextBase> {
   /**
    * Delete soc settings
    * @async
-   * @param {SocSettingDestroyAttributes} arg - The arg for the soc setting
+   * @param {{ key: string }} arg - The arg for the soc setting
    * @returns {Promise<number>} Number of soc settings deleted
    */
-  public async deleteSocSetting(
-    arg: SocSettingDestroyAttributes
-  ): Promise<number> {
+  public async deleteSocSetting(arg: { key: string }): Promise<number> {
     const count = await this.store.destroy({ where: arg });
     return count;
   }
