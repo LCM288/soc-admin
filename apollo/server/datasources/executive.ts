@@ -10,14 +10,27 @@ import {
   ExecutiveCreationAttributes,
 } from "@/models/Executive";
 import { ContextBase } from "@/types/datasources";
+import { compact } from "lodash";
 
 /**
  * Transforms the data from the Executive model to plain attributes
  * @internal
- * @param {Executive} executive - An instance of the Executive model
- * @returns {ExecutiveAttributes} Plain attributes for the Executive instance
+ * @param executive - An instance of the Executive model
+ * @returns Plain attributes for the Executive instance
  */
 const transformData = (executive: Executive): ExecutiveAttributes => {
+  return executive.get({ plain: true });
+};
+
+/**
+ * Transforms the data from the Executive model to plain attributes
+ * @internal
+ * @param executive - An instance of the Executive model
+ * @returns Plain attributes for the Executive instance
+ */
+const transformDataOptional = (
+  executive: Executive | null
+): ExecutiveAttributes | undefined => {
   return executive?.get({ plain: true });
 };
 
@@ -40,9 +53,11 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
    * @async
    * @returns {Promise<ExecutiveAttributes>} An instance of executive
    */
-  public async findExecutive(sid: string): Promise<ExecutiveAttributes> {
+  public async findExecutive(
+    sid: string
+  ): Promise<ExecutiveAttributes | undefined> {
     const executive = await this.store.findOne({ where: { sid } });
-    return transformData(executive);
+    return transformDataOptional(executive);
   }
 
   /**
@@ -52,7 +67,7 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
    */
   public async findExecutives(): Promise<ExecutiveAttributes[]> {
     const executives = await this.store.findAll();
-    return executives.map(transformData);
+    return compact(executives.map(transformData));
   }
 
   /**

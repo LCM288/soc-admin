@@ -23,10 +23,10 @@ export default class FacultyAPI extends DataSource {
   /**
    * Find a facultiy by code
    * @param {string} code - The code of the faculty
-   * @returns {Faculty | null} The matched faculty or null if not found
+   * @returns {Faculty | undefined} The matched faculty or undefined if not found
    */
-  public getFaculty(code: string): Faculty | null {
-    return this.faculties.find((f) => f.code === code) || null;
+  public getFaculty(code: string): Faculty | undefined {
+    return this.faculties.find((f) => f.code === code);
   }
 
   /**

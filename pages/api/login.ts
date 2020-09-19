@@ -10,12 +10,12 @@ import { getClientIp } from "request-ip";
  * @async
  * @param {string} baseUrl - The base url of the server
  * @param {string} code - The authorization code
- * @returns {Promise<string | null>} The access token
+ * @returns {Promise<string | undefined>} The access token
  */
 const getAccessToken = async (
   baseUrl: string,
   code: string
-): Promise<string | null> => {
+): Promise<string | undefined> => {
   /* TODO put CLIENT_ID and CLIENT_SECRET to database */
   const TENANT = "link.cuhk.edu.hk";
   const CLIENT_ID = "373b4ec9-6336-4955-90cf-b7cbd9e3426f";
@@ -36,7 +36,7 @@ const getAccessToken = async (
     const tokenResponse = await axios.post(link, body);
     return tokenResponse.data.access_token;
   } catch {
-    return null;
+    return undefined;
   }
 };
 
@@ -45,12 +45,12 @@ const getAccessToken = async (
  * @async
  * @param {NextApiRequest} req - The server request object
  * @param {string} accessToken - The access token recieved from microsoft
- * @returns {Promise<User | null>} A user object generated from the user data
+ * @returns {Promise<User | undefined>} A user object generated from the user data
  */
 const getUser = async (
   req: NextApiRequest,
   accessToken: string
-): Promise<User | null> => {
+): Promise<User | undefined> => {
   try {
     const userDataResponse = await axios.get(
       "https://graph.microsoft.com/v1.0/me",
@@ -63,7 +63,7 @@ const getUser = async (
     const addr = getClientIp(req);
     return { sid, name, addr };
   } catch {
-    return null;
+    return undefined;
   }
 };
 
@@ -82,7 +82,7 @@ export default async (
     res.status(400).end("No authorization code recieved.");
     return;
   }
-  const { host } = req.headers;
+  const { host = "" } = req.headers;
   const protocol = /^localhost/g.test(host) ? "http" : "https";
   const baseUrl = `${protocol}://${req.headers.host}`;
   const accessToken = await getAccessToken(baseUrl, req.body.code);

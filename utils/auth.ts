@@ -9,17 +9,13 @@ import { getClientIp } from "request-ip";
 /**
  * Get the jwt secret from the database
  * @async
- * @returns {Promise<string | null>} the jwt secret
+ * @returns {Promise<string | undefined>} the jwt secret
  */
-const getJwtSecret = async (): Promise<string | null> => {
-  try {
-    const entry = await socSettingStore.findOne({
-      where: { key: "jwt_secret" },
-    });
-    return entry.getDataValue("value");
-  } catch {
-    return null;
-  }
+const getJwtSecret = async (): Promise<string | undefined> => {
+  const entry = await socSettingStore.findOne({
+    where: { key: "jwt_secret" },
+  });
+  return entry?.getDataValue("value");
 };
 
 /**
@@ -27,13 +23,16 @@ const getJwtSecret = async (): Promise<string | null> => {
  * @async
  * @param {User} user - The user object to be encrypted
  * @param {string} secret - The jwt secret
- * @returns {Promise<string | null>} the issued token
+ * @returns {Promise<string | undefined>} the issued token
  */
 export const issureJwt = async (
   user: User,
   secret?: string
-): Promise<string | null> => {
-  const jwtSecret = secret || (await getJwtSecret());
+): Promise<string | undefined> => {
+  const jwtSecret = secret ?? (await getJwtSecret());
+  if (!jwtSecret) {
+    return undefined;
+  }
   const token = jwt.sign(
     { sid: user.sid, name: user.name, addr: user.addr },
     jwtSecret,
@@ -65,11 +64,11 @@ export const setJwtHeader = (token: string, res: ServerResponse): void => {
  * Get user through the cookie and update the token
  * @async
  * @param {GetServerSidePropsContext} ctx - The server side props context
- * @returns {Promise<User | null>} decoded user or null if invalid
+ * @returns {Promise<User | undefined>} decoded user or undefined if invalid
  */
 export const getUserAndRefreshToken = async (
   ctx: GetServerSidePropsContext
-): Promise<User | null> => {
+): Promise<User | undefined> => {
   const cookies = parseCookies(ctx);
   const token =
     process.env.NODE_ENV === "development"
@@ -77,17 +76,22 @@ export const getUserAndRefreshToken = async (
       : cookies["__Host-jwt"];
   const jwtSecret = await getJwtSecret();
   const addr = getClientIp(ctx.req);
+  if (!jwtSecret) {
+    return undefined;
+  }
   try {
     const user = <User>jwt.verify(token, jwtSecret);
-    if (addr !== user.addr) return null;
+    if (addr !== user.addr) return undefined;
 
     // issue new token whenever possible
     const newToken = await issureJwt(user, jwtSecret);
-    setJwtHeader(newToken, ctx.res);
+    if (newToken) {
+      setJwtHeader(newToken, ctx.res);
+    }
 
     return user;
   } catch {
-    return null;
+    return undefined;
   }
 };
 
@@ -95,23 +99,30 @@ export const getUserAndRefreshToken = async (
  * Get user from the request using the authorization header
  * @async
  * @param {string} token - The jwt token
- * @returns {Promise<User | null>} decoded user or null if invalid
+ * @returns decoded user or undefined if invalid
  */
-export const getUser = async (req: IncomingMessage): Promise<User | null> => {
+export const getUser = async (
+  req: IncomingMessage
+): Promise<User | undefined> => {
   const jwtSecret = await getJwtSecret();
+  if (!jwtSecret) {
+    return undefined;
+  }
+
   const addr = getClientIp(req);
   if (!req.headers.authorization) {
-    return null;
+    return undefined;
   }
+
   const [type, token] = req.headers.authorization.split(" ");
   if (type.toLowerCase() !== "bearer") {
-    return null;
+    return undefined;
   }
   try {
     const user = <User>jwt.verify(token, jwtSecret);
-    if (addr !== user.addr) return null;
+    if (addr !== user.addr) return undefined;
     return user;
   } catch {
-    return null;
+    return undefined;
   }
 };

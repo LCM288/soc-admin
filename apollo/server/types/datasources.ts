@@ -11,5 +11,5 @@ export type User = {
 /** The base context type for the apollo server */
 export type ContextBase = {
   /** The user under the context */
-  user: User;
+  user?: User;
 };

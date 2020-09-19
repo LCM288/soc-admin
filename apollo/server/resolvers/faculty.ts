@@ -29,14 +29,14 @@ const facultiesResolver: ResolverFn<unknown, Faculty[]> = (
 
 /**
  * The resolver for faculty Query
- * @returns The faculty with the given code or null if not found
+ * @returns The faculty with the given code or undefined if not found
  * @category Query Resolver
  */
-const facultyResolver: ResolverFn<FacultyResolverArgs, Faculty> = (
+const facultyResolver: ResolverFn<FacultyResolverArgs, Faculty | undefined> = (
   _,
   { code },
   { dataSources }
-) => {
+): Faculty | undefined => {
   return dataSources.facultyAPI.getFaculty(code);
 };
 

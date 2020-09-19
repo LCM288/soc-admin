@@ -4,7 +4,7 @@ import { GetServerSideProps } from "next";
 import { getUserAndRefreshToken } from "utils/auth";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { host } = ctx.req.headers;
+  const { host = "" } = ctx.req.headers;
   const protocol = /^localhost/g.test(host) ? "http" : "https";
   const baseUrl = `${protocol}://${ctx.req.headers.host}`;
   const user = await getUserAndRefreshToken(ctx);

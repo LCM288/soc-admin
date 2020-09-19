@@ -22,10 +22,10 @@ export default class MajorAPI extends DataSource {
   /**
    * Find a major program by code
    * @param {string} code - The code of the major program
-   * @returns {Major} The matched major or null if not found
+   * @returns The matched major or undefined if not found
    */
-  public getMajor(code: string): Major | null {
-    return this.majors.find((m) => m.code === code) || null;
+  public getMajor(code: string): Major | undefined {
+    return this.majors.find((m) => m.code === code);
   }
 
   /**

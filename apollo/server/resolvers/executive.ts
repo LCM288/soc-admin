@@ -48,8 +48,8 @@ const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = (
  */
 const executiveResolver: ResolverFn<
   ExecutiveResolverArgs,
-  ExecutiveAttributes
-> = (_, { sid }, { dataSources }): Promise<ExecutiveAttributes | null> => {
+  ExecutiveAttributes | undefined
+> = (_, { sid }, { dataSources }): Promise<ExecutiveAttributes | undefined> => {
   return dataSources.executiveAPI.findExecutive(sid);
 };
 

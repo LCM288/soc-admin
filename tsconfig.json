@@ -18,7 +18,8 @@
     "typeRoots": ["node_modules/@types"],
     "baseUrl": ".",
     "paths": { "@/*": ["apollo/server/*"] },
-    "stripInternal": true
+    "stripInternal": true,
+    "strictNullChecks": true
   },
   "extends": "@tsconfig/recommended/tsconfig.json",
   "exclude": ["node_modules"],

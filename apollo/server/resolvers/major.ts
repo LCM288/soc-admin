@@ -7,6 +7,7 @@ import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import { Major } from "@/models/Major";
 import { Faculty } from "@/models/Faculty";
+import { compact } from "lodash";
 
 /** The input arguments for the major query's resolver */
 interface MajorResolverArgs {
@@ -25,7 +26,9 @@ const facultiesResolver: ResolverFn<unknown, Faculty[]> = (
   _,
   { dataSources }
 ): Faculty[] => {
-  return faculties.map((faculty) => dataSources.facultyAPI.getFaculty(faculty));
+  return compact(
+    faculties.map((faculty) => dataSources.facultyAPI.getFaculty(faculty))
+  );
 };
 
 // Query resolvers
@@ -45,14 +48,14 @@ const majorsResolver: ResolverFn<unknown, Major[]> = (
 
 /**
  * The resolver for major Query
- * @returns The major with the given code or null if not found
+ * @returns The major with the given code or undefined if not found
  * @category Query Resolver
  */
-const majorResolver: ResolverFn<MajorResolverArgs, Major> = (
+const majorResolver: ResolverFn<MajorResolverArgs, Major | undefined> = (
   _,
   { code },
   { dataSources }
-): Major => {
+): Major | undefined => {
   return dataSources.majorAPI.getMajor(code);
 };
 

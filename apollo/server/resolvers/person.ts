@@ -29,11 +29,11 @@ interface PersonUpdateResponse {
  * @returns The major of the Person
  * @category Field Resolver
  */
-const majorResolver: ResolverFn<unknown, Major> = (
+const majorResolver: ResolverFn<null, Major | undefined> = (
   { major }: Person,
   _,
   { dataSources }
-): Major => {
+): Major | undefined => {
   return dataSources.majorAPI.getMajor(major);
 };
 
