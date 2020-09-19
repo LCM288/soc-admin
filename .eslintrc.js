@@ -28,6 +28,7 @@ module.exports = {
     sourceType: "module",
     project: "./tsconfig.json",
   },
+  ignorePatterns: ["docs"],
   rules: {
     "linebreak-style": "off",
     "prettier/prettier": [

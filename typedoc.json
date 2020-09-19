@@ -1,0 +1,5 @@
+{
+  "mode": "modules",
+  "exclude": ["node_modules/**", "docs/**", "**/*.js"],
+  "out": "./docs"
+}

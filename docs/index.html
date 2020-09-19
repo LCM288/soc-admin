@@ -1,0 +1,184 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>soc-admin</title>
+	<meta name="description" content="Documentation for soc-admin">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">soc-admin</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>soc-admin</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<p><a href="https://github.com/LCM288/soc-admin/blob/master/LICENSE"><img src="https://badgen.net/github/license/LCM288/soc-admin?cache=600" alt="License"></a>
+					<a href="https://github.com/LCM288/soc-admin"><img src="https://badgen.net/github/commits/LCM288/soc-admin?cache=600" alt="Commits"></a>
+					<a href="https://github.com/LCM288/soc-admin"><img src="https://badgen.net/github/last-commit/LCM288/soc-admin?cache=600" alt="Last Commit"></a>
+					<a href="https://travis-ci.com/LCM288/soc-admin"><img src="https://badgen.net/travis/LCM288/soc-admin?cache=600" alt="Build Status"></a>
+					<a href="https://github.com/LCM288/soc-admin/issues"><img src="https://badgen.net/github/open-issues/LCM288/soc-admin?cache=600" alt="Open Issues"></a>
+				<a href="https://github.com/LCM288/soc-admin/pulls"><img src="https://badgen.net/github/open-prs/LCM288/soc-admin?cache=600" alt="Open PRs"></a></p>
+				<a href="#for-dev" id="for-dev" style="color: inherit; text-decoration: none;">
+					<h1>For dev</h1>
+				</a>
+				<a href="#setup-procedure" id="setup-procedure" style="color: inherit; text-decoration: none;">
+					<h2>Setup procedure</h2>
+				</a>
+				<ol>
+					<li>install <code>postgresql</code>, <code>node.js</code> and <code>yarn</code></li>
+					<li>put a <code>.env</code> file in root following the variables in <code>.env.example</code></li>
+					<li>run <code>yarn install</code> to install all dependencies</li>
+					<li>run <code>yarn newdb</code> then <code>yarn migrate</code> to set up the database</li>
+					<li>run <code>yarn generate</code> to generate jwt secret</li>
+					<li>run <code>yarn dev</code> to start the server</li>
+				</ol>
+				<a href="#useful-docs" id="useful-docs" style="color: inherit; text-decoration: none;">
+					<h2>Useful docs</h2>
+				</a>
+				<ul>
+					<li>Database: <a href="https://sequelize.org/master/index.html">Sequelize</a> / <a href="https://github.com/sequelize/umzug/tree/v2.x">Umzug</a></li>
+					<li>Backend: <a href="https://graphql.org/learn/">Graphql</a> / <a href="https://www.apollographql.com/docs/apollo-server/">Apollo Server</a></li>
+					<li>Frontend: <a href="https://nextjs.org/docs/getting-started">Next</a> / <a href="https://reactjs.org/docs/getting-started.html">React</a> / <a href="https://www.apollographql.com/docs/react/">Apollo Client</a></li>
+					<li>Miscellaneous:  <a href="https://github.com/axios/axios">Axios</a> / <a href="https://www.typescriptlang.org/docs/handbook/intro.html">Typescript</a> / <a href="https://jestjs.io/docs/en/getting-started">Jest</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Internals</span>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/executive.html">Executive</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/faculty.html">Faculty</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/major.html">Major</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/person.html">Person</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/socsetting.html">Soc<wbr>Setting</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/apollo_server.html">apollo\server</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/apollo_server_types.html">apollo\server\types</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/pages.html">pages</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/pages_api.html">pages\api</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/tests.html">tests</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/utils.html">utils</a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Externals</span>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/apollo_server_json.html">apollo\server\json</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

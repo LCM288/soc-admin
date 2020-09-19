@@ -17,7 +17,8 @@
     "noImplicitAny": true,
     "typeRoots": ["node_modules/@types"],
     "baseUrl": ".",
-    "paths": { "@/*": ["apollo/server/*"] }
+    "paths": { "@/*": ["apollo/server/*"] },
+    "stripInternal": true
   },
   "extends": "@tsconfig/recommended/tsconfig.json",
   "exclude": ["node_modules"],
