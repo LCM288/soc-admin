@@ -95,10 +95,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="contextbase" class="tsd-anchor"></a>
 					<h3>Context<wbr>Base</h3>
-					<div class="tsd-signature tsd-kind-icon">Context<wbr>Base<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>user<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#user-1" class="tsd-signature-type">User</a><span class="tsd-signature-symbol"> }</span></div>
+					<div class="tsd-signature tsd-kind-icon">Context<wbr>Base<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>user<span class="tsd-signature-symbol">?: </span><a href="apollo_server_types.html#user-1" class="tsd-signature-type">User</a><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/9f7c24b/apollo/server/types/datasources.ts#L12">apollo/server/types/datasources.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c426023/apollo/server/types/datasources.ts#L12">apollo/server/types/datasources.ts:12</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -110,7 +110,7 @@
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter">
-								<h5>user<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#user-1" class="tsd-signature-type">User</a></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> user<span class="tsd-signature-symbol">?: </span><a href="apollo_server_types.html#user-1" class="tsd-signature-type">User</a></h5>
 								<div class="tsd-comment tsd-typography">
 									<div class="lead">
 										<p>The user under the context</p>
@@ -126,7 +126,7 @@
 					<div class="tsd-signature tsd-kind-icon">Resolver<wbr>Fn&lt;Args, Result&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>parent<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Args</span>, context<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolvercontext.html" class="tsd-signature-type">ResolverContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/9f7c24b/apollo/server/types/resolver.ts#L38">apollo/server/types/resolver.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c426023/apollo/server/types/resolver.ts#L38">apollo/server/types/resolver.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -187,7 +187,7 @@
 					<div class="tsd-signature tsd-kind-icon">Resolver<wbr>Parent<span class="tsd-signature-symbol">:</span> <a href="../classes/person.person-1.html" class="tsd-signature-type">Person</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/major.major-1.html" class="tsd-signature-type">Major</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/9f7c24b/apollo/server/types/resolver.ts#L26">apollo/server/types/resolver.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c426023/apollo/server/types/resolver.ts#L26">apollo/server/types/resolver.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -202,7 +202,7 @@
 					<div class="tsd-signature tsd-kind-icon">Resolvers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IResolvers</span><span class="tsd-signature-symbol">&lt;</span><a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/apollo_server_types.resolvercontext.html" class="tsd-signature-type">ResolverContext</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/9f7c24b/apollo/server/types/resolver.ts#L45">apollo/server/types/resolver.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c426023/apollo/server/types/resolver.ts#L45">apollo/server/types/resolver.ts:45</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -217,7 +217,7 @@
 					<div class="tsd-signature tsd-kind-icon">User<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>addr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">; </span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>sid<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/9f7c24b/apollo/server/types/datasources.ts#L2">apollo/server/types/datasources.ts:2</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c426023/apollo/server/types/datasources.ts#L2">apollo/server/types/datasources.ts:2</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
