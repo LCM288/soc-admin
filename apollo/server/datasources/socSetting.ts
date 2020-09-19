@@ -19,7 +19,7 @@ import { ContextBase } from "@/types/datasources";
  * @returns {SocSettingAttributes} Plain attributes for the SocSetting instance
  */
 const transformData = (socSetting: SocSetting): SocSettingAttributes => {
-  return socSetting?.get({ plain: true });
+  return socSetting.get({ plain: true });
 };
 
 /** An API to retrieve data from the SocSetting store */

@@ -16,7 +16,7 @@ export interface SocSettingAttributes {
 /** All the attributes needed to create an instance of the SocSetting model */
 export type SocSettingCreationAttributes = Optional<SocSettingAttributes, "id">;
 
-/** All the attributes needed to create an instance of the SocSetting model */
+/** All the attributes needed to destroy instance(s) of the SocSetting model */
 export type SocSettingDestroyAttributes = Optional<
   SocSettingAttributes,
   "id" | "key" | "value"
