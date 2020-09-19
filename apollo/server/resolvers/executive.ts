@@ -43,7 +43,7 @@ const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = (
 /**
  * The resolver for executive Query
  * @async
- * @returns Executive
+ * @returns The executive matches the sid or undefined if not found
  * @category Query Resolver
  */
 const executiveResolver: ResolverFn<
@@ -78,7 +78,7 @@ export const resolvers: Resolvers = {
   Query: {
     /** see {@link executivesResolver} */
     executives: executivesResolver,
-    /** see {@link executiveBySidResolver} */
+    /** see {@link executiveResolver} */
     executive: executiveResolver,
   },
   Mutation: {
