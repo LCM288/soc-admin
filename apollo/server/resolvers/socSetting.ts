@@ -20,6 +20,14 @@ interface SocSettingUpdateResponse {
   socSetting?: SocSettingAttributes;
 }
 
+/** The response when deleting socSetting(s) */
+interface SocSettingDeleteResponse {
+  /** Whether the mutation is successful or not */
+  success: boolean;
+  /** Additional information about the mutation */
+  message: string;
+}
+
 // Query resolvers
 
 /**
@@ -39,21 +47,42 @@ const socSettingsResolver: ResolverFn<unknown, SocSettingAttributes[]> = (
 // Mutation resolvers
 
 /**
- * The resolver for newSocSetting Mutation
+ * The resolver for updateSocSetting Mutation
  * @async
- * @param arg - The arguments for the newSocSetting mutation
+ * @param arg - The arguments for the updateSocSetting mutation
  * @returns The update response
  * @category Mutation Resolver
  */
-const newSocSettingResolver: ResolverFn<
+const updateSocSettingResolver: ResolverFn<
   SocSettingCreationAttributes,
   SocSettingUpdateResponse
 > = async (_, arg, { dataSources }): Promise<SocSettingUpdateResponse> => {
-  const socSetting = await dataSources.socSettingAPI.addNewSocSetting(arg);
+  const socSetting = await dataSources.socSettingAPI.updateSocSetting(arg);
   if (!socSetting) {
     return { success: false, message: "Something wrong happened" };
   }
   return { success: true, message: "success", socSetting };
+};
+
+/**
+ * The resolver for deleteSocSetting Mutation
+ * @async
+ * @param arg - The arguments for the deleteSocSetting mutation
+ * @returns The update response
+ * @category Mutation Resolver
+ */
+const deleteSocSettingResolver: ResolverFn<
+  SocSettingCreationAttributes,
+  SocSettingDeleteResponse
+> = async (_, arg, { dataSources }): Promise<SocSettingDeleteResponse> => {
+  const count = await dataSources.socSettingAPI.deleteSocSetting(arg);
+  if (!Number.isInteger(count)) {
+    return { success: false, message: "Something wrong happened" };
+  }
+  return {
+    success: true,
+    message: `${count} setting${(count !== 1 && "s") || ""} removed`,
+  };
 };
 
 /** The resolvers associated with the SocSetting model */
@@ -63,8 +92,10 @@ export const resolvers: Resolvers = {
     socSettings: socSettingsResolver,
   },
   Mutation: {
-    /** see {@link newSocSettingResolver} */
-    newSocSetting: newSocSettingResolver,
+    /** see {@link updateSocSettingResolver} */
+    updateSocSetting: updateSocSettingResolver,
+    /** see {@link deleteSocSettingResolver} */
+    deleteSocSetting: deleteSocSettingResolver,
   },
 };
 
@@ -78,7 +109,8 @@ export const resolverTypeDefs = gql`
   }
 
   extend type Mutation {
-    newSocSetting(key: String!, value: String!): SocSettingUpdateResponse!
+    updateSocSetting(key: String!, value: String!): SocSettingUpdateResponse!
+    deleteSocSetting(key: String!): SocSettingUpdateResponse!
   }
 
   type SocSettingUpdateResponse {
