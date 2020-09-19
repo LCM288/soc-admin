@@ -72,16 +72,16 @@ const updateSocSettingResolver: ResolverFn<
  * @category Mutation Resolver
  */
 const deleteSocSettingResolver: ResolverFn<
-  SocSettingCreationAttributes,
+  { key: string },
   SocSettingDeleteResponse
-> = async (_, arg, { dataSources }): Promise<SocSettingDeleteResponse> => {
-  const count = await dataSources.socSettingAPI.deleteSocSetting(arg);
+> = async (_, { key }, { dataSources }): Promise<SocSettingDeleteResponse> => {
+  const count = await dataSources.socSettingAPI.deleteSocSetting({ key });
   if (!Number.isInteger(count)) {
     return { success: false, message: "Something wrong happened" };
   }
   return {
     success: true,
-    message: `${count} setting${(count !== 1 && "s") || ""} removed`,
+    message: `${count} setting${count !== 1 ? "s" : ""} removed`,
   };
 };
 
