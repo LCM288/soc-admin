@@ -17,6 +17,7 @@
 6. run `yarn dev` to start the server
 
 ## Useful docs
+- [Soc-admin](https://lcm288.github.io/soc-admin/)
 - Database: [Sequelize](https://sequelize.org/master/index.html) / [Umzug](https://github.com/sequelize/umzug/tree/v2.x)
 - Backend: [Graphql](https://graphql.org/learn/) / [Apollo Server](https://www.apollographql.com/docs/apollo-server/)
 - Frontend: [Next](https://nextjs.org/docs/getting-started) / [React](https://reactjs.org/docs/getting-started.html) / [Apollo Client](https://www.apollographql.com/docs/react/)
