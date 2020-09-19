@@ -9,8 +9,17 @@ const socAdminDB =
 
 export const sequelize = new Sequelize(socAdminDB);
 
+/**
+ * A store for the Person model
+ */
 export const personStore = PersonFactory(sequelize);
 
+/**
+ * A store for the Executive model
+ */
 export const executiveStore = ExecutiveFactory(sequelize);
 
+/**
+ * A store for the SocSetting model
+ */
 export const socSettingStore = SocSettingFactory(sequelize);

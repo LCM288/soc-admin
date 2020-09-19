@@ -10,19 +10,36 @@ const transformData = (socSetting: SocSetting): SocSettingAttributes => {
   return socSetting.get({ plain: true });
 };
 
+/** An API to retrieve data from the SocSetting store */
 export default class SocSettingAPI extends DataSource<ContextBase> {
+  /** The SocSetting store */
   private store: typeof SocSetting;
 
+  /**
+   * Create the API instance.
+   * @param {typeof SocSetting} socSettingStore - A SocSetting store.
+   */
   constructor(socSettingStore: typeof SocSetting) {
     super();
     this.store = socSettingStore;
   }
 
+  /**
+   * Find all soc settings
+   * @async
+   * @returns {Promise<SocSettingAttributes[]>} An array of soc settings
+   */
   public async findSocSettings(): Promise<SocSettingAttributes[]> {
     const socSettings = await this.store.findAll();
     return socSettings.map(transformData);
   }
 
+  /**
+   * Add a new soc setting
+   * @async
+   * @param {SocSettingCreationAttributes} arg - The arg for the new soc setting
+   * @returns {Promise<SocSettingAttributes>} An instance of the new soc setting
+   */
   public async addNewSocSetting(
     arg: SocSettingCreationAttributes
   ): Promise<SocSettingAttributes> {

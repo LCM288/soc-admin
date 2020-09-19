@@ -40,7 +40,10 @@ import MajorAPI from "@/datasources/major";
 // store
 import { personStore, executiveStore, socSettingStore } from "@/store";
 
-// set up any dataSources our resolvers need
+/**
+ * Sets up any dataSources our resolvers need
+ * @returns a datasource object
+ */
 const dataSources = () => ({
   facultyAPI: new FacultyAPI(),
   majorAPI: new MajorAPI(),
@@ -55,6 +58,9 @@ const context = async () => {
   return {};
 };
 
+/**
+ * A dummy type def for graphql so that Mutation and Query can be extended
+ */
 const dummyTypeDefs = gql`
   type Mutation {
     dummy: Boolean

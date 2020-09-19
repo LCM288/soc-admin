@@ -8,7 +8,8 @@ import { getClientIp } from "request-ip";
 
 /**
  * Get the jwt secret from the database
- * @returns the jwt secret
+ * @async
+ * @returns {Promise<string | null>} the jwt secret
  */
 const getJwtSecret = async (): Promise<string | null> => {
   try {
@@ -23,9 +24,10 @@ const getJwtSecret = async (): Promise<string | null> => {
 
 /**
  * Issue a jwt token for a user
+ * @async
  * @param {User} user - The user object to be encrypted
  * @param {string} secret - The jwt secret
- * @returns the issued token
+ * @returns {Promise<string | null>} the issued token
  */
 export const issureJwt = async (
   user: User,
@@ -61,8 +63,9 @@ export const setJwtHeader = (token: string, res: ServerResponse): void => {
 
 /**
  * Get user through the header and update the token
+ * @async
  * @param {GetServerSidePropsContext} ctx - The server side props context
- * @returns decoded user or null if invalid
+ * @returns {Promise<User | null>} decoded user or null if invalid
  */
 export const getUser = async (
   ctx: GetServerSidePropsContext

@@ -7,9 +7,10 @@ import { getClientIp } from "request-ip";
 
 /**
  * Get access token from microsoft
+ * @async
  * @param {string} baseUrl - The base url of the server
  * @param {string} code - The authorization code
- * @returns The access token
+ * @returns {Promise<string | null>} The access token
  */
 const getAccessToken = async (
   baseUrl: string,
@@ -41,9 +42,10 @@ const getAccessToken = async (
 
 /**
  * Get user's data from microsoft graph api
+ * @async
  * @param {NextApiRequest} req - The server request object
  * @param {string} accessToken - The access token recieved from microsoft
- * @returns A user object generated from the user data
+ * @returns {Promise<User | null>} A user object generated from the user data
  */
 const getUser = async (
   req: NextApiRequest,
@@ -68,6 +70,7 @@ const getUser = async (
 /**
  * The handler that handles the login
  * if success, set jwt token cookie and redirect to index
+ * @async
  * @param {NextApiRequest} req - The server request object
  * @param {NextApiResponse} res - The server response object
  */
