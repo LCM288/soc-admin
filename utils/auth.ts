@@ -100,7 +100,13 @@ export const getUserAndRefreshToken = async (
 export const getUser = async (req: IncomingMessage): Promise<User | null> => {
   const jwtSecret = await getJwtSecret();
   const addr = getClientIp(req);
-  const token = req.headers.authorization || "";
+  if (!req.headers.authorization) {
+    return null;
+  }
+  const [type, token] = req.headers.authorization.split(" ");
+  if (type.toLowerCase() !== "bearer") {
+    return null;
+  }
   try {
     const user = <User>jwt.verify(token, jwtSecret);
     if (addr !== user.addr) return null;
