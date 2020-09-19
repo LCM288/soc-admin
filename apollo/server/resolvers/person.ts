@@ -22,26 +22,50 @@ interface PersonUpdateResponse {
   person?: PersonAttributes;
 }
 
+// Field resolvers
+
+/**
+ * The resolver for the major field of a Person
+ * @returns The major of the Person
+ * @category Field Resolver
+ */
 const majorResolver: ResolverFn<unknown, Major> = (
   { major }: Person,
   _,
   { dataSources }
-) => {
+): Major => {
   return dataSources.majorAPI.getMajor(major);
 };
 
+// Query resolvers
+
+/**
+ * The resolver for people Query
+ * @async
+ * @returns All the people
+ * @category Query Resolver
+ */
 const peopleResolver: ResolverFn<unknown, PersonAttributes[]> = (
   _,
   __,
   { dataSources }
-) => {
+): Promise<PersonAttributes[]> => {
   return dataSources.personAPI.findPeople();
 };
 
+// Mutation resolvers
+
+/**
+ * The resolver for newPerson Mutation
+ * @async
+ * @param arg - The arguments for the newPerson mutation
+ * @returns The update response
+ * @category Mutation Resolver
+ */
 const newPersonResolver: ResolverFn<
   PersonCreationAttributes,
   PersonUpdateResponse
-> = async (_, arg, { dataSources }) => {
+> = async (_, arg, { dataSources }): Promise<PersonUpdateResponse> => {
   const person = await dataSources.personAPI.addNewPerson(arg);
   if (!person) {
     return { success: false, message: "Something wrong happened" };
@@ -49,20 +73,26 @@ const newPersonResolver: ResolverFn<
   return { success: true, message: "success", person };
 };
 
-/** The resolvers associated with the Executive model */
+/** The resolvers associated with the Person model */
 export const resolvers: Resolvers = {
   Person: {
+    /** see {@link majorResolver} */
     major: majorResolver,
   },
   Query: {
+    /** see {@link peopleResolver} */
     people: peopleResolver,
   },
   Mutation: {
+    /** see {@link newPersonResolver} */
     newPerson: newPersonResolver,
   },
 };
 
-/** The graphql schema associated with the Executive model's resolvers */
+/**
+ * The graphql schema associated with the Person model's resolvers
+ * @internal
+ */
 export const resolverTypeDefs = gql`
   extend type Query {
     people: [Person!]!

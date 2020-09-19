@@ -42,6 +42,7 @@ export class Executive
 /** A helper function to create a store for the Executive model
  * @param {Sequelize} sequelize - the database connection
  * @returns {typeof Executive} The created store
+ * @category Factory
  */
 export const ExecutiveFactory = (sequelize: Sequelize): typeof Executive => {
   Executive.init(
@@ -72,7 +73,10 @@ export const ExecutiveFactory = (sequelize: Sequelize): typeof Executive => {
   return Executive;
 };
 
-/** The graphql schema definition for the Executive type */
+/**
+ * The graphql schema definition for the Executive type
+ * @internal
+ */
 export const typeDefs = gql`
   type Executive {
     id: ID!

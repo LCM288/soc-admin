@@ -35,6 +35,7 @@ export class SocSetting
 /** A helper function to create a store for the SocSetting model
  * @param {Sequelize} sequelize - the database connection
  * @returns {typeof SocSetting} The created store
+ * @category Factory
  */
 export const SocSettingFactory = (sequelize: Sequelize): typeof SocSetting => {
   SocSetting.init(
@@ -63,7 +64,10 @@ export const SocSettingFactory = (sequelize: Sequelize): typeof SocSetting => {
   return SocSetting;
 };
 
-/** The graphql schema definition for the SocSetting type */
+/**
+ * The graphql schema definition for the SocSetting type
+ * @internal
+ */
 export const typeDefs = gql`
   type SocSetting {
     id: ID!

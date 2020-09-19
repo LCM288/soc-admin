@@ -12,14 +12,26 @@ interface FacultyResolverArgs {
   code: string;
 }
 
+// Query resolvers
+
+/**
+ * The resolver for faculties Query
+ * @returns All the faculties
+ * @category Query Resolver
+ */
 const facultiesResolver: ResolverFn<unknown, Faculty[]> = (
   _,
   __,
   { dataSources }
-) => {
+): Faculty[] => {
   return dataSources.facultyAPI.getFaculties();
 };
 
+/**
+ * The resolver for faculty Query
+ * @returns The faculty with the given code or null if not found
+ * @category Query Resolver
+ */
 const facultyResolver: ResolverFn<FacultyResolverArgs, Faculty> = (
   _,
   { code },
@@ -31,12 +43,17 @@ const facultyResolver: ResolverFn<FacultyResolverArgs, Faculty> = (
 /** The resolvers associated with the Faculty model */
 export const resolvers: Resolvers = {
   Query: {
+    /** see {@link facultiesResolver} */
     faculties: facultiesResolver,
+    /** see {@link facultyResolver} */
     faculty: facultyResolver,
   },
 };
 
-/** The graphql schema associated with the Faculty model's resolvers */
+/**
+ * The graphql schema associated with the Faculty model's resolvers
+ * @internal
+ */
 export const resolverTypeDefs = gql`
   extend type Query {
     faculties: [Faculty!]!

@@ -98,6 +98,7 @@ export class Person
 /** A helper function to create a store for the Person model
  * @param {Sequelize} sequelize - the database connection
  * @returns {typeof Person} The created store
+ * @category Factory
  */
 export const PersonFactory = (sequelize: Sequelize): typeof Person => {
   Person.init(
@@ -162,7 +163,10 @@ export const PersonFactory = (sequelize: Sequelize): typeof Person => {
   return Person;
 };
 
-/** The graphql schema definition for the Person type and related enums */
+/**
+ * The graphql schema definition for the Person type and related enums
+ * @internal
+ */
 export const typeDefs = gql`
   enum Gender {
     Male
