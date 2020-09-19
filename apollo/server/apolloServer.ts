@@ -1,6 +1,6 @@
 import * as apolloServerMicro from "apollo-server-micro";
 import { gql } from "apollo-server";
-import { NextApiRequest } from "next";
+import { IncomingMessage } from "http";
 import { getUser } from "utils/auth";
 
 // models
@@ -60,7 +60,11 @@ const dataSources = () => ({
  * The function that sets up the global context for each resolver, using the req
  * @internal
  */
-const context = async (req: NextApiRequest): Promise<ContextBase> => {
+const context = async ({
+  req,
+}: {
+  req: IncomingMessage;
+}): Promise<ContextBase> => {
   const user = await getUser(req);
   return { user };
 };

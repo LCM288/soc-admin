@@ -1,5 +1,5 @@
-import { GetServerSidePropsContext, NextApiRequest } from "next";
-import { ServerResponse } from "http";
+import { GetServerSidePropsContext } from "next";
+import { IncomingMessage, ServerResponse } from "http";
 import { parseCookies } from "nookies";
 import jwt from "jsonwebtoken";
 import { User } from "@/types/datasources";
@@ -97,7 +97,7 @@ export const getUserAndRefreshToken = async (
  * @param {string} token - The jwt token
  * @returns {Promise<User | null>} decoded user or null if invalid
  */
-export const getUser = async (req: NextApiRequest): Promise<User | null> => {
+export const getUser = async (req: IncomingMessage): Promise<User | null> => {
   const jwtSecret = await getJwtSecret();
   const addr = getClientIp(req);
   const token = req.headers.authorization || "";
