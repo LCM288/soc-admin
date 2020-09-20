@@ -9,6 +9,7 @@ import {
   ExecutiveAttributes,
   ExecutiveCreationAttributes,
 } from "@/models/Executive";
+import { PubSub } from "graphql-subscriptions";
 
 /** The response when mutating a single executive */
 interface ExecutiveUpdateResponse {
@@ -24,6 +25,8 @@ interface ExecutiveUpdateResponse {
 interface ExecutiveResolverArgs {
   sid: string;
 }
+const pubsub = new PubSub();
+
 // Query resolvers
 
 /**
@@ -32,11 +35,12 @@ interface ExecutiveResolverArgs {
  * @returns All the executives
  * @category Query Resolver
  */
-const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = (
+const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = async (
   _,
   __,
   { dataSources }
 ): Promise<ExecutiveAttributes[]> => {
+  await pubsub.publish("testEmit", { testEmit: "foo" });
   return dataSources.executiveAPI.findExecutives();
 };
 
@@ -84,6 +88,11 @@ export const resolvers: Resolvers = {
   Mutation: {
     /** see {@link newExecutiveResolver} */
     newExecutive: newExecutiveResolver,
+  },
+  Subscription: {
+    testEmit: {
+      subscribe: () => pubsub.asyncIterator("testEmit"),
+    },
   },
 };
 

@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { User } from "@/types/datasources";
 import { getUserAndRefreshToken } from "utils/auth";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useSubscription } from "@apollo/react-hooks";
 import { gql } from "@apollo/client";
 
 export const getServerSideProps: GetServerSideProps<{
@@ -29,6 +29,12 @@ const query = gql`
   }
 `;
 
+const subscribe = gql`
+  subscription {
+    testEmit
+  }
+`;
+
 export default function Index({
   user,
 }: {
@@ -38,6 +44,7 @@ export default function Index({
   const { data, loading, error } = useQuery(query, {
     variables: { sid: user?.sid ?? "" },
   });
+  const { data: subData, loading: subLoading } = useSubscription(subscribe);
   const logout = () => {
     router.push("/api/logout");
   };
@@ -49,6 +56,7 @@ export default function Index({
       <div>
         <div>Hi, {user.name}</div>
         <div>{JSON.stringify(data)}</div>
+        <h4>New comment: {!subLoading && JSON.stringify(subData)}</h4>
         <button type="button" onClick={logout}>
           logout
         </button>

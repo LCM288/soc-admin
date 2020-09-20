@@ -65,8 +65,8 @@ const context = async ({
 }: {
   req: IncomingMessage;
 }): Promise<ContextBase> => {
-  const user = await getUser(req);
-  return { user };
+  // const user = await getUser(req);
+  return { user: null };
 };
 
 /**
@@ -79,6 +79,9 @@ const dummyTypeDefs = gql`
   }
   type Query {
     dummy: Boolean
+  }
+  type Subscription {
+    testEmit: String
   }
 `;
 
@@ -108,6 +111,12 @@ const apolloServer = new apolloServerMicro.ApolloServer({
   ],
   dataSources,
   context,
+  subscriptions: {
+    path: "/api/graphql",
+    keepAlive: 9000,
+    onConnect: () => console.log("connected"),
+    onDisconnect: () => console.log("disconnected"),
+  },
 });
 
 export default apolloServer;
