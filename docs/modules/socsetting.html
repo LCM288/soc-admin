@@ -81,6 +81,7 @@
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Attributes</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported"><a href="../interfaces/socsetting.socsettingdeleteresponse.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Delete<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported"><a href="../interfaces/socsetting.socsettingupdateresponse.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Update<wbr>Response</a></li>
 							</ul>
 						</section>
@@ -88,6 +89,7 @@
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="socsetting.html#socsettingcreationattributes" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Creation<wbr>Attributes</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="socsetting.html#socsettingdestroyattributes" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Destroy<wbr>Attributes</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -97,7 +99,8 @@
 							</ul>
 							<h3>Mutation Resolver Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="socsetting.html#newsocsettingresolver" class="tsd-kind-icon">new<wbr>Soc<wbr>Setting<wbr>Resolver</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="socsetting.html#deletesocsettingresolver" class="tsd-kind-icon">delete<wbr>Soc<wbr>Setting<wbr>Resolver</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="socsetting.html#updatesocsettingresolver" class="tsd-kind-icon">update<wbr>Soc<wbr>Setting<wbr>Resolver</a></li>
 							</ul>
 							<h3>Query Resolver Functions</h3>
 							<ul class="tsd-index-list">
@@ -121,7 +124,22 @@
 					<div class="tsd-signature tsd-kind-icon">Soc<wbr>Setting<wbr>Creation<wbr>Attributes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/acc3cd9/apollo/server/models/SocSetting.ts#L17">apollo/server/models/SocSetting.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/models/SocSetting.ts#L17">apollo/server/models/SocSetting.ts:17</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>All the attributes needed to create an instance of the SocSetting model</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="socsettingdestroyattributes" class="tsd-anchor"></a>
+					<h3>Soc<wbr>Setting<wbr>Destroy<wbr>Attributes</h3>
+					<div class="tsd-signature tsd-kind-icon">Soc<wbr>Setting<wbr>Destroy<wbr>Attributes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"key"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"value"</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/models/SocSetting.ts#L20">apollo/server/models/SocSetting.ts:20</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -143,7 +161,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/acc3cd9/apollo/server/models/SocSetting.ts#L40">apollo/server/models/SocSetting.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/models/SocSetting.ts#L46">apollo/server/models/SocSetting.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -171,21 +189,21 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Mutation Resolver Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-					<a name="newsocsettingresolver" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> new<wbr>Soc<wbr>Setting<wbr>Resolver</h3>
+					<a name="deletesocsettingresolver" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> delete<wbr>Soc<wbr>Setting<wbr>Resolver</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">new<wbr>Soc<wbr>Setting<wbr>Resolver<span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a>, arg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingupdateresponse.html" class="tsd-signature-type">SocSettingUpdateResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Soc<wbr>Setting<wbr>Resolver<span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a>, arg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingdeleteresponse.html" class="tsd-signature-type">SocSettingDeleteResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/acc3cd9/apollo/server/resolvers/socSetting.ts#L51">apollo/server/resolvers/socSetting.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/resolvers/socSetting.ts#L77">apollo/server/resolvers/socSetting.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The resolver for newSocSetting Mutation</p>
+									<p>The resolver for deleteSocSetting Mutation</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>async</dt>
@@ -201,7 +219,56 @@
 									<h5>arg: <span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>The arguments for the newSocSetting mutation</p>
+											<p>The arguments for the deleteSocSetting mutation</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>data<wbr>Sources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingdeleteresponse.html" class="tsd-signature-type">SocSettingDeleteResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The update response</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="updatesocsettingresolver" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> update<wbr>Soc<wbr>Setting<wbr>Resolver</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">update<wbr>Soc<wbr>Setting<wbr>Resolver<span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a>, arg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingupdateresponse.html" class="tsd-signature-type">SocSettingUpdateResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/resolvers/socSetting.ts#L59">apollo/server/resolvers/socSetting.ts:59</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The resolver for updateSocSetting Mutation</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>_: <a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a></h5>
+								</li>
+								<li>
+									<h5>arg: <span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The arguments for the updateSocSetting mutation</p>
 										</div>
 									</div>
 								</li>
@@ -232,7 +299,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/acc3cd9/apollo/server/resolvers/socSetting.ts#L31">apollo/server/resolvers/socSetting.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/resolvers/socSetting.ts#L39">apollo/server/resolvers/socSetting.ts:39</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -275,7 +342,7 @@
 					<div class="tsd-signature tsd-kind-icon">resolvers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/acc3cd9/apollo/server/resolvers/socSetting.ts#L60">apollo/server/resolvers/socSetting.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/resolvers/socSetting.ts#L89">apollo/server/resolvers/socSetting.ts:89</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -289,21 +356,36 @@
 						<div class="tsd-signature tsd-kind-icon">Mutation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/acc3cd9/apollo/server/resolvers/socSetting.ts#L65">apollo/server/resolvers/socSetting.ts:65</a></li>
+								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/resolvers/socSetting.ts#L94">apollo/server/resolvers/socSetting.ts:94</a></li>
 							</ul>
 						</aside>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
-							<a name="resolvers.mutation.newsocsetting" class="tsd-anchor"></a>
-							<h3>new<wbr>Soc<wbr>Setting</h3>
-							<div class="tsd-signature tsd-kind-icon">new<wbr>Soc<wbr>Setting<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/socsetting.socsettingupdateresponse.html" class="tsd-signature-type">SocSettingUpdateResponse</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = newSocSettingResolver</span></div>
+							<a name="resolvers.mutation.deletesocsetting" class="tsd-anchor"></a>
+							<h3>delete<wbr>Soc<wbr>Setting</h3>
+							<div class="tsd-signature tsd-kind-icon">delete<wbr>Soc<wbr>Setting<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/socsetting.socsettingdeleteresponse.html" class="tsd-signature-type">SocSettingDeleteResponse</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = deleteSocSettingResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/acc3cd9/apollo/server/resolvers/socSetting.ts#L67">apollo/server/resolvers/socSetting.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/resolvers/socSetting.ts#L98">apollo/server/resolvers/socSetting.ts:98</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>see <a href="socsetting.html#newsocsettingresolver">newSocSettingResolver</a></p>
+									<p>see <a href="socsetting.html#deletesocsettingresolver">deleteSocSettingResolver</a></p>
+								</div>
+							</div>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="resolvers.mutation.updatesocsetting" class="tsd-anchor"></a>
+							<h3>update<wbr>Soc<wbr>Setting</h3>
+							<div class="tsd-signature tsd-kind-icon">update<wbr>Soc<wbr>Setting<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/socsetting.socsettingupdateresponse.html" class="tsd-signature-type">SocSettingUpdateResponse</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = updateSocSettingResolver</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/resolvers/socSetting.ts#L96">apollo/server/resolvers/socSetting.ts:96</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>see <a href="socsetting.html#updatesocsettingresolver">updateSocSettingResolver</a></p>
 								</div>
 							</div>
 						</section>
@@ -314,7 +396,7 @@
 						<div class="tsd-signature tsd-kind-icon">Query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/acc3cd9/apollo/server/resolvers/socSetting.ts#L61">apollo/server/resolvers/socSetting.ts:61</a></li>
+								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/resolvers/socSetting.ts#L90">apollo/server/resolvers/socSetting.ts:90</a></li>
 							</ul>
 						</aside>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -323,7 +405,7 @@
 							<div class="tsd-signature tsd-kind-icon">soc<wbr>Settings<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = socSettingsResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/acc3cd9/apollo/server/resolvers/socSetting.ts#L63">apollo/server/resolvers/socSetting.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/resolvers/socSetting.ts#L92">apollo/server/resolvers/socSetting.ts:92</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -398,19 +480,28 @@
 						<a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Attributes</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../interfaces/socsetting.socsettingdeleteresponse.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Delete<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../interfaces/socsetting.socsettingupdateresponse.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Update<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="socsetting.html#socsettingcreationattributes" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Creation<wbr>Attributes</a>
 					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="socsetting.html#socsettingdestroyattributes" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Destroy<wbr>Attributes</a>
+					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="socsetting.html#socsettingfactory" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Factory</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<a href="socsetting.html#newsocsettingresolver" class="tsd-kind-icon">new<wbr>Soc<wbr>Setting<wbr>Resolver</a>
+						<a href="socsetting.html#deletesocsettingresolver" class="tsd-kind-icon">delete<wbr>Soc<wbr>Setting<wbr>Resolver</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
 						<a href="socsetting.html#socsettingsresolver" class="tsd-kind-icon">soc<wbr>Settings<wbr>Resolver</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="socsetting.html#updatesocsettingresolver" class="tsd-kind-icon">update<wbr>Soc<wbr>Setting<wbr>Resolver</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-parent-kind-module">
 						<a href="socsetting.html#resolvers" class="tsd-kind-icon">resolvers</a>
