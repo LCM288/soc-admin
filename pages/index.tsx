@@ -4,7 +4,9 @@ import { useRouter } from "next/router";
 import { User } from "@/types/datasources";
 import { getUserAndRefreshToken } from "utils/auth";
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<{
+  user: User | null;
+}> = async (ctx) => {
   const user = await getUserAndRefreshToken(ctx);
   if (!user) {
     ctx.res.statusCode = 307;
@@ -15,7 +17,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-export default function Index({ user }: { user: User }): React.ReactElement {
+export default function Index({
+  user,
+}: {
+  user: User | null;
+}): React.ReactElement {
   const router = useRouter();
   const logout = () => {
     router.push("/api/logout");

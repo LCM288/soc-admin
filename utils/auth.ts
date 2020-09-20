@@ -63,12 +63,12 @@ export const setJwtHeader = (token: string, res: ServerResponse): void => {
 /**
  * Get user through the cookie and update the token
  * @async
- * @param {GetServerSidePropsContext} ctx - The server side props context
- * @returns {Promise<User | undefined>} decoded user or undefined if invalid
+ * @param ctx - The server side props context
+ * @returns decoded user or undefined if invalid
  */
 export const getUserAndRefreshToken = async (
   ctx: GetServerSidePropsContext
-): Promise<User | undefined> => {
+): Promise<User | null> => {
   const cookies = parseCookies(ctx);
   const token =
     process.env.NODE_ENV === "development"
@@ -77,11 +77,11 @@ export const getUserAndRefreshToken = async (
   const jwtSecret = await getJwtSecret();
   const addr = getClientIp(ctx.req);
   if (!jwtSecret) {
-    return undefined;
+    return null;
   }
   try {
     const user = <User>jwt.verify(token, jwtSecret);
-    if (addr !== user.addr) return undefined;
+    if (addr !== user.addr) return null;
 
     // issue new token whenever possible
     const newToken = await issureJwt(user, jwtSecret);
@@ -91,7 +91,7 @@ export const getUserAndRefreshToken = async (
 
     return user;
   } catch {
-    return undefined;
+    return null;
   }
 };
 
@@ -101,28 +101,26 @@ export const getUserAndRefreshToken = async (
  * @param {string} token - The jwt token
  * @returns decoded user or undefined if invalid
  */
-export const getUser = async (
-  req: IncomingMessage
-): Promise<User | undefined> => {
+export const getUser = async (req: IncomingMessage): Promise<User | null> => {
   const jwtSecret = await getJwtSecret();
   if (!jwtSecret) {
-    return undefined;
+    return null;
   }
 
   const addr = getClientIp(req);
   if (!req.headers.authorization) {
-    return undefined;
+    return null;
   }
 
   const [type, token] = req.headers.authorization.split(" ");
   if (type.toLowerCase() !== "bearer") {
-    return undefined;
+    return null;
   }
   try {
     const user = <User>jwt.verify(token, jwtSecret);
-    if (addr !== user.addr) return undefined;
+    if (addr !== user.addr) return null;
     return user;
   } catch {
-    return undefined;
+    return null;
   }
 };
