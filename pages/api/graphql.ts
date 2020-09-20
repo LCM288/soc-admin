@@ -1,15 +1,14 @@
 import apolloServer from "@/apolloServer";
+import WebSocket from "ws";
 
-const graphqlWithSubscriptionHandler = (req, res, next) => {
-  if (!res.socket.server.apolloServer) {
-    console.log(`* apolloServer first use *`);
+const handler = apolloServer.createHandler({ path: "/api/graphql" });
 
-    apolloServer.installSubscriptionHandlers(res.socket.server);
-    const handler = apolloServer.createHandler({ path: "/api/graphql" });
-    res.socket.server.apolloServer = handler;
-  }
-
-  return res.socket.server.apolloServer(req, res, next);
+const graphqlWithSubscriptionHandler = (
+  req: unknown,
+  res: { socket: { server: WebSocket.Server } }
+): Promise<void> => {
+  apolloServer.installSubscriptionHandlers(res.socket.server);
+  return handler(req, res);
 };
 
 export default graphqlWithSubscriptionHandler;
