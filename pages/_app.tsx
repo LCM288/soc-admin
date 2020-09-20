@@ -1,6 +1,7 @@
-/* eslint-disable */
+/* eslint-disable react/jsx-props-no-spreading */
 
 import { AppProps } from "next/app";
+import React from "react";
 import {
   ApolloClient,
   InMemoryCache,
@@ -14,7 +15,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   credentials: "same-origin",
 });
 
-function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps): React.ReactElement {
   return (
     <ApolloProvider client={client}>
       <Component {...pageProps} />
