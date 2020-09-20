@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Gender | soc-admin</title>
+	<title>ContextBase | soc-admin</title>
 	<meta name="description" content="Documentation for soc-admin">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,54 +56,68 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/person.html">Person</a>
+					<a href="../modules/apollo_server_types.html">apollo\server\types</a>
 				</li>
 				<li>
-					<a href="person.gender.html">Gender</a>
+					<a href="apollo_server_types.contextbase.html">ContextBase</a>
 				</li>
 			</ul>
-			<h1>Enumeration Gender</h1>
+			<h1>Interface ContextBase</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The base context for the apollo server</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">ContextBase</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="apollo_server_types.resolvercontext.html" class="tsd-signature-type">ResolverContext</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Enumeration members</h3>
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="person.gender.html#female" class="tsd-kind-icon">Female</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="person.gender.html#male" class="tsd-kind-icon">Male</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="apollo_server_types.contextbase.html#user" class="tsd-kind-icon">user</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Enumeration members</h2>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-					<a name="female" class="tsd-anchor"></a>
-					<h3>Female</h3>
-					<div class="tsd-signature tsd-kind-icon">Female<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;Female&quot;</span></div>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="user" class="tsd-anchor"></a>
+					<h3>user</h3>
+					<div class="tsd-signature tsd-kind-icon">user<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.user.html" class="tsd-signature-type">User</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/models/Person.ts#L11">apollo/server/models/Person.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/types/datasources.ts#L14">apollo/server/types/datasources.ts:14</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-					<a name="male" class="tsd-anchor"></a>
-					<h3>Male</h3>
-					<div class="tsd-signature tsd-kind-icon">Male<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;Male&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/adcf772/apollo/server/models/Person.ts#L10">apollo/server/models/Person.ts:10</a></li>
-						</ul>
-					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The user under the context</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -125,7 +139,7 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/major.html">Major</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/person.html">Person</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -134,7 +148,7 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/apollo_server.html">apollo\server</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/apollo_server_types.html">apollo\server\types</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -159,53 +173,35 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported">
-						<a href="person.college.html" class="tsd-kind-icon">College</a>
-					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported">
-						<a href="person.gender.html" class="tsd-kind-icon">Gender</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="apollo_server_types.contextbase.html" class="tsd-kind-icon">Context<wbr>Base</a>
 						<ul>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-								<a href="person.gender.html#female" class="tsd-kind-icon">Female</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-								<a href="person.gender.html#male" class="tsd-kind-icon">Male</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="apollo_server_types.contextbase.html#user" class="tsd-kind-icon">user</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/person.person-1.html" class="tsd-kind-icon">Person</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/person.personapi.html" class="tsd-kind-icon">PersonAPI</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="apollo_server_types.resolvercontext.html" class="tsd-kind-icon">Resolver<wbr>Context</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/person.personattributes.html" class="tsd-kind-icon">Person<wbr>Attributes</a>
+						<a href="apollo_server_types.resolverdatasource.html" class="tsd-kind-icon">Resolver<wbr>Datasource</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/person.personupdateresponse.html" class="tsd-kind-icon">Person<wbr>Update<wbr>Response</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="apollo_server_types.user.html" class="tsd-kind-icon">User</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/apollo_server_types.html#resolverfn" class="tsd-kind-icon">Resolver<wbr>Fn</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/person.html#personcreationattributes" class="tsd-kind-icon">Person<wbr>Creation<wbr>Attributes</a>
+						<a href="../modules/apollo_server_types.html#resolverparent" class="tsd-kind-icon">Resolver<wbr>Parent</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/person.html#personfactory" class="tsd-kind-icon">Person<wbr>Factory</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/person.html#majorresolver" class="tsd-kind-icon">major<wbr>Resolver</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/person.html#newpersonresolver" class="tsd-kind-icon">new<wbr>Person<wbr>Resolver</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/person.html#peopleresolver" class="tsd-kind-icon">people<wbr>Resolver</a>
-					</li>
-					<li class=" tsd-kind-object-literal tsd-parent-kind-module">
-						<a href="../modules/person.html#resolvers" class="tsd-kind-icon">resolvers</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/apollo_server_types.html#resolvers" class="tsd-kind-icon">Resolvers</a>
 					</li>
 				</ul>
 			</nav>
@@ -224,10 +220,11 @@
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
