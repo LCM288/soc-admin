@@ -102,20 +102,17 @@ export const getUserAndRefreshToken = async (
  * @returns decoded user or undefined if invalid
  */
 export const getUser = async (req: IncomingMessage): Promise<User | null> => {
+  const cookies = parseCookies({ req });
+  const token =
+    process.env.NODE_ENV === "development"
+      ? cookies.jwt
+      : cookies["__Host-jwt"];
   const jwtSecret = await getJwtSecret();
   if (!jwtSecret) {
     return null;
   }
 
   const addr = getClientIp(req);
-  if (!req.headers.authorization) {
-    return null;
-  }
-
-  const [type, token] = req.headers.authorization.split(" ");
-  if (type.toLowerCase() !== "bearer") {
-    return null;
-  }
   try {
     const user = <User>jwt.verify(token, jwtSecret);
     if (addr !== user.addr) return null;
