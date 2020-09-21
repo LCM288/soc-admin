@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-
+import "bulma/bulma.sass";
 import { AppProps } from "next/app";
 import React from "react";
 import {

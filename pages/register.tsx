@@ -5,6 +5,9 @@ import { User } from "@/types/datasources";
 import { getUserAndRefreshToken } from "utils/auth";
 import { useQuery } from "@apollo/react-hooks";
 import { gql } from "@apollo/client";
+import { Button, Form } from "react-bulma-components";
+
+const { Input, Field, Control, Label } = Form;
 
 export const getServerSideProps: GetServerSideProps<{
   user: User | null;
@@ -29,37 +32,23 @@ const query = gql`
   }
 `;
 
-export default function Index({
+export default function Register({
   user,
 }: {
   user: User | null;
 }): React.ReactElement {
-  const router = useRouter();
-  const { data, loading, error } = useQuery(query, {
-    variables: { sid: user?.sid ?? "" },
-  });
-  const logout = () => {
-    router.push("/api/logout");
-  };
-  const register = () => {
-    router.push("/register");
-  };
-  if (loading) return <p>loading</p>;
-  if (error) return <p>ERROR</p>;
-
-  if (user) {
-    return (
-      <div>
-        <div>Hi, {user.name}</div>
-        <div>{JSON.stringify(data)}</div>
-        <button type="button" onClick={logout}>
-          logout
-        </button>
-        <button type="button" onClick={register}>
-          register
-        </button>
-      </div>
-    );
-  }
-  return <a href="/login">Please login first </a>;
+  return (
+    <div>
+      <h1>Register</h1>
+      {user?.name}
+      {user?.sid}
+      <Button color="primary">Push me</Button>
+      <Field>
+        <Label>Name</Label>
+        <Control>
+          <Input placeholder="Text input" />
+        </Control>
+      </Field>
+    </div>
+  );
 }
