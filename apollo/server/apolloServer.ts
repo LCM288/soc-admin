@@ -11,6 +11,7 @@ import { typeDefs as majorTypeDefs } from "@/models/Major";
 import { typeDefs as facultyTypeDefs } from "@/models/Faculty";
 
 // resolvers
+import { DateResolver, DateTypeDefinition } from "graphql-scalars";
 import {
   resolverTypeDefs as personResolverTypeDefs,
   resolvers as personResolvers,
@@ -87,6 +88,9 @@ const dummyTypeDefs = gql`
  */
 const apolloServer = new apolloServerMicro.ApolloServer({
   typeDefs: [
+    gql`
+      ${DateTypeDefinition}
+    `,
     dummyTypeDefs,
     personTypeDefs,
     personResolverTypeDefs,
@@ -100,6 +104,7 @@ const apolloServer = new apolloServerMicro.ApolloServer({
     facultyResolverTypeDefs,
   ],
   resolvers: [
+    { Date: DateResolver },
     personResolvers,
     executiveResolvers,
     socSettingResolvers,

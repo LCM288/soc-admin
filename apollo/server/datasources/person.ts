@@ -21,6 +21,18 @@ const transformData = (person: Person): PersonAttributes => {
   return person.get({ plain: true });
 };
 
+/**
+ * Transforms the data from the Person model to plain attributes
+ * @internal
+ * @param {Person} person - An instance of the Person model
+ * @returns {PersonAttributes} Plain attributes for the Person instance
+ */
+const transformDataOptional = (
+  person: Person | null
+): PersonAttributes | undefined => {
+  return person?.get({ plain: true });
+};
+
 /** An API to retrieve data from the Person store */
 export default class PersonAPI extends DataSource<ContextBase> {
   /** The {@link Person} store */
@@ -46,6 +58,17 @@ export default class PersonAPI extends DataSource<ContextBase> {
   }
 
   /**
+   * Find a major program by code
+   * @param {string} sid - The sid of the person
+   * @async
+   * @returns {Promise<PersonAttributes>} The matched person or undefined if not found
+   */
+  public async findPerson(sid: string): Promise<PersonAttributes | undefined> {
+    const person = await this.store.findOne({ where: { sid } });
+    return transformDataOptional(person);
+  }
+
+  /**
    * Add a new person
    * @async
    * @param {PersonCreationAttributes} arg - The arg for the new person
@@ -56,5 +79,20 @@ export default class PersonAPI extends DataSource<ContextBase> {
   ): Promise<PersonAttributes> {
     const person = await this.store.create(arg);
     return transformData(person);
+  }
+
+  /**
+   * Add or update a new person
+   * @async
+   * @param {PersonCreationAttributes} arg - The arg for the new person
+   * @returns {Promise<PersonAttributes>} An instance of the new person
+   */
+  public async updatePerson(
+    arg: PersonAttributes
+  ): Promise<[number, Person[]]> {
+    const count = await this.store.update(arg, {
+      where: { sid: arg.sid },
+    });
+    return count;
   }
 }
