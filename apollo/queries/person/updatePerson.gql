@@ -3,7 +3,7 @@ mutation(
   $chineseName: String
   $englishName: String
   $gender: Gender
-  $dateOfBirth: String
+  $dateOfBirth: Date
   $email: String
   $phone: String
   $college: College
