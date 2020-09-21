@@ -85,8 +85,8 @@ export default class PersonAPI extends DataSource<ContextBase> {
   /**
    * Update a new person
    * @async
-   * @param {PersonUpdateAttributes} arg - The arg for the new person
-   * @returns {Promise<[number, PersonAttributes[]]>} Number of people updated and an instance of the updated person
+   * @param {PersonUpdateAttributes} arg - The arg for the person
+   * @returns {Promise<[number, PersonAttributes[]]>} Number of people updated and instances of the updated person
    */
   public async updatePerson(
     arg: PersonUpdateAttributes
