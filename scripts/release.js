@@ -1,4 +1,7 @@
 /* eslint-disable */
 
-require("../migrations/index.js");
-require("./create_jwt_secret.js");
+(async () => {
+  const migration = require("../migrations/index.js");
+  await migration();
+  require("./create_jwt_secret.js");
+})();
