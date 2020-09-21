@@ -1,0 +1,45 @@
+mutation(
+  $sid: String!
+  $chineseName: String
+  $englishName: String!
+  $gender: Gender
+  $dateOfBirth: Date
+  $email: String
+  $phone: String
+  $college: College!
+  $major: String!
+  $dateOfEntry: Date!
+  $expectedGraduationDate: Date!
+) {
+  newPerson(
+    sid: $sid
+    chineseName: $chineseName
+    englishName: $englishName
+    gender: $gender
+    dateOfBirth: $dateOfBirth
+    email: $email
+    phone: $phone
+    college: $college
+    major: $major
+    dateOfEntry: $dateOfEntry
+    expectedGraduationDate: $expectedGraduationDate
+  ) {
+    success
+    message
+    person {
+      id
+      sid
+      chineseName
+      englishName
+      gender
+      dateOfBirth
+      email
+      phone
+      college
+      dateOfEntry
+      expectedGraduationDate
+      memberSince
+      major
+    }
+  }
+}

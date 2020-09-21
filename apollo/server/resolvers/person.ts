@@ -12,6 +12,11 @@ import {
 } from "@/models/Person";
 import { Major } from "@/models/Major";
 
+/** The input arguments for the person query's resolver */
+interface PersonResolverArgs {
+  sid: string;
+}
+
 /** The response when mutating a single person */
 interface PersonUpdateResponse {
   /** Whether the mutation is successful or not */
@@ -53,6 +58,19 @@ const peopleResolver: ResolverFn<unknown, PersonAttributes[]> = (
   return dataSources.personAPI.findPeople();
 };
 
+/**
+ * The resolver for person Query
+ * @async
+ * @returns The person with the given sid or undefined if not found
+ * @category Query Resolver
+ */
+const personResolver: ResolverFn<
+  PersonResolverArgs,
+  PersonAttributes | undefined
+> = (_, { sid }, { dataSources }): Promise<PersonAttributes | undefined> => {
+  return dataSources.personAPI.findPerson(sid);
+};
+
 // Mutation resolvers
 
 /**
@@ -73,6 +91,28 @@ const newPersonResolver: ResolverFn<
   return { success: true, message: "success", person };
 };
 
+/**
+ * The resolver for updatePerson Mutation
+ * @async
+ * @param arg - The arguments for the updatePerson mutation
+ * @returns The update response
+ * @category Mutation Resolver
+ */
+const updatePersonResolver: ResolverFn<
+  PersonAttributes,
+  PersonUpdateResponse
+> = async (_, arg, { dataSources }): Promise<PersonUpdateResponse> => {
+  const [count, [person]] = await dataSources.personAPI.updatePerson(arg);
+  if (!Number.isInteger(count)) {
+    return { success: false, message: "Something wrong happened" };
+  }
+  return {
+    success: true,
+    message: `${count} ${count !== 1 ? "people" : "person"} updated`,
+    person,
+  };
+};
+
 /** The resolvers associated with the Person model */
 export const resolvers: Resolvers = {
   Person: {
@@ -82,10 +122,14 @@ export const resolvers: Resolvers = {
   Query: {
     /** see {@link peopleResolver} */
     people: peopleResolver,
+    /** see {@link personResolver} */
+    person: personResolver,
   },
   Mutation: {
     /** see {@link newPersonResolver} */
     newPerson: newPersonResolver,
+    /** see {@link updatePersonResolver} */
+    updatePerson: updatePersonResolver,
   },
 };
 
@@ -96,6 +140,7 @@ export const resolvers: Resolvers = {
 export const resolverTypeDefs = gql`
   extend type Query {
     people: [Person!]!
+    person(sid: String!): Person
   }
 
   extend type Mutation {
@@ -109,8 +154,21 @@ export const resolverTypeDefs = gql`
       phone: String
       college: College!
       major: String!
-      dateOfEntry: String!
-      expectedGraduationDate: String!
+      dateOfEntry: Date!
+      expectedGraduationDate: Date!
+    ): PersonUpdateResponse!
+    updatePerson(
+      sid: String!
+      chineseName: String
+      englishName: String
+      gender: Gender
+      dateOfBirth: String
+      email: String
+      phone: String
+      college: College
+      major: String
+      dateOfEntry: Date
+      expectedGraduationDate: Date
     ): PersonUpdateResponse!
   }
 

@@ -1,0 +1,12 @@
+mutation($sid: String!, $nickname: String, $pos: String) {
+  updateExecutive(sid: $sid, nickname: $nickname, pos: $pos) {
+    success
+    message
+    executive {
+      id
+      sid
+      nickname
+      pos
+    }
+  }
+}

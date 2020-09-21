@@ -19,6 +19,10 @@ export interface ExecutiveAttributes {
 /** All the attributes needed to create an instance of the Executive model */
 export type ExecutiveCreationAttributes = Optional<ExecutiveAttributes, "id">;
 
+/** All the attributes needed to update an instance of the Executive model */
+export type ExecutiveUpdateAttributes = Partial<ExecutiveAttributes> &
+  Pick<ExecutiveAttributes, "sid">;
+
 /** A class for the Executive model */
 export class Executive
   extends Model<ExecutiveAttributes, ExecutiveCreationAttributes>

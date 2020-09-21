@@ -8,6 +8,7 @@ import {
   Executive,
   ExecutiveAttributes,
   ExecutiveCreationAttributes,
+  ExecutiveUpdateAttributes,
 } from "@/models/Executive";
 import { ContextBase } from "@/types/datasources";
 import { compact } from "lodash";
@@ -81,5 +82,21 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
   ): Promise<ExecutiveAttributes> {
     const executive = await this.store.create(arg);
     return transformData(executive);
+  }
+
+  /**
+   * Update an executive
+   * @async
+   * @param {ExecutiveCreationAttributes} arg - The arg for the executive
+   * @returns Number of executives updated and instances of updated executives
+   */
+  public async updateExecutive(
+    arg: ExecutiveUpdateAttributes
+  ): Promise<[number, ExecutiveAttributes[]]> {
+    const [count, executive] = await this.store.update(arg, {
+      where: { sid: arg.sid },
+      returning: true,
+    });
+    return [count, [...executive].map(transformData)];
   }
 }

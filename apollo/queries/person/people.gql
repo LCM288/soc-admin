@@ -1,0 +1,17 @@
+query people {
+  person {
+    id
+    sid
+    chineseName
+    englishName
+    gender
+    dateOfBirth
+    email
+    phone
+    college
+    dateOfEntry
+    expectedGraduationDate
+    memberSince
+    major
+  }
+}

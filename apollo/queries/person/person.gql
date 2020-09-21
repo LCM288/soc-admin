@@ -1,0 +1,19 @@
+query person($sid: String!) {
+  person(sid: $sid) {
+    id
+    sid
+    chineseName
+    englishName
+    gender
+    dateOfBirth
+    email
+    phone
+    college
+    dateOfEntry
+    expectedGraduationDate
+    memberSince
+    major {
+      code
+    }
+  }
+}

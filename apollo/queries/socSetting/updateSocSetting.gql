@@ -1,0 +1,10 @@
+mutation($key: String!, $value: String!) {
+  updateSocSetting(key: $key, value: $value) {
+    success
+    message
+    socSetting {
+      key
+      value
+    }
+  }
+}
