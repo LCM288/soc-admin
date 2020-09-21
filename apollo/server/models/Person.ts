@@ -196,8 +196,8 @@ export const typeDefs = gql`
     email: String
     phone: String
     college: College!
-    dateOfEntry: String!
-    expectedGraduationDate: String!
-    memberSince: String
+    dateOfEntry: Date!
+    expectedGraduationDate: Date!
+    memberSince: Date
   }
 `;

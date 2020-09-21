@@ -4,6 +4,7 @@
  */
 
 import { gql } from "apollo-server";
+import { DateResolver } from "graphql-scalars";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
   Person,
@@ -75,6 +76,7 @@ const newPersonResolver: ResolverFn<
 
 /** The resolvers associated with the Person model */
 export const resolvers: Resolvers = {
+  Date: DateResolver,
   Person: {
     /** see {@link majorResolver} */
     major: majorResolver,
@@ -94,6 +96,8 @@ export const resolvers: Resolvers = {
  * @internal
  */
 export const resolverTypeDefs = gql`
+  scalar Date
+
   extend type Query {
     people: [Person!]!
   }
@@ -109,8 +113,8 @@ export const resolverTypeDefs = gql`
       phone: String
       college: College!
       major: String!
-      dateOfEntry: String!
-      expectedGraduationDate: String!
+      dateOfEntry: Date!
+      expectedGraduationDate: Date!
     ): PersonUpdateResponse!
   }
 
