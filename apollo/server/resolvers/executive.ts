@@ -8,6 +8,7 @@ import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
   ExecutiveAttributes,
   ExecutiveCreationAttributes,
+  ExecutiveUpdateAttributes,
 } from "@/models/Executive";
 
 /** The response when mutating a single executive */
@@ -73,6 +74,30 @@ const newExecutiveResolver: ResolverFn<
   return { success: true, message: "success", executive };
 };
 
+/**
+ * The resolver for updateExecutive Mutation
+ * @async
+ * @param arg - The arguments for the updateExecutive mutation
+ * @returns The update response
+ * @category Mutation Resolver
+ */
+const updateExecutiveResolver: ResolverFn<
+  ExecutiveUpdateAttributes,
+  ExecutiveUpdateResponse
+> = async (_, arg, { dataSources }): Promise<ExecutiveUpdateResponse> => {
+  const [count, [executive]] = await dataSources.executiveAPI.updateExecutive(
+    arg
+  );
+  if (!Number.isInteger(count)) {
+    return { success: false, message: "Something wrong happened" };
+  }
+  return {
+    success: true,
+    message: `${count} executive${count !== 1 ? "s" : ""} updated`,
+    executive,
+  };
+};
+
 /** The resolvers associated with the Executive model */
 export const resolvers: Resolvers = {
   Query: {
@@ -84,6 +109,8 @@ export const resolvers: Resolvers = {
   Mutation: {
     /** see {@link newExecutiveResolver} */
     newExecutive: newExecutiveResolver,
+    /** see {@link updateExecutiveResolver} */
+    updateExecutive: updateExecutiveResolver,
   },
 };
 
@@ -99,6 +126,11 @@ export const resolverTypeDefs = gql`
 
   extend type Mutation {
     newExecutive(
+      sid: String!
+      nickname: String
+      pos: String
+    ): ExecutiveUpdateResponse!
+    updateExecutive(
       sid: String!
       nickname: String
       pos: String
