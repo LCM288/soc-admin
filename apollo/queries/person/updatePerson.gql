@@ -1,17 +1,17 @@
 mutation(
   $sid: String!
   $chineseName: String
-  $englishName: String!
+  $englishName: String
   $gender: Gender
   $dateOfBirth: String
   $email: String
   $phone: String
-  $college: College!
-  $major: String!
-  $dateOfEntry: Date!
-  $expectedGraduationDate: Date!
+  $college: College
+  $major: String
+  $dateOfEntry: Date
+  $expectedGraduationDate: Date
 ) {
-  newPerson(
+  updatePerson(
     sid: $sid
     chineseName: $chineseName
     englishName: $englishName
@@ -39,7 +39,9 @@ mutation(
       dateOfEntry
       expectedGraduationDate
       memberSince
-      major
+      major {
+        code
+      }
     }
   }
 }

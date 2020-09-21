@@ -52,6 +52,9 @@ export interface PersonAttributes {
 /** All the attributes needed to create an instance of the Person model */
 export type PersonCreationAttributes = Optional<PersonAttributes, "id">;
 
+/** All the attributes needed to update an instance of the Person model */
+export type PersonUpdateAttributes = Optional<PersonAttributes, "sid">;
+
 /** A class for the Person model */
 export class Person
   extends Model<PersonAttributes, PersonCreationAttributes>

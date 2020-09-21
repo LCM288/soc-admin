@@ -108,7 +108,7 @@ const updatePersonResolver: ResolverFn<
   }
   return {
     success: true,
-    message: `${count} person${count !== 1 ? "s" : ""} updated`,
+    message: `${count} ${count !== 1 ? "people" : "person"} updated`,
     person,
   };
 };
@@ -128,7 +128,7 @@ export const resolvers: Resolvers = {
   Mutation: {
     /** see {@link newPersonResolver} */
     newPerson: newPersonResolver,
-    /** see {@link newPersonResolver} */
+    /** see {@link updatePersonResolver} */
     updatePerson: updatePersonResolver,
   },
 };
@@ -140,7 +140,7 @@ export const resolvers: Resolvers = {
 export const resolverTypeDefs = gql`
   extend type Query {
     people: [Person!]!
-    person: Person
+    person(sid: String!): Person
   }
 
   extend type Mutation {

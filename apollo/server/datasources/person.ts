@@ -8,6 +8,7 @@ import {
   Person,
   PersonAttributes,
   PersonCreationAttributes,
+  PersonUpdateAttributes,
 } from "@/models/Person";
 import { ContextBase } from "@/types/datasources";
 
@@ -58,7 +59,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
   }
 
   /**
-   * Find a major program by code
+   * Find a person by sid
    * @param {string} sid - The sid of the person
    * @async
    * @returns {Promise<PersonAttributes>} The matched person or undefined if not found
@@ -82,17 +83,18 @@ export default class PersonAPI extends DataSource<ContextBase> {
   }
 
   /**
-   * Add or update a new person
+   * Update a new person
    * @async
-   * @param {PersonCreationAttributes} arg - The arg for the new person
-   * @returns {Promise<PersonAttributes>} An instance of the new person
+   * @param {PersonUpdateAttributes} arg - The arg for the new person
+   * @returns {Promise<[number, PersonAttributes[]]>} Number of people updated and an instance of the updated person
    */
   public async updatePerson(
-    arg: PersonAttributes
-  ): Promise<[number, Person[]]> {
-    const count = await this.store.update(arg, {
+    arg: PersonUpdateAttributes
+  ): Promise<[number, PersonAttributes[]]> {
+    const [count, people] = await this.store.update(arg, {
       where: { sid: arg.sid },
+      returning: true,
     });
-    return count;
+    return [count, [...people].map(transformData)];
   }
 }
