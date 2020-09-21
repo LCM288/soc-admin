@@ -1,0 +1,6 @@
+mutation($key: String!) {
+  deleteSocSetting(key: $key) {
+    success
+    message
+  }
+}

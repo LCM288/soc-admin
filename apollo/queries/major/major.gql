@@ -1,0 +1,12 @@
+query($code: String!) {
+  major(code: $code) {
+    code
+    chineseName
+    englishName
+    faculties {
+      code
+      chineseName
+      englishName
+    }
+  }
+}

@@ -1,0 +1,7 @@
+query executives {
+  executives {
+    sid
+    nickname
+    pos
+  }
+}

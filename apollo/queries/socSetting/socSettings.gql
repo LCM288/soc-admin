@@ -1,0 +1,6 @@
+query socSettings {
+  socSettings {
+    key
+    value
+  }
+}

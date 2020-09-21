@@ -1,0 +1,12 @@
+query {
+  majors {
+    code
+    chineseName
+    englishName
+    faculties {
+      code
+      chineseName
+      englishName
+    }
+  }
+}

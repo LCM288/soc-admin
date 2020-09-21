@@ -1,0 +1,7 @@
+query($code: String!) {
+  faculty(code: $code) {
+    code
+    chineseName
+    englishName
+  }
+}
