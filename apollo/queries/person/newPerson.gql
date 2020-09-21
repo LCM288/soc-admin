@@ -39,7 +39,9 @@ mutation(
       dateOfEntry
       expectedGraduationDate
       memberSince
-      major
+      major {
+        code
+      }
     }
   }
 }

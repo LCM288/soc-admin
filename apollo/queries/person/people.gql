@@ -12,6 +12,9 @@ query people {
     dateOfEntry
     expectedGraduationDate
     memberSince
-    major
+    memberUntil
+    major {
+      code
+    }
   }
 }

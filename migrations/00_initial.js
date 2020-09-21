@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 
 async function up(queryInterface) {
   await queryInterface.sequelize.transaction(async (t) => {
@@ -67,6 +67,9 @@ async function up(queryInterface) {
           allowNull: false,
         },
         memberSince: {
+          type: DataTypes.DATE,
+        },
+        memberUntil: {
           type: DataTypes.DATE,
         },
         createdAt: {

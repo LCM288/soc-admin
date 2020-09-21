@@ -1,7 +1,6 @@
 /* eslint-disable */
 
 const Sequelize = require("sequelize");
-const path = require("path");
 const Umzug = require("umzug");
 require("dotenv").config();
 

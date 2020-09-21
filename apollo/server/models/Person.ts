@@ -43,10 +43,12 @@ export interface PersonAttributes {
   dateOfEntry: Date;
   expectedGraduationDate: Date;
   /**
-   * The date that the student became a member of the society
+   * The date that the student became a member of the society \
    * Null for non-member
    */
   memberSince: Date | null;
+  /** The date that the membership expires, null for until grad */
+  memberUntil: Date | null;
 }
 
 /** All the attributes needed to create an instance of the Person model */
@@ -92,6 +94,9 @@ export class Person
    * Null for non-member
    */
   public memberSince!: Date | null;
+
+  /** The date that the membership expires, null for until grad */
+  public memberUntil!: Date | null;
 
   // timestamps!
   public readonly createdAt!: Date;
@@ -158,6 +163,9 @@ export const PersonFactory = (sequelize: Sequelize): typeof Person => {
       memberSince: {
         type: DataTypes.DATE,
       },
+      memberUntil: {
+        type: DataTypes.DATE,
+      },
     },
     {
       sequelize,
@@ -203,5 +211,6 @@ export const typeDefs = gql`
     dateOfEntry: Date!
     expectedGraduationDate: Date!
     memberSince: Date
+    memberUntil: Date
   }
 `;
