@@ -16,7 +16,7 @@ import {
 const { Input, Field, Control, Label, Select } = Form;
 
 export const getServerSideProps: GetServerSideProps<{
-  user: User | null;
+  user: User;
 }> = async (ctx) => {
   const user = await getUserAndRefreshToken(ctx);
   if (!user) {
@@ -38,11 +38,7 @@ const query = gql`
   }
 `;
 
-export default function Register({
-  user,
-}: {
-  user: User | null;
-}): React.ReactElement {
+export default function Register({ user }: { user: User }): React.ReactElement {
   const [chineseName, setChineseName] = useState("");
   const [gender, setGender] = useState("");
   const [dob, setDob] = useState("");
@@ -76,7 +72,9 @@ export default function Register({
                 <Input
                   placeholder="Text input"
                   value={chineseName}
-                  onChange={(event) => setChineseName(event.target.value)}
+                  onChange={(event: React.SyntheticEvent): void =>
+                    setChineseName(event.target.value)
+                  }
                 />
               </Control>
             </Field>
@@ -86,7 +84,9 @@ export default function Register({
             <Control>
               <Select
                 value={gender}
-                onChange={(event) => setGender(event.target.value)}
+                onChange={(event: React.SyntheticEvent): void =>
+                  setGender(event.target.value)
+                }
               >
                 <option value="M" selected={gender === "M"}>
                   M
@@ -104,7 +104,9 @@ export default function Register({
                 type="date"
                 placeholder="Text input"
                 value={dob}
-                onChange={(event) => setDob(event.target.value)}
+                onChange={(event: React.SyntheticEvent): void =>
+                  setDob(event.target.value)
+                }
               />
             </Control>
           </Field>
@@ -114,7 +116,9 @@ export default function Register({
               <Input
                 placeholder="Text input"
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={(event: React.SyntheticEvent): void =>
+                  setEmail(event.target.value)
+                }
               />
             </Control>
           </Field>
@@ -123,7 +127,9 @@ export default function Register({
             <Control>
               <Input
                 value={phone}
-                onChange={(event) => setPhone(event.target.value)}
+                onChange={(event: React.SyntheticEvent): void =>
+                  setPhone(event.target.value)
+                }
                 size="20"
                 pattern="(?:\+[0-9]{2,3}-[0-9]{1,15})|(?:[0-9]{8})"
               />
@@ -134,7 +140,9 @@ export default function Register({
             <Control>
               <Select
                 value={college}
-                onChange={(event) => setCollege(event.target.value)}
+                onChange={(event: React.SyntheticEvent): void =>
+                  setCollege(event.target.value)
+                }
               >
                 <option value="M" selected={gender === "M"}>
                   M
@@ -147,7 +155,9 @@ export default function Register({
             <Control>
               <Select
                 value={major}
-                onChange={(event) => setMajor(event.target.value)}
+                onChange={(event: React.SyntheticEvent): void =>
+                  setMajor(event.target.value)
+                }
               >
                 <option value="M" selected={gender === "M"}>
                   M
@@ -160,7 +170,9 @@ export default function Register({
             <Control>
               <Select
                 value={yoEntry}
-                onChange={(event) => setYoEntry(event.target.value)}
+                onChange={(event: React.SyntheticEvent): void =>
+                  setYoEntry(event.target.value)
+                }
               >
                 <option value="M" selected={gender === "M"}>
                   M
@@ -173,7 +185,9 @@ export default function Register({
             <Control>
               <Select
                 value={yoGrad}
-                onChange={(event) => setYoGrad(event.target.value)}
+                onChange={(event: React.SyntheticEvent): void =>
+                  setYoGrad(event.target.value)
+                }
               >
                 <option value="M" selected={gender === "M"}>
                   M
