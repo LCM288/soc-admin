@@ -9,6 +9,7 @@ import { typeDefs as executiveTypeDefs } from "@/models/Executive";
 import { typeDefs as socSettingTypeDefs } from "@/models/SocSetting";
 import { typeDefs as majorTypeDefs } from "@/models/Major";
 import { typeDefs as facultyTypeDefs } from "@/models/Faculty";
+import { typeDefs as collegeTypeDefs } from "@/models/College";
 
 // resolvers
 import { DateResolver, DateTypeDefinition } from "graphql-scalars";
@@ -32,6 +33,10 @@ import {
   resolverTypeDefs as majorResolverTypeDefs,
   resolvers as majorResolvers,
 } from "@/resolvers/major";
+import {
+  resolverTypeDefs as collegeResolverTypeDefs,
+  resolvers as collegeResolvers,
+} from "@/resolvers/college";
 
 // datasources
 import PersonAPI from "@/datasources/person";
@@ -39,18 +44,21 @@ import ExecutiveAPI from "@/datasources/executive";
 import SocSettingAPI from "@/datasources/socSetting";
 import FacultyAPI from "@/datasources/faculty";
 import MajorAPI from "@/datasources/major";
+import CollegeAPI from "@/datasources/college";
 
 // others
 import { personStore, executiveStore, socSettingStore } from "@/store";
 import { ContextBase } from "./types/datasources";
+import { ResolverDatasource } from "./types/resolver";
 
 /**
  * Sets up any dataSources our resolvers need
  * @returns a datasource object
  * @internal
  */
-const dataSources = () => ({
+const dataSources = (): ResolverDatasource => ({
   facultyAPI: new FacultyAPI(),
+  collegeAPI: new CollegeAPI(),
   majorAPI: new MajorAPI(),
   personAPI: new PersonAPI(personStore),
   executiveAPI: new ExecutiveAPI(executiveStore),
@@ -102,6 +110,8 @@ const apolloServer = new apolloServerMicro.ApolloServer({
     majorResolverTypeDefs,
     facultyTypeDefs,
     facultyResolverTypeDefs,
+    collegeTypeDefs,
+    collegeResolverTypeDefs,
   ],
   resolvers: [
     { Date: DateResolver },
@@ -110,6 +120,7 @@ const apolloServer = new apolloServerMicro.ApolloServer({
     socSettingResolvers,
     facultyResolvers,
     majorResolvers,
+    collegeResolvers,
   ],
   dataSources,
   context,

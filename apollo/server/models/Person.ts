@@ -6,13 +6,13 @@
 import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import { gql } from "apollo-server";
 
-enum Gender {
+enum GenderEnum {
   Male = "Male",
   Female = "Female",
 }
 
 /** The enum for the nine collges plus the option None */
-enum College {
+export enum CollegeEnum {
   CC = "CC",
   UC = "UC",
   NA = "NA",
@@ -32,11 +32,11 @@ export interface PersonAttributes {
   sid: string;
   chineseName: string | null;
   englishName: string;
-  gender: Gender | null;
+  gender: GenderEnum | null;
   dateOfBirth: Date | null;
   email: string | null;
   phone: string | null;
-  college: College;
+  college: CollegeEnum;
   /** The major program's code of the student */
   major: string;
   /** The date that the student entered the university */
@@ -71,7 +71,7 @@ export class Person
 
   public englishName!: string;
 
-  public gender!: Gender | null;
+  public gender!: GenderEnum | null;
 
   public dateOfBirth!: Date | null;
 
@@ -79,7 +79,7 @@ export class Person
 
   public phone!: string | null;
 
-  public college!: College;
+  public college!: CollegeEnum;
 
   /** The major program's code of the student */
   public major!: string;
@@ -132,7 +132,7 @@ export const PersonFactory = (sequelize: Sequelize): typeof Person => {
       },
       gender: {
         type: DataTypes.ENUM,
-        values: Object.values(Gender),
+        values: Object.values(GenderEnum),
       },
       dateOfBirth: {
         type: DataTypes.DATE,
@@ -145,7 +145,7 @@ export const PersonFactory = (sequelize: Sequelize): typeof Person => {
       },
       college: {
         type: DataTypes.ENUM,
-        values: Object.values(College),
+        values: Object.values(CollegeEnum),
         allowNull: false,
       },
       major: {
@@ -180,12 +180,12 @@ export const PersonFactory = (sequelize: Sequelize): typeof Person => {
  * @internal
  */
 export const typeDefs = gql`
-  enum Gender {
+  enum Gender_ENUM {
     Male
     Female
   }
 
-  enum College {
+  enum College_ENUM {
     CC
     UC
     NA
@@ -203,11 +203,10 @@ export const typeDefs = gql`
     sid: String!
     chineseName: String
     englishName: String!
-    gender: Gender
+    gender: Gender_ENUM
     dateOfBirth: String
     email: String
     phone: String
-    college: College!
     dateOfEntry: Date!
     expectedGraduationDate: Date!
     memberSince: Date

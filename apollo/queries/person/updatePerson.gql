@@ -2,11 +2,11 @@ mutation(
   $sid: String!
   $chineseName: String
   $englishName: String
-  $gender: Gender
+  $gender: Gender_ENUM
   $dateOfBirth: Date
   $email: String
   $phone: String
-  $college: College
+  $college: College_ENUM
   $major: String
   $dateOfEntry: Date
   $expectedGraduationDate: Date
@@ -35,7 +35,9 @@ mutation(
       dateOfBirth
       email
       phone
-      college
+      college {
+        code
+      }
       dateOfEntry
       expectedGraduationDate
       memberSince

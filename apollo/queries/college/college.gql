@@ -1,0 +1,7 @@
+query($code: College_ENUM!) {
+  college(code: $code) {
+    code
+    chineseName
+    englishName
+  }
+}

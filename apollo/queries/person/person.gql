@@ -8,7 +8,9 @@ query person($sid: String!) {
     dateOfBirth
     email
     phone
-    college
+    college {
+      code
+    }
     dateOfEntry
     expectedGraduationDate
     memberSince

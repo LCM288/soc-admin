@@ -6,9 +6,10 @@
 import { DataSource } from "apollo-datasource";
 import { Faculty } from "@/models/Faculty";
 import { faculties } from "@/json/Faculties.json";
+import { ContextBase } from "@/types/datasources";
 
 /** An API to retrieve data from the Faculty store */
-export default class FacultyAPI extends DataSource {
+export default class FacultyAPI extends DataSource<ContextBase> {
   /** The Faculty store */
   private faculties: Faculty[];
 
