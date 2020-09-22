@@ -2,7 +2,13 @@ import axios from "axios";
 import qs from "qs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/types/datasources";
-import { issureJwt, setJwtHeader } from "utils/auth";
+import {
+  issureJwt,
+  setJwtHeader,
+  getSetting,
+  CLIENT_ID_KEY,
+  CLIENT_SECRET_KEY,
+} from "utils/auth";
 import { getClientIp } from "request-ip";
 
 /**
@@ -18,18 +24,25 @@ const getAccessToken = async (
 ): Promise<string | undefined> => {
   /* TODO put CLIENT_ID and CLIENT_SECRET to database */
   const TENANT = "link.cuhk.edu.hk";
-  const CLIENT_ID = "373b4ec9-6336-4955-90cf-b7cbd9e3426f";
-  const CLIENT_SECRET = "vKst47W0fi_-I~qv9zP4utA~6IOhYeHXHm";
-  const REDIRECT_URI = `${baseUrl}/api/login`;
+  const clientId = await getSetting(CLIENT_ID_KEY);
+  const clientSecret = await getSetting(CLIENT_SECRET_KEY);
+  const redirectUrl = `${baseUrl}/api/login`;
+
+  if (!clientId) {
+    throw new Error("Cannot find client id");
+  }
+  if (!clientSecret) {
+    throw new Error("Cannot find client secret");
+  }
 
   const link = `https://login.microsoftonline.com/${TENANT}/oauth2/v2.0/token`;
   const body = qs.stringify({
-    client_id: CLIENT_ID,
+    client_id: clientId,
     scope: "user.read",
     code,
-    redirect_uri: REDIRECT_URI,
+    redirect_uri: redirectUrl,
     grant_type: "authorization_code",
-    client_secret: CLIENT_SECRET,
+    client_secret: clientSecret,
   });
 
   try {
@@ -85,7 +98,15 @@ export default async (
   const { host = "" } = req.headers;
   const protocol = /^localhost/g.test(host) ? "http" : "https";
   const baseUrl = `${protocol}://${req.headers.host}`;
-  const accessToken = await getAccessToken(baseUrl, req.body.code);
+
+  const accessToken = await getAccessToken(baseUrl, req.body.code).catch(
+    (err) => {
+      res.status(500).end(err.message);
+    }
+  );
+  if (res.statusCode === 500) {
+    return;
+  }
 
   if (!accessToken) {
     res.status(401).end("No access token recieved.");
