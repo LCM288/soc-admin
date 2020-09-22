@@ -4,7 +4,8 @@ import { useRouter } from "next/router";
 import { User } from "@/types/datasources";
 import { getUserAndRefreshToken } from "utils/auth";
 import { useQuery } from "@apollo/react-hooks";
-import { gql } from "@apollo/client";
+
+import query from "apollo/queries/executive/executives.gql";
 
 export const getServerSideProps: GetServerSideProps<{
   user: User | null;
@@ -18,16 +19,6 @@ export const getServerSideProps: GetServerSideProps<{
     props: { user }, // will be passed to the page component as props
   };
 };
-
-const query = gql`
-  query Executive($sid: String!) {
-    executive(sid: $sid) {
-      id
-      sid
-      nickname
-    }
-  }
-`;
 
 export default function Index({
   user,

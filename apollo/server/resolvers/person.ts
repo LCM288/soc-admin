@@ -11,6 +11,7 @@ import {
   PersonCreationAttributes,
 } from "@/models/Person";
 import { Major } from "@/models/Major";
+import { College } from "@/models/College";
 
 /** The input arguments for the person query's resolver */
 interface PersonResolverArgs {
@@ -40,6 +41,19 @@ const majorResolver: ResolverFn<null, Major | undefined> = (
   { dataSources }
 ): Major | undefined => {
   return dataSources.majorAPI.getMajor(major);
+};
+
+/**
+ * The resolver for the college field of a Person
+ * @returns The college of the Person
+ * @category Field Resolver
+ */
+const collegeResolver: ResolverFn<null, College> = (
+  { college }: Person,
+  _,
+  { dataSources }
+): College => {
+  return dataSources.collegeAPI.getCollege(college);
 };
 
 // Query resolvers
@@ -118,6 +132,8 @@ export const resolvers: Resolvers = {
   Person: {
     /** see {@link majorResolver} */
     major: majorResolver,
+    /** see {@link collegeResolver} */
+    college: collegeResolver,
   },
   Query: {
     /** see {@link peopleResolver} */
@@ -148,11 +164,11 @@ export const resolverTypeDefs = gql`
       sid: String!
       chineseName: String
       englishName: String!
-      gender: Gender
+      gender: Gender_ENUM
       dateOfBirth: String
       email: String
       phone: String
-      college: College!
+      college: College_ENUM!
       major: String!
       dateOfEntry: Date!
       expectedGraduationDate: Date!
@@ -161,11 +177,11 @@ export const resolverTypeDefs = gql`
       sid: String!
       chineseName: String
       englishName: String
-      gender: Gender
+      gender: Gender_ENUM
       dateOfBirth: String
       email: String
       phone: String
-      college: College
+      college: College_ENUM
       major: String
       dateOfEntry: Date
       expectedGraduationDate: Date
@@ -174,6 +190,7 @@ export const resolverTypeDefs = gql`
 
   extend type Person {
     major: Major
+    college: College
   }
 
   type PersonUpdateResponse {

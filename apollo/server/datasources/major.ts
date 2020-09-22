@@ -6,9 +6,10 @@
 import { DataSource } from "apollo-datasource";
 import { Major } from "@/models/Major";
 import { majors } from "@/json/Majors.json";
+import { ContextBase } from "@/types/datasources";
 
 /** An API to retrieve data from the Major store */
-export default class MajorAPI extends DataSource {
+export default class MajorAPI extends DataSource<ContextBase> {
   /** The Major store */
   private majors: Major[];
 

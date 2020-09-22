@@ -20,5 +20,5 @@
 - [Soc-admin](https://lcm288.github.io/soc-admin/)
 - Database: [Sequelize](https://sequelize.org/master/index.html) / [Umzug](https://github.com/sequelize/umzug/tree/v2.x)
 - Backend: [Graphql](https://graphql.org/learn/) / [Apollo Server](https://www.apollographql.com/docs/apollo-server/)
-- Frontend: [Next](https://nextjs.org/docs/getting-started) / [React](https://reactjs.org/docs/getting-started.html) / [Apollo Client](https://www.apollographql.com/docs/react/)
+- Frontend: [Apollo Client](https://www.apollographql.com/docs/react/) / [Next](https://nextjs.org/docs/getting-started) / [React](https://reactjs.org/docs/getting-started.html) / [react-bulma-components](https://github.com/couds/react-bulma-components) / [Bulma](https://bulma.io/)
 - Miscellaneous:  [Axios](https://github.com/axios/axios) / [Typescript](https://www.typescriptlang.org/docs/handbook/intro.html) / [Jest](https://jestjs.io/docs/en/getting-started)

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Faculty | soc-admin</title>
+	<title>College | soc-admin</title>
 	<meta name="description" content="Documentation for soc-admin">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="faculty.html">Faculty</a>
+					<a href="college.html">College</a>
 				</li>
 			</ul>
-			<h1>Module Faculty</h1>
+			<h1>Module College</h1>
 		</div>
 	</div>
 </header>
@@ -73,27 +73,27 @@
 						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/faculty.facultyapi.html" class="tsd-kind-icon">FacultyAPI</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/college.collegeapi.html" class="tsd-kind-icon">CollegeAPI</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/faculty.faculty-1.html" class="tsd-kind-icon">Faculty</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported"><a href="../interfaces/faculty.facultyresolverargs.html" class="tsd-kind-icon">Faculty<wbr>Resolver<wbr>Args</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/college.college-1.html" class="tsd-kind-icon">College</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported"><a href="../interfaces/college.collegeresolverargs.html" class="tsd-kind-icon">College<wbr>Resolver<wbr>Args</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Query Resolver Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="faculty.html#facultiesresolver" class="tsd-kind-icon">faculties<wbr>Resolver</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="faculty.html#facultyresolver" class="tsd-kind-icon">faculty<wbr>Resolver</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="college.html#collegeresolver" class="tsd-kind-icon">college<wbr>Resolver</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="college.html#collegesresolver" class="tsd-kind-icon">colleges<wbr>Resolver</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Object literals</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-object-literal tsd-parent-kind-module"><a href="faculty.html#resolvers" class="tsd-kind-icon">resolvers</a></li>
+								<li class="tsd-kind-object-literal tsd-parent-kind-module"><a href="college.html#resolvers" class="tsd-kind-icon">resolvers</a></li>
 							</ul>
 						</section>
 					</div>
@@ -102,21 +102,66 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Query Resolver Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-					<a name="facultiesresolver" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> faculties<wbr>Resolver</h3>
+					<a name="collegeresolver" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> college<wbr>Resolver</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">faculties<wbr>Resolver<span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a>, __<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/faculty.faculty-1.html" class="tsd-signature-type">Faculty</a><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">college<wbr>Resolver<span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>code<span class="tsd-signature-symbol">: </span><a href="../enums/person.collegeenum.html" class="tsd-signature-type">CollegeEnum</a><span class="tsd-signature-symbol"> }</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/faculty.ts#L22">apollo/server/resolvers/faculty.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/college.ts#L36">apollo/server/resolvers/college.ts:36</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The resolver for faculties Query</p>
+									<p>The resolver for college Query</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>_: <a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a></h5>
+								</li>
+								<li>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>code<span class="tsd-signature-symbol">: </span><a href="../enums/person.collegeenum.html" class="tsd-signature-type">CollegeEnum</a><span class="tsd-signature-symbol"> }</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>code<span class="tsd-signature-symbol">: </span><a href="../enums/person.collegeenum.html" class="tsd-signature-type">CollegeEnum</a></h5>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>data<wbr>Sources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+							<p>The college with the given code or undefined if not found</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="collegesresolver" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> colleges<wbr>Resolver</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">colleges<wbr>Resolver<span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a>, __<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/college.ts#L23">apollo/server/resolvers/college.ts:23</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The resolver for colleges Query</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -136,53 +181,8 @@
 									</ul>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/faculty.faculty-1.html" class="tsd-signature-type">Faculty</a><span class="tsd-signature-symbol">[]</span></h4>
-							<p>All the faculties</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-					<a name="facultyresolver" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> faculty<wbr>Resolver</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">faculty<wbr>Resolver<span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>code<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/faculty.faculty-1.html" class="tsd-signature-type">Faculty</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/faculty.ts#L35">apollo/server/resolvers/faculty.ts:35</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>The resolver for faculty Query</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>_: <a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a></h5>
-								</li>
-								<li>
-									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>code<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter">
-											<h5>code<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-										</li>
-									</ul>
-								</li>
-								<li>
-									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span></h5>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter">
-											<h5>data<wbr>Sources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a></h5>
-										</li>
-									</ul>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/faculty.faculty-1.html" class="tsd-signature-type">Faculty</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
-							<p>The faculty with the given code or undefined if not found</p>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol">[]</span></h4>
+							<p>All the colleges</p>
 						</li>
 					</ul>
 				</section>
@@ -195,12 +195,12 @@
 					<div class="tsd-signature tsd-kind-icon">resolvers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/faculty.ts#L44">apollo/server/resolvers/faculty.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/college.ts#L45">apollo/server/resolvers/college.ts:45</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The resolvers associated with the Faculty model</p>
+							<p>The resolvers associated with the College model</p>
 						</div>
 					</div>
 					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
@@ -209,36 +209,36 @@
 						<div class="tsd-signature tsd-kind-icon">Query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/faculty.ts#L45">apollo/server/resolvers/faculty.ts:45</a></li>
+								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/college.ts#L46">apollo/server/resolvers/college.ts:46</a></li>
 							</ul>
 						</aside>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
-							<a name="resolvers.query.faculties" class="tsd-anchor"></a>
-							<h3>faculties</h3>
-							<div class="tsd-signature tsd-kind-icon">faculties<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/faculty.faculty-1.html" class="tsd-signature-type">Faculty</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = facultiesResolver</span></div>
+							<a name="resolvers.query.college-2" class="tsd-anchor"></a>
+							<h3>college</h3>
+							<div class="tsd-signature tsd-kind-icon">college<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/college.collegeresolverargs.html" class="tsd-signature-type">CollegeResolverArgs</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = collegeResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/faculty.ts#L47">apollo/server/resolvers/faculty.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/college.ts#L50">apollo/server/resolvers/college.ts:50</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>see <a href="faculty.html#facultiesresolver">facultiesResolver</a></p>
+									<p>see <a href="college.html#collegeresolver">collegeResolver</a></p>
 								</div>
 							</div>
 						</section>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
-							<a name="resolvers.query.faculty-2" class="tsd-anchor"></a>
-							<h3>faculty</h3>
-							<div class="tsd-signature tsd-kind-icon">faculty<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/faculty.facultyresolverargs.html" class="tsd-signature-type">FacultyResolverArgs</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/faculty.faculty-1.html" class="tsd-signature-type">Faculty</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = facultyResolver</span></div>
+							<a name="resolvers.query.colleges" class="tsd-anchor"></a>
+							<h3>colleges</h3>
+							<div class="tsd-signature tsd-kind-icon">colleges<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = collegesResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/faculty.ts#L49">apollo/server/resolvers/faculty.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/resolvers/college.ts#L48">apollo/server/resolvers/college.ts:48</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>see <a href="faculty.html#facultyresolver">facultyResolver</a></p>
+									<p>see <a href="college.html#collegesresolver">collegesResolver</a></p>
 								</div>
 							</div>
 						</section>
@@ -255,13 +255,13 @@
 					<li class="label tsd-is-external">
 						<span>Internals</span>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="college.html">College</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="executive.html">Executive</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="faculty.html">Faculty</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -302,22 +302,22 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/faculty.facultyapi.html" class="tsd-kind-icon">FacultyAPI</a>
+						<a href="../classes/college.collegeapi.html" class="tsd-kind-icon">CollegeAPI</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/faculty.faculty-1.html" class="tsd-kind-icon">Faculty</a>
+						<a href="../interfaces/college.college-1.html" class="tsd-kind-icon">College</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/faculty.facultyresolverargs.html" class="tsd-kind-icon">Faculty<wbr>Resolver<wbr>Args</a>
+						<a href="../interfaces/college.collegeresolverargs.html" class="tsd-kind-icon">College<wbr>Resolver<wbr>Args</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<a href="faculty.html#facultiesresolver" class="tsd-kind-icon">faculties<wbr>Resolver</a>
+						<a href="college.html#collegeresolver" class="tsd-kind-icon">college<wbr>Resolver</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<a href="faculty.html#facultyresolver" class="tsd-kind-icon">faculty<wbr>Resolver</a>
+						<a href="college.html#collegesresolver" class="tsd-kind-icon">colleges<wbr>Resolver</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-parent-kind-module">
-						<a href="faculty.html#resolvers" class="tsd-kind-icon">resolvers</a>
+						<a href="college.html#resolvers" class="tsd-kind-icon">resolvers</a>
 					</li>
 				</ul>
 			</nav>

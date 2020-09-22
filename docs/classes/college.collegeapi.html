@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>SocSettingAPI | soc-admin</title>
+	<title>CollegeAPI | soc-admin</title>
 	<meta name="description" content="Documentation for soc-admin">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/socsetting.html">SocSetting</a>
+					<a href="../modules/college.html">College</a>
 				</li>
 				<li>
-					<a href="socsetting.socsettingapi.html">SocSettingAPI</a>
+					<a href="college.collegeapi.html">CollegeAPI</a>
 				</li>
 			</ul>
-			<h1>Class SocSettingAPI</h1>
+			<h1>Class CollegeAPI</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>An API to retrieve data from the SocSetting store</p>
+						<p>An API to retrieve data from the College store</p>
 					</div>
 				</div>
 			</section>
@@ -83,7 +83,7 @@
 						<span class="tsd-signature-type">DataSource</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/apollo_server_types.contextbase.html" class="tsd-signature-type">ContextBase</a><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">SocSettingAPI</span>
+								<span class="target">CollegeAPI</span>
 							</li>
 						</ul>
 					</li>
@@ -96,22 +96,21 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="socsetting.socsettingapi.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="college.collegeapi.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="socsetting.socsettingapi.html#store" class="tsd-kind-icon">store</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="college.collegeapi.html#colleges" class="tsd-kind-icon">colleges</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="socsetting.socsettingapi.html#deletesocsetting" class="tsd-kind-icon">delete<wbr>Soc<wbr>Setting</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="socsetting.socsettingapi.html#findsocsettings" class="tsd-kind-icon">find<wbr>Soc<wbr>Settings</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="socsetting.socsettingapi.html#initialize" class="tsd-kind-icon">initialize</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="socsetting.socsettingapi.html#updatesocsetting" class="tsd-kind-icon">update<wbr>Soc<wbr>Setting</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="college.collegeapi.html#getcollege" class="tsd-kind-icon">get<wbr>College</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="college.collegeapi.html#getcolleges" class="tsd-kind-icon">get<wbr>Colleges</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="college.collegeapi.html#initialize" class="tsd-kind-icon">initialize</a></li>
 							</ul>
 						</section>
 					</div>
@@ -123,13 +122,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Soc<wbr>SettingAPI<span class="tsd-signature-symbol">(</span>socSettingStore<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">SocSetting</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="socsetting.socsettingapi.html" class="tsd-signature-type">SocSettingAPI</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>CollegeAPI<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="college.collegeapi.html" class="tsd-signature-type">CollegeAPI</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/datasources/socSetting.ts#L27">apollo/server/datasources/socSetting.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/datasources/college.ts#L15">apollo/server/datasources/college.ts:15</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -137,18 +136,7 @@
 									<p>Create the API instance.</p>
 								</div>
 							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>socSettingStore: <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">SocSetting</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>A SocSetting store.</p>
-										</div>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="socsetting.socsettingapi.html" class="tsd-signature-type">SocSettingAPI</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="college.collegeapi.html" class="tsd-signature-type">CollegeAPI</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -156,17 +144,17 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="store" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> store</h3>
-					<div class="tsd-signature tsd-kind-icon">store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">SocSetting</span></div>
+					<a name="colleges" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> colleges</h3>
+					<div class="tsd-signature tsd-kind-icon">colleges<span class="tsd-signature-symbol">:</span> <a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/datasources/socSetting.ts#L27">apollo/server/datasources/socSetting.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/datasources/college.ts#L15">apollo/server/datasources/college.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The <a href="socsetting.socsetting-1.html">SocSetting</a> store</p>
+							<p>The College store</p>
 						</div>
 					</div>
 				</section>
@@ -174,70 +162,57 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="deletesocsetting" class="tsd-anchor"></a>
-					<h3>delete<wbr>Soc<wbr>Setting</h3>
+					<a name="getcollege" class="tsd-anchor"></a>
+					<h3>get<wbr>College</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">delete<wbr>Soc<wbr>Setting<span class="tsd-signature-symbol">(</span>arg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>College<span class="tsd-signature-symbol">(</span>code<span class="tsd-signature-symbol">: </span><a href="../enums/person.collegeenum.html" class="tsd-signature-type">CollegeEnum</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/datasources/socSetting.ts#L67">apollo/server/datasources/socSetting.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/datasources/college.ts#L30">apollo/server/datasources/college.ts:30</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Delete soc settings</p>
+									<p>Find a college by code</p>
 								</div>
-								<dl class="tsd-comment-tags">
-									<dt>async</dt>
-									<dd></dd>
-								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>arg: <span class="tsd-signature-symbol">{ </span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+									<h5>code: <a href="../enums/person.collegeenum.html" class="tsd-signature-type">CollegeEnum</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The arg for the soc setting</p>
+										<p>The code of the college</p>
 									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter">
-											<h5>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-										</li>
-									</ul>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Number of soc settings deleted</p>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a></h4>
+							<p>The matched college or undefined if not found</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="findsocsettings" class="tsd-anchor"></a>
-					<h3>find<wbr>Soc<wbr>Settings</h3>
+					<a name="getcolleges" class="tsd-anchor"></a>
+					<h3>get<wbr>Colleges</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">find<wbr>Soc<wbr>Settings<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Colleges<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/datasources/socSetting.ts#L43">apollo/server/datasources/socSetting.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/datasources/college.ts#L42">apollo/server/datasources/college.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Find all soc settings</p>
+									<p>Find all colleges</p>
 								</div>
-								<dl class="tsd-comment-tags">
-									<dt>async</dt>
-									<dd></dd>
-								</dl>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>An array of soc settings</p>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol">[]</span></h4>
+							<p>An array of colleges</p>
 						</li>
 					</ul>
 				</section>
@@ -265,42 +240,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="updatesocsetting" class="tsd-anchor"></a>
-					<h3>update<wbr>Soc<wbr>Setting</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">update<wbr>Soc<wbr>Setting<span class="tsd-signature-symbol">(</span>arg<span class="tsd-signature-symbol">: </span><a href="../modules/socsetting.html#socsettingcreationattributes" class="tsd-signature-type">SocSettingCreationAttributes</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/7e19fd6/apollo/server/datasources/socSetting.ts#L54">apollo/server/datasources/socSetting.ts:54</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Add or update a new soc setting</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>async</dt>
-									<dd></dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>arg: <a href="../modules/socsetting.html#socsettingcreationattributes" class="tsd-signature-type">SocSettingCreationAttributes</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The arg for the soc setting</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>An instance of the soc setting</p>
-						</li>
-					</ul>
-				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -312,7 +251,7 @@
 					<li class="label tsd-is-external">
 						<span>Internals</span>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/college.html">College</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -327,7 +266,7 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/person.html">Person</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/socsetting.html">Soc<wbr>Setting</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -358,62 +297,44 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="socsetting.socsetting-1.html" class="tsd-kind-icon">Soc<wbr>Setting</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="socsetting.socsettingapi.html" class="tsd-kind-icon">Soc<wbr>SettingAPI</a>
+						<a href="college.collegeapi.html" class="tsd-kind-icon">CollegeAPI</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="socsetting.socsettingapi.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="college.collegeapi.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="socsetting.socsettingapi.html#store" class="tsd-kind-icon">store</a>
+								<a href="college.collegeapi.html#colleges" class="tsd-kind-icon">colleges</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="socsetting.socsettingapi.html#deletesocsetting" class="tsd-kind-icon">delete<wbr>Soc<wbr>Setting</a>
+								<a href="college.collegeapi.html#getcollege" class="tsd-kind-icon">get<wbr>College</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="socsetting.socsettingapi.html#findsocsettings" class="tsd-kind-icon">find<wbr>Soc<wbr>Settings</a>
+								<a href="college.collegeapi.html#getcolleges" class="tsd-kind-icon">get<wbr>Colleges</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="socsetting.socsettingapi.html#initialize" class="tsd-kind-icon">initialize</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="socsetting.socsettingapi.html#updatesocsetting" class="tsd-kind-icon">update<wbr>Soc<wbr>Setting</a>
+								<a href="college.collegeapi.html#initialize" class="tsd-kind-icon">initialize</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Attributes</a>
+						<a href="../interfaces/college.college-1.html" class="tsd-kind-icon">College</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/socsetting.socsettingdeleteresponse.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Delete<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/socsetting.socsettingupdateresponse.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Update<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/socsetting.html#socsettingcreationattributes" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Creation<wbr>Attributes</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/socsetting.html#socsettingfactory" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Factory</a>
+						<a href="../interfaces/college.collegeresolverargs.html" class="tsd-kind-icon">College<wbr>Resolver<wbr>Args</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/socsetting.html#deletesocsettingresolver" class="tsd-kind-icon">delete<wbr>Soc<wbr>Setting<wbr>Resolver</a>
+						<a href="../modules/college.html#collegeresolver" class="tsd-kind-icon">college<wbr>Resolver</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/socsetting.html#socsettingsresolver" class="tsd-kind-icon">soc<wbr>Settings<wbr>Resolver</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/socsetting.html#updatesocsettingresolver" class="tsd-kind-icon">update<wbr>Soc<wbr>Setting<wbr>Resolver</a>
+						<a href="../modules/college.html#collegesresolver" class="tsd-kind-icon">colleges<wbr>Resolver</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-parent-kind-module">
-						<a href="../modules/socsetting.html#resolvers" class="tsd-kind-icon">resolvers</a>
+						<a href="../modules/college.html#resolvers" class="tsd-kind-icon">resolvers</a>
 					</li>
 				</ul>
 			</nav>
