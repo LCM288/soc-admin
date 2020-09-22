@@ -4,7 +4,8 @@ import { useRouter } from "next/router";
 import { User } from "@/types/datasources";
 import { getUserAndRefreshToken } from "utils/auth";
 import { useQuery } from "@apollo/react-hooks";
-import { gql } from "@apollo/client";
+import ReactSelect from "react-select";
+import { DateTime } from "luxon";
 import {
   Button,
   Form,
@@ -12,6 +13,10 @@ import {
   Container,
   Heading,
 } from "react-bulma-components";
+import { Major } from "@/models/Major";
+import { College } from "@/models/College";
+import majorsQuery from "../apollo/queries/major/majors.gql";
+import collegesQuery from "../apollo/queries/college/colleges.gql";
 
 const { Input, Field, Control, Label, Select } = Form;
 
@@ -28,30 +33,56 @@ export const getServerSideProps: GetServerSideProps<{
   };
 };
 
-const query = gql`
-  query Executive($sid: String!) {
-    executive(sid: $sid) {
-      id
-      sid
-      nickname
-    }
-  }
-`;
-
 export default function Register({
   user,
 }: {
   user: User | null;
 }): React.ReactElement {
+  const majorsQueryResult = useQuery(majorsQuery);
+  const collegesQueryResult = useQuery(collegesQuery);
   const [chineseName, setChineseName] = useState("");
   const [gender, setGender] = useState("");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState(`${user?.sid}@link.cuhk.edu.hk`);
   const [phone, setPhone] = useState("");
-  const [college, setCollege] = useState("");
-  const [major, setMajor] = useState("");
+  const [collegeCode, setCollegeCode] = useState("");
+  const [majorCode, setMajorCode] = useState("");
   const [yoEntry, setYoEntry] = useState("");
   const [yoGrad, setYoGrad] = useState("");
+  if (majorsQueryResult.error || collegesQueryResult.error) {
+    return <div>error</div>;
+  }
+  if (majorsQueryResult.loading || collegesQueryResult.loading) {
+    return <div>loading</div>;
+  }
+  const { majors } = majorsQueryResult.data as { majors: Major[] };
+  const { colleges } = collegesQueryResult.data as { colleges: College[] };
+  const getMajor = () => {
+    const foundMajor = majors.find((m) => m.code === majorCode);
+    if (!foundMajor) {
+      return { value: "", label: "" };
+    }
+    return {
+      value: foundMajor.code,
+      label: `${foundMajor.englishName} ${foundMajor.chineseName}`,
+    };
+  };
+  const getCollege = () => {
+    const foundCollege = colleges.find((c) => c.code === collegeCode);
+    if (!foundCollege) {
+      return { value: "", label: "" };
+    }
+    return {
+      value: foundCollege.code,
+      label: `${foundCollege.englishName} ${foundCollege.chineseName}`,
+    };
+  };
+  const setDate = (date: string, type: string, value: string) => {
+    const newDate = /^\d{4}-\d{2}-\d{2}$/g.test(date)
+      ? DateTime.fromISO(date)
+      : DateTime.local();
+    return newDate.set({ [type]: parseInt(value, 10) }).toISODate();
+  };
   return (
     <div>
       <Section>
@@ -63,28 +94,26 @@ export default function Register({
               <Input type="number" value={user?.sid} disabled />
             </Control>
           </Field>
-          <Field className="is-grouped">
-            <Field>
-              <Label>English Name</Label>
-              <Control className="is-expanded">
-                <Input value={user?.name} disabled />
-              </Control>
-            </Field>
-            <Field>
-              <Label>Chinese Name</Label>
-              <Control className="is-expanded">
-                <Input
-                  placeholder="Text input"
-                  value={chineseName}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>
-                  ): void => setChineseName(event.target.value)}
-                />
-              </Control>
-            </Field>
+          <Field>
+            <Label>English Name</Label>
+            <Control className="is-expanded">
+              <Input value={user?.name} disabled />
+            </Control>
           </Field>
           <Field>
-            <Label>Subject</Label>
+            <Label>Chinese Name</Label>
+            <Control className="is-expanded">
+              <Input
+                placeholder="Text input"
+                value={chineseName}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+                  setChineseName(event.target.value)
+                }
+              />
+            </Control>
+          </Field>
+          <Field>
+            <Label>Gender</Label>
             <Control>
               <Select
                 value={gender}
@@ -92,12 +121,8 @@ export default function Register({
                   setGender(event.target.value)
                 }
               >
-                <option value="M" selected={gender === "M"}>
-                  M
-                </option>
-                <option value="F" selected={gender === "F"}>
-                  F
-                </option>
+                <option value="M">M</option>
+                <option value="F">F</option>
               </Select>
             </Control>
           </Field>
@@ -142,45 +167,66 @@ export default function Register({
           <Field>
             <Label>College</Label>
             <Control>
-              <Select
-                value={college}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-                  setCollege(event.target.value)
-                }
-              >
-                <option value="M" selected={gender === "M"}>
-                  M
-                </option>
-              </Select>
+              <ReactSelect
+                value={getCollege()}
+                options={colleges.map((c) => ({
+                  value: c.code,
+                  label: `${c.englishName} ${c.chineseName}`,
+                }))}
+                onChange={(input: { value: string }): void => {
+                  setCollegeCode(input.value);
+                }}
+              />
             </Control>
           </Field>
           <Field>
             <Label>Major</Label>
-            <Control>
-              <Select
-                value={major}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-                  setMajor(event.target.value)
-                }
-              >
-                <option value="M" selected={gender === "M"}>
-                  M
-                </option>
-              </Select>
-            </Control>
+            <ReactSelect
+              value={getMajor()}
+              options={majors.map((m) => ({
+                value: m.code,
+                label: `${m.englishName} ${m.chineseName}`,
+              }))}
+              onChange={(input: { value: string }): void => {
+                setMajorCode(input.value);
+              }}
+            />
           </Field>
           <Field>
             <Label>Year of Entry</Label>
             <Control>
               <Select
-                value={yoEntry}
+                className="mr-3"
+                value={DateTime.fromISO(yoEntry).year}
+                onChange={(
+                  event: React.ChangeEvent<HTMLInputElement>
+                ): void => {
+                  setYoEntry(setDate(yoEntry, "year", event?.target?.value));
+                }}
+              >
+                {[-8, -7, -6, -5, -4, -3, -2, -1, 0]
+                  .map((i) => i + DateTime.local().year)
+                  .map((y) => (
+                    <option value={y}>{y}</option>
+                  ))}
+              </Select>
+              <Select
+                value={DateTime.fromISO(yoEntry).month || "DEFAULT"}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-                  setYoEntry(event.target.value)
+                  setYoEntry(
+                    setDate(
+                      setDate(yoEntry, "month", event?.target?.value),
+                      "day",
+                      "1"
+                    )
+                  )
                 }
               >
-                <option value="M" selected={gender === "M"}>
-                  M
+                <option value="DEFAULT" disabled>
+                  Please Choose...
                 </option>
+                <option value="9">Term 1</option>
+                <option value="1">Term 2</option>
               </Select>
             </Control>
           </Field>
@@ -188,14 +234,37 @@ export default function Register({
             <Label>Expected Graduation Year</Label>
             <Control>
               <Select
-                value={yoGrad}
+                className="mr-3"
+                value={DateTime.fromISO(yoGrad).year}
+                onChange={(
+                  event: React.ChangeEvent<HTMLInputElement>
+                ): void => {
+                  setYoGrad(setDate(yoGrad, "year", event?.target?.value));
+                }}
+              >
+                {[0, 1, 2, 3, 4, 5, 6, 7, 8]
+                  .map((i) => i + DateTime.local().year)
+                  .map((y) => (
+                    <option value={y}>{y}</option>
+                  ))}
+              </Select>
+              <Select
+                value={DateTime.fromISO(yoGrad).month || "DEFAULT"}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-                  setYoGrad(event.target.value)
+                  setYoGrad(
+                    setDate(
+                      setDate(yoGrad, "month", event?.target?.value),
+                      "day",
+                      "31"
+                    )
+                  )
                 }
               >
-                <option value="M" selected={gender === "M"}>
-                  M
+                <option value="DEFAULT" disabled>
+                  Please Choose...
                 </option>
+                <option value="12">Term 1</option>
+                <option value="7">Term 2</option>
               </Select>
             </Control>
           </Field>
