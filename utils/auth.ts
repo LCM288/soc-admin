@@ -6,14 +6,19 @@ import { User } from "@/types/datasources";
 import { socSettingStore } from "@/store";
 import { getClientIp } from "request-ip";
 
+export const JWT_SECRET_KEY = "jwt_secret";
+export const CLIENT_ID_KEY = "client_id";
+export const CLIENT_SECRET_KEY = "client_secret";
+
 /**
- * Get the jwt secret from the database
+ * Get a specific settings from the database
  * @async
- * @returns {Promise<string | undefined>} the jwt secret
+ * @arg key - The key of the settings
+ * @returns the value of the corresponding key
  */
-const getJwtSecret = async (): Promise<string | undefined> => {
+export const getSetting = async (key: string): Promise<string | undefined> => {
   const entry = await socSettingStore.findOne({
-    where: { key: "jwt_secret" },
+    where: { key },
   });
   return entry?.getDataValue("value");
 };
@@ -29,7 +34,7 @@ export const issureJwt = async (
   user: User,
   secret?: string
 ): Promise<string | undefined> => {
-  const jwtSecret = secret ?? (await getJwtSecret());
+  const jwtSecret = secret ?? (await getSetting(JWT_SECRET_KEY));
   if (!jwtSecret) {
     return undefined;
   }
@@ -74,7 +79,7 @@ export const getUserAndRefreshToken = async (
     process.env.NODE_ENV === "development"
       ? cookies.jwt
       : cookies["__Host-jwt"];
-  const jwtSecret = await getJwtSecret();
+  const jwtSecret = await getSetting(JWT_SECRET_KEY);
   const addr = getClientIp(ctx.req);
   if (!jwtSecret) {
     return null;
@@ -107,7 +112,7 @@ export const getUser = async (req: IncomingMessage): Promise<User | null> => {
     process.env.NODE_ENV === "development"
       ? cookies.jwt
       : cookies["__Host-jwt"];
-  const jwtSecret = await getJwtSecret();
+  const jwtSecret = await getSetting(JWT_SECRET_KEY);
   if (!jwtSecret) {
     return null;
   }
