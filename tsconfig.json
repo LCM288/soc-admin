@@ -15,7 +15,7 @@
     "jsx": "preserve",
     "alwaysStrict": true,
     "noImplicitAny": true,
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": ["node_modules/@types", "@types"],
     "baseUrl": ".",
     "paths": { "@/*": ["apollo/server/*"] },
     "stripInternal": true,
