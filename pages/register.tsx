@@ -16,7 +16,7 @@ import {
 const { Input, Field, Control, Label, Select } = Form;
 
 export const getServerSideProps: GetServerSideProps<{
-  user: User;
+  user: User | null;
 }> = async (ctx) => {
   const user = await getUserAndRefreshToken(ctx);
   if (!user) {
@@ -38,11 +38,15 @@ const query = gql`
   }
 `;
 
-export default function Register({ user }: { user: User }): React.ReactElement {
+export default function Register({
+  user,
+}: {
+  user: User | null;
+}): React.ReactElement {
   const [chineseName, setChineseName] = useState("");
   const [gender, setGender] = useState("");
   const [dob, setDob] = useState("");
-  const [email, setEmail] = useState(`${user.sid}@link.cuhk.edu.hk`);
+  const [email, setEmail] = useState(`${user?.sid}@link.cuhk.edu.hk`);
   const [phone, setPhone] = useState("");
   const [college, setCollege] = useState("");
   const [major, setMajor] = useState("");
@@ -56,14 +60,14 @@ export default function Register({ user }: { user: User }): React.ReactElement {
           <Field>
             <Label>Student ID</Label>
             <Control>
-              <Input type="number" value={user.sid} disabled />
+              <Input type="number" value={user?.sid} disabled />
             </Control>
           </Field>
           <Field className="is-grouped">
             <Field>
               <Label>English Name</Label>
               <Control className="is-expanded">
-                <Input value={user.name} disabled />
+                <Input value={user?.name} disabled />
               </Control>
             </Field>
             <Field>
@@ -72,9 +76,9 @@ export default function Register({ user }: { user: User }): React.ReactElement {
                 <Input
                   placeholder="Text input"
                   value={chineseName}
-                  onChange={(event: React.SyntheticEvent): void =>
-                    setChineseName(event.target.value)
-                  }
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => setChineseName(event.target.value)}
                 />
               </Control>
             </Field>
@@ -84,7 +88,7 @@ export default function Register({ user }: { user: User }): React.ReactElement {
             <Control>
               <Select
                 value={gender}
-                onChange={(event: React.SyntheticEvent): void =>
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
                   setGender(event.target.value)
                 }
               >
@@ -104,7 +108,7 @@ export default function Register({ user }: { user: User }): React.ReactElement {
                 type="date"
                 placeholder="Text input"
                 value={dob}
-                onChange={(event: React.SyntheticEvent): void =>
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
                   setDob(event.target.value)
                 }
               />
@@ -116,7 +120,7 @@ export default function Register({ user }: { user: User }): React.ReactElement {
               <Input
                 placeholder="Text input"
                 value={email}
-                onChange={(event: React.SyntheticEvent): void =>
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
                   setEmail(event.target.value)
                 }
               />
@@ -127,7 +131,7 @@ export default function Register({ user }: { user: User }): React.ReactElement {
             <Control>
               <Input
                 value={phone}
-                onChange={(event: React.SyntheticEvent): void =>
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
                   setPhone(event.target.value)
                 }
                 size="20"
@@ -140,7 +144,7 @@ export default function Register({ user }: { user: User }): React.ReactElement {
             <Control>
               <Select
                 value={college}
-                onChange={(event: React.SyntheticEvent): void =>
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
                   setCollege(event.target.value)
                 }
               >
@@ -155,7 +159,7 @@ export default function Register({ user }: { user: User }): React.ReactElement {
             <Control>
               <Select
                 value={major}
-                onChange={(event: React.SyntheticEvent): void =>
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
                   setMajor(event.target.value)
                 }
               >
@@ -170,7 +174,7 @@ export default function Register({ user }: { user: User }): React.ReactElement {
             <Control>
               <Select
                 value={yoEntry}
-                onChange={(event: React.SyntheticEvent): void =>
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
                   setYoEntry(event.target.value)
                 }
               >
@@ -185,7 +189,7 @@ export default function Register({ user }: { user: User }): React.ReactElement {
             <Control>
               <Select
                 value={yoGrad}
-                onChange={(event: React.SyntheticEvent): void =>
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
                   setYoGrad(event.target.value)
                 }
               >
