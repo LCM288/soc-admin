@@ -204,7 +204,7 @@ export const typeDefs = gql`
     chineseName: String
     englishName: String!
     gender: Gender_ENUM
-    dateOfBirth: String
+    dateOfBirth: Date
     email: String
     phone: String
     dateOfEntry: Date!
