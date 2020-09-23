@@ -165,7 +165,7 @@ export const resolverTypeDefs = gql`
       chineseName: String
       englishName: String!
       gender: Gender_ENUM
-      dateOfBirth: String
+      dateOfBirth: Date
       email: String
       phone: String
       college: College_ENUM!
@@ -178,7 +178,7 @@ export const resolverTypeDefs = gql`
       chineseName: String
       englishName: String
       gender: Gender_ENUM
-      dateOfBirth: String
+      dateOfBirth: Date
       email: String
       phone: String
       college: College_ENUM
