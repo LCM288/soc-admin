@@ -9,6 +9,7 @@ import { gql } from "apollo-server";
 enum GenderEnum {
   Male = "Male",
   Female = "Female",
+  None = "None",
 }
 
 /** The enum for the nine collges plus the option None */

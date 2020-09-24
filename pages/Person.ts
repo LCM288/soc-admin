@@ -9,6 +9,7 @@ import { Major } from "./Major";
 enum GenderEnum {
   Male = "Male",
   Female = "Female",
+  None = "None",
 }
 
 /** All the attributes in the Person model */

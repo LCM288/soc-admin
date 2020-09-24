@@ -198,6 +198,7 @@ export default function Register({
                   </option>
                   <option value="Male">M</option>
                   <option value="Female">F</option>
+                  <option value="None">Prefer not to say</option>
                 </Select>
               </Control>
             </Field>
@@ -279,7 +280,9 @@ export default function Register({
                   {[-8, -7, -6, -5, -4, -3, -2, -1, 0]
                     .map((i) => i + DateTime.local().year)
                     .map((y) => (
-                      <option value={y}>{y}</option>
+                      <option value={y} key={y}>
+                        {y}
+                      </option>
                     ))}
                 </Select>
                 <Select
@@ -322,7 +325,9 @@ export default function Register({
                   {[0, 1, 2, 3, 4, 5, 6, 7, 8]
                     .map((i) => i + DateTime.local().year)
                     .map((y) => (
-                      <option value={y}>{y}</option>
+                      <option value={y} key={y}>
+                        {y}
+                      </option>
                     ))}
                 </Select>
                 <Select
@@ -347,7 +352,7 @@ export default function Register({
               </Control>
             </Field>
             <Button color="primary" type="submit">
-              Push me
+              {person ? "Update" : "Register"}
             </Button>
           </form>
           {(newPersonMutationLoading || updatePersonMutationLoading) && (
