@@ -20,6 +20,7 @@ import majorsQuery from "../apollo/queries/major/majors.gql";
 import collegesQuery from "../apollo/queries/college/colleges.gql";
 import personQuery from "../apollo/queries/person/person.gql";
 import newPersonMutation from "../apollo/queries/person/newPerson.gql";
+import updatePersonMutation from "../apollo/queries/person/updatePerson.gql";
 
 const { Input, Field, Control, Label, Select } = Form;
 
@@ -48,8 +49,12 @@ export default function Register({
   });
   const [
     newPerson,
-    { loading: mutationLoading, error: mutationError },
+    { loading: newPersonMutationLoading, error: newPersonMutationError },
   ] = useMutation(newPersonMutation);
+  const [
+    updatePerson,
+    { loading: updatePersonMutationLoading, error: updatePersonMutationError },
+  ] = useMutation(updatePersonMutation);
 
   const [chineseName, setChineseName] = useState("");
   const [gender, setGender] = useState("");
@@ -79,7 +84,7 @@ export default function Register({
   const { majors } = majorsQueryResult.data as { majors: Major[] };
   const { colleges } = collegesQueryResult.data as { colleges: College[] };
   const { person } = personQueryResult.data as { person: Person };
-  if (!personLoaded.current) {
+  if (!personLoaded.current && person) {
     setChineseName(person?.chineseName ?? "");
     setGender(person?.gender ?? "");
     setDob(person?.dateOfBirth ?? "");
@@ -128,7 +133,7 @@ export default function Register({
   };
   const formSubmit = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
-    newPerson({
+    const options = {
       variables: {
         sid: user?.sid,
         englishName: user?.name,
@@ -142,7 +147,12 @@ export default function Register({
         dateOfEntry: validDate(doEntry),
         expectedGraduationDate: validDate(doGrad),
       },
-    });
+    };
+    if (person) {
+      updatePerson(options);
+    } else {
+      newPerson(options);
+    }
   };
   return (
     <div>
@@ -340,8 +350,12 @@ export default function Register({
               Push me
             </Button>
           </form>
-          {mutationLoading && <p>Loading...</p>}
-          {mutationError && <p>Error :( Please try again</p>}
+          {(newPersonMutationLoading || updatePersonMutationLoading) && (
+            <p>Loading...</p>
+          )}
+          {(newPersonMutationError || updatePersonMutationError) && (
+            <p>Error :( Please try again</p>
+          )}
         </Container>
       </Section>
     </div>
