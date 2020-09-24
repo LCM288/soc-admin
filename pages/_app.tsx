@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-
+import "bulma/bulma.sass";
 import { AppProps } from "next/app";
 import React from "react";
 import {
@@ -16,10 +16,16 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 
 function App({ Component, pageProps }: AppProps): React.ReactElement {
+  const Layout =
+    ((Component as unknown) as {
+      Layout: React.ComponentType;
+    }).Layout ?? React.Fragment;
   return (
-    <ApolloProvider client={client}>
-      <Component {...pageProps} />
-    </ApolloProvider>
+    <Layout>
+      <ApolloProvider client={client}>
+        <Component {...pageProps} />
+      </ApolloProvider>
+    </Layout>
   );
 }
 
