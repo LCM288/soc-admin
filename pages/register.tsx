@@ -22,7 +22,7 @@ import personQuery from "../apollo/queries/person/person.gql";
 import newPersonMutation from "../apollo/queries/person/newPerson.gql";
 import updatePersonMutation from "../apollo/queries/person/updatePerson.gql";
 
-const { Input, Field, Control, Label, Select } = Form;
+const { Input, Field, Control, Label, Select, Help } = Form;
 
 export const getServerSideProps: GetServerSideProps<{
   user: User | null;
@@ -163,13 +163,13 @@ export default function Register({
             <Field>
               <Label>Student ID</Label>
               <Control>
-                <Input type="number" value={user?.sid} disabled />
+                <Input type="number" value={user?.sid} disabled required />
               </Control>
             </Field>
             <Field>
               <Label>English Name</Label>
               <Control>
-                <Input value={user?.name} disabled />
+                <Input value={user?.name} disabled required />
               </Control>
             </Field>
             <Field>
@@ -188,12 +188,12 @@ export default function Register({
               <Label>Gender</Label>
               <Control>
                 <Select
-                  value={gender || "DEFAULT"}
+                  value={gender || "None"}
                   onChange={(
                     event: React.ChangeEvent<HTMLInputElement>
                   ): void => setGender(event.target.value)}
                 >
-                  <option value="DEFAULT" disabled>
+                  <option value="None" disabled>
                     Please Choose...
                   </option>
                   <option value="Male">M</option>
@@ -219,6 +219,7 @@ export default function Register({
               <Label>Email</Label>
               <Control>
                 <Input
+                  type="email"
                   placeholder="Text input"
                   value={email}
                   onChange={(
@@ -231,6 +232,7 @@ export default function Register({
               <Label>Phone Number</Label>
               <Control>
                 <Input
+                  type="tel"
                   value={phone}
                   onChange={(
                     event: React.ChangeEvent<HTMLInputElement>
