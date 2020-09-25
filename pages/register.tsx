@@ -96,6 +96,22 @@ export default function Register({
     setDoGrad(person?.expectedGraduationDate);
   }
   personLoaded.current = true;
+  const getGender = () => {
+    return [
+      {
+        value: "Male",
+        label: "Male",
+      },
+      {
+        value: "Female",
+        label: "Female",
+      },
+      {
+        value: "None",
+        label: "Prefer not to say",
+      },
+    ];
+  };
   const getMajor = () => {
     const foundMajor = majors.find((m) => m.code === majorCode);
     if (!foundMajor) {
@@ -116,17 +132,25 @@ export default function Register({
       label: `${foundCollege.englishName} ${foundCollege.chineseName}`,
     };
   };
+  const getTermStart = (yearDiff: number) => {
+    const year = yearDiff + DateTime.local().year;
+    return [
+      { value: `${year}-09-01`, label: `${year}-${year + 1} Term 1` },
+      { value: `${year + 1}-01-01`, label: `${year}-${year + 1} Term 2` },
+    ];
+  };
+  const getTermEnd = (yearDiff: number) => {
+    const year = yearDiff + DateTime.local().year;
+    return [
+      { value: `${year}-12-31`, label: `${year}-${year + 1} Term 1` },
+      { value: `${year + 1}-07-31`, label: `${year}-${year + 1} Term 2` },
+    ];
+  };
   const mapCode = (arr: any[]) => {
     return arr.map((a) => ({
       value: a.code,
       label: `${a.englishName} ${a.chineseName}`,
     }));
-  };
-  const setDate = (date: string, values: Record<string, number>) => {
-    const newDate = /^\d{4}-\d{2}-\d{2}$/g.test(date)
-      ? DateTime.fromISO(date)
-      : DateTime.local();
-    return newDate.set(values).toISODate();
   };
   const validDate = (date: string) => {
     return /^\d{4}-\d{2}-\d{2}$/g.test(date) ? date : null;
@@ -187,19 +211,13 @@ export default function Register({
             <Field>
               <Label>Gender</Label>
               <Control>
-                <Select
-                  value={gender || "None"}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>
-                  ): void => setGender(event.target.value)}
-                >
-                  <option value="None" disabled>
-                    Please Choose...
-                  </option>
-                  <option value="Male">M</option>
-                  <option value="Female">F</option>
-                  <option value="None">Prefer not to say</option>
-                </Select>
+                <ReactSelect
+                  defaultValue={getGender().find((g) => g.value === "None")}
+                  options={getGender()}
+                  onChange={(input: { value: string }): void => {
+                    setGender(input.value);
+                  }}
+                />
               </Control>
             </Field>
             <Field>
@@ -266,91 +284,27 @@ export default function Register({
             <Field>
               <Label>Year of Entry</Label>
               <Control>
-                <Select
-                  className="mr-3"
-                  value={DateTime.fromISO(doEntry).year}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>
-                  ): void => {
-                    setDoEntry(
-                      setDate(doEntry, {
-                        year: parseInt(event?.target?.value, 10),
-                      })
-                    );
+                <ReactSelect
+                  options={[-8, -7, -6, -5, -4, -3, -2, -1, 0]
+                    .map((i) => getTermStart(i))
+                    .flat()}
+                  onChange={(input: { value: string }): void => {
+                    setDoEntry(input.value);
                   }}
-                >
-                  {[-8, -7, -6, -5, -4, -3, -2, -1, 0]
-                    .map((i) => i + DateTime.local().year)
-                    .map((y) => (
-                      <option value={y} key={y}>
-                        {y}
-                      </option>
-                    ))}
-                </Select>
-                <Select
-                  value={DateTime.fromISO(doEntry).month || "DEFAULT"}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>
-                  ): void =>
-                    setDoEntry(
-                      setDate(doEntry, {
-                        month: parseInt(event?.target?.value, 10),
-                        day: 1,
-                      })
-                    )
-                  }
-                >
-                  <option value="DEFAULT" disabled>
-                    Please Choose...
-                  </option>
-                  <option value="9">Term 1</option>
-                  <option value="1">Term 2</option>
-                </Select>
+                />
               </Control>
             </Field>
             <Field>
               <Label>Expected Graduation Year</Label>
               <Control>
-                <Select
-                  className="mr-3"
-                  value={DateTime.fromISO(doGrad).year}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>
-                  ): void => {
-                    setDoGrad(
-                      setDate(doGrad, {
-                        year: parseInt(event?.target?.value, 10),
-                      })
-                    );
+                <ReactSelect
+                  options={[0, 1, 2, 3, 4, 5, 6, 7, 8]
+                    .map((i) => getTermEnd(i))
+                    .flat()}
+                  onChange={(input: { value: string }): void => {
+                    setDoGrad(input.value);
                   }}
-                >
-                  {[0, 1, 2, 3, 4, 5, 6, 7, 8]
-                    .map((i) => i + DateTime.local().year)
-                    .map((y) => (
-                      <option value={y} key={y}>
-                        {y}
-                      </option>
-                    ))}
-                </Select>
-                <Select
-                  value={DateTime.fromISO(doGrad).month || "DEFAULT"}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>
-                  ): void =>
-                    setDoGrad(
-                      setDate(doGrad, {
-                        month: parseInt(event?.target?.value, 10),
-                        day: 31,
-                      })
-                    )
-                  }
-                >
-                  <option value="DEFAULT" disabled>
-                    Please Choose...
-                  </option>
-                  <option value="12">Term 1</option>
-                  <option value="7">Term 2</option>
-                </Select>
+                />
               </Control>
             </Field>
             <Button color="primary" type="submit">
