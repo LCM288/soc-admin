@@ -21,14 +21,9 @@
       "chineseName": "逸夫書院"
     },
     {
-      "code": "WS",
-      "englishName": "Lee Woo Sing College",
-      "chineseName": "和聲書院"
-    },
-    {
-      "code": "WYS",
-      "englishName": "Wu Yee Sun College",
-      "chineseName": "伍宜孫書院"
+      "code": "MC",
+      "englishName": "Morningside College",
+      "chineseName": "晨興書院"
     },
     {
       "code": "SHHO",
@@ -36,14 +31,24 @@
       "chineseName": "善衡書院"
     },
     {
-      "code": "MC",
-      "englishName": "Morningside College",
-      "chineseName": "晨興書院"
-    },
-    {
       "code": "CW",
       "englishName": "CW Chu College",
       "chineseName": "敬文書院"
+    },
+    {
+      "code": "WYS",
+      "englishName": "Wu Yee Sun College",
+      "chineseName": "伍宜孫書院"
+    },
+    {
+      "code": "LWS",
+      "englishName": "Lee Woo Sing College",
+      "chineseName": "和聲書院"
+    },
+    {
+      "code": "GS",
+      "englishName": "Graduate School",
+      "chineseName": "研究院"
     },
     {
       "code": "None",

@@ -13,16 +13,16 @@ import {
   Container,
   Heading,
 } from "react-bulma-components";
-import { Major } from "./Major";
-import { College } from "./College";
-import { Person } from "./Person";
+import { Major } from "types/Major";
+import { College } from "types/College";
+import { Person } from "types/Person";
 import majorsQuery from "../apollo/queries/major/majors.gql";
 import collegesQuery from "../apollo/queries/college/colleges.gql";
 import personQuery from "../apollo/queries/person/person.gql";
 import newPersonMutation from "../apollo/queries/person/newPerson.gql";
 import updatePersonMutation from "../apollo/queries/person/updatePerson.gql";
 
-const { Input, Field, Control, Label, Select, Help } = Form;
+const { Input, Field, Control, Label } = Form;
 
 export const getServerSideProps: GetServerSideProps<{
   user: User | null;

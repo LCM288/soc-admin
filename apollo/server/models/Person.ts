@@ -18,11 +18,12 @@ export enum CollegeEnum {
   UC = "UC",
   NA = "NA",
   SC = "SC",
-  WS = "WS",
-  WYS = "WYS",
-  SHHO = "SHHO",
   MC = "MC",
+  SHHO = "SHHO",
   CW = "CW",
+  WYS = "WYS",
+  LWS = "LWS",
+  GS = "GS",
   None = "None",
 }
 
