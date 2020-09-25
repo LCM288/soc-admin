@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import "bulma/bulma.sass";
+import "styles/select-fix.css";
 import { AppProps } from "next/app";
 import React from "react";
 import {
