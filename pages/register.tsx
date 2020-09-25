@@ -132,19 +132,25 @@ export default function Register({
       label: `${foundCollege.englishName} ${foundCollege.chineseName}`,
     };
   };
-  const getTermStart = (yearDiff: number) => {
+  const calcTermStart = (yearDiff: number) => {
     const year = yearDiff + DateTime.local().year;
     return [
       { value: `${year}-09-01`, label: `${year}-${year + 1} Term 1` },
       { value: `${year + 1}-01-01`, label: `${year}-${year + 1} Term 2` },
     ];
   };
-  const getTermEnd = (yearDiff: number) => {
+  const getTermStart = (yearsDiff: number[]) => {
+    return yearsDiff.map((i) => calcTermStart(i)).flat();
+  };
+  const calcTermEnd = (yearDiff: number) => {
     const year = yearDiff + DateTime.local().year;
     return [
       { value: `${year}-12-31`, label: `${year}-${year + 1} Term 1` },
       { value: `${year + 1}-07-31`, label: `${year}-${year + 1} Term 2` },
     ];
+  };
+  const getTermEnd = (yearsDiff: number[]) => {
+    return yearsDiff.map((i) => calcTermEnd(i)).flat();
   };
   const mapCode = (arr: any[]) => {
     return arr.map((a) => ({
@@ -213,6 +219,7 @@ export default function Register({
               <Control>
                 <ReactSelect
                   defaultValue={getGender().find((g) => g.value === "None")}
+                  value={getGender().find((g) => g.value === gender)}
                   options={getGender()}
                   onChange={(input: { value: string }): void => {
                     setGender(input.value);
@@ -285,9 +292,10 @@ export default function Register({
               <Label>Year of Entry</Label>
               <Control>
                 <ReactSelect
-                  options={[-8, -7, -6, -5, -4, -3, -2, -1, 0]
-                    .map((i) => getTermStart(i))
-                    .flat()}
+                  value={getTermStart([-8, -7, -6, -5, -4, -3, -2, -1, 0]).find(
+                    (term) => term.value === doEntry
+                  )}
+                  options={getTermStart([-8, -7, -6, -5, -4, -3, -2, -1, 0])}
                   onChange={(input: { value: string }): void => {
                     setDoEntry(input.value);
                   }}
@@ -298,9 +306,10 @@ export default function Register({
               <Label>Expected Graduation Year</Label>
               <Control>
                 <ReactSelect
-                  options={[0, 1, 2, 3, 4, 5, 6, 7, 8]
-                    .map((i) => getTermEnd(i))
-                    .flat()}
+                  value={getTermEnd([-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8]).find(
+                    (term) => term.value === doGrad
+                  )}
+                  options={getTermEnd([-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8])}
                   onChange={(input: { value: string }): void => {
                     setDoGrad(input.value);
                   }}
