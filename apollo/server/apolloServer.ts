@@ -124,6 +124,11 @@ const apolloServer = new apolloServerMicro.ApolloServer({
   ],
   dataSources,
   context,
+  playground: {
+    settings: {
+      "request.credentials": "same-origin",
+    },
+  },
 });
 
 export default apolloServer;

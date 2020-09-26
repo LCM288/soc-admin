@@ -1,0 +1,31 @@
+query registrations {
+  registrations {
+    id
+    sid
+    chineseName
+    englishName
+    gender
+    dateOfBirth
+    email
+    phone
+    college {
+      code
+      chineseName
+      englishName
+    }
+    major {
+      code
+      chineseName
+      englishName
+      faculties {
+        code
+        chineseName
+        englishName
+      }
+    }
+    dateOfEntry
+    expectedGraduationDate
+    memberSince
+    memberUntil
+  }
+}

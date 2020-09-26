@@ -11,7 +11,7 @@ import {
   PersonUpdateAttributes,
 } from "@/models/Person";
 import { ContextBase } from "@/types/datasources";
-
+import Sequelize, { Op } from "sequelize";
 /**
  * Transforms the data from the Person model to plain attributes
  * @internal
@@ -56,6 +56,44 @@ export default class PersonAPI extends DataSource<ContextBase> {
   public async findPeople(): Promise<PersonAttributes[]> {
     const people = await this.store.findAll();
     return people.map(transformData);
+  }
+
+  /**
+   * Find all ***pending*** registrations \
+   * A registration maybe for new member or for renewal of membership
+   * @async
+   * @returns {Promise<PersonAttributes[]>} An array of people
+   */
+  public async findRegistrations(): Promise<PersonAttributes[]> {
+    const registrations = await this.store.findAll({
+      where: {
+        [Op.or]: [
+          { memberSince: { [Op.eq]: null } },
+          {
+            [Op.and]: [
+              Sequelize.where(
+                Sequelize.cast(
+                  Sequelize.col("memberUntil"),
+                  "TIMESTAMP WITH TIME ZONE"
+                ),
+                Op.lt,
+                Sequelize.fn("NOW")
+              ),
+              Sequelize.where(
+                Sequelize.cast(
+                  Sequelize.col("memberUntil"),
+                  "TIMESTAMP WITH TIME ZONE"
+                ),
+                Op.lt,
+                Sequelize.col("updatedAt")
+              ),
+            ],
+          },
+        ],
+      },
+      raw: true,
+    });
+    return registrations;
   }
 
   /**

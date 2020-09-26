@@ -27,14 +27,15 @@ const newSetting = {
   value: crypto.randomBytes(32).toString("base64"),
 };
 
-socSetting.findOne({ where: { key: "jwt_secret" } }).then(function (obj) {
+module.exports = async () => {
+  const obj = await socSetting.findOne({ where: { key: "jwt_secret" } });
   if (obj) {
     // update
-    obj.update(newSetting);
+    await obj.update(newSetting);
     console.log("Update new jwt_secret");
   } else {
     // insert
-    socSetting.create(newSetting);
+    await socSetting.create(newSetting);
     console.log("Insert new jwt_secret");
   }
-});
+};

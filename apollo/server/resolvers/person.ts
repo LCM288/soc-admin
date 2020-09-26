@@ -73,6 +73,27 @@ const peopleResolver: ResolverFn<unknown, PersonAttributes[]> = (
 };
 
 /**
+ * The resolver for registrations Query
+ * @async
+ * @returns All the registrations (as PersonAttributes[])
+ * @category Query Resolver
+ */
+const registrationsResolver: ResolverFn<unknown, PersonAttributes[]> = async (
+  _,
+  __,
+  { user, dataSources }
+): Promise<PersonAttributes[]> => {
+  const isAdmin = Boolean(
+    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+  );
+  // only admin can access
+  if (isAdmin) {
+    return dataSources.personAPI.findRegistrations();
+  }
+  return [];
+};
+
+/**
  * The resolver for person Query
  * @async
  * @returns The person with the given sid or undefined if not found
@@ -138,6 +159,8 @@ export const resolvers: Resolvers = {
   Query: {
     /** see {@link peopleResolver} */
     people: peopleResolver,
+    /** see {@link registrationsResolver} */
+    registrations: registrationsResolver,
     /** see {@link personResolver} */
     person: personResolver,
   },
@@ -156,6 +179,7 @@ export const resolvers: Resolvers = {
 export const resolverTypeDefs = gql`
   extend type Query {
     people: [Person!]!
+    registrations: [Person!]!
     person(sid: String!): Person
   }
 

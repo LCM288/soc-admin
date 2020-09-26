@@ -137,7 +137,7 @@ export const PersonFactory = (sequelize: Sequelize): typeof Person => {
         values: Object.values(GenderEnum),
       },
       dateOfBirth: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
       },
       email: {
         type: DataTypes.STRING,
@@ -155,18 +155,18 @@ export const PersonFactory = (sequelize: Sequelize): typeof Person => {
         allowNull: false,
       },
       dateOfEntry: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       expectedGraduationDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       memberSince: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
       },
       memberUntil: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
       },
     },
     {
