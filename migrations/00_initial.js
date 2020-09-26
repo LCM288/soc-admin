@@ -30,7 +30,7 @@ async function up(queryInterface) {
           values: ["Male", "Female"],
         },
         dateOfBirth: {
-          type: DataTypes.DATE,
+          type: DataTypes.DATEONLY,
         },
         email: {
           type: DataTypes.STRING,
@@ -59,18 +59,18 @@ async function up(queryInterface) {
           allowNull: false,
         },
         dateOfEntry: {
-          type: DataTypes.DATE,
+          type: DataTypes.DATEONLY,
           allowNull: false,
         },
         expectedGraduationDate: {
-          type: DataTypes.DATE,
+          type: DataTypes.DATEONLY,
           allowNull: false,
         },
         memberSince: {
-          type: DataTypes.DATE,
+          type: DataTypes.DATEONLY,
         },
         memberUntil: {
-          type: DataTypes.DATE,
+          type: DataTypes.DATEONLY,
         },
         createdAt: {
           type: DataTypes.DATE,
