@@ -1,47 +1,102 @@
-import React from "react";
-import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
-import { User } from "@/types/datasources";
-import { getUserAndRefreshToken } from "utils/auth";
+/* eslint-disable react/jsx-props-no-spreading */
+
+import React, { useMemo } from "react";
+import { useTable, CellProps } from "react-table";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
+import { ServerSideProps } from "utils/getServerSideProps";
+import registrationsQuery from "apollo/queries/person/registrations.gql";
+import { PersonAttributes } from "@/models/Person";
 
-import query from "apollo/queries/executive/executives.gql";
+export { getServerSideProps } from "utils/getServerSideProps";
 
-interface Props {
-  user: User | null;
-}
+const Index: React.FunctionComponent<ServerSideProps> = ({
+  user,
+}: ServerSideProps) => {
+  const { data, loading, error } = useQuery(registrationsQuery);
+  const tableColumns = useMemo(
+    () => [
+      {
+        Header: "ID",
+        accessor: "id",
+      },
+      {
+        Header: "SID",
+        accessor: "sid",
+        Cell: ({
+          row,
+          cell,
+        }: CellProps<Record<string, unknown> & PersonAttributes>) => {
+          return <div>{`${row.values.id} + ${cell.value}`}</div>;
+        },
+      },
+    ],
+    []
+  );
+  const tableData = useMemo(() => {
+    return data?.registrations ?? [];
+  }, [data]);
+  const tableInstance = useTable({ columns: tableColumns, data: tableData });
 
-export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  const user = await getUserAndRefreshToken(ctx);
-  if (!user) {
-    ctx.res.statusCode = 307;
-    ctx.res.setHeader("Location", "/login");
-  }
-  return {
-    props: { user }, // will be passed to the page component as props
-  };
-};
-
-const Index: React.FunctionComponent<Props> = ({ user }: Props) => {
-  const router = useRouter();
-  const { data, loading, error } = useQuery(query, {
-    variables: { sid: user?.sid ?? "" },
-  });
-  const logout = () => {
-    router.push("/api/logout");
-  };
   if (loading) return <p>loading</p>;
   if (error) return <p>ERROR</p>;
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = tableInstance;
 
   if (user) {
     return (
       <div>
         <div>Hi, {user.name}</div>
-        <div>{JSON.stringify(data)}</div>
-        <button type="button" onClick={logout}>
-          logout
-        </button>
+        {/* apply the table props */}
+        <table {...getTableProps()} style={{ border: "solid 1px blue" }}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps()}
+                    style={{
+                      borderBottom: "solid 3px red",
+                      background: "aliceblue",
+                      color: "black",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {column.render("Header")}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        {...cell.getCellProps()}
+                        style={{
+                          padding: "10px",
+                          border: "solid 1px gray",
+                          background: "papayawhip",
+                        }}
+                      >
+                        {cell.render("Cell")}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     );
   }
