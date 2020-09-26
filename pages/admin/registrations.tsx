@@ -8,7 +8,7 @@ import { ServerSideProps } from "utils/getServerSideProps";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import { PersonAttributes } from "@/models/Person";
+import { Table } from "react-bulma-components";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -105,20 +105,12 @@ const Index: React.FunctionComponent<ServerSideProps> = ({
       <div>
         <div>Hi, {user.name}</div>
         {/* apply the table props */}
-        <table {...getTableProps()} style={{ border: "solid 1px blue" }}>
+        <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    style={{
-                      borderBottom: "solid 3px red",
-                      background: "aliceblue",
-                      color: "black",
-                      fontWeight: "bold",
-                    }}
-                  >
+                  <th {...column.getHeaderProps()}>
                     {column.render("Header")}
                   </th>
                 ))}
@@ -132,23 +124,14 @@ const Index: React.FunctionComponent<ServerSideProps> = ({
                 <tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <td
-                        {...cell.getCellProps()}
-                        style={{
-                          padding: "10px",
-                          border: "solid 1px gray",
-                          background: "papayawhip",
-                        }}
-                      >
-                        {cell.render("Cell")}
-                      </td>
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                     );
                   })}
                 </tr>
               );
             })}
           </tbody>
-        </table>
+        </Table>
       </div>
     );
   }
