@@ -23,11 +23,8 @@ const Index: React.FunctionComponent<ServerSideProps> = ({
       {
         Header: "SID",
         accessor: "sid",
-        Cell: ({
-          row,
-          cell,
-        }: CellProps<Record<string, unknown> & PersonAttributes>) => {
-          return <div>{`${row.values.id} + ${cell.value}`}</div>;
+        Cell: ({ row, value }: CellProps<Record<string, unknown>, string>) => {
+          return <div>{`${row.values.id} + ${value}`}</div>;
         },
       },
     ],
