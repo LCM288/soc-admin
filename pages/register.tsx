@@ -42,6 +42,7 @@ export default function Register({
 }: {
   user: User | null;
 }): React.ReactElement {
+  const router = useRouter();
   const majorsQueryResult = useQuery(majorsQuery);
   const collegesQueryResult = useQuery(collegesQuery);
   const personQueryResult = useQuery(personQuery, {
@@ -50,11 +51,15 @@ export default function Register({
   const [
     newPerson,
     { loading: newPersonMutationLoading, error: newPersonMutationError },
-  ] = useMutation(newPersonMutation);
+  ] = useMutation(newPersonMutation, {
+    onCompleted: () => router.push("/"),
+  });
   const [
     updatePerson,
     { loading: updatePersonMutationLoading, error: updatePersonMutationError },
-  ] = useMutation(updatePersonMutation);
+  ] = useMutation(updatePersonMutation, {
+    onCompleted: () => router.push("/"),
+  });
 
   const [chineseName, setChineseName] = useState("");
   const [gender, setGender] = useState("None");
@@ -230,6 +235,7 @@ export default function Register({
                     autoComplete="off"
                     style={{ position: "absolute", opacity: 0, height: 0 }}
                     value={gender}
+                    onChange={() => {}}
                     required
                   />
                 </div>
@@ -290,6 +296,7 @@ export default function Register({
                     autoComplete="off"
                     style={{ position: "absolute", opacity: 0, height: 0 }}
                     value={collegeCode}
+                    onChange={() => {}}
                     required
                   />
                 </div>
@@ -310,6 +317,7 @@ export default function Register({
                   autoComplete="off"
                   style={{ position: "absolute", opacity: 0, height: 0 }}
                   value={majorCode}
+                  onChange={() => {}}
                   required
                 />
               </div>
@@ -340,6 +348,7 @@ export default function Register({
                     autoComplete="off"
                     style={{ position: "absolute", opacity: 0, height: 0 }}
                     value={doEntry}
+                    onChange={() => {}}
                     required
                   />
                 </div>
@@ -363,6 +372,7 @@ export default function Register({
                     autoComplete="off"
                     style={{ position: "absolute", opacity: 0, height: 0 }}
                     value={doGrad}
+                    onChange={() => {}}
                     required
                   />
                 </div>
