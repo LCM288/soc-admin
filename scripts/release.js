@@ -7,6 +7,7 @@ process.on("exit", function (code) {
 (async () => {
   const migration = require("../migrations/index.js");
   await migration();
-  require("./create_jwt_secret.js");
+  const updateJwtSrcret = require("./create_jwt_secret.js");
+  await updateJwtSrcret();
   process.exit(0);
 })();
