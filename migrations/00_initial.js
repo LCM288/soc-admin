@@ -27,7 +27,7 @@ async function up(queryInterface) {
         },
         gender: {
           type: DataTypes.ENUM,
-          values: ["Male", "Female"],
+          values: ["Male", "Female", "None"],
         },
         dateOfBirth: {
           type: DataTypes.DATEONLY,
@@ -45,11 +45,11 @@ async function up(queryInterface) {
             "UC",
             "NA",
             "SC",
-            "WS",
-            "WYS",
-            "SHHO",
             "MC",
+            "SHHO",
             "CW",
+            "WYS",
+            "LWS",
             "None",
           ],
           allowNull: false,

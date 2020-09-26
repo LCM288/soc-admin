@@ -57,7 +57,7 @@ export default function Register({
   ] = useMutation(updatePersonMutation);
 
   const [chineseName, setChineseName] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState("None");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState(`${user?.sid}@link.cuhk.edu.hk`);
   const [phone, setPhone] = useState("");
