@@ -206,7 +206,6 @@ export default function Register({
               <Label>Chinese Name</Label>
               <Control>
                 <Input
-                  placeholder="Text input"
                   value={chineseName}
                   onChange={(
                     event: React.ChangeEvent<HTMLInputElement>
@@ -217,14 +216,23 @@ export default function Register({
             <Field>
               <Label>Gender</Label>
               <Control>
-                <ReactSelect
-                  defaultValue={getGender().find((g) => g.value === "None")}
-                  value={getGender().find((g) => g.value === gender)}
-                  options={getGender()}
-                  onChange={(input: { value: string }): void => {
-                    setGender(input.value);
-                  }}
-                />
+                <div>
+                  <ReactSelect
+                    defaultValue={getGender().find((g) => g.value === "None")}
+                    value={getGender().find((g) => g.value === gender)}
+                    options={getGender()}
+                    onChange={(input: { value: string }): void => {
+                      setGender(input.value);
+                    }}
+                  />
+                  <input
+                    tabIndex={-1}
+                    autoComplete="off"
+                    style={{ position: "absolute", opacity: 0, height: 0 }}
+                    value={gender}
+                    required
+                  />
+                </div>
               </Control>
             </Field>
             <Field>
@@ -269,51 +277,95 @@ export default function Register({
             <Field>
               <Label>College</Label>
               <Control>
-                <ReactSelect
-                  value={getCollege()}
-                  options={mapCode(colleges)}
-                  onChange={(input: { value: string }): void => {
-                    setCollegeCode(input.value);
-                  }}
-                />
+                <div>
+                  <ReactSelect
+                    value={getCollege()}
+                    options={mapCode(colleges)}
+                    onChange={(input: { value: string }): void => {
+                      setCollegeCode(input.value);
+                    }}
+                  />
+                  <input
+                    tabIndex={-1}
+                    autoComplete="off"
+                    style={{ position: "absolute", opacity: 0, height: 0 }}
+                    value={collegeCode}
+                    required
+                  />
+                </div>
               </Control>
             </Field>
             <Field>
               <Label>Major</Label>
-              <ReactSelect
-                value={getMajor()}
-                options={mapCode(majors)}
-                onChange={(input: { value: string }): void => {
-                  setMajorCode(input.value);
-                }}
-              />
+              <div>
+                <ReactSelect
+                  value={getMajor()}
+                  options={mapCode(majors)}
+                  onChange={(input: { value: string }): void => {
+                    setMajorCode(input.value);
+                  }}
+                />
+                <input
+                  tabIndex={-1}
+                  autoComplete="off"
+                  style={{ position: "absolute", opacity: 0, height: 0 }}
+                  value={majorCode}
+                  required
+                />
+              </div>
             </Field>
             <Field>
               <Label>Year of Entry</Label>
               <Control>
-                <ReactSelect
-                  value={getTermStart([-8, -7, -6, -5, -4, -3, -2, -1, 0]).find(
-                    (term) => term.value === doEntry
-                  )}
-                  options={getTermStart([-8, -7, -6, -5, -4, -3, -2, -1, 0])}
-                  onChange={(input: { value: string }): void => {
-                    setDoEntry(input.value);
-                  }}
-                />
+                <div>
+                  <ReactSelect
+                    value={getTermStart([
+                      -8,
+                      -7,
+                      -6,
+                      -5,
+                      -4,
+                      -3,
+                      -2,
+                      -1,
+                      0,
+                    ]).find((term) => term.value === doEntry)}
+                    options={getTermStart([-8, -7, -6, -5, -4, -3, -2, -1, 0])}
+                    onChange={(input: { value: string }): void => {
+                      setDoEntry(input.value);
+                    }}
+                  />
+                  <input
+                    tabIndex={-1}
+                    autoComplete="off"
+                    style={{ position: "absolute", opacity: 0, height: 0 }}
+                    value={doEntry}
+                    required
+                  />
+                </div>
               </Control>
             </Field>
             <Field>
               <Label>Expected Graduation Year</Label>
               <Control>
-                <ReactSelect
-                  value={getTermEnd([-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8]).find(
-                    (term) => term.value === doGrad
-                  )}
-                  options={getTermEnd([-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8])}
-                  onChange={(input: { value: string }): void => {
-                    setDoGrad(input.value);
-                  }}
-                />
+                <div>
+                  <ReactSelect
+                    value={getTermEnd([-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8]).find(
+                      (term) => term.value === doGrad
+                    )}
+                    options={getTermEnd([-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8])}
+                    onChange={(input: { value: string }): void => {
+                      setDoGrad(input.value);
+                    }}
+                  />
+                  <input
+                    tabIndex={-1}
+                    autoComplete="off"
+                    style={{ position: "absolute", opacity: 0, height: 0 }}
+                    value={doGrad}
+                    required
+                  />
+                </div>
               </Control>
             </Field>
             <Button color="primary" type="submit">
