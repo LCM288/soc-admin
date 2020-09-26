@@ -6,6 +6,8 @@ import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
+import { College } from "@/models/College";
+import { Major } from "@/models/Major";
 import { PersonAttributes } from "@/models/Person";
 
 export { getServerSideProps } from "utils/getServerSideProps";
@@ -23,8 +25,61 @@ const Index: React.FunctionComponent<ServerSideProps> = ({
       {
         Header: "SID",
         accessor: "sid",
-        Cell: ({ row, value }: CellProps<Record<string, unknown>, string>) => {
-          return <div>{`${row.values.id} + ${value}`}</div>;
+      },
+      {
+        Header: "Chinese Name",
+        accessor: "chineseName",
+      },
+      {
+        Header: "English Name",
+        accessor: "englishName",
+      },
+      {
+        Header: "Gender",
+        accessor: "gender",
+      },
+      {
+        Header: "Date of Birth",
+        accessor: "dateOfBirth",
+      },
+      {
+        Header: "Email",
+        accessor: "email",
+      },
+      {
+        Header: "Phone",
+        accessor: "phone",
+      },
+      {
+        Header: "College",
+        accessor: "college",
+        Cell: ({ value }: CellProps<Record<string, unknown>, College>) => {
+          return <div>{`${value.code}`}</div>;
+        },
+      },
+      {
+        Header: "Major",
+        accessor: "major",
+        Cell: ({ value }: CellProps<Record<string, unknown>, Major>) => {
+          return <div>{`${value.code}`}</div>;
+        },
+      },
+      {
+        Header: "Date of Entry",
+        accessor: "dateOfEntry",
+      },
+      {
+        Header: "Expected Graduation Date",
+        accessor: "expectedGraduationDate",
+      },
+      {
+        Header: "Approve",
+        accessor: (row: Record<string, unknown>) => row.id,
+        id: "approve",
+        Cell: ({ row, value }: CellProps<Record<string, unknown>, number>) => {
+          return (
+            <div>{`A button to approve ${row.values.englishName} (${value})`}</div>
+          );
         },
       },
     ],
