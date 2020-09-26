@@ -14,7 +14,9 @@ const socAdminDB =
 /**
  * A database connection
  */
-export const sequelize = new Sequelize(socAdminDB);
+export const sequelize = new Sequelize(socAdminDB, {
+  timezone: "Asia/Hong_Kong",
+});
 
 /**
  * A store for the Person model
