@@ -1,4 +1,4 @@
-query executives {
+query {
   executives {
     sid
     nickname

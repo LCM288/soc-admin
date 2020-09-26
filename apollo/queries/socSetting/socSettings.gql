@@ -1,4 +1,4 @@
-query socSettings {
+query {
   socSettings {
     key
     value
