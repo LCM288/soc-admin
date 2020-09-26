@@ -50,6 +50,7 @@ async function up(queryInterface) {
             "CW",
             "WYS",
             "LWS",
+            "GS",
             "None",
           ],
           allowNull: false,
