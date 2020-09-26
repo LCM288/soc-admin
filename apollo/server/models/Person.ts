@@ -185,6 +185,7 @@ export const typeDefs = gql`
   enum Gender_ENUM {
     Male
     Female
+    None
   }
 
   enum College_ENUM {

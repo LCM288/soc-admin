@@ -33,7 +33,8 @@ export interface Person {
    * The date that the student became a member of the society \
    * Null for non-member
    */
-  memberSince: Date | null;
+  memberSince: string | null;
   /** The date that the membership expires, null for until grad */
-  memberUntil: Date | null;
+  memberUntil: string | null;
+  updatedAt: string;
 }
