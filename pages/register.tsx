@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { User } from "@/types/datasources";
@@ -13,9 +13,9 @@ import {
   Container,
   Heading,
 } from "react-bulma-components";
-import { Major } from "types/Major";
-import { College } from "types/College";
-import { Person } from "types/Person";
+import { Major } from "@/models/Major";
+import { College } from "@/models/College";
+import { Person } from "@/models/Person";
 import majorsQuery from "../apollo/queries/major/majors.gql";
 import collegesQuery from "../apollo/queries/college/colleges.gql";
 import personQuery from "../apollo/queries/person/person.gql";
@@ -72,6 +72,67 @@ export default function Register({
   const [doGrad, setDoGrad] = useState("");
   const personLoaded = useRef(false);
 
+  const major = useMemo(() => {
+    const foundMajor = majorsQueryResult.data?.majors.find(
+      (m: Major) => m.code === majorCode
+    );
+    if (!foundMajor) {
+      return { value: "", label: "" };
+    }
+    return {
+      value: foundMajor.code,
+      label: `${foundMajor.englishName} ${foundMajor.chineseName}`,
+    };
+  }, [majorsQueryResult, majorCode]);
+  const college = useMemo(() => {
+    const foundCollege = collegesQueryResult.data?.colleges.find(
+      (c: College) => c.code === collegeCode
+    );
+    if (!foundCollege) {
+      return { value: "", label: "" };
+    }
+    return {
+      value: foundCollege.code,
+      label: `${foundCollege.englishName} ${foundCollege.chineseName}`,
+    };
+  }, [collegesQueryResult, collegeCode]);
+  const majors = useMemo(() => {
+    return majorsQueryResult.data?.majors.map((a: Major) => ({
+      value: a.code,
+      label: `${a.englishName} ${a.chineseName}`,
+    }));
+  }, [majorsQueryResult]);
+  const colleges = useMemo(() => {
+    return collegesQueryResult.data?.colleges.map((a: College) => ({
+      value: a.code,
+      label: `${a.englishName} ${a.chineseName}`,
+    }));
+  }, [collegesQueryResult]);
+  const termStart = useMemo(() => {
+    const calcTermStart = (yearDiff: number) => {
+      const year = yearDiff + DateTime.local().year;
+      return [
+        { value: `${year}-09-01`, label: `${year}-${year + 1} Term 1` },
+        { value: `${year + 1}-01-01`, label: `${year}-${year + 1} Term 2` },
+      ];
+    };
+    return [-8, -7, -6, -5, -4, -3, -2, -1, 0]
+      .map((i) => calcTermStart(i))
+      .flat();
+  }, []);
+  const termEnd = useMemo(() => {
+    const calcTermEnd = (yearDiff: number) => {
+      const year = yearDiff + DateTime.local().year;
+      return [
+        { value: `${year + 1}-01-01`, label: `${year}-${year + 1} Term 1` },
+        { value: `${year + 1}-08-01`, label: `${year}-${year + 1} Term 2` },
+      ];
+    };
+    return [-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8]
+      .map((i) => calcTermEnd(i))
+      .flat();
+  }, []);
+
   if (
     majorsQueryResult.error ||
     collegesQueryResult.error ||
@@ -86,19 +147,17 @@ export default function Register({
   ) {
     return <div>loading</div>;
   }
-  const { majors } = majorsQueryResult.data as { majors: Major[] };
-  const { colleges } = collegesQueryResult.data as { colleges: College[] };
   const { person } = personQueryResult.data as { person: Person };
   if (!personLoaded.current && person) {
-    setChineseName(person?.chineseName ?? "");
-    setGender(person?.gender ?? "");
-    setDob(person?.dateOfBirth ?? "");
-    setEmail(person?.email ?? "");
-    setPhone(person?.phone ?? "");
-    setCollegeCode(person?.college.code);
-    setMajorCode(person?.major.code);
-    setDoEntry(person?.dateOfEntry);
-    setDoGrad(person?.expectedGraduationDate);
+    setChineseName(person.chineseName ?? "");
+    setGender(person.gender ?? "None");
+    setDob(person.dateOfBirth ?? "");
+    setEmail(person.email ?? "");
+    setPhone(person.phone ?? "");
+    setCollegeCode((person.college as College).code);
+    setMajorCode((person.major as Major).code);
+    setDoEntry(person.dateOfEntry);
+    setDoGrad(person.expectedGraduationDate);
   }
   personLoaded.current = true;
   const getGender = () => {
@@ -116,52 +175,6 @@ export default function Register({
         label: "Prefer not to say",
       },
     ];
-  };
-  const getMajor = () => {
-    const foundMajor = majors.find((m) => m.code === majorCode);
-    if (!foundMajor) {
-      return { value: "", label: "" };
-    }
-    return {
-      value: foundMajor.code,
-      label: `${foundMajor.englishName} ${foundMajor.chineseName}`,
-    };
-  };
-  const getCollege = () => {
-    const foundCollege = colleges.find((c) => c.code === collegeCode);
-    if (!foundCollege) {
-      return { value: "", label: "" };
-    }
-    return {
-      value: foundCollege.code,
-      label: `${foundCollege.englishName} ${foundCollege.chineseName}`,
-    };
-  };
-  const calcTermStart = (yearDiff: number) => {
-    const year = yearDiff + DateTime.local().year;
-    return [
-      { value: `${year}-09-01`, label: `${year}-${year + 1} Term 1` },
-      { value: `${year + 1}-01-01`, label: `${year}-${year + 1} Term 2` },
-    ];
-  };
-  const getTermStart = (yearsDiff: number[]) => {
-    return yearsDiff.map((i) => calcTermStart(i)).flat();
-  };
-  const calcTermEnd = (yearDiff: number) => {
-    const year = yearDiff + DateTime.local().year;
-    return [
-      { value: `${year}-12-31`, label: `${year}-${year + 1} Term 1` },
-      { value: `${year + 1}-07-31`, label: `${year}-${year + 1} Term 2` },
-    ];
-  };
-  const getTermEnd = (yearsDiff: number[]) => {
-    return yearsDiff.map((i) => calcTermEnd(i)).flat();
-  };
-  const mapCode = (arr: any[]) => {
-    return arr.map((a) => ({
-      value: a.code,
-      label: `${a.englishName} ${a.chineseName}`,
-    }));
   };
   const validDate = (date: string) => {
     return /^\d{4}-\d{2}-\d{2}$/g.test(date) ? date : null;
@@ -285,9 +298,12 @@ export default function Register({
               <Control>
                 <div>
                   <ReactSelect
-                    value={getCollege()}
-                    options={mapCode(colleges)}
-                    onChange={(input: { value: string }): void => {
+                    value={college}
+                    options={colleges}
+                    onChange={(input: {
+                      value: string;
+                      label: string;
+                    }): void => {
                       setCollegeCode(input.value);
                     }}
                   />
@@ -306,9 +322,9 @@ export default function Register({
               <Label>Major</Label>
               <div>
                 <ReactSelect
-                  value={getMajor()}
-                  options={mapCode(majors)}
-                  onChange={(input: { value: string }): void => {
+                  value={major}
+                  options={majors}
+                  onChange={(input: { value: string; label: string }): void => {
                     setMajorCode(input.value);
                   }}
                 />
@@ -327,19 +343,12 @@ export default function Register({
               <Control>
                 <div>
                   <ReactSelect
-                    value={getTermStart([
-                      -8,
-                      -7,
-                      -6,
-                      -5,
-                      -4,
-                      -3,
-                      -2,
-                      -1,
-                      0,
-                    ]).find((term) => term.value === doEntry)}
-                    options={getTermStart([-8, -7, -6, -5, -4, -3, -2, -1, 0])}
-                    onChange={(input: { value: string }): void => {
+                    value={termStart.find((term) => term.value === doEntry)}
+                    options={termStart}
+                    onChange={(input: {
+                      value: string;
+                      label: string;
+                    }): void => {
                       setDoEntry(input.value);
                     }}
                   />
@@ -359,11 +368,12 @@ export default function Register({
               <Control>
                 <div>
                   <ReactSelect
-                    value={getTermEnd([-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8]).find(
-                      (term) => term.value === doGrad
-                    )}
-                    options={getTermEnd([-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8])}
-                    onChange={(input: { value: string }): void => {
+                    value={termEnd.find((term) => term.value === doGrad)}
+                    options={termEnd}
+                    onChange={(input: {
+                      value: string;
+                      label: string;
+                    }): void => {
                       setDoGrad(input.value);
                     }}
                   />

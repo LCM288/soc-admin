@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { User } from "@/types/datasources";
-import { Person } from "types/Person";
+import { Person } from "@/models/Person";
 import { getUserAndRefreshToken } from "utils/auth";
 import { useQuery } from "@apollo/react-hooks";
 import { Button, Section, Container, Heading } from "react-bulma-components";
