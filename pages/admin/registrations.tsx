@@ -8,12 +8,15 @@ import { ServerSideProps } from "utils/getServerSideProps";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import { Table } from "react-bulma-components";
+import { Table, Button } from "react-bulma-components";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
 const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
-  const { data, loading, error } = useQuery(registrationsQuery);
+  const { data, loading, error } = useQuery(registrationsQuery, {
+    fetchPolicy: "cache-and-network",
+    pollInterval: 0, // 1000,
+  });
   const tableColumns = useMemo(
     () => [
       {
@@ -76,7 +79,9 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         id: "approve",
         Cell: ({ row, value }: CellProps<Record<string, unknown>, number>) => {
           return (
-            <div>{`A button to approve ${row.values.englishName} (${value})`}</div>
+            <Button color="success">
+              Approve {row.values.englishName + value}
+            </Button>
           );
         },
       },
