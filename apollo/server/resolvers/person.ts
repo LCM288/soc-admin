@@ -168,8 +168,17 @@ const approveMembershipResolver: ResolverFn<
 > = async (
   _,
   { sid, memberUntil },
-  { dataSources }
+  { user, dataSources }
 ): Promise<PersonUpdateResponse> => {
+  const isExecutive = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  if (!isExecutive) {
+    return {
+      success: false,
+      message: "Please log in as executive",
+    };
+  }
   const [count, [person]] = await dataSources.personAPI.updatePerson({
     sid,
     memberSince: DateTime.local().toISO(),
