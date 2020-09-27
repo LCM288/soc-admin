@@ -4,6 +4,7 @@
  */
 
 import { gql } from "apollo-server";
+import { DateTime } from "luxon";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
   Person,
@@ -16,6 +17,11 @@ import { College } from "@/models/College";
 /** The input arguments for the person query's resolver */
 interface PersonResolverArgs {
   sid: string;
+}
+/** The input arguments for the approveMembership mutation's resolver */
+interface ApproveMembershipResolverArgs {
+  sid: string;
+  memberUntil: string | null;
 }
 
 /** The response when mutating a single person */
@@ -148,6 +154,36 @@ const updatePersonResolver: ResolverFn<
   };
 };
 
+/**
+ * The resolver for approveMembership Mutation
+ * @async
+ * @param arg - The arguments for the approveMembership mutation
+ * @returns The update response
+ * @category Mutation Resolver
+ */
+const approveMembershipResolver: ResolverFn<
+  ApproveMembershipResolverArgs,
+  PersonUpdateResponse
+> = async (
+  _,
+  { sid, memberUntil },
+  { dataSources }
+): Promise<PersonUpdateResponse> => {
+  const [count, [person]] = await dataSources.personAPI.updatePerson({
+    sid,
+    memberSince: DateTime.local().toISO(),
+    memberUntil,
+  });
+  if (!Number.isInteger(count)) {
+    return { success: false, message: "Something wrong happened" };
+  }
+  return {
+    success: true,
+    message: `${count} ${count !== 1 ? "people" : "person"} updated`,
+    person,
+  };
+};
+
 /** The resolvers associated with the Person model */
 export const resolvers: Resolvers = {
   Person: {
@@ -169,6 +205,8 @@ export const resolvers: Resolvers = {
     newPerson: newPersonResolver,
     /** see {@link updatePersonResolver} */
     updatePerson: updatePersonResolver,
+    /** see {@link approveMembershipResolver} */
+    approveMembership: approveMembershipResolver,
   },
 };
 
@@ -197,6 +235,7 @@ export const resolverTypeDefs = gql`
       dateOfEntry: Date!
       expectedGraduationDate: Date!
     ): PersonUpdateResponse!
+
     updatePerson(
       sid: String!
       chineseName: String
@@ -210,6 +249,8 @@ export const resolverTypeDefs = gql`
       dateOfEntry: Date
       expectedGraduationDate: Date
     ): PersonUpdateResponse!
+
+    approveMembership(sid: String!, memberUntil: Date): PersonUpdateResponse!
   }
 
   extend type Person {
