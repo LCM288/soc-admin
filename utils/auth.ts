@@ -3,7 +3,8 @@ import { IncomingMessage, ServerResponse } from "http";
 import { parseCookies } from "nookies";
 import jwt from "jsonwebtoken";
 import { User } from "@/types/datasources";
-import { socSettingStore } from "@/store";
+import { socSettingStore, executiveStore } from "@/store";
+
 import { getClientIp } from "request-ip";
 
 export const JWT_SECRET_KEY = "jwt_secret";
@@ -21,6 +22,16 @@ export const getSetting = async (key: string): Promise<string | undefined> => {
     where: { key },
   });
   return entry?.getDataValue("value");
+};
+
+/**
+ * Get the number of executives from the database
+ * @async
+ * @returns the number of executives
+ */
+export const countExecutives = async (): Promise<number | undefined> => {
+  const entries = await executiveStore.count();
+  return entries;
 };
 
 /**

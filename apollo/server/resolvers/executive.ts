@@ -54,6 +54,20 @@ const executiveResolver: ResolverFn<
   return dataSources.executiveAPI.findExecutive(sid);
 };
 
+/**
+ * The resolver for countExecutives Query
+ * @async
+ * @returns Number of executives
+ * @category Query Resolver
+ */
+const countExecutivesResolver: ResolverFn<null, number | undefined> = (
+  _,
+  __,
+  { dataSources }
+): Promise<number | undefined> => {
+  return dataSources.executiveAPI.countExecutives();
+};
+
 // Mutation resolvers
 
 /**
@@ -105,6 +119,8 @@ export const resolvers: Resolvers = {
     executives: executivesResolver,
     /** see {@link executiveResolver} */
     executive: executiveResolver,
+    /** see {@link countExecutivesResolver} */
+    countExecutives: countExecutivesResolver,
   },
   Mutation: {
     /** see {@link newExecutiveResolver} */
@@ -122,6 +138,7 @@ export const resolverTypeDefs = gql`
   extend type Query {
     executives: [Executive!]!
     executive(sid: String): Executive
+    countExecutives: Int
   }
 
   extend type Mutation {

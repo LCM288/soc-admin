@@ -62,6 +62,15 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
   }
 
   /**
+   * Count number of executive
+   * @async
+   * @returns The number of executives
+   */
+  public async countExecutives(): Promise<number | undefined> {
+    return this.store.count();
+  }
+
+  /**
    * Find all executives
    * @async
    * @returns {Promise<ExecutiveAttributes[]>} An array of executives
