@@ -147,6 +147,9 @@ export default function Register({
   ) {
     return <div>loading</div>;
   }
+  if (!user) {
+    return <div>no user</div>;
+  }
   const { person } = personQueryResult.data as { person: Person };
   if (!personLoaded.current && person) {
     setChineseName(person.chineseName ?? "");
@@ -160,22 +163,20 @@ export default function Register({
     setDoGrad(person.expectedGraduationDate);
   }
   personLoaded.current = true;
-  const getGender = () => {
-    return [
-      {
-        value: "Male",
-        label: "Male",
-      },
-      {
-        value: "Female",
-        label: "Female",
-      },
-      {
-        value: "None",
-        label: "Prefer not to say",
-      },
-    ];
-  };
+  const genders = [
+    {
+      value: "Male",
+      label: "Male",
+    },
+    {
+      value: "Female",
+      label: "Female",
+    },
+    {
+      value: "None",
+      label: "Prefer not to say",
+    },
+  ];
   const validDate = (date: string) => {
     return /^\d{4}-\d{2}-\d{2}$/g.test(date) ? date : null;
   };
@@ -183,8 +184,8 @@ export default function Register({
     e.preventDefault();
     const options = {
       variables: {
-        sid: user?.sid,
-        englishName: user?.name,
+        sid: user.sid,
+        englishName: user.name,
         chineseName,
         gender,
         dateOfBirth: validDate(dob),
@@ -236,9 +237,9 @@ export default function Register({
               <Control>
                 <div>
                   <ReactSelect
-                    defaultValue={getGender().find((g) => g.value === "None")}
-                    value={getGender().find((g) => g.value === gender)}
-                    options={getGender()}
+                    defaultValue={genders.find((g) => g.value === "None")}
+                    value={genders.find((g) => g.value === gender)}
+                    options={genders}
                     onChange={(input: { value: string }): void => {
                       setGender(input.value);
                     }}
