@@ -5,10 +5,13 @@
 
 import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import { gql } from "apollo-server";
+import { Major } from "@/models/Major";
+import { College } from "@/models/College";
 
 enum GenderEnum {
   Male = "Male",
   Female = "Female",
+  None = "None",
 }
 
 /** The enum for the nine collges plus the option None */
@@ -17,11 +20,12 @@ export enum CollegeEnum {
   UC = "UC",
   NA = "NA",
   SC = "SC",
-  WS = "WS",
-  WYS = "WYS",
-  SHHO = "SHHO",
   MC = "MC",
+  SHHO = "SHHO",
   CW = "CW",
+  WYS = "WYS",
+  LWS = "LWS",
+  GS = "GS",
   None = "None",
 }
 
@@ -33,22 +37,22 @@ export interface PersonAttributes {
   chineseName: string | null;
   englishName: string;
   gender: GenderEnum | null;
-  dateOfBirth: Date | null;
+  dateOfBirth: string | null;
   email: string | null;
   phone: string | null;
-  college: CollegeEnum;
+  college: CollegeEnum | College;
   /** The major program's code of the student */
-  major: string;
+  major: string | Major;
   /** The date that the student entered the university */
-  dateOfEntry: Date;
-  expectedGraduationDate: Date;
+  dateOfEntry: string;
+  expectedGraduationDate: string;
   /**
    * The date that the student became a member of the society \
    * Null for non-member
    */
-  memberSince: Date | null;
+  memberSince: string | null;
   /** The date that the membership expires, null for until grad */
-  memberUntil: Date | null;
+  memberUntil: string | null;
 }
 
 /** All the attributes needed to create an instance of the Person model */
@@ -73,35 +77,35 @@ export class Person
 
   public gender!: GenderEnum | null;
 
-  public dateOfBirth!: Date | null;
+  public dateOfBirth!: string | null;
 
   public email!: string | null;
 
   public phone!: string | null;
 
-  public college!: CollegeEnum;
+  public college!: CollegeEnum | College;
 
   /** The major program's code of the student */
-  public major!: string;
+  public major!: string | Major;
 
   /** The date that the student entered the university */
-  public dateOfEntry!: Date;
+  public dateOfEntry!: string;
 
-  public expectedGraduationDate!: Date;
+  public expectedGraduationDate!: string;
 
   /**
    * The date that the student became a member of the society. \
    * Null for non-member
    */
-  public memberSince!: Date | null;
+  public memberSince!: string | null;
 
   /** The date that the membership expires, null for until grad */
-  public memberUntil!: Date | null;
+  public memberUntil!: string | null;
 
   // timestamps!
-  public readonly createdAt!: Date;
+  public readonly createdAt!: string;
 
-  public readonly updatedAt!: Date;
+  public readonly updatedAt!: string;
 }
 
 /** A helper function to create a store for the Person model
@@ -183,6 +187,7 @@ export const typeDefs = gql`
   enum Gender_ENUM {
     Male
     Female
+    None
   }
 
   enum College_ENUM {
@@ -204,7 +209,7 @@ export const typeDefs = gql`
     chineseName: String
     englishName: String!
     gender: Gender_ENUM
-    dateOfBirth: String
+    dateOfBirth: Date
     email: String
     phone: String
     dateOfEntry: Date!
