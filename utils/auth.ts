@@ -85,7 +85,7 @@ export const getUserAndRefreshToken = async (
     return null;
   }
   try {
-    const { sid, name, jwtAddr } = jwt.verify(token, jwtSecret) as Record<
+    const { sid, name, addr: jwtAddr } = jwt.verify(token, jwtSecret) as Record<
       string,
       unknown
     >;
