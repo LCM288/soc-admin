@@ -85,7 +85,11 @@ export const getUserAndRefreshToken = async (
     return null;
   }
   try {
-    const user = <User>jwt.verify(token, jwtSecret);
+    const { sid, name, jwtAddr } = jwt.verify(token, jwtSecret) as Record<
+      string,
+      unknown
+    >;
+    const user = { sid, name, addr: jwtAddr } as User;
     if (addr !== user.addr) return null;
 
     // issue new token whenever possible
