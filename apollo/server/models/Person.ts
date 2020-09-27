@@ -33,22 +33,22 @@ export interface PersonAttributes {
   chineseName: string | null;
   englishName: string;
   gender: GenderEnum | null;
-  dateOfBirth: Date | null;
+  dateOfBirth: string | null;
   email: string | null;
   phone: string | null;
   college: CollegeEnum;
   /** The major program's code of the student */
   major: string;
   /** The date that the student entered the university */
-  dateOfEntry: Date;
-  expectedGraduationDate: Date;
+  dateOfEntry: string;
+  expectedGraduationDate: string;
   /**
    * The date that the student became a member of the society \
    * Null for non-member
    */
-  memberSince: Date | null;
+  memberSince: string | null;
   /** The date that the membership expires, null for until grad */
-  memberUntil: Date | null;
+  memberUntil: string | null;
 }
 
 /** All the attributes needed to create an instance of the Person model */
@@ -73,7 +73,7 @@ export class Person
 
   public gender!: GenderEnum | null;
 
-  public dateOfBirth!: Date | null;
+  public dateOfBirth!: string | null;
 
   public email!: string | null;
 
@@ -85,23 +85,23 @@ export class Person
   public major!: string;
 
   /** The date that the student entered the university */
-  public dateOfEntry!: Date;
+  public dateOfEntry!: string;
 
-  public expectedGraduationDate!: Date;
+  public expectedGraduationDate!: string;
 
   /**
    * The date that the student became a member of the society. \
    * Null for non-member
    */
-  public memberSince!: Date | null;
+  public memberSince!: string | null;
 
   /** The date that the membership expires, null for until grad */
-  public memberUntil!: Date | null;
+  public memberUntil!: string | null;
 
   // timestamps!
-  public readonly createdAt!: Date;
+  public readonly createdAt!: string;
 
-  public readonly updatedAt!: Date;
+  public readonly updatedAt!: string;
 }
 
 /** A helper function to create a store for the Person model
@@ -204,7 +204,7 @@ export const typeDefs = gql`
     chineseName: String
     englishName: String!
     gender: Gender_ENUM
-    dateOfBirth: String
+    dateOfBirth: Date
     email: String
     phone: String
     dateOfEntry: Date!
