@@ -10,6 +10,7 @@ import {
   Person,
   PersonAttributes,
   PersonCreationAttributes,
+  CollegeEnum,
 } from "@/models/Person";
 import { Major } from "@/models/Major";
 import { College } from "@/models/College";
@@ -46,7 +47,7 @@ const majorResolver: ResolverFn<null, Major | undefined> = (
   _,
   { dataSources }
 ): Major | undefined => {
-  return dataSources.majorAPI.getMajor(major);
+  return dataSources.majorAPI.getMajor(major as string);
 };
 
 /**
@@ -59,7 +60,7 @@ const collegeResolver: ResolverFn<null, College> = (
   _,
   { dataSources }
 ): College => {
-  return dataSources.collegeAPI.getCollege(college);
+  return dataSources.collegeAPI.getCollege(college as CollegeEnum);
 };
 
 // Query resolvers
@@ -227,7 +228,7 @@ export const resolverTypeDefs = gql`
       chineseName: String
       englishName: String!
       gender: Gender_ENUM
-      dateOfBirth: String
+      dateOfBirth: Date
       email: String
       phone: String
       college: College_ENUM!
@@ -241,7 +242,7 @@ export const resolverTypeDefs = gql`
       chineseName: String
       englishName: String
       gender: Gender_ENUM
-      dateOfBirth: String
+      dateOfBirth: Date
       email: String
       phone: String
       college: College_ENUM

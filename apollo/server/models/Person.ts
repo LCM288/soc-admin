@@ -5,10 +5,13 @@
 
 import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import { gql } from "apollo-server";
+import { Major } from "@/models/Major";
+import { College } from "@/models/College";
 
 enum GenderEnum {
   Male = "Male",
   Female = "Female",
+  None = "None",
 }
 
 /** The enum for the nine collges plus the option None */
@@ -17,11 +20,12 @@ export enum CollegeEnum {
   UC = "UC",
   NA = "NA",
   SC = "SC",
-  WS = "WS",
-  WYS = "WYS",
-  SHHO = "SHHO",
   MC = "MC",
+  SHHO = "SHHO",
   CW = "CW",
+  WYS = "WYS",
+  LWS = "LWS",
+  GS = "GS",
   None = "None",
 }
 
@@ -36,9 +40,9 @@ export interface PersonAttributes {
   dateOfBirth: string | null;
   email: string | null;
   phone: string | null;
-  college: CollegeEnum;
+  college: CollegeEnum | College;
   /** The major program's code of the student */
-  major: string;
+  major: string | Major;
   /** The date that the student entered the university */
   dateOfEntry: string;
   expectedGraduationDate: string;
@@ -79,10 +83,10 @@ export class Person
 
   public phone!: string | null;
 
-  public college!: CollegeEnum;
+  public college!: CollegeEnum | College;
 
   /** The major program's code of the student */
-  public major!: string;
+  public major!: string | Major;
 
   /** The date that the student entered the university */
   public dateOfEntry!: string;
@@ -183,6 +187,7 @@ export const typeDefs = gql`
   enum Gender_ENUM {
     Male
     Female
+    None
   }
 
   enum College_ENUM {
