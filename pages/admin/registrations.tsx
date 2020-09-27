@@ -12,9 +12,7 @@ import { Table } from "react-bulma-components";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
-const Index: React.FunctionComponent<ServerSideProps> = ({
-  user,
-}: ServerSideProps) => {
+const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(registrationsQuery);
   const tableColumns = useMemo(
     () => [
@@ -102,42 +100,36 @@ const Index: React.FunctionComponent<ServerSideProps> = ({
 
   if (user) {
     return (
-      <div>
-        <div>Hi, {user.name}</div>
-        {/* apply the table props */}
-        <Table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
+      <Table {...getTableProps()}>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  );
+                })}
               </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-      </div>
+            );
+          })}
+        </tbody>
+      </Table>
     );
   }
   return <a href="/login">Please login first </a>;
 };
 
-((Index as unknown) as { Layout: React.ComponentType }).Layout = Layout;
+Registrations.Layout = Layout;
 
-export default Index;
+export default Registrations;
