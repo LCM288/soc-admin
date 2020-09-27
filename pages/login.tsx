@@ -1,7 +1,12 @@
 import React from "react";
 import qs from "qs";
 import { GetServerSideProps } from "next";
-import { getUserAndRefreshToken, getSetting, CLIENT_ID_KEY } from "utils/auth";
+import {
+  getUserAndRefreshToken,
+  getSetting,
+  countExecutives,
+  CLIENT_ID_KEY,
+} from "utils/auth";
 
 const EMPTY_PROPS = {
   props: { baseUrl: "", clientId: "" },
@@ -18,6 +23,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const protocol = /^localhost/g.test(host) ? "http" : "https";
   const baseUrl = `${protocol}://${ctx.req.headers.host}`;
   const clientId = await getSetting(CLIENT_ID_KEY);
+  const executives = await countExecutives();
+  if (!executives && !clientId) {
+    ctx.res.statusCode = 307;
+    ctx.res.setHeader("Location", "/initialise");
+    return EMPTY_PROPS;
+  }
   if (!clientId) {
     ctx.res.statusCode = 500;
     ctx.res.end("Cannot get client id");

@@ -15,6 +15,7 @@ import {
 } from "react-bulma-components";
 import query from "apollo/queries/executive/executives.gql";
 import personQuery from "../apollo/queries/person/person.gql";
+import countExecutivesQuery from "../apollo/queries/executive/countExecutives.gql";
 import socSettingsQuery from "../apollo/queries/socSetting/socSettings.gql";
 import newExecutiveMutation from "../apollo/queries/executive/newExecutive.gql";
 import updateSocSettingMutation from "../apollo/queries/socSetting/updateSocSetting.gql";
@@ -25,6 +26,7 @@ export const getServerSideProps: GetServerSideProps<{
   user: User | null;
 }> = async (ctx) => {
   const user = await getUserAndRefreshToken(ctx);
+
   if (!user) {
     ctx.res.statusCode = 307;
     ctx.res.setHeader("Location", "/login");
@@ -36,8 +38,10 @@ export const getServerSideProps: GetServerSideProps<{
 
 export default function Index({
   user,
+  executives,
 }: {
   user: User | null;
+  executives: number | undefined;
 }): React.ReactElement {
   const router = useRouter();
   const personQueryResult = useQuery(personQuery, {
@@ -45,6 +49,9 @@ export default function Index({
     fetchPolicy: "network-only",
   });
   const socSettingsQueryResult = useQuery(socSettingsQuery, {
+    fetchPolicy: "network-only",
+  });
+  const countExecutivesQueryResult = useQuery(countExecutivesQuery, {
     fetchPolicy: "network-only",
   });
   const { data, loading, error } = useQuery(query, {
@@ -61,7 +68,6 @@ export default function Index({
       error: updateSocSettingMutationError,
     },
   ] = useMutation(updateSocSettingMutation);
-  const [hasExecutiveForm, setHasExecutiveForm] = useState(false);
   const [nickname, setNickname] = useState("");
   const [position, setPosition] = useState("");
 
@@ -126,74 +132,66 @@ export default function Index({
     // router.push("/");
     window.location.reload();
   };
-  const executiveForm = () => {
-    if (hasExecutiveForm) {
-      return (
-        <form onSubmit={(e) => setExecutive(e)}>
-          <Field>
-            <Label>Nickname</Label>
-            <Control>
-              <Input
-                value={nickname}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-                  setNickname(event.target.value)
-                }
-                required
-              />
-            </Control>
-          </Field>
-          <Field>
-            <Label>Position</Label>
-            <Control>
-              <Input
-                value={position}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-                  setPosition(event.target.value)
-                }
-                required
-              />
-            </Control>
-          </Field>
-          <Button color="primary" type="submit">
-            Submit
-          </Button>
-          {(newExecutiveMutationLoading || updateSocSettingMutationLoading) && (
-            <p>Loading...</p>
-          )}
-          {(newExecutiveMutationError || updateSocSettingMutationError) && (
-            <p>Error :( Please try again</p>
-          )}
-        </form>
-      );
-    }
-    return (
-      <Button color="primary" onClick={() => setHasExecutiveForm(true)}>
-        Set myself as executive
-      </Button>
-    );
-  };
-
-  if (personQueryResult.loading || socSettingsQueryResult.loading || loading)
-    return <p>loading</p>;
-  if (personQueryResult.error || socSettingsQueryResult.error || error)
-    return <p>ERROR</p>;
 
   if (
-    !socSettingsQueryResult.data.socSettings.find(
-      (s: { key: string; value: string }) => s.key === "created_at"
-    ) &&
-    user
-  ) {
+    countExecutivesQueryResult.loading ||
+    personQueryResult.loading ||
+    socSettingsQueryResult.loading ||
+    loading
+  )
+    return <p>loading</p>;
+  if (
+    countExecutivesQueryResult.error ||
+    personQueryResult.error ||
+    socSettingsQueryResult.error ||
+    error
+  )
+    return <p>ERROR</p>;
+
+  if (!countExecutivesQueryResult.data.countExecutives && user) {
     return (
       <div>
         <Section>
           <Container>
-            <Heading>This SocAdmin system is not initialised.</Heading>
+            <Heading>Set youself as an executive.</Heading>
             <div>
               {getGreetingTime()}, {user.name}
             </div>
-            <Button onClick={logout}>logout</Button>
-            {executiveForm()}
+            <form onSubmit={(e) => setExecutive(e)}>
+              <Field>
+                <Label>Nickname</Label>
+                <Control>
+                  <Input
+                    value={nickname}
+                    onChange={(
+                      event: React.ChangeEvent<HTMLInputElement>
+                    ): void => setNickname(event.target.value)}
+                    required
+                  />
+                </Control>
+              </Field>
+              <Field>
+                <Label>Position</Label>
+                <Control>
+                  <Input
+                    value={position}
+                    onChange={(
+                      event: React.ChangeEvent<HTMLInputElement>
+                    ): void => setPosition(event.target.value)}
+                    required
+                  />
+                </Control>
+              </Field>
+              <Button onClick={logout}>logout</Button>
+              <Button color="primary" type="submit">
+                Submit
+              </Button>
+              {(newExecutiveMutationLoading ||
+                updateSocSettingMutationLoading) && <p>Loading...</p>}
+              {(newExecutiveMutationError || updateSocSettingMutationError) && (
+                <p>Error :( Please try again</p>
+              )}
+            </form>
           </Container>
         </Section>
       </div>
