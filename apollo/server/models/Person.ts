@@ -161,7 +161,7 @@ export const PersonFactory = (sequelize: Sequelize): typeof Person => {
         allowNull: false,
       },
       memberSince: {
-        type: DataTypes.DATEONLY,
+        type: DataTypes.DATE,
       },
       memberUntil: {
         type: DataTypes.DATEONLY,

@@ -67,7 +67,7 @@ async function up(queryInterface) {
           allowNull: false,
         },
         memberSince: {
-          type: DataTypes.DATEONLY,
+          type: DataTypes.DATE,
         },
         memberUntil: {
           type: DataTypes.DATEONLY,
