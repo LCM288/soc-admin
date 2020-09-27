@@ -128,9 +128,7 @@ export default function Register({
         { value: `${year + 1}-08-01`, label: `${year}-${year + 1} Term 2` },
       ];
     };
-    return [-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8]
-      .map((i) => calcTermEnd(i))
-      .flat();
+    return [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => calcTermEnd(i)).flat();
   }, []);
 
   if (
