@@ -19,13 +19,22 @@ const LogoutReminderModal: React.FunctionComponent<Props> = ({
     router.reload();
   };
 
+  const logout = () => {
+    router.push("/api/logout");
+  };
+
   return (
     <Modal show={open} closeOnEsc={false} showClose={false} onClose={refresh}>
       <Modal.Content className="has-background-white box">
         <Section>You are about to logout, are you still here?</Section>
-        <Button color="primary" onClick={refresh} className="is-pulled-right">
-          I am still here!
-        </Button>
+        <div className="is-pulled-right buttons">
+          <Button color="primary" onClick={refresh}>
+            I am still here!
+          </Button>
+          <Button color="danger" onClick={logout}>
+            Logout
+          </Button>
+        </div>
       </Modal.Content>
     </Modal>
   );

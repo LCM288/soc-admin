@@ -1,0 +1,6 @@
+mutation($sid: String!, $memberUntil: Date) {
+  approveMembership(sid: $sid, memberUntil:$memberUntil) {
+  success
+  message
+}
+}

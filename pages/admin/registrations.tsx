@@ -1,22 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { useTable, CellProps } from "react-table";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
-import registrationsQuery from "apollo/queries/person/registrations.gql";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
 import { Table, Button } from "react-bulma-components";
+import ConfirmApproveModal from "components/admin/registrations/confirmApproveModal";
+import registrationsQuery from "apollo/queries/person/registrations.gql";
+import approveMembershipMutation from "apollo/queries/person/approveMembership.gql";
+import toast from "utils/toast";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
 const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(registrationsQuery, {
     fetchPolicy: "cache-and-network",
-    pollInterval: 1000,
+    pollInterval: 5000,
   });
+  const [approveMembership] = useMutation(approveMembershipMutation);
   const tableColumns = useMemo(
     () => [
       {
@@ -75,23 +79,76 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
       },
       {
         Header: "Approve",
-        accessor: (row: Record<string, unknown>) => row.id,
+        accessor: (row: Record<string, unknown>) => row.sid,
         id: "approve",
-        Cell: ({ row, value }: CellProps<Record<string, unknown>, number>) => {
+        Cell: ({
+          row,
+          value: sid,
+        }: CellProps<Record<string, unknown>, number>) => {
+          const [approveLoading, setApproveLoading] = useState(false);
+          const [openModal, setOpenModal] = useState(false);
+          const approve = () => {
+            setOpenModal(false);
+            approveMembership({ variables: { sid } })
+              .then((payload) => {
+                if (!payload.data?.approveMembership.success) {
+                  throw new Error(
+                    payload.data?.approveMembership.message ??
+                      "some error occurs"
+                  );
+                }
+                toast.success(payload.data.approveMembership.message, {
+                  position: toast.POSITION.TOP_LEFT,
+                });
+              })
+              .catch((err) => {
+                toast.danger(err, { position: toast.POSITION.TOP_LEFT });
+              })
+              .finally(() => {
+                setApproveLoading(false);
+              });
+            setApproveLoading(true);
+          };
+          const promptApprove = () => {
+            setOpenModal(true);
+          };
+          const cencelApprove = () => {
+            setOpenModal(false);
+          };
           return (
-            <Button color="success">
-              Approve {row.values.englishName + value}
-            </Button>
+            <>
+              {openModal && (
+                <ConfirmApproveModal
+                  onConfirm={approve}
+                  onCancel={cencelApprove}
+                  row={row.values}
+                />
+              )}
+              <Button
+                color="success"
+                onClick={promptApprove}
+                loading={approveLoading}
+              >
+                Approve {row.values.englishName}
+              </Button>
+            </>
           );
         },
       },
     ],
-    []
+    [approveMembership]
   );
   const tableData = useMemo(() => {
     return data?.registrations ?? [];
   }, [data]);
-  const tableInstance = useTable({ columns: tableColumns, data: tableData });
+  const tableGetRowId = useMemo(() => {
+    return (row: Record<string, unknown>) => (row.id as number).toString();
+  }, []);
+  const tableInstance = useTable({
+    columns: tableColumns,
+    data: tableData,
+    getRowId: tableGetRowId,
+  });
 
   if (loading) return <p>loading</p>;
   if (error) return <p>ERROR</p>;

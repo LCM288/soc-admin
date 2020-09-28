@@ -1,14 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import "react-toastify/dist/ReactToastify.css";
 import "bulma/bulma.sass";
 import "styles/select-fix.css";
 import { AppProps } from "next/app";
 import React from "react";
+import { ToastContainer } from "react-toastify";
 import {
   ApolloClient,
   InMemoryCache,
   NormalizedCacheObject,
   ApolloProvider,
 } from "@apollo/client";
+
+const BulmaCloseBtn = ({
+  closeToast,
+}: {
+  closeToast: () => void;
+}): React.ReactElement => (
+  <button onClick={closeToast} className="delete" type="button">
+    x
+  </button>
+);
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   uri: "/api/graphql",
@@ -26,6 +38,7 @@ function App({ Component, pageProps }: AppProps): React.ReactElement {
       <ApolloProvider client={client}>
         <Component {...pageProps} />
       </ApolloProvider>
+      <ToastContainer closeButton={<BulmaCloseBtn />} />
     </Layout>
   );
 }
