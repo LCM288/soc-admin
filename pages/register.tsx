@@ -7,7 +7,7 @@ import { getUserAndRefreshToken } from "utils/auth";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import ReactSelect from "react-select";
 import DayPickerInput from "react-day-picker/DayPickerInput";
-import { DateTime } from "luxon";
+import { DateTime, Info } from "luxon";
 import {
   Button,
   Form,
@@ -24,7 +24,7 @@ import personQuery from "../apollo/queries/person/person.gql";
 import newPersonMutation from "../apollo/queries/person/newPerson.gql";
 import updatePersonMutation from "../apollo/queries/person/updatePerson.gql";
 
-const { Input, Field, Control, Label } = Form;
+const { Input, Field, Control, Label, Select } = Form;
 
 export const getServerSideProps: GetServerSideProps<{
   user: User | null;
@@ -38,6 +38,56 @@ export const getServerSideProps: GetServerSideProps<{
     props: { user }, // will be passed to the page component as props
   };
 };
+
+function YearMonthForm({
+  date,
+  onChange,
+}: {
+  date: Date;
+  onChange: (month: Date) => void;
+}) {
+  const yearCount = 30;
+  const months = Info.months("long");
+
+  const years = Array.from(
+    { length: yearCount + 1 },
+    (_, i) => i + DateTime.local().minus({ year: yearCount }).year
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { year, month } = e.target.form as HTMLFormElement;
+    onChange(new Date(year.value, month.value));
+  };
+
+  return (
+    <form className="DayPicker-Caption">
+      <Select
+        name="month"
+        onChange={handleChange}
+        value={DateTime.fromJSDate(date).month - 1}
+        size="small"
+      >
+        {months.map((month, i) => (
+          <option key={month} value={i}>
+            {month}
+          </option>
+        ))}
+      </Select>
+      <Select
+        name="year"
+        onChange={handleChange}
+        value={DateTime.fromJSDate(date).year}
+        size="small"
+      >
+        {years.map((year) => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
+      </Select>
+    </form>
+  );
+}
 
 export default function Register({
   user,
@@ -73,6 +123,7 @@ export default function Register({
   const [doEntry, setDoEntry] = useState("");
   const [doGrad, setDoGrad] = useState("");
   const personLoaded = useRef(false);
+  const [calMonth, setCalMonth] = useState(new Date()); // useState(DateTime.local().month);
 
   const major = useMemo(() => {
     const foundMajor = majorsQueryResult.data?.majors.find(
@@ -284,6 +335,15 @@ export default function Register({
                     setDob(dayParse ? dayParse.toISODate() : "");
                   }}
                   placeholder="YYYY-MM-DD"
+                  dayPickerProps={{
+                    month: calMonth,
+                    captionElement: ({ date }: { date: Date }) => (
+                      <YearMonthForm
+                        date={date}
+                        onChange={(month: Date) => setCalMonth(month)}
+                      />
+                    ),
+                  }}
                 />
               </Control>
             </Field>
