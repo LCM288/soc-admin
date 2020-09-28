@@ -77,6 +77,9 @@ export default function Index({
   const register = () => {
     router.push("/register");
   };
+  const admin = () => {
+    router.push("/admin");
+  };
   const isActiveMember = (person: Person) => {
     if (!person.memberSince) return false;
     if (!person.memberUntil) {
@@ -209,16 +212,22 @@ export default function Index({
             <Heading>
               {personQueryResult.data ? "Welcome Back" : "Hello"}
             </Heading>
-            <div>
+            <p>
               {getGreetingTime()}, {user.name}
-            </div>
-            <div>{JSON.stringify(data)}</div>
-            {memberStatus(personQueryResult.data.person)}
+            </p>
+            <p>{memberStatus(personQueryResult.data.person)}</p>
             <Button.Group>
               <Button onClick={logout}>logout</Button>
               <Button color="primary" onClick={register}>
                 register
               </Button>
+              {data.executives.length ? (
+                <Button color="info" onClick={admin}>
+                  admin
+                </Button>
+              ) : (
+                ""
+              )}
             </Button.Group>
           </Container>
         </Section>
