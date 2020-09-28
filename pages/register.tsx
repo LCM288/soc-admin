@@ -151,7 +151,7 @@ export default function Register({
     return <div>no user</div>;
   }
   const { person } = personQueryResult.data as { person: Person };
-  if (!personLoaded.current && person) {
+  const setData = () => {
     setChineseName(person.chineseName ?? "");
     setGender(person.gender ?? "None");
     setDob(person.dateOfBirth ?? "");
@@ -161,6 +161,9 @@ export default function Register({
     setMajorCode((person.major as Major).code);
     setDoEntry(person.dateOfEntry);
     setDoGrad(person.expectedGraduationDate);
+  };
+  if (!personLoaded.current && person) {
+    setData();
   }
   personLoaded.current = true;
   const genders = [
@@ -405,9 +408,14 @@ export default function Register({
                 </div>
               </Control>
             </Field>
-            <Button color="primary" type="submit">
-              {person ? "Update" : "Register"}
-            </Button>
+            <Button.Group>
+              <Button type="button" onClick={() => setData()}>
+                Reset
+              </Button>
+              <Button color="primary" type="submit">
+                {person ? "Update" : "Register"}
+              </Button>
+            </Button.Group>
           </form>
           {(newPersonMutationLoading || updatePersonMutationLoading) && (
             <p>Loading...</p>

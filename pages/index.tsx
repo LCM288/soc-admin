@@ -182,10 +182,14 @@ export default function Index({
                   />
                 </Control>
               </Field>
-              <Button onClick={logout}>logout</Button>
-              <Button color="primary" type="submit">
-                Submit
-              </Button>
+              <div>
+                <Button.Group>
+                  <Button onClick={logout}>logout</Button>
+                  <Button color="primary" type="submit">
+                    Submit
+                  </Button>
+                </Button.Group>
+              </div>
               {(newExecutiveMutationLoading ||
                 updateSocSettingMutationLoading) && <p>Loading...</p>}
               {(newExecutiveMutationError || updateSocSettingMutationError) && (
@@ -210,10 +214,12 @@ export default function Index({
             </div>
             <div>{JSON.stringify(data)}</div>
             {memberStatus(personQueryResult.data.person)}
-            <Button onClick={logout}>logout</Button>
-            <Button color="primary" onClick={register}>
-              register
-            </Button>
+            <Button.Group>
+              <Button onClick={logout}>logout</Button>
+              <Button color="primary" onClick={register}>
+                register
+              </Button>
+            </Button.Group>
           </Container>
         </Section>
       </div>

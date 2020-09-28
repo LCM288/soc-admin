@@ -8,6 +8,8 @@ import {
   CLIENT_ID_KEY,
 } from "utils/auth";
 
+import { Button, Section, Container } from "react-bulma-components";
+
 const EMPTY_PROPS = {
   props: { baseUrl: "", clientId: "" },
 };
@@ -63,7 +65,17 @@ function MicrosoftLogin({
   });
 
   const link = `https://login.microsoftonline.com/${TENANT}/oauth2/v2.0/authorize?${body}`;
-  return <a href={link}>login</a>;
+  return (
+    <div>
+      <Section>
+        <Container>
+          <a className="button is-primary" href={link}>
+            login
+          </a>
+        </Container>
+      </Section>
+    </div>
+  );
 }
 
 export default MicrosoftLogin;
