@@ -17,9 +17,8 @@ const BulmaCloseBtn = ({
 }: {
   closeToast: () => void;
 }): React.ReactElement => (
-  <button onClick={closeToast} className="delete" type="button">
-    x
-  </button>
+  // eslint-disable-next-line jsx-a11y/control-has-associated-label, react/button-has-type
+  <button onClick={closeToast} className="delete" />
 );
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
@@ -38,7 +37,7 @@ function App({ Component, pageProps }: AppProps): React.ReactElement {
       <ApolloProvider client={client}>
         <Component {...pageProps} />
       </ApolloProvider>
-      <ToastContainer closeButton={<BulmaCloseBtn />} />
+      <ToastContainer closeButton={BulmaCloseBtn} />
     </Layout>
   );
 }
