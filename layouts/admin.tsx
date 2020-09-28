@@ -2,15 +2,19 @@ import React, { useState, useRef, useEffect } from "react";
 import { Navbar } from "react-bulma-components";
 import Link from "next/link";
 import LogoutTimer from "components/logoutTimer";
+import { DateTime } from "luxon";
 
 interface Props {
   children: React.ReactElement;
-  time: number;
 }
 
-const Layout: React.FunctionComponent<Props> = ({ children, time }: Props) => {
+const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
   const navBarRef = useRef<HTMLDivElement | null>(null);
+  const oldChildren = useRef(children);
   const [isActive, setActive] = useState(false);
+  const [logoutTime, setLogoutTime] = useState(
+    DateTime.local().plus({ minutes: 30 })
+  );
 
   const toggleActive = () => {
     setActive(!isActive);
@@ -29,6 +33,11 @@ const Layout: React.FunctionComponent<Props> = ({ children, time }: Props) => {
     };
   }, [navBarRef, setActive]);
 
+  if (oldChildren.current !== children) {
+    setLogoutTime(DateTime.local().plus({ minutes: 30 }));
+    oldChildren.current = children;
+  }
+
   return (
     <div>
       <div ref={navBarRef}>
@@ -45,7 +54,7 @@ const Layout: React.FunctionComponent<Props> = ({ children, time }: Props) => {
               </Navbar.Item>
             </Link>
             <Navbar.Item renderAs="div">
-              <LogoutTimer time={time} />
+              <LogoutTimer time={logoutTime} />
             </Navbar.Item>
             <Navbar.Burger onClick={toggleActive} />
           </Navbar.Brand>

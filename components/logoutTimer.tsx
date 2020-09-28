@@ -1,25 +1,33 @@
 import React, { useState } from "react";
 import printf from "printf";
 import { useRouter } from "next/router";
+import { DateTime } from "luxon";
 
 interface Props {
-  time: number;
+  time: DateTime;
 }
 
 const LogoutTimer: React.FunctionComponent<Props> = ({ time }: Props) => {
-  const [now, setNow] = useState(Math.floor(new Date().valueOf() / 1000));
+  const [now, setNow] = useState(DateTime.local());
   const router = useRouter();
-  const rem = time - now;
-  if (rem < 0) {
+
+  if (time < now) {
     router.push("/");
     return <div>00:00</div>;
   }
+
+  // drop milliseconds
+  const { minutes, seconds } = time.diff(now, [
+    "minutes",
+    "seconds",
+    "milliseconds",
+  ]);
+
   setTimeout(() => {
-    setNow(Math.ceil(new Date().valueOf() / 1000));
+    setNow(DateTime.local());
   }, 1000);
-  const hh = Math.floor(rem / 60);
-  const mm = rem % 60;
-  return <div>{printf("%02d:%02d", hh, mm)}</div>;
+
+  return <div>{printf("%02d:%02d", minutes, seconds)}</div>;
 };
 
 export default LogoutTimer;

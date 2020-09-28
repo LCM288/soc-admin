@@ -19,10 +19,10 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 function App({ Component, pageProps }: AppProps): React.ReactElement {
   const Layout =
     ((Component as unknown) as {
-      Layout: React.ComponentType<Record<string, unknown>>;
+      Layout: React.ComponentType;
     }).Layout ?? React.Fragment;
   return (
-    <Layout time={Math.floor(new Date().valueOf() / 1000) + 1801}>
+    <Layout>
       <ApolloProvider client={client}>
         <Component {...pageProps} />
       </ApolloProvider>
