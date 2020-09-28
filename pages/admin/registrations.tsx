@@ -15,7 +15,7 @@ export { getServerSideProps } from "utils/getServerSideProps";
 const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(registrationsQuery, {
     fetchPolicy: "cache-and-network",
-    pollInterval: 0, // 1000,
+    pollInterval: 1000,
   });
   const tableColumns = useMemo(
     () => [

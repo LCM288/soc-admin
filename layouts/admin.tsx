@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Navbar } from "react-bulma-components";
 import Link from "next/link";
 import LogoutTimer from "components/logoutTimer";
+import LogoutReminderModal from "components/logoutReminderModal";
 import { DateTime } from "luxon";
 
 interface Props {
@@ -15,6 +16,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
   const [logoutTime, setLogoutTime] = useState(
     DateTime.local().plus({ minutes: 30 })
   );
+  const [openModel, setOpenModel] = useState(false);
 
   const toggleActive = () => {
     setActive(!isActive);
@@ -33,6 +35,18 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
     };
   }, [navBarRef, setActive]);
 
+  useEffect(() => {
+    if (!openModel) {
+      const openModalTimeout = setTimeout(() => {
+        setOpenModel(true);
+      }, logoutTime.minus({ minutes: 5 }).diffNow().as("milliseconds"));
+      return () => {
+        clearTimeout(openModalTimeout);
+      };
+    }
+    return () => {};
+  }, [logoutTime, setOpenModel, openModel]);
+
   if (oldChildren.current !== children) {
     setLogoutTime(DateTime.local().plus({ minutes: 30 }));
     oldChildren.current = children;
@@ -40,6 +54,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
 
   return (
     <div>
+      <LogoutReminderModal open={openModel} />
       <div ref={navBarRef}>
         <Navbar color="primary" fixed="top" active={isActive}>
           <Navbar.Brand>
