@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useRef, useMemo } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -5,6 +6,7 @@ import { User } from "@/types/datasources";
 import { getUserAndRefreshToken } from "utils/auth";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import ReactSelect from "react-select";
+import DayPickerInput from "react-day-picker/DayPickerInput";
 import { DateTime } from "luxon";
 import {
   Button,
@@ -256,13 +258,29 @@ export default function Register({
             <Field>
               <Label>Date of Birth</Label>
               <Control>
-                <Input
-                  type="date"
-                  placeholder="Text input"
+                {/* TODO: pick year / month with captionElement */}
+                <DayPickerInput
+                  component={(props: any) => <Input {...props} />}
+                  style={{ display: "block !important" }}
+                  classNames={{
+                    container: "",
+                    overlayWrapper: "DayPickerInput-OverlayWrapper",
+                    overlay: "DayPickerInput-Overlay",
+                  }}
+                  format="yyyy-MM-dd"
+                  formatDate={(date: Date) =>
+                    DateTime.fromJSDate(date).toISODate()
+                  }
+                  parseDate={(str: string, format: string) => {
+                    const day = DateTime.fromFormat(str, format);
+                    return day.isValid ? day.toJSDate() : undefined;
+                  }}
                   value={dob}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>
-                  ): void => setDob(event.target.value)}
+                  onDayChange={(day: Date) => {
+                    const dayParse = DateTime.fromJSDate(day);
+                    setDob(dayParse ? dayParse.toISODate() : "");
+                  }}
+                  placeholder="YYYY-MM-DD"
                 />
               </Control>
             </Field>
