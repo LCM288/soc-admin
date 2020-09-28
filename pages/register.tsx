@@ -14,8 +14,11 @@ import {
   Section,
   Container,
   Heading,
+  Tag,
+  Level,
 } from "react-bulma-components";
 import { Major } from "@/models/Major";
+import { Faculty } from "@/models/Faculty";
 import { College } from "@/models/College";
 import { Person } from "@/models/Person";
 import majorsQuery from "../apollo/queries/major/majors.gql";
@@ -89,6 +92,61 @@ function YearMonthForm({
   );
 }
 
+const facultyColor: { [index: string]: string } = {
+  ART: "dark",
+  BAF: "info",
+  EDU: "danger",
+  ENF: "primary",
+  SLAW: "light",
+  MED: "success",
+  SCF: "warning",
+  SSF: "link",
+  DDP: "black",
+  IDM: "white",
+};
+
+const formatMajorOptionLabel = ({
+  label,
+  faculties,
+}: {
+  value: string;
+  label: string;
+  faculties: { value: string; label: string }[];
+}) => (
+  <Level style={{ flexWrap: "wrap" }}>
+    <Level.Side align="left">
+      <Level.Item>{label}</Level.Item>
+    </Level.Side>
+    <Level.Side align="right">
+      {faculties.map((f) => (
+        <Level.Item>
+          <Tag
+            className="ml-2 has-text-weight-medium"
+            color={facultyColor[f.value]}
+          >
+            {f.label}
+          </Tag>
+        </Level.Item>
+      ))}
+    </Level.Side>
+  </Level>
+);
+
+const formatOptionLabel = ({
+  label,
+  month,
+}: {
+  label: string;
+  month: string;
+}) => (
+  <div style={{ display: "flex" }}>
+    <div>{label}</div>
+    <Tag className="ml-2" color="info">
+      {month}
+    </Tag>
+  </div>
+);
+
 export default function Register({
   user,
 }: {
@@ -135,6 +193,10 @@ export default function Register({
     return {
       value: foundMajor.code,
       label: `${foundMajor.englishName} ${foundMajor.chineseName}`,
+      faculties: (foundMajor.faculties as Faculty[]).map((f: Faculty) => ({
+        value: f.code,
+        label: `${f.englishName} ${f.chineseName}`,
+      })),
     };
   }, [majorsQueryResult, majorCode]);
   const college = useMemo(() => {
@@ -153,6 +215,10 @@ export default function Register({
     return majorsQueryResult.data?.majors.map((a: Major) => ({
       value: a.code,
       label: `${a.englishName} ${a.chineseName}`,
+      faculties: (a.faculties as Faculty[]).map((f: Faculty) => ({
+        value: f.code,
+        label: `${f.englishName} ${f.chineseName}`,
+      })),
     }));
   }, [majorsQueryResult]);
   const colleges = useMemo(() => {
@@ -165,20 +231,37 @@ export default function Register({
     const calcTermStart = (yearDiff: number) => {
       const year = yearDiff + DateTime.local().year;
       return [
-        { value: `${year}-09-01`, label: `${year}-${year + 1} Term 1` },
-        { value: `${year + 1}-01-01`, label: `${year}-${year + 1} Term 2` },
+        {
+          value: `${year}-09-01`,
+          label: `${year}-${year + 1} Term 1`,
+          month: `Sept ${year}`,
+        },
+        {
+          value: `${year + 1}-01-01`,
+          label: `${year}-${year + 1} Term 2`,
+          month: `Jan ${year + 1}`,
+        },
       ];
     };
     return [-8, -7, -6, -5, -4, -3, -2, -1, 0]
       .map((i) => calcTermStart(i))
-      .flat();
+      .flat()
+      .reverse();
   }, []);
   const termEnd = useMemo(() => {
     const calcTermEnd = (yearDiff: number) => {
       const year = yearDiff + DateTime.local().year;
       return [
-        { value: `${year + 1}-01-01`, label: `${year}-${year + 1} Term 1` },
-        { value: `${year + 1}-08-01`, label: `${year}-${year + 1} Term 2` },
+        {
+          value: `${year + 1}-01-01`,
+          label: `${year}-${year + 1} Term 1`,
+          month: `Dec ${year}`,
+        },
+        {
+          value: `${year + 1}-08-01`,
+          label: `${year}-${year + 1} Term 2`,
+          month: `Jul ${year + 1}`,
+        },
       ];
     };
     return [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => calcTermEnd(i)).flat();
@@ -404,9 +487,14 @@ export default function Register({
                 <ReactSelect
                   value={major}
                   options={majors}
-                  onChange={(input: { value: string; label: string }): void => {
+                  onChange={(input: {
+                    value: string;
+                    label: string;
+                    faculties: { value: string; label: string }[];
+                  }): void => {
                     setMajorCode(input.value);
                   }}
+                  formatOptionLabel={formatMajorOptionLabel}
                 />
                 <input
                   tabIndex={-1}
@@ -428,9 +516,11 @@ export default function Register({
                     onChange={(input: {
                       value: string;
                       label: string;
+                      month: string;
                     }): void => {
                       setDoEntry(input.value);
                     }}
+                    formatOptionLabel={formatOptionLabel}
                   />
                   <input
                     tabIndex={-1}
@@ -453,9 +543,11 @@ export default function Register({
                     onChange={(input: {
                       value: string;
                       label: string;
+                      month: string;
                     }): void => {
                       setDoGrad(input.value);
                     }}
+                    formatOptionLabel={formatOptionLabel}
                   />
                   <input
                     tabIndex={-1}
