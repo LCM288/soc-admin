@@ -174,10 +174,9 @@ const approveMembershipResolver: ResolverFn<
   }
   const result = await dataSources.personAPI.approveMembership(arg);
   if (typeof result === "string") {
-    const errorMessage = result as string;
     return {
       success: false,
-      message: errorMessage,
+      message: result,
     };
   }
   return {

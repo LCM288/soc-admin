@@ -52,6 +52,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
   /**
    * Create the API instance.
    * @param {typeof Person} personStore - A Person store.
+   * @param {Sequelize.Sequelize} sequelize - The sequelize connection.
    */
   constructor(personStore: typeof Person, sequelize: Sequelize.Sequelize) {
     super();
