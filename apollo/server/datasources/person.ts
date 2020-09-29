@@ -12,6 +12,13 @@ import {
 } from "@/models/Person";
 import { ContextBase } from "@/types/datasources";
 import Sequelize, { Op } from "sequelize";
+import { DateTime } from "luxon";
+
+export interface ApproveMembershipAttribute {
+  sid: string;
+  memberUntil: string | null;
+}
+
 /**
  * Transforms the data from the Person model to plain attributes
  * @internal
@@ -39,13 +46,18 @@ export default class PersonAPI extends DataSource<ContextBase> {
   /** The {@link Person} store */
   private store: typeof Person;
 
+  /** The sequelize connection */
+  private sequelize: Sequelize.Sequelize;
+
   /**
    * Create the API instance.
    * @param {typeof Person} personStore - A Person store.
+   * @param {Sequelize.Sequelize} sequelize - The sequelize connection.
    */
-  constructor(personStore: typeof Person) {
+  constructor(personStore: typeof Person, sequelize: Sequelize.Sequelize) {
     super();
     this.store = personStore;
+    this.sequelize = sequelize;
   }
 
   /**
@@ -121,7 +133,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
   }
 
   /**
-   * Update a new person
+   * Update a person
    * @async
    * @param {PersonUpdateAttributes} arg - The arg for the person
    * @returns Number of people updated and instances of updated people
@@ -134,5 +146,43 @@ export default class PersonAPI extends DataSource<ContextBase> {
       returning: true,
     });
     return [count, [...people].map(transformData)];
+  }
+
+  /**
+   * Approve someone's membership
+   * @async
+   * @param {ApproveMembershipAttribute} arg - The arg for the approval
+   * @returns The updated person if successful or a string explaining why it failed
+   */
+  public async approveMembership({
+    sid,
+    memberUntil,
+  }: ApproveMembershipAttribute): Promise<PersonAttributes | string> {
+    try {
+      const result = await this.sequelize.transaction(async (t) => {
+        const person = await this.store.findOne({
+          where: { sid },
+          transaction: t,
+        });
+        if (!person) {
+          throw new Error(`Cannot find registration record for sid ${sid}`);
+        }
+        person
+          .set("memberUntil", memberUntil)
+          .set("memberSince", DateTime.local().toISO())
+          .save({ transaction: t });
+        return this.store.findOne({
+          where: { sid },
+          transaction: t,
+          raw: true,
+        });
+      });
+      if (!result) {
+        throw new Error(`Cannot find registration record for sid ${sid}`);
+      }
+      return result;
+    } catch (err) {
+      return err.message as string;
+    }
   }
 }

@@ -87,6 +87,7 @@
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/person.approvemembershipattribute.html" class="tsd-kind-icon">Approve<wbr>Membership<wbr>Attribute</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/person.personattributes.html" class="tsd-kind-icon">Person<wbr>Attributes</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported"><a href="../interfaces/person.personresolverargs.html" class="tsd-kind-icon">Person<wbr>Resolver<wbr>Args</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported"><a href="../interfaces/person.personupdateresponse.html" class="tsd-kind-icon">Person<wbr>Update<wbr>Response</a></li>
@@ -95,6 +96,7 @@
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported"><a href="person.html#approvemembershipresolverargs" class="tsd-kind-icon">Approve<wbr>Membership<wbr>Resolver<wbr>Args</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="person.html#personcreationattributes" class="tsd-kind-icon">Person<wbr>Creation<wbr>Attributes</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="person.html#personupdateattributes" class="tsd-kind-icon">Person<wbr>Update<wbr>Attributes</a></li>
 							</ul>
@@ -111,6 +113,7 @@
 							</ul>
 							<h3>Mutation Resolver Functions</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="person.html#approvemembershipresolver" class="tsd-kind-icon">approve<wbr>Membership<wbr>Resolver</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="person.html#newpersonresolver" class="tsd-kind-icon">new<wbr>Person<wbr>Resolver</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="person.html#updatepersonresolver" class="tsd-kind-icon">update<wbr>Person<wbr>Resolver</a></li>
 							</ul>
@@ -132,13 +135,28 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
+					<a name="approvemembershipresolverargs" class="tsd-anchor"></a>
+					<h3>Approve<wbr>Membership<wbr>Resolver<wbr>Args</h3>
+					<div class="tsd-signature tsd-kind-icon">Approve<wbr>Membership<wbr>Resolver<wbr>Args<span class="tsd-signature-symbol">:</span> <a href="../interfaces/person.approvemembershipattribute.html" class="tsd-signature-type">ApproveMembershipAttribute</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L23">apollo/server/resolvers/person.ts:23</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The input arguments for the approveMembership mutation&#39;s resolver</p>
+						</div>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="personcreationattributes" class="tsd-anchor"></a>
 					<h3>Person<wbr>Creation<wbr>Attributes</h3>
 					<div class="tsd-signature tsd-kind-icon">Person<wbr>Creation<wbr>Attributes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.personattributes.html" class="tsd-signature-type">PersonAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/models/Person.ts#L55">apollo/server/models/Person.ts:55</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/models/Person.ts#L59">apollo/server/models/Person.ts:59</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -153,7 +171,7 @@
 					<div class="tsd-signature tsd-kind-icon">Person<wbr>Update<wbr>Attributes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.personattributes.html" class="tsd-signature-type">PersonAttributes</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.personattributes.html" class="tsd-signature-type">PersonAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"sid"</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/models/Person.ts#L58">apollo/server/models/Person.ts:58</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/models/Person.ts#L62">apollo/server/models/Person.ts:62</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -175,7 +193,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/models/Person.ts#L112">apollo/server/models/Person.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/models/Person.ts#L116">apollo/server/models/Person.ts:116</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -206,13 +224,13 @@
 					<a name="collegeresolver" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> college<wbr>Resolver</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">college<wbr>Resolver<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>college<span class="tsd-signature-symbol">: </span><a href="../enums/person.collegeenum.html" class="tsd-signature-type">CollegeEnum</a><span class="tsd-signature-symbol"> }</span>, _<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a></li>
+						<li class="tsd-signature tsd-kind-icon">college<wbr>Resolver<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>college<span class="tsd-signature-symbol">: </span><a href="../enums/person.collegeenum.html#cc" class="tsd-signature-type">CC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#uc" class="tsd-signature-type">UC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#na" class="tsd-signature-type">NA</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#sc" class="tsd-signature-type">SC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#mc" class="tsd-signature-type">MC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#shho" class="tsd-signature-type">SHHO</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#cw" class="tsd-signature-type">CW</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#wys" class="tsd-signature-type">WYS</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#lws" class="tsd-signature-type">LWS</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#gs" class="tsd-signature-type">GS</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#none" class="tsd-signature-type">None</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol"> }</span>, _<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L51">apollo/server/resolvers/person.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L55">apollo/server/resolvers/person.ts:55</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -223,10 +241,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>college<span class="tsd-signature-symbol">: </span><a href="../enums/person.collegeenum.html" class="tsd-signature-type">CollegeEnum</a><span class="tsd-signature-symbol"> }</span></h5>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>college<span class="tsd-signature-symbol">: </span><a href="../enums/person.collegeenum.html#cc" class="tsd-signature-type">CC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#uc" class="tsd-signature-type">UC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#na" class="tsd-signature-type">NA</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#sc" class="tsd-signature-type">SC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#mc" class="tsd-signature-type">MC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#shho" class="tsd-signature-type">SHHO</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#cw" class="tsd-signature-type">CW</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#wys" class="tsd-signature-type">WYS</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#lws" class="tsd-signature-type">LWS</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#gs" class="tsd-signature-type">GS</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#none" class="tsd-signature-type">None</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol"> }</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter">
-											<h5>college<span class="tsd-signature-symbol">: </span><a href="../enums/person.collegeenum.html" class="tsd-signature-type">CollegeEnum</a></h5>
+											<h5>college<span class="tsd-signature-symbol">: </span><a href="../enums/person.collegeenum.html#cc" class="tsd-signature-type">CC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#uc" class="tsd-signature-type">UC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#na" class="tsd-signature-type">NA</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#sc" class="tsd-signature-type">SC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#mc" class="tsd-signature-type">MC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#shho" class="tsd-signature-type">SHHO</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#cw" class="tsd-signature-type">CW</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#wys" class="tsd-signature-type">WYS</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#lws" class="tsd-signature-type">LWS</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#gs" class="tsd-signature-type">GS</a><span class="tsd-signature-symbol"> | </span><a href="../enums/person.collegeenum.html#none" class="tsd-signature-type">None</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a></h5>
 										</li>
 									</ul>
 								</li>
@@ -251,13 +269,13 @@
 					<a name="majorresolver" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> major<wbr>Resolver</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">major<wbr>Resolver<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>major<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span>, _<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/major.major-1.html" class="tsd-signature-type">Major</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+						<li class="tsd-signature tsd-kind-icon">major<wbr>Resolver<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>major<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/major.major-1.html" class="tsd-signature-type">Major</a><span class="tsd-signature-symbol"> }</span>, _<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/major.major-1.html" class="tsd-signature-type">Major</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L38">apollo/server/resolvers/person.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L42">apollo/server/resolvers/person.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -268,10 +286,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>major<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>major<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/major.major-1.html" class="tsd-signature-type">Major</a><span class="tsd-signature-symbol"> }</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter">
-											<h5>major<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+											<h5>major<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/major.major-1.html" class="tsd-signature-type">Major</a></h5>
 										</li>
 									</ul>
 								</li>
@@ -296,6 +314,58 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Mutation Resolver Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="approvemembershipresolver" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> approve<wbr>Membership<wbr>Resolver</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">approve<wbr>Membership<wbr>Resolver<span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a>, arg<span class="tsd-signature-symbol">: </span><a href="../interfaces/person.approvemembershipattribute.html" class="tsd-signature-type">ApproveMembershipAttribute</a>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol">; </span>user<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/apollo_server_types.user.html" class="tsd-signature-type">User</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.personupdateresponse.html" class="tsd-signature-type">PersonUpdateResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L165">apollo/server/resolvers/person.ts:165</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The resolver for approveMembership Mutation</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>_: <a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a></h5>
+								</li>
+								<li>
+									<h5>arg: <a href="../interfaces/person.approvemembershipattribute.html" class="tsd-signature-type">ApproveMembershipAttribute</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The arguments for the approveMembership mutation</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol">; </span>user<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/apollo_server_types.user.html" class="tsd-signature-type">User</a><span class="tsd-signature-symbol"> }</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>data<wbr>Sources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5>user<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/apollo_server_types.user.html" class="tsd-signature-type">User</a></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.personupdateresponse.html" class="tsd-signature-type">PersonUpdateResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The update response</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
 					<a name="newpersonresolver" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> new<wbr>Person<wbr>Resolver</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
@@ -305,7 +375,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L121">apollo/server/resolvers/person.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L125">apollo/server/resolvers/person.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -354,7 +424,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L139">apollo/server/resolvers/person.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L143">apollo/server/resolvers/person.ts:143</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -406,7 +476,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L67">apollo/server/resolvers/person.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L71">apollo/server/resolvers/person.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -450,7 +520,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L105">apollo/server/resolvers/person.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L109">apollo/server/resolvers/person.ts:109</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -499,7 +569,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L81">apollo/server/resolvers/person.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L85">apollo/server/resolvers/person.ts:85</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -545,7 +615,7 @@
 					<div class="tsd-signature tsd-kind-icon">resolvers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L152">apollo/server/resolvers/person.ts:152</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L190">apollo/server/resolvers/person.ts:190</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -559,16 +629,31 @@
 						<div class="tsd-signature tsd-kind-icon">Mutation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L167">apollo/server/resolvers/person.ts:167</a></li>
+								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L205">apollo/server/resolvers/person.ts:205</a></li>
 							</ul>
 						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="resolvers.mutation.approvemembership" class="tsd-anchor"></a>
+							<h3>approve<wbr>Membership</h3>
+							<div class="tsd-signature tsd-kind-icon">approve<wbr>Membership<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.approvemembershipattribute.html" class="tsd-signature-type">ApproveMembershipAttribute</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/person.personupdateresponse.html" class="tsd-signature-type">PersonUpdateResponse</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = approveMembershipResolver</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L211">apollo/server/resolvers/person.ts:211</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>see <a href="person.html#approvemembershipresolver">approveMembershipResolver</a></p>
+								</div>
+							</div>
+						</section>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 							<a name="resolvers.mutation.newperson" class="tsd-anchor"></a>
 							<h3>new<wbr>Person</h3>
 							<div class="tsd-signature tsd-kind-icon">new<wbr>Person<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.personattributes.html" class="tsd-signature-type">PersonAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/person.personupdateresponse.html" class="tsd-signature-type">PersonUpdateResponse</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = newPersonResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L169">apollo/server/resolvers/person.ts:169</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L207">apollo/server/resolvers/person.ts:207</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -583,7 +668,7 @@
 							<div class="tsd-signature tsd-kind-icon">update<wbr>Person<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.personattributes.html" class="tsd-signature-type">PersonAttributes</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/person.personupdateresponse.html" class="tsd-signature-type">PersonUpdateResponse</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = updatePersonResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L171">apollo/server/resolvers/person.ts:171</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L209">apollo/server/resolvers/person.ts:209</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -599,7 +684,7 @@
 						<div class="tsd-signature tsd-kind-icon">Person<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L153">apollo/server/resolvers/person.ts:153</a></li>
+								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L191">apollo/server/resolvers/person.ts:191</a></li>
 							</ul>
 						</aside>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -608,7 +693,7 @@
 							<div class="tsd-signature tsd-kind-icon">college<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/college.college-1.html" class="tsd-signature-type">College</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = collegeResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L157">apollo/server/resolvers/person.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L195">apollo/server/resolvers/person.ts:195</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -623,7 +708,7 @@
 							<div class="tsd-signature tsd-kind-icon">major<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/major.major-1.html" class="tsd-signature-type">Major</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = majorResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L155">apollo/server/resolvers/person.ts:155</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L193">apollo/server/resolvers/person.ts:193</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -639,7 +724,7 @@
 						<div class="tsd-signature tsd-kind-icon">Query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L159">apollo/server/resolvers/person.ts:159</a></li>
+								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L197">apollo/server/resolvers/person.ts:197</a></li>
 							</ul>
 						</aside>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -648,7 +733,7 @@
 							<div class="tsd-signature tsd-kind-icon">people<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/person.personattributes.html" class="tsd-signature-type">PersonAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = peopleResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L161">apollo/server/resolvers/person.ts:161</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L199">apollo/server/resolvers/person.ts:199</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -663,7 +748,7 @@
 							<div class="tsd-signature tsd-kind-icon">person<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.personresolverargs.html" class="tsd-signature-type">PersonResolverArgs</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/person.personattributes.html" class="tsd-signature-type">PersonAttributes</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = personResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L165">apollo/server/resolvers/person.ts:165</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L203">apollo/server/resolvers/person.ts:203</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -678,7 +763,7 @@
 							<div class="tsd-signature tsd-kind-icon">registrations<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/person.personattributes.html" class="tsd-signature-type">PersonAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = registrationsResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/1629491/apollo/server/resolvers/person.ts#L163">apollo/server/resolvers/person.ts:163</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/resolvers/person.ts#L201">apollo/server/resolvers/person.ts:201</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -725,7 +810,19 @@
 						<a href="apollo_server_types.html">apollo\server\types</a>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="components.html">components</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="components_admin_registrations.html">components\admin\registrations</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="layouts.html">layouts</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="pages.html">pages</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="pages_admin.html">pages\admin</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="pages_api.html">pages\api</a>
@@ -759,6 +856,9 @@
 						<a href="../classes/person.personapi.html" class="tsd-kind-icon">PersonAPI</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/person.approvemembershipattribute.html" class="tsd-kind-icon">Approve<wbr>Membership<wbr>Attribute</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/person.personattributes.html" class="tsd-kind-icon">Person<wbr>Attributes</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
@@ -766,6 +866,9 @@
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../interfaces/person.personupdateresponse.html" class="tsd-kind-icon">Person<wbr>Update<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
+						<a href="person.html#approvemembershipresolverargs" class="tsd-kind-icon">Approve<wbr>Membership<wbr>Resolver<wbr>Args</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="person.html#personcreationattributes" class="tsd-kind-icon">Person<wbr>Creation<wbr>Attributes</a>
@@ -775,6 +878,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="person.html#personfactory" class="tsd-kind-icon">Person<wbr>Factory</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="person.html#approvemembershipresolver" class="tsd-kind-icon">approve<wbr>Membership<wbr>Resolver</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
 						<a href="person.html#collegeresolver" class="tsd-kind-icon">college<wbr>Resolver</a>

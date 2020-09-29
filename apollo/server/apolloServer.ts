@@ -47,7 +47,12 @@ import MajorAPI from "@/datasources/major";
 import CollegeAPI from "@/datasources/college";
 
 // others
-import { personStore, executiveStore, socSettingStore } from "@/store";
+import {
+  sequelize,
+  personStore,
+  executiveStore,
+  socSettingStore,
+} from "@/store";
 import { ContextBase } from "./types/datasources";
 import { ResolverDatasource } from "./types/resolver";
 
@@ -60,7 +65,7 @@ const dataSources = (): ResolverDatasource => ({
   facultyAPI: new FacultyAPI(),
   collegeAPI: new CollegeAPI(),
   majorAPI: new MajorAPI(),
-  personAPI: new PersonAPI(personStore),
+  personAPI: new PersonAPI(personStore, sequelize),
   executiveAPI: new ExecutiveAPI(executiveStore),
   socSettingAPI: new SocSettingAPI(socSettingStore),
 });

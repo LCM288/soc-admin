@@ -1,4 +1,4 @@
-query executive($sid: String!) {
+query($sid: String!) {
   executive(sid: $sid) {
     sid
     nickname

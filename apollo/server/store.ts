@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { Sequelize, Transaction } from "sequelize";
 import { PersonFactory } from "@/models/Person";
 import { ExecutiveFactory } from "@/models/Executive";
 import { SocSettingFactory } from "@/models/SocSetting";
@@ -16,6 +16,7 @@ const socAdminDB =
  */
 export const sequelize = new Sequelize(socAdminDB, {
   timezone: "Asia/Hong_Kong",
+  isolationLevel: Transaction.ISOLATION_LEVELS.REPEATABLE_READ,
 });
 
 /**

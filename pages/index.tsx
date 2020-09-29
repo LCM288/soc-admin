@@ -1,40 +1,23 @@
 import React from "react";
 import { DateTime } from "luxon";
-import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { User } from "@/types/datasources";
 import { Person } from "@/models/Person";
-import { getUserAndRefreshToken } from "utils/auth";
 import { useQuery } from "@apollo/react-hooks";
 import { Button, Section, Container, Heading } from "react-bulma-components";
-import query from "apollo/queries/executive/executives.gql";
+import { ServerSideProps } from "utils/getServerSideProps";
+import executiveQuery from "apollo/queries/executive/executive.gql";
 import personQuery from "../apollo/queries/person/person.gql";
 
-export const getServerSideProps: GetServerSideProps<{
-  user: User | null;
-}> = async (ctx) => {
-  const user = await getUserAndRefreshToken(ctx);
-  if (!user) {
-    ctx.res.statusCode = 307;
-    ctx.res.setHeader("Location", "/login");
-  }
-  return {
-    props: { user }, // will be passed to the page component as props
-  };
-};
+export { getServerSideProps } from "utils/getServerSideProps";
 
-export default function Index({
-  user,
-}: {
-  user: User | null;
-}): React.ReactElement {
+export default function Index({ user }: ServerSideProps): React.ReactElement {
   const router = useRouter();
   const personQueryResult = useQuery(personQuery, {
     variables: { sid: user?.sid },
     fetchPolicy: "network-only",
   });
-  const { data, loading, error } = useQuery(query, {
-    variables: { sid: user?.sid ?? "" },
+  const { data, loading, error } = useQuery(executiveQuery, {
+    variables: { sid: user?.sid },
   });
   const logout = () => {
     router.push("/api/logout");
@@ -80,7 +63,11 @@ export default function Index({
   };
   if (personQueryResult.loading || loading) return <p>loading</p>;
   if (personQueryResult.error || error) return <p>ERROR</p>;
-  // console.log(new DateTime());
+
+  if (data?.executive) {
+    router.replace("/admin");
+    return <></>;
+  }
 
   if (user) {
     return (
@@ -93,7 +80,6 @@ export default function Index({
             <div>
               {getGreetingTime()}, {user.name}
             </div>
-            <div>{JSON.stringify(data)}</div>
             {memberStatus(personQueryResult.data.person)}
             <Button onClick={logout}>logout</Button>
             <Button color="primary" onClick={register}>
