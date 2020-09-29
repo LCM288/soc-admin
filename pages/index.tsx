@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import { DateTime } from "luxon";
-import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { User } from "@/types/datasources";
 import { Person } from "@/models/Person";
 import { getUserAndRefreshToken } from "utils/auth";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import {
   Button,
-  Form,
   Section,
   Container,
+  Form,
   Heading,
 } from "react-bulma-components";
-import query from "apollo/queries/executive/executives.gql";
+import { ServerSideProps } from "utils/getServerSideProps";
+import executiveQuery from "apollo/queries/executive/executive.gql";
 import personQuery from "../apollo/queries/person/person.gql";
 import countExecutivesQuery from "../apollo/queries/executive/countExecutives.gql";
 import socSettingsQuery from "../apollo/queries/socSetting/socSettings.gql";
@@ -22,27 +21,9 @@ import updateSocSettingMutation from "../apollo/queries/socSetting/updateSocSett
 
 const { Input, Field, Control, Label } = Form;
 
-export const getServerSideProps: GetServerSideProps<{
-  user: User | null;
-}> = async (ctx) => {
-  const user = await getUserAndRefreshToken(ctx);
+export { getServerSideProps } from "utils/getServerSideProps";
 
-  if (!user) {
-    ctx.res.statusCode = 307;
-    ctx.res.setHeader("Location", "/login");
-  }
-  return {
-    props: { user }, // will be passed to the page component as props
-  };
-};
-
-export default function Index({
-  user,
-  executives,
-}: {
-  user: User | null;
-  executives: number | undefined;
-}): React.ReactElement {
+export default function Index({ user }: ServerSideProps): React.ReactElement {
   const router = useRouter();
   const personQueryResult = useQuery(personQuery, {
     variables: { sid: user?.sid },
@@ -54,8 +35,8 @@ export default function Index({
   const countExecutivesQueryResult = useQuery(countExecutivesQuery, {
     fetchPolicy: "network-only",
   });
-  const { data, loading, error } = useQuery(query, {
-    variables: { sid: user?.sid ?? "" },
+  const { data, loading, error } = useQuery(executiveQuery, {
+    variables: { sid: user?.sid },
   });
   const [
     newExecutive,
@@ -135,6 +116,11 @@ export default function Index({
     // router.push("/");
     window.location.reload();
   };
+
+  if (data?.executive) {
+    router.replace("/admin");
+    return <></>;
+  }
 
   if (
     countExecutivesQueryResult.loading ||

@@ -1,5 +1,5 @@
-query people {
-  person {
+query {
+  people {
     id
     sid
     chineseName

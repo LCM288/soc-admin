@@ -29,18 +29,7 @@ import updatePersonMutation from "../apollo/queries/person/updatePerson.gql";
 
 const { Input, Field, Control, Label, Select } = Form;
 
-export const getServerSideProps: GetServerSideProps<{
-  user: User | null;
-}> = async (ctx) => {
-  const user = await getUserAndRefreshToken(ctx);
-  if (!user) {
-    ctx.res.statusCode = 307;
-    ctx.res.setHeader("Location", "/login");
-  }
-  return {
-    props: { user }, // will be passed to the page component as props
-  };
-};
+export { getServerSideProps } from "utils/getServerSideProps";
 
 function YearMonthForm({
   date,
