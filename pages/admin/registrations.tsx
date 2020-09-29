@@ -1,17 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useTable, CellProps } from "react-table";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import { Table, Button } from "react-bulma-components";
-import ConfirmApproveModal from "components/admin/registrations/confirmApproveModal";
-import registrationsQuery from "apollo/queries/person/registrations.gql";
-import approveMembershipMutation from "apollo/queries/person/approveMembership.gql";
+import { Table } from "react-bulma-components";
 import toast from "utils/toast";
+import registrationsQuery from "apollo/queries/person/registrations.gql";
+import ApproveCell from "components/admin/registrations/approveCell";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -20,7 +19,11 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     fetchPolicy: "cache-and-network",
     pollInterval: 5000,
   });
-  const [approveMembership] = useMutation(approveMembershipMutation);
+
+  const [registrationsData, setRegistrationsData] = useState<
+    { registrations: Record<string, unknown>[] } | undefined
+  >(undefined);
+
   const tableColumns = useMemo(
     () => [
       {
@@ -81,77 +84,37 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Approve",
         accessor: (row: Record<string, unknown>) => row.sid,
         id: "approve",
-        Cell: ({
-          row,
-          value: sid,
-        }: CellProps<Record<string, unknown>, number>) => {
-          const [approveLoading, setApproveLoading] = useState(false);
-          const [openModal, setOpenModal] = useState(false);
-          const approve = () => {
-            setOpenModal(false);
-            approveMembership({ variables: { sid } })
-              .then((payload) => {
-                if (!payload.data?.approveMembership.success) {
-                  throw new Error(
-                    payload.data?.approveMembership.message ??
-                      "some error occurs"
-                  );
-                }
-                toast.success(payload.data.approveMembership.message, {
-                  position: toast.POSITION.TOP_LEFT,
-                });
-              })
-              .catch((err) => {
-                toast.danger(err, { position: toast.POSITION.TOP_LEFT });
-              })
-              .finally(() => {
-                setApproveLoading(false);
-              });
-            setApproveLoading(true);
-          };
-          const promptApprove = () => {
-            setOpenModal(true);
-          };
-          const cencelApprove = () => {
-            setOpenModal(false);
-          };
-          return (
-            <>
-              {openModal && (
-                <ConfirmApproveModal
-                  onConfirm={approve}
-                  onCancel={cencelApprove}
-                  row={row.values}
-                />
-              )}
-              <Button
-                color="success"
-                onClick={promptApprove}
-                loading={approveLoading}
-              >
-                Approve {row.values.englishName}
-              </Button>
-            </>
-          );
-        },
+        Cell: ApproveCell,
       },
     ],
-    [approveMembership]
+    []
   );
+
   const tableData = useMemo(() => {
-    return data?.registrations ?? [];
-  }, [data]);
+    return registrationsData?.registrations ?? [];
+  }, [registrationsData]);
+
   const tableGetRowId = useMemo(() => {
     return (row: Record<string, unknown>) => (row.id as number).toString();
   }, []);
+
   const tableInstance = useTable({
     columns: tableColumns,
     data: tableData,
     getRowId: tableGetRowId,
   });
 
-  if (loading) return <p>loading</p>;
-  if (error) return <p>ERROR</p>;
+  if (data && data !== registrationsData) {
+    setRegistrationsData(data);
+  }
+
+  if (!registrationsData) {
+    if (loading) return <p>loading</p>;
+    if (error) return <p>{error.message}</p>;
+  } else if (error) {
+    toast.danger(error.message);
+  }
+
   const {
     getTableProps,
     getTableBodyProps,
