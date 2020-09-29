@@ -4,7 +4,6 @@
  */
 
 import { gql } from "apollo-server";
-import { DateTime } from "luxon";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
   Person,
