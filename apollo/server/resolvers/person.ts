@@ -14,16 +14,14 @@ import {
 } from "@/models/Person";
 import { Major } from "@/models/Major";
 import { College } from "@/models/College";
+import { ApproveMembershipAttribute } from "@/datasources/person";
 
 /** The input arguments for the person query's resolver */
 interface PersonResolverArgs {
   sid: string;
 }
 /** The input arguments for the approveMembership mutation's resolver */
-interface ApproveMembershipResolverArgs {
-  sid: string;
-  memberUntil: string | null;
-}
+type ApproveMembershipResolverArgs = ApproveMembershipAttribute;
 
 /** The response when mutating a single person */
 interface PersonUpdateResponse {
@@ -165,11 +163,7 @@ const updatePersonResolver: ResolverFn<
 const approveMembershipResolver: ResolverFn<
   ApproveMembershipResolverArgs,
   PersonUpdateResponse
-> = async (
-  _,
-  { sid, memberUntil },
-  { user, dataSources }
-): Promise<PersonUpdateResponse> => {
+> = async (_, arg, { user, dataSources }): Promise<PersonUpdateResponse> => {
   const isExecutive = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
@@ -179,18 +173,18 @@ const approveMembershipResolver: ResolverFn<
       message: "Please log in as executive",
     };
   }
-  const [count, [person]] = await dataSources.personAPI.updatePerson({
-    sid,
-    memberSince: DateTime.local().toISO(),
-    memberUntil,
-  });
-  if (!Number.isInteger(count)) {
-    return { success: false, message: "Something wrong happened" };
+  const result = await dataSources.personAPI.approveMembership(arg);
+  if (typeof result === "string") {
+    const errorMessage = result as string;
+    return {
+      success: false,
+      message: errorMessage,
+    };
   }
   return {
     success: true,
-    message: `${count} ${count !== 1 ? "people" : "person"} updated`,
-    person,
+    message: `Hooray!🎉 ${result.englishName} is now a member of us`,
+    person: result,
   };
 };
 

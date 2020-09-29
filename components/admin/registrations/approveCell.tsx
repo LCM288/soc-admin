@@ -31,7 +31,7 @@ const ApproveCell = ({
         });
       })
       .catch((err) => {
-        toast.danger(err, { position: toast.POSITION.TOP_LEFT });
+        toast.danger(err.message, { position: toast.POSITION.TOP_LEFT });
       })
       .finally(() => {
         setApproveLoading(false);
