@@ -112,7 +112,9 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     if (loading) return <p>loading</p>;
     if (error) return <p>{error.message}</p>;
   } else if (error) {
-    toast.danger(error.message);
+    toast.danger(error.message, {
+      position: toast.POSITION.TOP_LEFT,
+    });
   }
 
   const {
