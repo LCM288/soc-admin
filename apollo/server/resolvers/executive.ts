@@ -33,12 +33,16 @@ interface ExecutiveResolverArgs {
  * @returns All the executives
  * @category Query Resolver
  */
-const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = (
+const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = async (
   _,
   __,
-  { dataSources }
+  { user, dataSources }
 ): Promise<ExecutiveAttributes[]> => {
-  return dataSources.executiveAPI.findExecutives();
+  const executives = await dataSources.executiveAPI.findExecutives();
+  if (executives.map((executive) => executive.sid).includes(user?.sid ?? "")) {
+    return executives;
+  }
+  throw new Error("You have no permission to read this");
 };
 
 /**
@@ -50,7 +54,20 @@ const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = (
 const executiveResolver: ResolverFn<
   ExecutiveResolverArgs,
   ExecutiveAttributes | undefined
-> = (_, { sid }, { dataSources }): Promise<ExecutiveAttributes | undefined> => {
+> = async (
+  _,
+  { sid },
+  { user, dataSources }
+): Promise<ExecutiveAttributes | undefined> => {
+  if (user?.sid === sid) {
+    return dataSources.executiveAPI.findExecutive(sid);
+  }
+  const isAdmin = Boolean(
+    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+  );
+  if (!isAdmin) {
+    throw new Error("You have no permission to read this");
+  }
   return dataSources.executiveAPI.findExecutive(sid);
 };
 
@@ -66,7 +83,14 @@ const executiveResolver: ResolverFn<
 const newExecutiveResolver: ResolverFn<
   ExecutiveCreationAttributes,
   ExecutiveUpdateResponse
-> = async (_, arg, { dataSources }): Promise<ExecutiveUpdateResponse> => {
+> = async (_, arg, { user, dataSources }): Promise<ExecutiveUpdateResponse> => {
+  const isAdmin = Boolean(
+    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+  );
+  // TODO: count admin, allow new executive if executives count is 0
+  if (!isAdmin) {
+    return { success: false, message: "You have no permission to do this" };
+  }
   const executive = await dataSources.executiveAPI.addNewExecutive(arg);
   if (!executive) {
     return { success: false, message: "Something wrong happened" };
@@ -84,7 +108,13 @@ const newExecutiveResolver: ResolverFn<
 const updateExecutiveResolver: ResolverFn<
   ExecutiveUpdateAttributes,
   ExecutiveUpdateResponse
-> = async (_, arg, { dataSources }): Promise<ExecutiveUpdateResponse> => {
+> = async (_, arg, { user, dataSources }): Promise<ExecutiveUpdateResponse> => {
+  const isAdmin = Boolean(
+    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+  );
+  if (!isAdmin) {
+    return { success: false, message: "You have no permission to do this" };
+  }
   const [count, [executive]] = await dataSources.executiveAPI.updateExecutive(
     arg
   );
