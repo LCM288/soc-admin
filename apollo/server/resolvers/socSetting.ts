@@ -10,6 +10,8 @@ import {
   SocSettingCreationAttributes,
 } from "@/models/SocSetting";
 
+const editableKeys = ["client_id", "client_secret"];
+
 /** The response when mutating a single socSetting */
 interface SocSettingUpdateResponse {
   /** Whether the mutation is successful or not */
@@ -41,7 +43,10 @@ const socSettingsResolver: ResolverFn<unknown, SocSettingAttributes[]> = (
   __,
   { dataSources }
 ): Promise<SocSettingAttributes[]> => {
-  return dataSources.socSettingAPI.findSocSettings();
+  if (process.env.NODE_ENV === "development") {
+    return dataSources.socSettingAPI.findSocSettings();
+  }
+  throw new Error("You have no permission to read this");
 };
 
 // Mutation resolvers
@@ -56,7 +61,17 @@ const socSettingsResolver: ResolverFn<unknown, SocSettingAttributes[]> = (
 const updateSocSettingResolver: ResolverFn<
   SocSettingCreationAttributes,
   SocSettingUpdateResponse
-> = async (_, arg, { dataSources }): Promise<SocSettingUpdateResponse> => {
+> = async (
+  _,
+  arg,
+  { user, dataSources }
+): Promise<SocSettingUpdateResponse> => {
+  const isAdmin = Boolean(
+    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+  );
+  if (!isAdmin || !editableKeys.includes(arg.key)) {
+    return { success: false, message: "You have no permission to do this" };
+  }
   const socSetting = await dataSources.socSettingAPI.updateSocSetting(arg);
   if (!socSetting) {
     return { success: false, message: "Something wrong happened" };
@@ -74,7 +89,17 @@ const updateSocSettingResolver: ResolverFn<
 const deleteSocSettingResolver: ResolverFn<
   { key: string },
   SocSettingDeleteResponse
-> = async (_, { key }, { dataSources }): Promise<SocSettingDeleteResponse> => {
+> = async (
+  _,
+  { key },
+  { user, dataSources }
+): Promise<SocSettingDeleteResponse> => {
+  const isAdmin = Boolean(
+    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+  );
+  if (!isAdmin || !editableKeys.includes(key)) {
+    return { success: false, message: "You have no permission to do this" };
+  }
   const count = await dataSources.socSettingAPI.deleteSocSetting({ key });
   if (!Number.isInteger(count)) {
     return { success: false, message: "Something wrong happened" };
