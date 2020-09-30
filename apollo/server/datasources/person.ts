@@ -161,7 +161,34 @@ export default class PersonAPI extends DataSource<ContextBase> {
     try {
       const result = await this.sequelize.transaction(async (t) => {
         const person = await this.store.findOne({
-          where: { sid },
+          where: {
+            [Op.and]: {
+              sid,
+              [Op.or]: [
+                { memberSince: { [Op.eq]: null } },
+                {
+                  [Op.and]: [
+                    Sequelize.where(
+                      Sequelize.cast(
+                        Sequelize.col("memberUntil"),
+                        "TIMESTAMP WITH TIME ZONE"
+                      ),
+                      Op.lt,
+                      Sequelize.fn("NOW")
+                    ),
+                    Sequelize.where(
+                      Sequelize.cast(
+                        Sequelize.col("memberUntil"),
+                        "TIMESTAMP WITH TIME ZONE"
+                      ),
+                      Op.lt,
+                      Sequelize.col("updatedAt")
+                    ),
+                  ],
+                },
+              ],
+            },
+          },
           transaction: t,
         });
         if (!person) {
