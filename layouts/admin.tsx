@@ -75,6 +75,11 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
           </Navbar.Brand>
           <Navbar.Menu>
             <Navbar.Container>
+              <Link href="/admin/members">
+                <Navbar.Item onClick={() => setActive(false)}>
+                  Members
+                </Navbar.Item>
+              </Link>
               <Link href="/admin/registrations">
                 <Navbar.Item onClick={() => setActive(false)}>
                   Registrations

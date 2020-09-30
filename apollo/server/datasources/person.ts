@@ -74,7 +74,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
    * Find all ***pending*** registrations \
    * A registration maybe for new member or for renewal of membership
    * @async
-   * @returns {Promise<PersonAttributes[]>} An array of people
+   * @returns {Promise<PersonAttributes[]>} An array of ***pending*** registrations
    */
   public async findRegistrations(): Promise<PersonAttributes[]> {
     const registrations = await this.store.findAll({
@@ -106,6 +106,52 @@ export default class PersonAPI extends DataSource<ContextBase> {
       raw: true,
     });
     return registrations;
+  }
+
+  /**
+   * Find all ***active*** members \
+   * A member if active iff he/her has not graduated and membership not expired
+   * @async
+   * @returns {Promise<PersonAttributes[]>} An array of ***active*** members
+   */
+  public async findMembers(): Promise<PersonAttributes[]> {
+    const members = await this.store.findAll({
+      where: {
+        [Op.and]: [
+          Sequelize.where(
+            Sequelize.cast(
+              Sequelize.col("memberSince"),
+              "TIMESTAMP WITH TIME ZONE"
+            ),
+            Op.lt,
+            Sequelize.fn("NOW")
+          ),
+          Sequelize.where(
+            Sequelize.cast(
+              Sequelize.col("expectedGraduationDate"),
+              "TIMESTAMP WITH TIME ZONE"
+            ),
+            Op.gt,
+            Sequelize.fn("NOW")
+          ),
+          {
+            [Op.or]: [
+              { memberUntil: { [Op.eq]: null } },
+              Sequelize.where(
+                Sequelize.cast(
+                  Sequelize.col("memberUntil"),
+                  "TIMESTAMP WITH TIME ZONE"
+                ),
+                Op.gt,
+                Sequelize.fn("NOW")
+              ),
+            ],
+          },
+        ],
+      },
+      raw: true,
+    });
+    return members;
   }
 
   /**
@@ -161,7 +207,34 @@ export default class PersonAPI extends DataSource<ContextBase> {
     try {
       const result = await this.sequelize.transaction(async (t) => {
         const person = await this.store.findOne({
-          where: { sid },
+          where: {
+            [Op.and]: {
+              sid,
+              [Op.or]: [
+                { memberSince: { [Op.eq]: null } },
+                {
+                  [Op.and]: [
+                    Sequelize.where(
+                      Sequelize.cast(
+                        Sequelize.col("memberUntil"),
+                        "TIMESTAMP WITH TIME ZONE"
+                      ),
+                      Op.lt,
+                      Sequelize.fn("NOW")
+                    ),
+                    Sequelize.where(
+                      Sequelize.cast(
+                        Sequelize.col("memberUntil"),
+                        "TIMESTAMP WITH TIME ZONE"
+                      ),
+                      Op.lt,
+                      Sequelize.col("updatedAt")
+                    ),
+                  ],
+                },
+              ],
+            },
+          },
           transaction: t,
         });
         if (!person) {
