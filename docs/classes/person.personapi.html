@@ -111,6 +111,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="person.personapi.html#addnewperson" class="tsd-kind-icon">add<wbr>New<wbr>Person</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="person.personapi.html#approvemembership" class="tsd-kind-icon">approve<wbr>Membership</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="person.personapi.html#findmembers" class="tsd-kind-icon">find<wbr>Members</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="person.personapi.html#findpeople" class="tsd-kind-icon">find<wbr>People</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="person.personapi.html#findperson" class="tsd-kind-icon">find<wbr>Person</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="person.personapi.html#findregistrations" class="tsd-kind-icon">find<wbr>Registrations</a></li>
@@ -133,7 +134,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/datasources/person.ts#L50">apollo/server/datasources/person.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c6db20e/apollo/server/datasources/person.ts#L50">apollo/server/datasources/person.ts:50</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -173,7 +174,7 @@
 					<div class="tsd-signature tsd-kind-icon">sequelize<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Sequelize</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/datasources/person.ts#L50">apollo/server/datasources/person.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c6db20e/apollo/server/datasources/person.ts#L50">apollo/server/datasources/person.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -188,7 +189,7 @@
 					<div class="tsd-signature tsd-kind-icon">store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">Person</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/datasources/person.ts#L47">apollo/server/datasources/person.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c6db20e/apollo/server/datasources/person.ts#L47">apollo/server/datasources/person.ts:47</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -210,7 +211,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/datasources/person.ts#L128">apollo/server/datasources/person.ts:128</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c6db20e/apollo/server/datasources/person.ts#L174">apollo/server/datasources/person.ts:174</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -246,7 +247,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/datasources/person.ts#L157">apollo/server/datasources/person.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c6db20e/apollo/server/datasources/person.ts#L203">apollo/server/datasources/person.ts:203</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -278,6 +279,33 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="findmembers" class="tsd-anchor"></a>
+					<h3>find<wbr>Members</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">find<wbr>Members<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.personattributes.html" class="tsd-signature-type">PersonAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c6db20e/apollo/server/datasources/person.ts#L117">apollo/server/datasources/person.ts:117</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Find all <strong><em>active</em></strong> members <br>A member if active iff he/her has not graduated and membership not expired</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.personattributes.html" class="tsd-signature-type">PersonAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>An array of <strong><em>active</em></strong> members</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="findpeople" class="tsd-anchor"></a>
 					<h3>find<wbr>People</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -287,7 +315,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/datasources/person.ts#L68">apollo/server/datasources/person.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c6db20e/apollo/server/datasources/person.ts#L68">apollo/server/datasources/person.ts:68</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -314,7 +342,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/datasources/person.ts#L117">apollo/server/datasources/person.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c6db20e/apollo/server/datasources/person.ts#L163">apollo/server/datasources/person.ts:163</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -350,7 +378,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/datasources/person.ts#L79">apollo/server/datasources/person.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c6db20e/apollo/server/datasources/person.ts#L79">apollo/server/datasources/person.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -363,7 +391,7 @@
 								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/person.personattributes.html" class="tsd-signature-type">PersonAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>An array of people</p>
+							<p>An array of <strong><em>pending</em></strong> registrations</p>
 						</li>
 					</ul>
 				</section>
@@ -401,7 +429,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/dfa640a/apollo/server/datasources/person.ts#L141">apollo/server/datasources/person.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/c6db20e/apollo/server/datasources/person.ts#L187">apollo/server/datasources/person.ts:187</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -526,6 +554,9 @@
 								<a href="person.personapi.html#approvemembership" class="tsd-kind-icon">approve<wbr>Membership</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="person.personapi.html#findmembers" class="tsd-kind-icon">find<wbr>Members</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="person.personapi.html#findpeople" class="tsd-kind-icon">find<wbr>People</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -576,6 +607,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../modules/person.html#majorresolver" class="tsd-kind-icon">major<wbr>Resolver</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/person.html#membersresolver" class="tsd-kind-icon">members<wbr>Resolver</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../modules/person.html#newpersonresolver" class="tsd-kind-icon">new<wbr>Person<wbr>Resolver</a>
