@@ -67,7 +67,7 @@ const updateSocSettingResolver: ResolverFn<
   { user, dataSources }
 ): Promise<SocSettingUpdateResponse> => {
   const isAdmin = Boolean(
-    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
   if (!isAdmin || !editableKeys.includes(arg.key)) {
     return { success: false, message: "You have no permission to do this" };
@@ -95,7 +95,7 @@ const deleteSocSettingResolver: ResolverFn<
   { user, dataSources }
 ): Promise<SocSettingDeleteResponse> => {
   const isAdmin = Boolean(
-    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
   if (!isAdmin || !editableKeys.includes(key)) {
     return { success: false, message: "You have no permission to do this" };

@@ -63,7 +63,7 @@ const executiveResolver: ResolverFn<
     return dataSources.executiveAPI.findExecutive(sid);
   }
   const isAdmin = Boolean(
-    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
   if (!isAdmin) {
     throw new Error("You have no permission to read this");
@@ -85,7 +85,7 @@ const newExecutiveResolver: ResolverFn<
   ExecutiveUpdateResponse
 > = async (_, arg, { user, dataSources }): Promise<ExecutiveUpdateResponse> => {
   const isAdmin = Boolean(
-    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
   // TODO: count admin, allow new executive if executives count is 0
   if (!isAdmin) {
@@ -110,7 +110,7 @@ const updateExecutiveResolver: ResolverFn<
   ExecutiveUpdateResponse
 > = async (_, arg, { user, dataSources }): Promise<ExecutiveUpdateResponse> => {
   const isAdmin = Boolean(
-    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
   if (!isAdmin) {
     return { success: false, message: "You have no permission to do this" };
