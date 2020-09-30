@@ -106,7 +106,7 @@ const formatMajorOptionLabel = ({
     <Level.Side align="left">
       <Level.Item>{label}</Level.Item>
     </Level.Side>
-    <Level.Side align="right">
+    <Level.Side align="right" style={{ marginLeft: "auto" }}>
       {faculties.map((f) => (
         <Level.Item>
           <Tag
@@ -177,7 +177,7 @@ export default function Register({
       (m: Major) => m.code === majorCode
     );
     if (!foundMajor) {
-      return { value: "", label: "" };
+      return { value: "", label: "", faculties: [] };
     }
     return {
       value: foundMajor.code,
