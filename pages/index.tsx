@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { DateTime } from "luxon";
 import { useRouter } from "next/router";
 import { Person } from "@/models/Person";
-import { getUserAndRefreshToken } from "utils/auth";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import {
   Button,
@@ -57,9 +56,6 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
   };
   const register = () => {
     router.push("/register");
-  };
-  const admin = () => {
-    router.push("/admin");
   };
   const isActiveMember = (person: Person) => {
     if (!person.memberSince) return false;
@@ -207,13 +203,6 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
               <Button color="primary" onClick={register}>
                 register
               </Button>
-              {data.executives.length ? (
-                <Button color="info" onClick={admin}>
-                  admin
-                </Button>
-              ) : (
-                ""
-              )}
             </Button.Group>
           </Container>
         </Section>
