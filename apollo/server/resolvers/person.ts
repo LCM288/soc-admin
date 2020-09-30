@@ -14,6 +14,7 @@ import {
 import { Major } from "@/models/Major";
 import { College } from "@/models/College";
 import { ApproveMembershipAttribute } from "@/datasources/person";
+import { omit } from "lodash";
 
 /** The input arguments for the person query's resolver */
 interface PersonResolverArgs {
@@ -68,11 +69,17 @@ const collegeResolver: ResolverFn<null, College> = (
  * @returns All the people
  * @category Query Resolver
  */
-const peopleResolver: ResolverFn<unknown, PersonAttributes[]> = (
+const peopleResolver: ResolverFn<unknown, PersonAttributes[]> = async (
   _,
   __,
-  { dataSources }
+  { user, dataSources }
 ): Promise<PersonAttributes[]> => {
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  if (!isAdmin) {
+    throw new Error("You have no permission to read this");
+  }
   return dataSources.personAPI.findPeople();
 };
 
@@ -88,13 +95,12 @@ const registrationsResolver: ResolverFn<unknown, PersonAttributes[]> = async (
   { user, dataSources }
 ): Promise<PersonAttributes[]> => {
   const isAdmin = Boolean(
-    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
-  // only admin can access
-  if (isAdmin) {
-    return dataSources.personAPI.findRegistrations();
+  if (!isAdmin) {
+    throw new Error("You have no permission to read this");
   }
-  return [];
+  return dataSources.personAPI.findRegistrations();
 };
 
 /**
@@ -109,13 +115,12 @@ const membersResolver: ResolverFn<unknown, PersonAttributes[]> = async (
   { user, dataSources }
 ): Promise<PersonAttributes[]> => {
   const isAdmin = Boolean(
-    await dataSources.executiveAPI.findExecutive(user?.sid ?? "")
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
-  // only admin can access
-  if (isAdmin) {
-    return dataSources.personAPI.findMembers();
+  if (!isAdmin) {
+    throw new Error("You have no permission to read this");
   }
-  return [];
+  return dataSources.personAPI.findMembers();
 };
 
 /**
@@ -127,7 +132,20 @@ const membersResolver: ResolverFn<unknown, PersonAttributes[]> = async (
 const personResolver: ResolverFn<
   PersonResolverArgs,
   PersonAttributes | undefined
-> = (_, { sid }, { dataSources }): Promise<PersonAttributes | undefined> => {
+> = async (
+  _,
+  { sid },
+  { user, dataSources }
+): Promise<PersonAttributes | undefined> => {
+  if (user?.sid === sid) {
+    return dataSources.personAPI.findPerson(sid);
+  }
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  if (!isAdmin) {
+    throw new Error("You have no permission to read this");
+  }
   return dataSources.personAPI.findPerson(sid);
 };
 
@@ -143,8 +161,18 @@ const personResolver: ResolverFn<
 const newPersonResolver: ResolverFn<
   PersonCreationAttributes,
   PersonUpdateResponse
-> = async (_, arg, { dataSources }): Promise<PersonUpdateResponse> => {
-  const person = await dataSources.personAPI.addNewPerson(arg);
+> = async (_, arg, { user, dataSources }): Promise<PersonUpdateResponse> => {
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  if (!isAdmin && user?.sid !== arg.sid) {
+    return { success: false, message: "You have no permission to do this" };
+  }
+  const person = await dataSources.personAPI.addNewPerson({
+    ...arg,
+    memberSince: null,
+    memberUntil: null,
+  });
   if (!person) {
     return { success: false, message: "Something wrong happened" };
   }
@@ -161,8 +189,16 @@ const newPersonResolver: ResolverFn<
 const updatePersonResolver: ResolverFn<
   PersonAttributes,
   PersonUpdateResponse
-> = async (_, arg, { dataSources }): Promise<PersonUpdateResponse> => {
-  const [count, [person]] = await dataSources.personAPI.updatePerson(arg);
+> = async (_, arg, { user, dataSources }): Promise<PersonUpdateResponse> => {
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  if (!isAdmin && user?.sid !== arg.sid) {
+    return { success: false, message: "You have no permission to do this" };
+  }
+  const [count, [person]] = await dataSources.personAPI.updatePerson(
+    omit(arg, isAdmin ? ["memberSince"] : ["memberSince", "memberUntil"])
+  );
   if (!Number.isInteger(count)) {
     return { success: false, message: "Something wrong happened" };
   }
@@ -184,10 +220,10 @@ const approveMembershipResolver: ResolverFn<
   ApproveMembershipResolverArgs,
   PersonUpdateResponse
 > = async (_, arg, { user, dataSources }): Promise<PersonUpdateResponse> => {
-  const isExecutive = Boolean(
+  const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
-  if (!isExecutive) {
+  if (!isAdmin) {
     return {
       success: false,
       message: "Please log in as executive",
