@@ -20,7 +20,7 @@ const DOBField: React.FunctionComponent<Props> = ({ dob, setDob }: Props) => {
       <Label>Date of Birth</Label>
       <Control>
         <DayPickerInput
-          component={(props: any) => <Input {...props} />}
+          component={(props: unknown) => <Input {...props} />}
           classNames={{
             container: "",
             overlayWrapper: "DayPickerInput-OverlayWrapper",
