@@ -228,7 +228,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
       });
     });
     if (!result) {
-      throw new Error(`Cannot find registration record for sid ${sid}`);
+      throw new Error(`Cannot update record for sid ${sid}`);
     }
     return result;
   }
