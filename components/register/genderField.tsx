@@ -25,7 +25,7 @@ const genders = [
   },
 ];
 
-const None = genders.find((g) => g.value === "None");
+const DEFAULT_GENDER = genders.find((g) => g.value === "None");
 
 const GenderField: React.FunctionComponent<Props> = ({
   gender,
@@ -37,7 +37,7 @@ const GenderField: React.FunctionComponent<Props> = ({
       <Control>
         <div>
           <ReactSelect
-            defaultValue={None}
+            defaultValue={DEFAULT_GENDER}
             value={genders.find((g) => g.value === gender)}
             options={genders}
             onChange={(input: { value: string }): void => {
