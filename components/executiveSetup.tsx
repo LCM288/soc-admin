@@ -3,11 +3,9 @@ import { useRouter } from "next/router";
 import toast from "utils/toast";
 
 import { Button, Form } from "react-bulma-components";
-import { DateTime } from "luxon";
 import { User } from "@/types/datasources";
 import { useMutation } from "@apollo/react-hooks";
 import newExecutiveMutation from "../apollo/queries/executive/newExecutive.gql";
-import updateSocSettingMutation from "../apollo/queries/socSetting/updateSocSetting.gql";
 
 const { Input, Field, Control, Label } = Form;
 
@@ -22,13 +20,6 @@ const ExecutiveSetup: React.FunctionComponent<Props> = ({ user }: Props) => {
     newExecutive,
     { loading: newExecutiveMutationLoading, error: newExecutiveMutationError },
   ] = useMutation(newExecutiveMutation);
-  const [
-    updateSocSetting,
-    {
-      loading: updateSocSettingMutationLoading,
-      error: updateSocSettingMutationError,
-    },
-  ] = useMutation(updateSocSettingMutation);
 
   const [nickname, setNickname] = useState("");
   const [position, setPosition] = useState("");
@@ -98,12 +89,8 @@ const ExecutiveSetup: React.FunctionComponent<Props> = ({ user }: Props) => {
           </Button>
         </Button.Group>
       </div>
-      {(newExecutiveMutationLoading || updateSocSettingMutationLoading) && (
-        <p>Loading...</p>
-      )}
-      {(newExecutiveMutationError || updateSocSettingMutationError) && (
-        <p>Error :( Please try again</p>
-      )}
+      {newExecutiveMutationLoading && <p>Loading...</p>}
+      {newExecutiveMutationError && <p>Error :( Please try again</p>}
     </form>
   );
 };

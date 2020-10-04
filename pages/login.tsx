@@ -7,8 +7,9 @@ import {
   countExecutives,
   CLIENT_ID_KEY,
 } from "utils/auth";
+import { getMicrosoftLoginLink } from "utils/microsoftLogin";
 
-import { Button, Section, Container } from "react-bulma-components";
+import { Section, Container } from "react-bulma-components";
 
 const EMPTY_PROPS = {
   props: { baseUrl: "", clientId: "" },
@@ -51,20 +52,7 @@ function MicrosoftLogin({
   baseUrl: string;
   clientId: string;
 }): React.ReactElement {
-  const TENANT = "link.cuhk.edu.hk";
-  const redirectUrl = `${baseUrl}/api/login`;
-
-  const body = qs.stringify({
-    client_id: clientId,
-    response_type: "code",
-    scope: "user.read",
-    redirect_uri: redirectUrl,
-    response_mode: "form_post",
-    prompt: "select_account",
-    domain_hint: TENANT,
-  });
-
-  const link = `https://login.microsoftonline.com/${TENANT}/oauth2/v2.0/authorize?${body}`;
+  const link = getMicrosoftLoginLink({ baseUrl, clientId });
   return (
     <div>
       <Section>

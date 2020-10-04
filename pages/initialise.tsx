@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/react-hooks";
+import toast from "utils/toast";
+import { getMicrosoftLoginLink } from "utils/microsoftLogin";
+
 import {
   Button,
   Form,
@@ -8,38 +11,45 @@ import {
   Container,
   Heading,
 } from "react-bulma-components";
-import { CLIENT_ID_KEY, CLIENT_SECRET_KEY } from "utils/auth";
-import updateSocSettingMutation from "../apollo/queries/socSetting/updateSocSetting.gql";
+import initClientKeysMutation from "../apollo/queries/socSetting/initClientKeys.gql";
 
 const { Input, Field, Control, Label } = Form;
 
 export default function Initialise(): React.ReactElement {
   const router = useRouter();
   const [
-    updateSocSetting,
+    initClientKeys,
     {
-      loading: updateSocSettingMutationLoading,
-      error: updateSocSettingMutationError,
+      loading: initClientKeysMutationLoading,
+      error: initClientKeysMutationError,
     },
-  ] = useMutation(updateSocSettingMutation);
+  ] = useMutation(initClientKeysMutation);
 
   const [clientId, setClientId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
   const formSubmit = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
-    await updateSocSetting({
-      variables: {
-        key: CLIENT_ID_KEY,
-        value: clientId,
-      },
-    });
-    await updateSocSetting({
-      variables: {
-        key: CLIENT_SECRET_KEY,
-        value: clientSecret,
-      },
-    });
-    router.push("/login");
+    try {
+      const updateSocSettingPayload = await initClientKeys({
+        variables: {
+          id: clientId,
+          secret: clientSecret,
+        },
+      });
+      console.log(updateSocSettingPayload);
+      if (!updateSocSettingPayload.data.initClientKeys.success) {
+        throw new Error(updateSocSettingPayload.data.initClientKeys.message);
+      }
+      const link = getMicrosoftLoginLink({
+        baseUrl: window.location.origin,
+        clientId,
+      });
+      router.push(link);
+    } catch (err) {
+      toast.danger(err.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
   };
 
   return (
@@ -74,8 +84,8 @@ export default function Initialise(): React.ReactElement {
               Initialise
             </Button>
           </form>
-          {updateSocSettingMutationLoading && <p>Loading...</p>}
-          {updateSocSettingMutationError && <p>Error :( Please try again</p>}
+          {initClientKeysMutationLoading && <p>Loading...</p>}
+          {initClientKeysMutationError && <p>Error :( Please try again</p>}
         </Container>
       </Section>
     </div>

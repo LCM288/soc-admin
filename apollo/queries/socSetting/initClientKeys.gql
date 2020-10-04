@@ -1,0 +1,6 @@
+mutation($id: String!, $secret: String!) {
+  initClientKeys(id: $id, secret: $secret) {
+    success
+    message
+  }
+}
