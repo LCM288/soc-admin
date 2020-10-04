@@ -8,6 +8,7 @@ import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
   Person,
   PersonAttributes,
+  PersonUpdateAttributes,
   PersonCreationAttributes,
   CollegeEnum,
 } from "@/models/Person";
@@ -22,9 +23,6 @@ interface PersonResolverArgs {
 }
 /** The input arguments for the approveMembership mutation's resolver */
 type ApproveMembershipResolverArgs = ApproveMembershipAttribute;
-/** The input arguments for the approveMembership mutation's resolver */
-type UpdatePersonArgs = Partial<PersonAttributes> &
-  Pick<PersonAttributes, "sid">;
 
 /** The response when mutating a single person */
 interface PersonUpdateResponse {
@@ -188,7 +186,7 @@ const newPersonResolver: ResolverFn<
  * @category Mutation Resolver
  */
 const updatePersonResolver: ResolverFn<
-  UpdatePersonArgs,
+  PersonUpdateAttributes,
   PersonUpdateResponse
 > = async (_, arg, { user, dataSources }): Promise<PersonUpdateResponse> => {
   const isAdmin = Boolean(

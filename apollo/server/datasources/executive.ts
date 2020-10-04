@@ -68,8 +68,8 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
   /**
    * Update an executive
    * @async
-   * @param {ExecutiveCreationAttributes} arg - The arg for the executive
-   * @returns Number of executives updated and instances of updated executives
+   * @param arg - The arg for updating the executive
+   * @returns The updated executive
    */
   public async updateExecutive(
     arg: ExecutiveUpdateAttributes
