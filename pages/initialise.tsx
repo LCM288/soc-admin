@@ -36,7 +36,6 @@ export default function Initialise(): React.ReactElement {
           secret: clientSecret,
         },
       });
-      console.log(updateSocSettingPayload);
       if (!updateSocSettingPayload.data.initClientKeys.success) {
         throw new Error(updateSocSettingPayload.data.initClientKeys.message);
       }

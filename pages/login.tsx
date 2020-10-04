@@ -1,5 +1,4 @@
 import React from "react";
-import qs from "qs";
 import { GetServerSideProps } from "next";
 import {
   getUserAndRefreshToken,

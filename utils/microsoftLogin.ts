@@ -6,7 +6,7 @@ export const getMicrosoftLoginLink = ({
 }: {
   baseUrl: string;
   clientId: string;
-}) => {
+}): string => {
   const TENANT = "link.cuhk.edu.hk";
   const redirectUrl = `${baseUrl}/api/login`;
 
