@@ -22,6 +22,9 @@ interface PersonResolverArgs {
 }
 /** The input arguments for the approveMembership mutation's resolver */
 type ApproveMembershipResolverArgs = ApproveMembershipAttribute;
+/** The input arguments for the approveMembership mutation's resolver */
+type UpdatePersonArgs = Partial<PersonAttributes> &
+  Pick<PersonAttributes, "sid">;
 
 /** The response when mutating a single person */
 interface PersonUpdateResponse {
@@ -137,13 +140,10 @@ const personResolver: ResolverFn<
   { sid },
   { user, dataSources }
 ): Promise<PersonAttributes | null> => {
-  if (user?.sid === sid) {
-    return dataSources.personAPI.findPerson(sid);
-  }
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
-  if (!isAdmin) {
+  if (!isAdmin && user?.sid !== sid) {
     throw new Error("You have no permission to read this");
   }
   return dataSources.personAPI.findPerson(sid);
@@ -168,15 +168,16 @@ const newPersonResolver: ResolverFn<
   if (!isAdmin && user?.sid !== arg.sid) {
     return { success: false, message: "You have no permission to do this" };
   }
-  const person = await dataSources.personAPI.addNewPerson({
-    ...arg,
-    memberSince: null,
-    memberUntil: null,
-  });
-  if (!person) {
-    return { success: false, message: "Something wrong happened" };
+  try {
+    const person = await dataSources.personAPI.addNewPerson({
+      ...arg,
+      memberSince: null,
+      memberUntil: null,
+    });
+    return { success: true, message: "success", person };
+  } catch (err) {
+    return { success: false, message: err.message };
   }
-  return { success: true, message: "success", person };
 };
 
 /**
@@ -187,7 +188,7 @@ const newPersonResolver: ResolverFn<
  * @category Mutation Resolver
  */
 const updatePersonResolver: ResolverFn<
-  PersonAttributes,
+  UpdatePersonArgs,
   PersonUpdateResponse
 > = async (_, arg, { user, dataSources }): Promise<PersonUpdateResponse> => {
   const isAdmin = Boolean(
@@ -196,17 +197,18 @@ const updatePersonResolver: ResolverFn<
   if (!isAdmin && user?.sid !== arg.sid) {
     return { success: false, message: "You have no permission to do this" };
   }
-  const [count, [person]] = await dataSources.personAPI.updatePerson(
-    omit(arg, isAdmin ? ["memberSince"] : ["memberSince", "memberUntil"])
-  );
-  if (!Number.isInteger(count)) {
-    return { success: false, message: "Something wrong happened" };
+  try {
+    const person = await dataSources.personAPI.updatePerson(
+      omit(arg, isAdmin ? ["memberSince"] : ["memberSince", "memberUntil"])
+    );
+    return {
+      success: true,
+      message: `success`,
+      person,
+    };
+  } catch (err) {
+    return { success: false, message: err.message };
   }
-  return {
-    success: true,
-    message: `${count} ${count !== 1 ? "people" : "person"} updated`,
-    person,
-  };
 };
 
 /**
@@ -229,18 +231,16 @@ const approveMembershipResolver: ResolverFn<
       message: "Please log in as executive",
     };
   }
-  const result = await dataSources.personAPI.approveMembership(arg);
-  if (typeof result === "string") {
+  try {
+    const person = await dataSources.personAPI.approveMembership(arg);
     return {
-      success: false,
-      message: result,
+      success: true,
+      message: `Hooray!🎉 ${person.englishName} is now a member of us`,
+      person,
     };
+  } catch (err) {
+    return { success: false, message: err.message };
   }
-  return {
-    success: true,
-    message: `Hooray!🎉 ${result.englishName} is now a member of us`,
-    person: result,
-  };
 };
 
 /** The resolvers associated with the Person model */

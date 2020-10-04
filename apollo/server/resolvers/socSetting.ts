@@ -79,6 +79,12 @@ const initClientKeysResolver: ResolverFn<
   { id, secret },
   { dataSources }
 ): Promise<ClientKeysUpdateResponse> => {
+  const hasExecutives = Boolean(
+    await dataSources.executiveAPI.countExecutives()
+  );
+  if (hasExecutives) {
+    return { success: false, message: "You have no permission to read this" };
+  }
   const idResult = await dataSources.socSettingAPI.updateSocSetting({
     key: CLIENT_ID_KEY,
     value: id,
@@ -114,11 +120,12 @@ const updateSocSettingResolver: ResolverFn<
   if (!isAdmin || !editableKeys.includes(arg.key)) {
     return { success: false, message: "You have no permission to do this" };
   }
-  const socSetting = await dataSources.socSettingAPI.updateSocSetting(arg);
-  if (!socSetting) {
-    return { success: false, message: "Something wrong happened" };
+  try {
+    const socSetting = await dataSources.socSettingAPI.updateSocSetting(arg);
+    return { success: true, message: "success", socSetting };
+  } catch (err) {
+    return { success: false, message: err.message };
   }
-  return { success: true, message: "success", socSetting };
 };
 
 /**

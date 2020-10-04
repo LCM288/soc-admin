@@ -39,7 +39,7 @@ const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = async (
   { user, dataSources }
 ): Promise<ExecutiveAttributes[]> => {
   const executives = await dataSources.executiveAPI.findExecutives();
-  if (executives.map((executive) => executive.sid).includes(user?.sid ?? "")) {
+  if (user && executives.map((executive) => executive.sid).includes(user.sid)) {
     return executives;
   }
   throw new Error("You have no permission to read this");
@@ -59,13 +59,10 @@ const executiveResolver: ResolverFn<
   { sid },
   { user, dataSources }
 ): Promise<ExecutiveAttributes | null> => {
-  if (user?.sid === sid) {
-    return dataSources.executiveAPI.findExecutive(sid);
-  }
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
-  if (!isAdmin) {
+  if (!isAdmin && user?.sid !== sid) {
     throw new Error("You have no permission to read this");
   }
   return dataSources.executiveAPI.findExecutive(sid);
@@ -101,15 +98,18 @@ const newExecutiveResolver: ResolverFn<
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
-  // TODO: count admin, allow new executive if executives count is 0
-  if (!isAdmin) {
+  const hasExecutives = Boolean(
+    await dataSources.executiveAPI.countExecutives()
+  );
+  if (!isAdmin && hasExecutives) {
     return { success: false, message: "You have no permission to do this" };
   }
-  const executive = await dataSources.executiveAPI.addNewExecutive(arg);
-  if (!executive) {
-    return { success: false, message: "Something wrong happened" };
+  try {
+    const executive = await dataSources.executiveAPI.addNewExecutive(arg);
+    return { success: true, message: "success", executive };
+  } catch (err) {
+    return { success: false, message: err.message };
   }
-  return { success: true, message: "success", executive };
 };
 
 /**
@@ -129,17 +129,16 @@ const updateExecutiveResolver: ResolverFn<
   if (!isAdmin) {
     return { success: false, message: "You have no permission to do this" };
   }
-  const [count, [executive]] = await dataSources.executiveAPI.updateExecutive(
-    arg
-  );
-  if (!Number.isInteger(count)) {
-    return { success: false, message: "Something wrong happened" };
+  try {
+    const executive = await dataSources.executiveAPI.updateExecutive(arg);
+    return {
+      success: true,
+      message: `success`,
+      executive,
+    };
+  } catch (err) {
+    return { success: false, message: err.message };
   }
-  return {
-    success: true,
-    message: `${count} executive${count !== 1 ? "s" : ""} updated`,
-    executive,
-  };
 };
 
 /** The resolvers associated with the Executive model */

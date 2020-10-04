@@ -73,14 +73,14 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
    */
   public async updateExecutive(
     arg: ExecutiveUpdateAttributes
-  ): Promise<[number, ExecutiveAttributes[]]> {
+  ): Promise<ExecutiveAttributes> {
     const [count, executives] = await this.store.update(arg, {
       where: { sid: arg.sid },
       returning: true,
     });
-    return [
-      count,
-      [...executives].map((executive) => executive.get({ plain: true })),
-    ];
+    if (!count) {
+      throw new Error(`Cannot update executive record for sid ${arg.sid}`);
+    }
+    return executives[0].get({ plain: true });
   }
 }

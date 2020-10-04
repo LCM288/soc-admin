@@ -161,76 +161,75 @@ export default class PersonAPI extends DataSource<ContextBase> {
    */
   public async updatePerson(
     arg: PersonUpdateAttributes
-  ): Promise<[number, PersonAttributes[]]> {
+  ): Promise<PersonAttributes> {
     const [count, people] = await this.store.update(arg, {
       where: { sid: arg.sid },
       returning: true,
     });
-    return [count, [...people].map((person) => person.get({ plain: true }))];
+    if (!count) {
+      throw new Error(`Cannot update person record for sid ${arg.sid}`);
+    }
+    return people[0].get({ plain: true });
   }
 
   /**
    * Approve someone's membership
    * @async
    * @param {ApproveMembershipAttribute} arg - The arg for the approval
-   * @returns The updated person if successful or a string explaining why it failed
+   * @returns The updated person
    */
   public async approveMembership({
     sid,
     memberUntil,
-  }: ApproveMembershipAttribute): Promise<PersonAttributes | string> {
-    try {
-      const result = await this.sequelize.transaction(async (t) => {
-        const person = await this.store.findOne({
-          where: {
-            [Op.and]: {
-              sid,
-              [Op.or]: [
-                { memberSince: { [Op.eq]: null } },
-                {
-                  [Op.and]: [
-                    Sequelize.where(
-                      Sequelize.cast(
-                        Sequelize.col("memberUntil"),
-                        "TIMESTAMP WITH TIME ZONE"
-                      ),
-                      Op.lt,
-                      Sequelize.fn("NOW")
+  }: ApproveMembershipAttribute): Promise<PersonAttributes> {
+    const result = await this.sequelize.transaction(async (t) => {
+      const person = await this.store.findOne({
+        where: {
+          [Op.and]: {
+            sid,
+            [Op.or]: [
+              { memberSince: { [Op.eq]: null } },
+              {
+                [Op.and]: [
+                  Sequelize.where(
+                    Sequelize.cast(
+                      Sequelize.col("memberUntil"),
+                      "TIMESTAMP WITH TIME ZONE"
                     ),
-                    Sequelize.where(
-                      Sequelize.cast(
-                        Sequelize.col("memberUntil"),
-                        "TIMESTAMP WITH TIME ZONE"
-                      ),
-                      Op.lt,
-                      Sequelize.col("updatedAt")
+                    Op.lt,
+                    Sequelize.fn("NOW")
+                  ),
+                  Sequelize.where(
+                    Sequelize.cast(
+                      Sequelize.col("memberUntil"),
+                      "TIMESTAMP WITH TIME ZONE"
                     ),
-                  ],
-                },
-              ],
-            },
+                    Op.lt,
+                    Sequelize.col("updatedAt")
+                  ),
+                ],
+              },
+            ],
           },
-          transaction: t,
-        });
-        if (!person) {
-          throw new Error(`Cannot find registration record for sid ${sid}`);
-        }
-        person
-          .set("memberUntil", memberUntil)
-          .set("memberSince", DateTime.local().toISO())
-          .save({ transaction: t });
-        return this.store.findOne({
-          where: { sid },
-          transaction: t,
-          raw: true,
-        });
+        },
+        transaction: t,
       });
-      if (!result) {
+      if (!person) {
         throw new Error(`Cannot find registration record for sid ${sid}`);
       }
-      return result;
-    } catch (err) {
-      return err.message as string;
+      person
+        .set("memberUntil", memberUntil)
+        .set("memberSince", DateTime.local().toISO())
+        .save({ transaction: t });
+      return this.store.findOne({
+        where: { sid },
+        transaction: t,
+        raw: true,
+      });
+    });
+    if (!result) {
+      throw new Error(`Cannot find registration record for sid ${sid}`);
     }
+    return result;
   }
 }
