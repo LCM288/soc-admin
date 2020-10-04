@@ -11,29 +11,6 @@ import {
   ExecutiveUpdateAttributes,
 } from "@/models/Executive";
 import { ContextBase } from "@/types/datasources";
-import { compact } from "lodash";
-
-/**
- * Transforms the data from the Executive model to plain attributes
- * @internal
- * @param executive - An instance of the Executive model
- * @returns Plain attributes for the Executive instance
- */
-const transformData = (executive: Executive): ExecutiveAttributes => {
-  return executive.get({ plain: true });
-};
-
-/**
- * Transforms the data from the Executive model to plain attributes
- * @internal
- * @param executive - An instance of the Executive model
- * @returns Plain attributes for the Executive instance
- */
-const transformDataOptional = (
-  executive: Executive | null
-): ExecutiveAttributes | undefined => {
-  return executive?.get({ plain: true });
-};
 
 /** An API to retrieve data from the Executive store */
 export default class ExecutiveAPI extends DataSource<ContextBase> {
@@ -52,13 +29,10 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
   /**
    * Find executive by sid
    * @async
-   * @returns An instance of executive or undefined if not found
+   * @returns An instance of executive or null if not found
    */
-  public async findExecutive(
-    sid: string
-  ): Promise<ExecutiveAttributes | undefined> {
-    const executive = await this.store.findOne({ where: { sid } });
-    return transformDataOptional(executive);
+  public async findExecutive(sid: string): Promise<ExecutiveAttributes | null> {
+    return this.store.findOne({ where: { sid }, raw: true });
   }
 
   /**
@@ -76,8 +50,7 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
    * @returns {Promise<ExecutiveAttributes[]>} An array of executives
    */
   public async findExecutives(): Promise<ExecutiveAttributes[]> {
-    const executives = await this.store.findAll();
-    return compact(executives.map(transformData));
+    return this.store.findAll({ raw: true });
   }
 
   /**
@@ -89,23 +62,25 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
   public async addNewExecutive(
     arg: ExecutiveCreationAttributes
   ): Promise<ExecutiveAttributes> {
-    const executive = await this.store.create(arg);
-    return transformData(executive);
+    return (await this.store.create(arg)).get({ plain: true });
   }
 
   /**
    * Update an executive
    * @async
-   * @param {ExecutiveCreationAttributes} arg - The arg for the executive
-   * @returns Number of executives updated and instances of updated executives
+   * @param arg - The arg for updating the executive
+   * @returns The updated executive
    */
   public async updateExecutive(
     arg: ExecutiveUpdateAttributes
-  ): Promise<[number, ExecutiveAttributes[]]> {
-    const [count, executive] = await this.store.update(arg, {
+  ): Promise<ExecutiveAttributes> {
+    const [count, executives] = await this.store.update(arg, {
       where: { sid: arg.sid },
       returning: true,
     });
-    return [count, [...executive].map(transformData)];
+    if (!count) {
+      throw new Error(`Cannot update executive record for sid ${arg.sid}`);
+    }
+    return executives[0].get({ plain: true });
   }
 }

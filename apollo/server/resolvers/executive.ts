@@ -33,24 +33,38 @@ interface ExecutiveResolverArgs {
  * @returns All the executives
  * @category Query Resolver
  */
-const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = (
+const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = async (
   _,
   __,
-  { dataSources }
+  { user, dataSources }
 ): Promise<ExecutiveAttributes[]> => {
-  return dataSources.executiveAPI.findExecutives();
+  const executives = await dataSources.executiveAPI.findExecutives();
+  if (user && executives.map((executive) => executive.sid).includes(user.sid)) {
+    return executives;
+  }
+  throw new Error("You have no permission to read this");
 };
 
 /**
  * The resolver for executive Query
  * @async
- * @returns The executive matches the sid or undefined if not found
+ * @returns The executive matches the sid or null if not found
  * @category Query Resolver
  */
 const executiveResolver: ResolverFn<
   ExecutiveResolverArgs,
-  ExecutiveAttributes | undefined
-> = (_, { sid }, { dataSources }): Promise<ExecutiveAttributes | undefined> => {
+  ExecutiveAttributes | null
+> = async (
+  _,
+  { sid },
+  { user, dataSources }
+): Promise<ExecutiveAttributes | null> => {
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  if (!isAdmin) {
+    throw new Error("You have no permission to read this");
+  }
   return dataSources.executiveAPI.findExecutive(sid);
 };
 
@@ -80,12 +94,22 @@ const countExecutivesResolver: ResolverFn<null, number> = (
 const newExecutiveResolver: ResolverFn<
   ExecutiveCreationAttributes,
   ExecutiveUpdateResponse
-> = async (_, arg, { dataSources }): Promise<ExecutiveUpdateResponse> => {
-  const executive = await dataSources.executiveAPI.addNewExecutive(arg);
-  if (!executive) {
-    return { success: false, message: "Something wrong happened" };
+> = async (_, arg, { user, dataSources }): Promise<ExecutiveUpdateResponse> => {
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  const hasExecutives = Boolean(
+    await dataSources.executiveAPI.countExecutives()
+  );
+  if (!isAdmin && hasExecutives) {
+    return { success: false, message: "You have no permission to do this" };
   }
-  return { success: true, message: "success", executive };
+  try {
+    const executive = await dataSources.executiveAPI.addNewExecutive(arg);
+    return { success: true, message: "success", executive };
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
 };
 
 /**
@@ -98,18 +122,23 @@ const newExecutiveResolver: ResolverFn<
 const updateExecutiveResolver: ResolverFn<
   ExecutiveUpdateAttributes,
   ExecutiveUpdateResponse
-> = async (_, arg, { dataSources }): Promise<ExecutiveUpdateResponse> => {
-  const [count, [executive]] = await dataSources.executiveAPI.updateExecutive(
-    arg
+> = async (_, arg, { user, dataSources }): Promise<ExecutiveUpdateResponse> => {
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
-  if (!Number.isInteger(count)) {
-    return { success: false, message: "Something wrong happened" };
+  if (!isAdmin) {
+    return { success: false, message: "You have no permission to do this" };
   }
-  return {
-    success: true,
-    message: `${count} executive${count !== 1 ? "s" : ""} updated`,
-    executive,
-  };
+  try {
+    const executive = await dataSources.executiveAPI.updateExecutive(arg);
+    return {
+      success: true,
+      message: `success`,
+      executive,
+    };
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
 };
 
 /** The resolvers associated with the Executive model */

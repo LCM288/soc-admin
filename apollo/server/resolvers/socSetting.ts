@@ -11,6 +11,8 @@ import {
   SocSettingCreationAttributes,
 } from "@/models/SocSetting";
 
+const editableKeys = ["client_id", "client_secret"];
+
 /** The response when initiating with client keys */
 interface ClientKeysUpdateResponse {
   /** Whether the mutation is successful or not */
@@ -54,7 +56,10 @@ const socSettingsResolver: ResolverFn<unknown, SocSettingAttributes[]> = (
   __,
   { dataSources }
 ): Promise<SocSettingAttributes[]> => {
-  return dataSources.socSettingAPI.findSocSettings();
+  if (process.env.NODE_ENV === "development") {
+    return dataSources.socSettingAPI.findSocSettings();
+  }
+  throw new Error("You have no permission to read this");
 };
 
 // Mutation resolvers
@@ -74,6 +79,12 @@ const initClientKeysResolver: ResolverFn<
   { id, secret },
   { dataSources }
 ): Promise<ClientKeysUpdateResponse> => {
+  const hasExecutives = Boolean(
+    await dataSources.executiveAPI.countExecutives()
+  );
+  if (hasExecutives) {
+    return { success: false, message: "You have no permission to read this" };
+  }
   const idResult = await dataSources.socSettingAPI.updateSocSetting({
     key: CLIENT_ID_KEY,
     value: id,
@@ -98,12 +109,23 @@ const initClientKeysResolver: ResolverFn<
 const updateSocSettingResolver: ResolverFn<
   SocSettingCreationAttributes,
   SocSettingUpdateResponse
-> = async (_, arg, { dataSources }): Promise<SocSettingUpdateResponse> => {
-  const socSetting = await dataSources.socSettingAPI.updateSocSetting(arg);
-  if (!socSetting) {
-    return { success: false, message: "Something wrong happened" };
+> = async (
+  _,
+  arg,
+  { user, dataSources }
+): Promise<SocSettingUpdateResponse> => {
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  if (!isAdmin || !editableKeys.includes(arg.key)) {
+    return { success: false, message: "You have no permission to do this" };
   }
-  return { success: true, message: "success", socSetting };
+  try {
+    const socSetting = await dataSources.socSettingAPI.updateSocSetting(arg);
+    return { success: true, message: "success", socSetting };
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
 };
 
 /**
@@ -116,14 +138,24 @@ const updateSocSettingResolver: ResolverFn<
 const deleteSocSettingResolver: ResolverFn<
   { key: string },
   SocSettingDeleteResponse
-> = async (_, { key }, { dataSources }): Promise<SocSettingDeleteResponse> => {
+> = async (
+  _,
+  { key },
+  { user, dataSources }
+): Promise<SocSettingDeleteResponse> => {
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  if (!isAdmin || !editableKeys.includes(key)) {
+    return { success: false, message: "You have no permission to do this" };
+  }
   const count = await dataSources.socSettingAPI.deleteSocSetting({ key });
-  if (!Number.isInteger(count)) {
-    return { success: false, message: "Something wrong happened" };
+  if (!count) {
+    return { success: false, message: `cannot remove setting ${key}` };
   }
   return {
     success: true,
-    message: `${count} setting${count !== 1 ? "s" : ""} removed`,
+    message: `setting "${key}" removed`,
   };
 };
 
