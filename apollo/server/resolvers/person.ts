@@ -126,17 +126,17 @@ const membersResolver: ResolverFn<unknown, PersonAttributes[]> = async (
 /**
  * The resolver for person Query
  * @async
- * @returns The person with the given sid or undefined if not found
+ * @returns The person with the given sid or null if not found
  * @category Query Resolver
  */
 const personResolver: ResolverFn<
   PersonResolverArgs,
-  PersonAttributes | undefined
+  PersonAttributes | null
 > = async (
   _,
   { sid },
   { user, dataSources }
-): Promise<PersonAttributes | undefined> => {
+): Promise<PersonAttributes | null> => {
   if (user?.sid === sid) {
     return dataSources.personAPI.findPerson(sid);
   }

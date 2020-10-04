@@ -11,16 +11,6 @@ import {
 } from "@/models/SocSetting";
 import { ContextBase } from "@/types/datasources";
 
-/**
- * Transforms the data from the SocSetting model to plain attributes
- * @internal
- * @param {SocSetting} socSetting - An instance of the SocSetting model
- * @returns {SocSettingAttributes} Plain attributes for the SocSetting instance
- */
-const transformData = (socSetting: SocSetting): SocSettingAttributes => {
-  return socSetting.get({ plain: true });
-};
-
 /** An API to retrieve data from the SocSetting store */
 export default class SocSettingAPI extends DataSource<ContextBase> {
   /** The {@link SocSetting} store */
@@ -41,8 +31,7 @@ export default class SocSettingAPI extends DataSource<ContextBase> {
    * @returns {Promise<SocSettingAttributes[]>} An array of soc settings
    */
   public async findSocSettings(): Promise<SocSettingAttributes[]> {
-    const socSettings = await this.store.findAll();
-    return socSettings.map(transformData);
+    return this.store.findAll({ raw: true });
   }
 
   /**
@@ -55,7 +44,7 @@ export default class SocSettingAPI extends DataSource<ContextBase> {
     arg: SocSettingCreationAttributes
   ): Promise<SocSettingAttributes> {
     const [socSetting] = await this.store.upsert(arg);
-    return transformData(socSetting);
+    return socSetting.get({ plain: true });
   }
 
   /**

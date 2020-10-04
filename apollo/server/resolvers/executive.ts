@@ -48,17 +48,17 @@ const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = async (
 /**
  * The resolver for executive Query
  * @async
- * @returns The executive matches the sid or undefined if not found
+ * @returns The executive matches the sid or null if not found
  * @category Query Resolver
  */
 const executiveResolver: ResolverFn<
   ExecutiveResolverArgs,
-  ExecutiveAttributes | undefined
+  ExecutiveAttributes | null
 > = async (
   _,
   { sid },
   { user, dataSources }
-): Promise<ExecutiveAttributes | undefined> => {
+): Promise<ExecutiveAttributes | null> => {
   if (user?.sid === sid) {
     return dataSources.executiveAPI.findExecutive(sid);
   }

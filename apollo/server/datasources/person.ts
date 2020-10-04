@@ -19,28 +19,6 @@ export interface ApproveMembershipAttribute {
   memberUntil: string | null;
 }
 
-/**
- * Transforms the data from the Person model to plain attributes
- * @internal
- * @param {Person} person - An instance of the Person model
- * @returns {PersonAttributes} Plain attributes for the Person instance
- */
-const transformData = (person: Person): PersonAttributes => {
-  return person.get({ plain: true });
-};
-
-/**
- * Transforms the data from the Person model to plain attributes
- * @internal
- * @param {Person} person - An instance of the Person model
- * @returns {PersonAttributes} Plain attributes for the Person instance
- */
-const transformDataOptional = (
-  person: Person | null
-): PersonAttributes | undefined => {
-  return person?.get({ plain: true });
-};
-
 /** An API to retrieve data from the Person store */
 export default class PersonAPI extends DataSource<ContextBase> {
   /** The {@link Person} store */
@@ -66,8 +44,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
    * @returns {Promise<PersonAttributes[]>} An array of people
    */
   public async findPeople(): Promise<PersonAttributes[]> {
-    const people = await this.store.findAll();
-    return people.map(transformData);
+    return this.store.findAll({ raw: true });
   }
 
   /**
@@ -158,11 +135,10 @@ export default class PersonAPI extends DataSource<ContextBase> {
    * Find a person by sid
    * @param {string} sid - The sid of the person
    * @async
-   * @returns {Promise<PersonAttributes>} The matched person or undefined if not found
+   * @returns {Promise<PersonAttributes>} The matched person or null if not found
    */
-  public async findPerson(sid: string): Promise<PersonAttributes | undefined> {
-    const person = await this.store.findOne({ where: { sid } });
-    return transformDataOptional(person);
+  public async findPerson(sid: string): Promise<PersonAttributes | null> {
+    return this.store.findOne({ where: { sid }, raw: true });
   }
 
   /**
@@ -174,8 +150,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
   public async addNewPerson(
     arg: PersonCreationAttributes
   ): Promise<PersonAttributes> {
-    const person = await this.store.create(arg);
-    return transformData(person);
+    return (await this.store.create(arg)).get({ plain: true });
   }
 
   /**
@@ -191,7 +166,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
       where: { sid: arg.sid },
       returning: true,
     });
-    return [count, [...people].map(transformData)];
+    return [count, [...people].map((person) => person.get({ plain: true }))];
   }
 
   /**
