@@ -1,6 +1,9 @@
 {
   "name": "soc-admin",
   "version": "0.1.0",
+  "engines": {
+    "node": "12.x"
+  },
   "private": false,
   "scripts": {
     "dev": "next dev",
