@@ -4,13 +4,7 @@ import { useRouter } from "next/router";
 import { User } from "@/types/datasources";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import toast from "utils/toast";
-import {
-  Button,
-  Form,
-  Section,
-  Container,
-  Heading,
-} from "react-bulma-components";
+import { Button, Section, Container, Heading } from "react-bulma-components";
 import { Major } from "@/models/Major";
 import { College } from "@/models/College";
 import { Person } from "@/models/Person";

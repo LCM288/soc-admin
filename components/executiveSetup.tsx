@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import toast from "utils/toast";
 
-import {
-  Button,
-  Section,
-  Container,
-  Form,
-  Heading,
-} from "react-bulma-components";
-import { DateTime, Info } from "luxon";
+import { Button, Form } from "react-bulma-components";
+import { DateTime } from "luxon";
 import { User } from "@/types/datasources";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import newExecutiveMutation from "../apollo/queries/executive/newExecutive.gql";
 import updateSocSettingMutation from "../apollo/queries/socSetting/updateSocSetting.gql";
 
@@ -41,22 +36,27 @@ const ExecutiveSetup: React.FunctionComponent<Props> = ({ user }: Props) => {
   const setExecutive = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
     if (!user) {
-      // TODO: toast
+      toast.danger("User is not found", {
+        position: toast.POSITION.TOP_LEFT,
+      });
     } else {
-      await newExecutive({
-        variables: {
-          sid: user?.sid,
-          nickname,
-          pos: position,
-        },
-      });
-      await updateSocSetting({
-        variables: {
-          key: "created_at",
-          value: DateTime.utc().toISO(),
-        },
-      });
-      window.location.reload();
+      try {
+        const newExecutivePayload = await newExecutive({
+          variables: {
+            sid: user.sid,
+            nickname,
+            pos: position,
+          },
+        });
+        if (!newExecutivePayload.data.newExecutive.success) {
+          throw new Error(newExecutivePayload.data.newExecutive.message);
+        }
+        window.location.reload();
+      } catch (err) {
+        toast.danger(err.message, {
+          position: toast.POSITION.TOP_LEFT,
+        });
+      }
     }
   };
 
