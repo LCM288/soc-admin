@@ -62,7 +62,7 @@ const executiveResolver: ResolverFn<
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
-  if (!isAdmin && user?.sid !== sid) {
+  if (!isAdmin) {
     throw new Error("You have no permission to read this");
   }
   return dataSources.executiveAPI.findExecutive(sid);

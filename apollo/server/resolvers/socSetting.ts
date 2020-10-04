@@ -150,12 +150,12 @@ const deleteSocSettingResolver: ResolverFn<
     return { success: false, message: "You have no permission to do this" };
   }
   const count = await dataSources.socSettingAPI.deleteSocSetting({ key });
-  if (!Number.isInteger(count)) {
-    return { success: false, message: "Something wrong happened" };
+  if (!count) {
+    return { success: false, message: `cannot remove setting ${key}` };
   }
   return {
     success: true,
-    message: `${count} setting${count !== 1 ? "s" : ""} removed`,
+    message: `setting "${key}" removed`,
   };
 };
 
