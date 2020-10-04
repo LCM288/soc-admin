@@ -17,13 +17,7 @@ interface Labels {
   month: string;
 }
 
-const formatOptionLabel = ({
-  label,
-  month,
-}: {
-  label: string;
-  month: string;
-}) => (
+const formatOptionLabel = ({ label, month }: Labels) => (
   <div className="is-flex">
     <div>{label}</div>
     <Tag className="ml-2" color="info">
