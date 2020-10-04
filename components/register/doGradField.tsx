@@ -11,6 +11,12 @@ interface Props {
   setDoGrad: (value: string) => void;
 }
 
+interface Labels {
+  value: string;
+  label: string;
+  month: string;
+}
+
 const formatOptionLabel = ({
   label,
   month,
@@ -60,11 +66,7 @@ const DOGradField: React.FunctionComponent<Props> = ({
           <ReactSelect
             value={termEnd}
             options={termEnds}
-            onChange={(input: {
-              value: string;
-              label: string;
-              month: string;
-            }): void => {
+            onChange={(input: Labels): void => {
               setDoGrad(input.value);
             }}
             formatOptionLabel={formatOptionLabel}

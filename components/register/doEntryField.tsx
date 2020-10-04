@@ -11,6 +11,12 @@ interface Props {
   setDoEntry: (value: string) => void;
 }
 
+interface Labels {
+  value: string;
+  label: string;
+  month: string;
+}
+
 const formatOptionLabel = ({
   label,
   month,
@@ -61,11 +67,7 @@ const DOEntryField: React.FunctionComponent<Props> = ({
           <ReactSelect
             value={termStart}
             options={termStarts}
-            onChange={(input: {
-              value: string;
-              label: string;
-              month: string;
-            }): void => {
+            onChange={(input: Labels): void => {
               setDoEntry(input.value);
             }}
             formatOptionLabel={formatOptionLabel}

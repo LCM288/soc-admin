@@ -15,6 +15,12 @@ interface Props {
   setMajorCode: (value: string) => void;
 }
 
+interface Labels {
+  value: string;
+  label: string;
+  faculties: { value: string; label: string }[];
+}
+
 const facultyColor: { [index: string]: string } = {
   ART: "dark",
   BAF: "info",
@@ -28,14 +34,7 @@ const facultyColor: { [index: string]: string } = {
   IDM: "white",
 };
 
-const formatMajorOptionLabel = ({
-  label,
-  faculties,
-}: {
-  value: string;
-  label: string;
-  faculties: { value: string; label: string }[];
-}) => (
+const formatMajorOptionLabel = ({ label, faculties }: Labels) => (
   <Level style={{ flexWrap: "wrap" }}>
     <Level.Side align="left">
       <Level.Item>{label}</Level.Item>
@@ -102,11 +101,7 @@ const MajorField: React.FunctionComponent<Props> = ({
         <ReactSelect
           value={major}
           options={majors}
-          onChange={(input: {
-            value: string;
-            label: string;
-            faculties: { value: string; label: string }[];
-          }): void => {
+          onChange={(input: Labels): void => {
             setMajorCode(input.value);
           }}
           formatOptionLabel={formatMajorOptionLabel}
