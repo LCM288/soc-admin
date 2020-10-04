@@ -1,3 +1,9 @@
 .select:not(.is-multiple):not(.is-loading)::after {
   z-index: auto !important;
 }
+
+.hidden-input {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+}

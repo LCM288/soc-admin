@@ -27,7 +27,9 @@ const facultiesResolver: ResolverFn<unknown, Faculty[]> = (
   { dataSources }
 ): Faculty[] => {
   return compact(
-    faculties.map((faculty) => dataSources.facultyAPI.getFaculty(faculty))
+    (faculties as string[]).map((faculty) =>
+      dataSources.facultyAPI.getFaculty(faculty)
+    )
   );
 };
 
