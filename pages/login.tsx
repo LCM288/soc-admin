@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const baseUrl = `${protocol}://${ctx.req.headers.host}`;
   const clientId = await getSetting(CLIENT_ID_KEY);
   const executives = await countExecutives();
-  if (!executives && !clientId) {
+  if (!executives) {
     ctx.res.statusCode = 307;
     ctx.res.setHeader("Location", "/initialise");
     return EMPTY_PROPS;
