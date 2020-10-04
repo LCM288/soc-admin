@@ -38,19 +38,19 @@ const ExecutiveSetup: React.FunctionComponent<Props> = ({ user }: Props) => {
   const [nickname, setNickname] = useState("");
   const [position, setPosition] = useState("");
 
-  const setExecutive = (e: React.FormEvent<HTMLElement>) => {
+  const setExecutive = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
     if (!user) {
       // TODO: toast
     } else {
-      newExecutive({
+      await newExecutive({
         variables: {
           sid: user?.sid,
           nickname,
           pos: position,
         },
       });
-      updateSocSetting({
+      await updateSocSetting({
         variables: {
           key: "created_at",
           value: DateTime.utc().toISO(),

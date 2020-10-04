@@ -75,11 +75,11 @@ export default function Register({
     collegesQueryResult.error ||
     personQueryResult.error
   ) {
-    const msg =
+    const error =
       majorsQueryResult.error ||
       collegesQueryResult.error ||
       personQueryResult.error;
-    toast.danger(msg?.message, {
+    toast.danger(error?.message, {
       position: toast.POSITION.TOP_LEFT,
     });
   }

@@ -2,14 +2,8 @@ import React, { useState } from "react";
 import { DateTime } from "luxon";
 import { useRouter } from "next/router";
 import { Person } from "@/models/Person";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import {
-  Button,
-  Section,
-  Container,
-  Form,
-  Heading,
-} from "react-bulma-components";
+import { useQuery } from "@apollo/react-hooks";
+import { Button, Section, Container, Heading } from "react-bulma-components";
 import { ServerSideProps } from "utils/getServerSideProps";
 import toast from "utils/toast";
 import executiveQuery from "apollo/queries/executive/executive.gql";
@@ -17,10 +11,6 @@ import ExecutiveSetup from "components/executiveSetup";
 import personQuery from "../apollo/queries/person/person.gql";
 import countExecutivesQuery from "../apollo/queries/executive/countExecutives.gql";
 import socSettingsQuery from "../apollo/queries/socSetting/socSettings.gql";
-import newExecutiveMutation from "../apollo/queries/executive/newExecutive.gql";
-import updateSocSettingMutation from "../apollo/queries/socSetting/updateSocSetting.gql";
-
-const { Input, Field, Control, Label } = Form;
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -36,7 +26,7 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
   const countExecutivesQueryResult = useQuery(countExecutivesQuery, {
     fetchPolicy: "network-only",
   });
-  const { data, loading, error } = useQuery(executiveQuery, {
+  const executiveQueryResult = useQuery(executiveQuery, {
     variables: { sid: user?.sid },
   });
 
@@ -83,7 +73,7 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
     return g;
   };
 
-  if (data?.executive) {
+  if (executiveQueryResult.data?.executive) {
     router.replace("/admin");
     return <></>;
   }
@@ -92,21 +82,21 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
     countExecutivesQueryResult.loading ||
     personQueryResult.loading ||
     socSettingsQueryResult.loading ||
-    loading
+    executiveQueryResult.loading
   )
     return <p>loading</p>;
   if (
     countExecutivesQueryResult.error ||
     personQueryResult.error ||
     socSettingsQueryResult.error ||
-    error
+    executiveQueryResult.error
   ) {
-    const msg =
+    const error =
       countExecutivesQueryResult.error ||
       personQueryResult.error ||
       socSettingsQueryResult.error ||
-      error;
-    toast.danger(msg?.message, {
+      executiveQueryResult.error;
+    toast.danger(error?.message, {
       position: toast.POSITION.TOP_LEFT,
     });
   }

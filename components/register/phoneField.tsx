@@ -17,6 +17,7 @@ const PhoneField: React.FunctionComponent<Props> = ({
     <Field>
       <Label>Phone Number</Label>
       <Control>
+        {/* TODO: improve tel pattern */}
         <Input
           type="tel"
           value={phone}

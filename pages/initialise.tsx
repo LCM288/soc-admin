@@ -25,23 +25,21 @@ export default function Initialise(): React.ReactElement {
 
   const [clientId, setClientId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
-  const formSubmit = (e: React.FormEvent<HTMLElement>) => {
+  const formSubmit = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
-    updateSocSetting({
+    await updateSocSetting({
       variables: {
         key: CLIENT_ID_KEY,
         value: clientId,
       },
-    }).then(() => {
-      updateSocSetting({
-        variables: {
-          key: CLIENT_SECRET_KEY,
-          value: clientSecret,
-        },
-      }).then(() => {
-        router.push("/login");
-      });
     });
+    await updateSocSetting({
+      variables: {
+        key: CLIENT_SECRET_KEY,
+        value: clientSecret,
+      },
+    });
+    router.push("/login");
   };
 
   return (

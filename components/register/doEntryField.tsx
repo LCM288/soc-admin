@@ -31,7 +31,7 @@ const DOEntryField: React.FunctionComponent<Props> = ({
   setDoEntry,
 }: Props) => {
   const termStarts = useMemo(() => {
-    const calcTermStarts = (yearDiff: number) => {
+    const calcTermStart = (yearDiff: number) => {
       const year = yearDiff + DateTime.local().year;
       return [
         {
@@ -47,7 +47,7 @@ const DOEntryField: React.FunctionComponent<Props> = ({
       ];
     };
     return [0, -1, -2, -3, -4, -5, -6, -7, -8]
-      .map((i) => calcTermStarts(i))
+      .map((i) => calcTermStart(i))
       .flat();
   }, []);
 
