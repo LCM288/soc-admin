@@ -4,6 +4,7 @@
  */
 
 import { gql } from "apollo-server";
+import { Faculty } from "@/models/Faculty";
 
 /** A major program */
 export interface Major {
@@ -14,7 +15,7 @@ export interface Major {
   /** Major program's English name */
   englishName: string;
   /** The faculties that the major program belongs to */
-  faculties: string[];
+  faculties: string[] | Faculty[];
 }
 
 /**

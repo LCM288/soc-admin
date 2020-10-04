@@ -5,12 +5,21 @@
 
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
+import { CLIENT_ID_KEY, CLIENT_SECRET_KEY } from "utils/auth";
 import {
   SocSettingAttributes,
   SocSettingCreationAttributes,
 } from "@/models/SocSetting";
 
 const editableKeys = ["client_id", "client_secret"];
+
+/** The response when initiating with client keys */
+interface ClientKeysUpdateResponse {
+  /** Whether the mutation is successful or not */
+  success: boolean;
+  /** Additional information about the mutation */
+  message: string;
+}
 
 /** The response when mutating a single socSetting */
 interface SocSettingUpdateResponse {
@@ -30,6 +39,10 @@ interface SocSettingDeleteResponse {
   message: string;
 }
 
+interface ClientKeysAttributes {
+  id: string;
+  secret: string;
+}
 // Query resolvers
 
 /**
@@ -50,6 +63,35 @@ const socSettingsResolver: ResolverFn<unknown, SocSettingAttributes[]> = (
 };
 
 // Mutation resolvers
+
+/**
+ * The resolver for initClientKeys Mutation
+ * @async
+ * @param arg - The arguments for the initClientKeys mutation
+ * @returns The update response
+ * @category Mutation Resolver
+ */
+const initClientKeysResolver: ResolverFn<
+  ClientKeysAttributes,
+  ClientKeysUpdateResponse
+> = async (
+  _,
+  { id, secret },
+  { dataSources }
+): Promise<ClientKeysUpdateResponse> => {
+  const idResult = await dataSources.socSettingAPI.updateSocSetting({
+    key: CLIENT_ID_KEY,
+    value: id,
+  });
+  const secretResult = await dataSources.socSettingAPI.updateSocSetting({
+    key: CLIENT_SECRET_KEY,
+    value: secret,
+  });
+  if (!idResult || !secretResult) {
+    return { success: false, message: "Something wrong happened" };
+  }
+  return { success: true, message: "success" };
+};
 
 /**
  * The resolver for updateSocSetting Mutation
@@ -117,6 +159,8 @@ export const resolvers: Resolvers = {
     socSettings: socSettingsResolver,
   },
   Mutation: {
+    /** see {@link initClientKeysResolver} */
+    initClientKeys: initClientKeysResolver,
     /** see {@link updateSocSettingResolver} */
     updateSocSetting: updateSocSettingResolver,
     /** see {@link deleteSocSettingResolver} */
@@ -134,6 +178,7 @@ export const resolverTypeDefs = gql`
   }
 
   extend type Mutation {
+    initClientKeys(id: String!, secret: String!): ClientKeysUpdateResponse!
     updateSocSetting(key: String!, value: String!): SocSettingUpdateResponse!
     deleteSocSetting(key: String!): SocSettingUpdateResponse!
   }
@@ -142,5 +187,10 @@ export const resolverTypeDefs = gql`
     success: Boolean!
     message: String!
     socSetting: SocSetting
+  }
+
+  type ClientKeysUpdateResponse {
+    success: Boolean!
+    message: String!
   }
 `;
