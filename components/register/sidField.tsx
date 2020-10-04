@@ -3,9 +3,11 @@ import { Form } from "react-bulma-components";
 
 const { Input, Field, Control, Label } = Form;
 
-const SIDField: React.FunctionComponent<{
+interface Props {
   sid: string;
-}> = ({ sid }: { sid: string }) => {
+}
+
+const SIDField: React.FunctionComponent<Props> = ({ sid }: Props) => {
   return (
     <Field>
       <Label>Student ID</Label>

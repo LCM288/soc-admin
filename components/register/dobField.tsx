@@ -21,7 +21,6 @@ const DOBField: React.FunctionComponent<Props> = ({ dob, setDob }: Props) => {
       <Control>
         <DayPickerInput
           component={(props: any) => <Input {...props} />}
-          style={{ display: "block !important" }}
           classNames={{
             container: "",
             overlayWrapper: "DayPickerInput-OverlayWrapper",
@@ -34,9 +33,9 @@ const DOBField: React.FunctionComponent<Props> = ({ dob, setDob }: Props) => {
             return day.isValid ? day.toJSDate() : undefined;
           }}
           value={dob}
-          onDayChange={(day: Date) => {
-            const dayParse = DateTime.fromJSDate(day);
-            setDob(dayParse ? dayParse.toISODate() : "");
+          onDayChange={(date: Date) => {
+            const dateTime = DateTime.fromJSDate(date);
+            setDob(dateTime ? dateTime.toISODate() : "");
           }}
           placeholder="YYYY-MM-DD"
           dayPickerProps={{

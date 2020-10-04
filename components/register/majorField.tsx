@@ -5,6 +5,7 @@ import ReactSelect from "react-select";
 import { Major } from "@/models/Major";
 import { Faculty } from "@/models/Faculty";
 import { useQuery } from "@apollo/react-hooks";
+import toast from "utils/toast";
 import majorsQuery from "apollo/queries/major/majors.gql";
 
 const { Field, Label } = Form;
@@ -13,6 +14,7 @@ interface Props {
   majorCode: string;
   setMajorCode: (value: string) => void;
 }
+
 const facultyColor: { [index: string]: string } = {
   ART: "dark",
   BAF: "info",
@@ -85,7 +87,9 @@ const MajorField: React.FunctionComponent<Props> = ({
     }));
   }, [majorsQueryResult]);
   if (majorsQueryResult.error) {
-    return <div>error</div>;
+    toast.danger(majorsQueryResult.error.message, {
+      position: toast.POSITION.TOP_LEFT,
+    });
   }
   if (majorsQueryResult.loading) {
     return <div>loading</div>;
@@ -110,7 +114,7 @@ const MajorField: React.FunctionComponent<Props> = ({
         <input
           tabIndex={-1}
           autoComplete="off"
-          style={{ position: "absolute", opacity: 0, height: 0 }}
+          className="hidden-input"
           value={majorCode}
           onChange={() => {}}
           required

@@ -20,6 +20,7 @@ const EnglishNameField: React.FunctionComponent<Props> = ({
       <Label>English Name</Label>
       <Control>
         <Input
+          placeholder="English Name as in CU Link Card"
           value={englishName}
           onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
             setEnglishName(event.target.value)

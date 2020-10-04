@@ -18,7 +18,7 @@ const formatOptionLabel = ({
   label: string;
   month: string;
 }) => (
-  <div style={{ display: "flex" }}>
+  <div className="is-flex">
     <div>{label}</div>
     <Tag className="ml-2" color="info">
       {month}
@@ -30,9 +30,10 @@ const DOGradField: React.FunctionComponent<Props> = ({
   doGrad,
   setDoGrad,
 }: Props) => {
-  const termEnd = useMemo(() => {
-    const calcTermEnd = (yearDiff: number) => {
+  const termEnds = useMemo(() => {
+    const calcTermEnds = (yearDiff: number) => {
       const year = yearDiff + DateTime.local().year;
+      // `value` corresponds to the date where student status becomes ineffective
       return [
         {
           value: `${year + 1}-01-01`,
@@ -46,8 +47,10 @@ const DOGradField: React.FunctionComponent<Props> = ({
         },
       ];
     };
-    return [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => calcTermEnd(i)).flat();
+    return [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => calcTermEnds(i)).flat();
   }, []);
+
+  const termEnd = termEnds.find((term) => term.value === doGrad);
 
   return (
     <Field>
@@ -55,8 +58,8 @@ const DOGradField: React.FunctionComponent<Props> = ({
       <Control>
         <div>
           <ReactSelect
-            value={termEnd.find((term) => term.value === doGrad)}
-            options={termEnd}
+            value={termEnd}
+            options={termEnds}
             onChange={(input: {
               value: string;
               label: string;
@@ -69,7 +72,7 @@ const DOGradField: React.FunctionComponent<Props> = ({
           <input
             tabIndex={-1}
             autoComplete="off"
-            style={{ position: "absolute", opacity: 0, height: 0 }}
+            className="hidden-input"
             value={doGrad}
             onChange={() => {}}
             required

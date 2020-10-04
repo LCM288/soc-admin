@@ -4,6 +4,7 @@ import { Form } from "react-bulma-components";
 import ReactSelect from "react-select";
 import { College } from "@/models/College";
 import { useQuery } from "@apollo/react-hooks";
+import toast from "utils/toast";
 import collegesQuery from "apollo/queries/college/colleges.gql";
 
 const { Field, Control, Label } = Form;
@@ -37,7 +38,9 @@ const CollegeField: React.FunctionComponent<Props> = ({
     }));
   }, [collegesQueryResult]);
   if (collegesQueryResult.error) {
-    return <div>error</div>;
+    toast.danger(collegesQueryResult.error.message, {
+      position: toast.POSITION.TOP_LEFT,
+    });
   }
   if (collegesQueryResult.loading) {
     return <div>loading</div>;
@@ -58,7 +61,7 @@ const CollegeField: React.FunctionComponent<Props> = ({
           <input
             tabIndex={-1}
             autoComplete="off"
-            style={{ position: "absolute", opacity: 0, height: 0 }}
+            className="hidden-input"
             value={collegeCode}
             onChange={() => {}}
             required

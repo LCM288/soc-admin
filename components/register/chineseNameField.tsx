@@ -18,11 +18,11 @@ const ChineseNameField: React.FunctionComponent<Props> = ({
       <Label>Chinese Name</Label>
       <Control>
         <Input
+          placeholder="Chinese Name as in CU Link Card"
           value={chineseName}
           onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
             setChineseName(event.target.value)
           }
-          required
         />
       </Control>
     </Field>

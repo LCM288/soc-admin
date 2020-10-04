@@ -19,7 +19,7 @@ const EmailField: React.FunctionComponent<Props> = ({
       <Control>
         <Input
           type="email"
-          placeholder="Text input"
+          placeholder="Email address"
           value={email}
           onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
             setEmail(event.target.value)

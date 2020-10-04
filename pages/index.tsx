@@ -11,7 +11,9 @@ import {
   Heading,
 } from "react-bulma-components";
 import { ServerSideProps } from "utils/getServerSideProps";
+import toast from "utils/toast";
 import executiveQuery from "apollo/queries/executive/executive.gql";
+import ExecutiveSetup from "components/executiveSetup";
 import personQuery from "../apollo/queries/person/person.gql";
 import countExecutivesQuery from "../apollo/queries/executive/countExecutives.gql";
 import socSettingsQuery from "../apollo/queries/socSetting/socSettings.gql";
@@ -37,19 +39,6 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
   const { data, loading, error } = useQuery(executiveQuery, {
     variables: { sid: user?.sid },
   });
-  const [
-    newExecutive,
-    { loading: newExecutiveMutationLoading, error: newExecutiveMutationError },
-  ] = useMutation(newExecutiveMutation);
-  const [
-    updateSocSetting,
-    {
-      loading: updateSocSettingMutationLoading,
-      error: updateSocSettingMutationError,
-    },
-  ] = useMutation(updateSocSettingMutation);
-  const [nickname, setNickname] = useState("");
-  const [position, setPosition] = useState("");
 
   const logout = () => {
     router.push("/api/logout");
@@ -93,25 +82,6 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
 
     return g;
   };
-  const setExecutive = (e: React.FormEvent<HTMLElement>) => {
-    e.preventDefault();
-    newExecutive({
-      variables: {
-        sid: user?.sid,
-        nickname,
-        pos: position,
-      },
-    });
-    updateSocSetting({
-      variables: {
-        key: "created_at",
-        value: DateTime.utc().toISO(),
-      },
-    });
-    // TODO: redirect to admin page
-    // router.push("/");
-    window.location.reload();
-  };
 
   if (data?.executive) {
     router.replace("/admin");
@@ -130,8 +100,16 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
     personQueryResult.error ||
     socSettingsQueryResult.error ||
     error
-  )
-    return <p>ERROR</p>;
+  ) {
+    const msg =
+      countExecutivesQueryResult.error ||
+      personQueryResult.error ||
+      socSettingsQueryResult.error ||
+      error;
+    toast.danger(msg?.message, {
+      position: toast.POSITION.TOP_LEFT,
+    });
+  }
 
   if (!countExecutivesQueryResult.data.countExecutives && user) {
     return (
@@ -142,45 +120,7 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
             <div>
               {getGreetingTime()}, {user.name}
             </div>
-            <form onSubmit={(e) => setExecutive(e)}>
-              <Field>
-                <Label>Nickname</Label>
-                <Control>
-                  <Input
-                    value={nickname}
-                    onChange={(
-                      event: React.ChangeEvent<HTMLInputElement>
-                    ): void => setNickname(event.target.value)}
-                    required
-                  />
-                </Control>
-              </Field>
-              <Field>
-                <Label>Position</Label>
-                <Control>
-                  <Input
-                    value={position}
-                    onChange={(
-                      event: React.ChangeEvent<HTMLInputElement>
-                    ): void => setPosition(event.target.value)}
-                    required
-                  />
-                </Control>
-              </Field>
-              <div>
-                <Button.Group>
-                  <Button onClick={logout}>logout</Button>
-                  <Button color="primary" type="submit">
-                    Submit
-                  </Button>
-                </Button.Group>
-              </div>
-              {(newExecutiveMutationLoading ||
-                updateSocSettingMutationLoading) && <p>Loading...</p>}
-              {(newExecutiveMutationError || updateSocSettingMutationError) && (
-                <p>Error :( Please try again</p>
-              )}
-            </form>
+            <ExecutiveSetup user={user} />
           </Container>
         </Section>
       </div>

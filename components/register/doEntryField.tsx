@@ -18,7 +18,7 @@ const formatOptionLabel = ({
   label: string;
   month: string;
 }) => (
-  <div style={{ display: "flex" }}>
+  <div className="is-flex">
     <div>{label}</div>
     <Tag className="ml-2" color="info">
       {month}
@@ -30,8 +30,8 @@ const DOEntryField: React.FunctionComponent<Props> = ({
   doEntry,
   setDoEntry,
 }: Props) => {
-  const termStart = useMemo(() => {
-    const calcTermStart = (yearDiff: number) => {
+  const termStarts = useMemo(() => {
+    const calcTermStarts = (yearDiff: number) => {
       const year = yearDiff + DateTime.local().year;
       return [
         {
@@ -46,11 +46,12 @@ const DOEntryField: React.FunctionComponent<Props> = ({
         },
       ];
     };
-    return [-8, -7, -6, -5, -4, -3, -2, -1, 0]
-      .map((i) => calcTermStart(i))
-      .flat()
-      .reverse();
+    return [0, -1, -2, -3, -4, -5, -6, -7, -8]
+      .map((i) => calcTermStarts(i))
+      .flat();
   }, []);
+
+  const termStart = termStarts.find((term) => term.value === doEntry);
 
   return (
     <Field>
@@ -58,8 +59,8 @@ const DOEntryField: React.FunctionComponent<Props> = ({
       <Control>
         <div>
           <ReactSelect
-            value={termStart.find((term) => term.value === doEntry)}
-            options={termStart}
+            value={termStart}
+            options={termStarts}
             onChange={(input: {
               value: string;
               label: string;
@@ -72,7 +73,7 @@ const DOEntryField: React.FunctionComponent<Props> = ({
           <input
             tabIndex={-1}
             autoComplete="off"
-            style={{ position: "absolute", opacity: 0, height: 0 }}
+            className="hidden-input"
             value={doEntry}
             onChange={() => {}}
             required

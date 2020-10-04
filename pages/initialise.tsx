@@ -8,10 +8,8 @@ import {
   Container,
   Heading,
 } from "react-bulma-components";
+import { CLIENT_ID_KEY, CLIENT_SECRET_KEY } from "utils/auth";
 import updateSocSettingMutation from "../apollo/queries/socSetting/updateSocSetting.gql";
-
-export const CLIENT_ID_KEY = "client_id";
-export const CLIENT_SECRET_KEY = "client_secret";
 
 const { Input, Field, Control, Label } = Form;
 
@@ -34,14 +32,16 @@ export default function Initialise(): React.ReactElement {
         key: CLIENT_ID_KEY,
         value: clientId,
       },
+    }).then(() => {
+      updateSocSetting({
+        variables: {
+          key: CLIENT_SECRET_KEY,
+          value: clientSecret,
+        },
+      }).then(() => {
+        router.push("/login");
+      });
     });
-    updateSocSetting({
-      variables: {
-        key: CLIENT_SECRET_KEY,
-        value: clientSecret,
-      },
-    });
-    router.push("/login");
   };
 
   return (

@@ -60,11 +60,11 @@ const executiveResolver: ResolverFn<
  * @returns Number of executives
  * @category Query Resolver
  */
-const countExecutivesResolver: ResolverFn<null, number | undefined> = (
+const countExecutivesResolver: ResolverFn<null, number> = (
   _,
   __,
   { dataSources }
-): Promise<number | undefined> => {
+): Promise<number> => {
   return dataSources.executiveAPI.countExecutives();
 };
 
@@ -138,7 +138,7 @@ export const resolverTypeDefs = gql`
   extend type Query {
     executives: [Executive!]!
     executive(sid: String): Executive
-    countExecutives: Int
+    countExecutives: Int!
   }
 
   extend type Mutation {

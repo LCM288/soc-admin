@@ -1,24 +1,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useRef, useMemo } from "react";
-import { GetServerSideProps } from "next";
+import React, { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { User } from "@/types/datasources";
-import { getUserAndRefreshToken } from "utils/auth";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import ReactSelect from "react-select";
-import DayPickerInput from "react-day-picker/DayPickerInput";
-import { DateTime, Info } from "luxon";
+import toast from "utils/toast";
 import {
   Button,
   Form,
   Section,
   Container,
   Heading,
-  Tag,
-  Level,
 } from "react-bulma-components";
 import { Major } from "@/models/Major";
-import { Faculty } from "@/models/Faculty";
 import { College } from "@/models/College";
 import { Person } from "@/models/Person";
 
@@ -38,8 +31,6 @@ import newPersonMutation from "../apollo/queries/person/newPerson.gql";
 import personQuery from "../apollo/queries/person/person.gql";
 import collegesQuery from "../apollo/queries/college/colleges.gql";
 import majorsQuery from "../apollo/queries/major/majors.gql";
-
-const { Input, Field, Control, Label, Select } = Form;
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -78,12 +69,19 @@ export default function Register({
   const [doGrad, setDoGrad] = useState("");
   const personLoaded = useRef(false);
 
+  // TODO: toast
   if (
     majorsQueryResult.error ||
     collegesQueryResult.error ||
     personQueryResult.error
   ) {
-    return <div>error</div>;
+    const msg =
+      majorsQueryResult.error ||
+      collegesQueryResult.error ||
+      personQueryResult.error;
+    toast.danger(msg?.message, {
+      position: toast.POSITION.TOP_LEFT,
+    });
   }
   if (
     majorsQueryResult.loading ||

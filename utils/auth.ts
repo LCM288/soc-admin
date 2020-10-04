@@ -27,9 +27,9 @@ export const getSetting = async (key: string): Promise<string | undefined> => {
 /**
  * Get the number of executives from the database
  * @async
- * @returns the number of executives
+ * @returns Number of executives
  */
-export const countExecutives = async (): Promise<number | undefined> => {
+export const countExecutives = async (): Promise<number> => {
   const entries = await executiveStore.count();
   return entries;
 };
