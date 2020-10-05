@@ -6,6 +6,8 @@ import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { Table } from "react-bulma-components";
+import EditCell from "components/admin/socSettings/editCell";
+
 import toast from "utils/toast";
 import socSettingsQuery from "apollo/queries/socSetting/socSettings.gql";
 import allSocSettings from "utils/socSettings";
@@ -40,6 +42,7 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "Value",
         accessor: "value",
+        Cell: EditCell,
       },
     ],
     []
