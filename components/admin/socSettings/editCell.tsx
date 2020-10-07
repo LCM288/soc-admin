@@ -20,8 +20,11 @@ const EditCell = ({
     refetchQueries: [{ query: socSettingsQuery }],
   });
   const [keyValue, setKeyValue] = useState(value);
+  // https://github.com/RIP21/react-simplemde-editor/issues/79
+  const [forceRefresh, setForceRefresh] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const resetValue = () => {
+    setForceRefresh(forceRefresh + 1);
     setKeyValue(value);
   };
   const updateValue = () => {
@@ -44,6 +47,9 @@ const EditCell = ({
         setIsSaving(false);
       });
   };
+  const extraKeys = {
+    "Ctrl-S": updateValue,
+  };
   switch (row.values.type) {
     case "string":
       return (
@@ -58,12 +64,7 @@ const EditCell = ({
             />
           </Control>
           <Control>
-            <Button
-              color="danger"
-              outlined
-              onClick={resetValue}
-              disabled={value === keyValue}
-            >
+            <Button color="danger" outlined onClick={resetValue}>
               Reset
             </Button>
           </Control>
@@ -83,12 +84,13 @@ const EditCell = ({
     default:
       return (
         <>
-          <Tile kind="ancestor">
+          <Tile kind="ancestor" className="mb-1">
             <Tile>
               <Tile kind="parent">
                 <Tile kind="child">
                   <SimpleMDE
                     id={row.values.key}
+                    key={forceRefresh}
                     value={keyValue}
                     onChange={(newValue: string) => setKeyValue(newValue)}
                     options={{
@@ -96,10 +98,11 @@ const EditCell = ({
                       maxHeight: "20rem",
                       previewClass: ["editor-preview", "content"],
                     }}
+                    extraKeys={extraKeys}
                   />
                 </Tile>
               </Tile>
-              <Tile kind="parent">
+              <Tile kind="parent" vertical>
                 <Tile kind="child" className="box preview-content">
                   <Content>
                     <ReactMarkdown source={keyValue} escapeHtml={false} />
@@ -109,12 +112,7 @@ const EditCell = ({
             </Tile>
           </Tile>
           <Button.Group position="right">
-            <Button
-              color="danger"
-              outlined
-              onClick={resetValue}
-              disabled={value === keyValue}
-            >
+            <Button color="danger" outlined onClick={resetValue}>
               Reset
             </Button>
             <Button
