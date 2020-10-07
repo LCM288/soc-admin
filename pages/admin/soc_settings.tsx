@@ -40,6 +40,10 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: "key",
       },
       {
+        Header: "Type",
+        accessor: "type",
+      },
+      {
         Header: "Value",
         accessor: "value",
         Cell: EditCell,
@@ -66,6 +70,9 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
   const tableInstance = useTable({
     columns: tableColumns,
     data: tableData,
+    initialState: {
+      hiddenColumns: ["type"],
+    },
   });
 
   if (data && data !== socSettingsData) {

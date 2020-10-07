@@ -1,0 +1,13 @@
+.preview-content {
+  max-height: 26rem;
+  overflow-y: auto;
+}
+
+.editor-toolbar.fullscreen {
+  z-index: 39 !important;
+}
+
+.CodeMirror-fullscreen,
+.editor-preview-side {
+  z-index: 38 !important;
+}
