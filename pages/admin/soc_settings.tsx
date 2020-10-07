@@ -38,6 +38,20 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "Key",
         accessor: "key",
+        Cell: ({ row, value }: CellProps<Record<string, unknown>, Major>) => {
+          return (
+            <div>
+              <p>{value}</p>
+              <p>
+                <i>{row.values.desc}</i>
+              </p>
+            </div>
+          );
+        },
+      },
+      {
+        Header: "Description",
+        accessor: "desc",
       },
       {
         Header: "Type",
@@ -71,7 +85,7 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
     columns: tableColumns,
     data: tableData,
     initialState: {
-      hiddenColumns: ["type"],
+      hiddenColumns: ["desc", "type"],
     },
   });
 
