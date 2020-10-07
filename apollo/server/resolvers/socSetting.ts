@@ -10,9 +10,10 @@ import {
   SocSettingAttributes,
   SocSettingCreationAttributes,
 } from "@/models/SocSetting";
+import allSocSettings from "utils/socSettings";
 
-const editableKeys = ["client_id", "client_secret"];
-
+const allSocSettingsArray = Object.values(allSocSettings).map((i) => i.key);
+const editableKeys = ["client_id", "client_secret"].concat(allSocSettingsArray);
 /** The response when initiating with client keys */
 interface ClientKeysUpdateResponse {
   /** Whether the mutation is successful or not */
