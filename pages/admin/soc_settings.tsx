@@ -38,7 +38,7 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "Key",
         accessor: "key",
-        Cell: ({ row, value }: CellProps<Record<string, unknown>, Major>) => {
+        Cell: ({ row, value }: CellProps<Record<string, unknown>, string>) => {
           return (
             <div>
               <p>{value}</p>
