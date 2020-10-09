@@ -77,14 +77,18 @@ const initClientKeysResolver: ResolverFn<
 > = async (
   _,
   { id, secret },
-  { dataSources }
+  { user, dataSources }
 ): Promise<ClientKeysUpdateResponse> => {
-  /* const hasExecutives = Boolean(
+  const hasExecutives = Boolean(
     await dataSources.executiveAPI.countExecutives()
   );
-  if (hasExecutives) {
-    return { success: false, message: "You have no permission to read this" };
-  } */
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  if (hasExecutives && !isAdmin) {
+    return { success: false, message: "You have no permission to do this" };
+  }
+
   const idResult = await dataSources.socSettingAPI.updateSocSetting({
     key: NEW_CLIENT_ID_KEY,
     value: id,
