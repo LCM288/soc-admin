@@ -5,7 +5,7 @@
 
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
-import { CLIENT_ID_KEY, CLIENT_SECRET_KEY } from "utils/auth";
+import { NEW_CLIENT_ID_KEY, NEW_CLIENT_SECRET_KEY } from "utils/auth";
 import {
   SocSettingAttributes,
   SocSettingCreationAttributes,
@@ -79,18 +79,18 @@ const initClientKeysResolver: ResolverFn<
   { id, secret },
   { dataSources }
 ): Promise<ClientKeysUpdateResponse> => {
-  const hasExecutives = Boolean(
+  /* const hasExecutives = Boolean(
     await dataSources.executiveAPI.countExecutives()
   );
   if (hasExecutives) {
     return { success: false, message: "You have no permission to read this" };
-  }
+  } */
   const idResult = await dataSources.socSettingAPI.updateSocSetting({
-    key: CLIENT_ID_KEY,
+    key: NEW_CLIENT_ID_KEY,
     value: id,
   });
   const secretResult = await dataSources.socSettingAPI.updateSocSetting({
-    key: CLIENT_SECRET_KEY,
+    key: NEW_CLIENT_SECRET_KEY,
     value: secret,
   });
   if (!idResult || !secretResult) {

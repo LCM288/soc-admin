@@ -10,6 +10,8 @@ import { getClientIp } from "request-ip";
 export const JWT_SECRET_KEY = "jwt_secret";
 export const CLIENT_ID_KEY = "client_id";
 export const CLIENT_SECRET_KEY = "client_secret";
+export const NEW_CLIENT_ID_KEY = "new_client_id";
+export const NEW_CLIENT_SECRET_KEY = "new_client_secret";
 
 /**
  * Get a specific settings from the database
