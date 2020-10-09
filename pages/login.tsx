@@ -4,6 +4,7 @@ import {
   getUserAndRefreshToken,
   getSetting,
   countExecutives,
+  NEW_CLIENT_ID_KEY,
   CLIENT_ID_KEY,
 } from "utils/auth";
 import { getMicrosoftLoginLink } from "utils/microsoftLogin";
@@ -24,12 +25,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { host = "" } = ctx.req.headers;
   const protocol = /^localhost/g.test(host) ? "http" : "https";
   const baseUrl = `${protocol}://${ctx.req.headers.host}`;
+  const newClientId = await getSetting(NEW_CLIENT_ID_KEY);
   const clientId = await getSetting(CLIENT_ID_KEY);
   const executives = await countExecutives();
   if (!executives) {
     ctx.res.statusCode = 307;
     ctx.res.setHeader("Location", "/initialise");
     return EMPTY_PROPS;
+  }
+  if (newClientId) {
+    return {
+      props: {
+        baseUrl,
+        clientId: newClientId,
+      },
+    };
   }
   if (!clientId) {
     ctx.res.statusCode = 500;
