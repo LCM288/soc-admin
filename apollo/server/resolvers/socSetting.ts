@@ -121,7 +121,6 @@ const updateSocSettingResolver: ResolverFn<
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
-  console.log(publicSocSettingsArray);
   if (!isAdmin || !editableKeys.includes(arg.key)) {
     return { success: false, message: "You have no permission to do this" };
   }
