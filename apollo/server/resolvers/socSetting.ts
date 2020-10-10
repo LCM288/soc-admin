@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module SocSetting
  */
-
+import lodash from "lodash";
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import { NEW_CLIENT_ID_KEY, NEW_CLIENT_SECRET_KEY } from "utils/auth";
@@ -10,9 +10,13 @@ import {
   SocSettingAttributes,
   SocSettingCreationAttributes,
 } from "@/models/SocSetting";
+import publicSocSettings from "utils/socSettings";
 
-const editableKeys = ["client_id", "client_secret"];
+const publicSocSettingsArray = lodash.map(publicSocSettings, "key");
 
+const editableKeys = ["client_id", "client_secret"].concat(
+  publicSocSettingsArray
+);
 /** The response when initiating with client keys */
 interface ClientKeysUpdateResponse {
   /** Whether the mutation is successful or not */

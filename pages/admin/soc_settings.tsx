@@ -38,6 +38,24 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "Key",
         accessor: "key",
+        Cell: ({ row, value }: CellProps<Record<string, unknown>, string>) => {
+          return (
+            <div>
+              <p>{value}</p>
+              <p>
+                <i>{row.values.desc}</i>
+              </p>
+            </div>
+          );
+        },
+      },
+      {
+        Header: "Description",
+        accessor: "desc",
+      },
+      {
+        Header: "Type",
+        accessor: "type",
       },
       {
         Header: "Value",
@@ -66,6 +84,9 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
   const tableInstance = useTable({
     columns: tableColumns,
     data: tableData,
+    initialState: {
+      hiddenColumns: ["desc", "type"],
+    },
   });
 
   if (data && data !== socSettingsData) {
