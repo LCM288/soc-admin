@@ -27,7 +27,7 @@ export const getSetting = async (key: string): Promise<string | undefined> => {
 };
 
 /**
- * Get a specific settings from the database
+ * Get a specific settings from the database with timestamp
  * @async
  * @arg key - The key of the settings
  * @returns the value of the corresponding key
@@ -167,20 +167,16 @@ export const getUser = async (req: IncomingMessage): Promise<User | null> => {
  * @async
  */
 export const deleteNewAPIKey = async (): Promise<void> => {
-  try {
-    await sequelize.transaction(async (t) => {
-      await socSettingStore.destroy({
-        where: { key: NEW_CLIENT_ID_KEY },
-        transaction: t,
-      });
-      await socSettingStore.destroy({
-        where: { key: NEW_CLIENT_SECRET_KEY },
-        transaction: t,
-      });
+  await sequelize.transaction(async (t) => {
+    await socSettingStore.destroy({
+      where: { key: NEW_CLIENT_ID_KEY },
+      transaction: t,
     });
-  } catch (error) {
-    throw new Error(error);
-  }
+    await socSettingStore.destroy({
+      where: { key: NEW_CLIENT_SECRET_KEY },
+      transaction: t,
+    });
+  });
 };
 
 /**
@@ -199,19 +195,22 @@ export const swapAPIKey = async (): Promise<void> => {
   if (!newIDKey || !newSecretKey) {
     throw new Error("Invalid Key");
   }
-  try {
-    await sequelize.transaction(async (t) => {
-      await socSettingStore.upsert(
-        { key: CLIENT_ID_KEY, value: newIDKey },
-        { transaction: t }
-      );
-      await socSettingStore.upsert(
-        { key: CLIENT_SECRET_KEY, value: newSecretKey },
-        { transaction: t }
-      );
-      deleteNewAPIKey();
+  await sequelize.transaction(async (t) => {
+    await socSettingStore.upsert(
+      { key: CLIENT_ID_KEY, value: newIDKey },
+      { transaction: t }
+    );
+    await socSettingStore.upsert(
+      { key: CLIENT_SECRET_KEY, value: newSecretKey },
+      { transaction: t }
+    );
+    await socSettingStore.destroy({
+      where: { key: NEW_CLIENT_ID_KEY },
+      transaction: t,
     });
-  } catch (error) {
-    throw new Error(error);
-  }
+    await socSettingStore.destroy({
+      where: { key: NEW_CLIENT_SECRET_KEY },
+      transaction: t,
+    });
+  });
 };
