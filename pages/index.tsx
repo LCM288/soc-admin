@@ -5,9 +5,11 @@ import { Person } from "@/models/Person";
 import { useQuery } from "@apollo/react-hooks";
 import { Button, Section, Container, Heading } from "react-bulma-components";
 import { ServerSideProps } from "utils/getServerSideProps";
+import ReactMarkdown from "react-markdown/with-html";
 import toast from "utils/toast";
 import executiveQuery from "apollo/queries/executive/executive.gql";
 import ExecutiveSetup from "components/executiveSetup";
+import { SOC_NAME, WELCOME_MESSAGE, INACTIVE_MESSAGE } from "utils/socSettings";
 import personQuery from "../apollo/queries/person/person.gql";
 import countExecutivesQuery from "../apollo/queries/executive/countExecutives.gql";
 import socSettingsQuery from "../apollo/queries/socSetting/socSettings.gql";
@@ -47,12 +49,38 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
   const memberStatus = (person: Person | null) => {
     // TODO: get strings from socSetting for payment methods
     if (!person) {
-      return <div> You have not registered </div>;
+      return (
+        <div>
+          <p>You have not registered</p>
+          <ReactMarkdown
+            source={
+              socSettingsQueryResult.data.socSettings.find(
+                (s: { key: string; value: string }) =>
+                  s.key === WELCOME_MESSAGE.key
+              )?.value
+            }
+            escapeHtml={false}
+          />
+        </div>
+      );
     }
     if (isActiveMember(person)) {
       return <div> You are a member </div>;
     }
-    return <div> You are not active member </div>;
+    return (
+      <div>
+        <p> You are not active member </p>
+        <ReactMarkdown
+          source={
+            socSettingsQueryResult.data.socSettings.find(
+              (s: { key: string; value: string }) =>
+                s.key === INACTIVE_MESSAGE.key
+            )?.value
+          }
+          escapeHtml={false}
+        />
+      </div>
+    );
   };
   const getGreetingTime = () => {
     // ref: https://gist.github.com/James1x0/8443042
@@ -100,7 +128,7 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
       position: toast.POSITION.TOP_LEFT,
     });
   }
-
+  console.log(socSettingsQueryResult);
   if (!countExecutivesQueryResult.data.countExecutives && user) {
     return (
       <div>
@@ -122,12 +150,19 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
         <Section>
           <Container>
             <Heading>
+              {
+                socSettingsQueryResult.data.socSettings.find(
+                  (s: { key: string; value: string }) => s.key === SOC_NAME.key
+                )?.value
+              }
+            </Heading>
+            <Heading>
               {personQueryResult.data ? "Welcome Back" : "Hello"}
             </Heading>
             <p>
               {getGreetingTime()}, {user.name}
             </p>
-            <p>{memberStatus(personQueryResult.data.person)}</p>
+            {memberStatus(personQueryResult.data.person)}
             <Button.Group>
               <Button onClick={logout}>logout</Button>
               <Button color="primary" onClick={register}>

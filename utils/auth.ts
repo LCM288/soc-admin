@@ -3,13 +3,15 @@ import { IncomingMessage, ServerResponse } from "http";
 import { parseCookies } from "nookies";
 import jwt from "jsonwebtoken";
 import { User } from "@/types/datasources";
-import { socSettingStore, executiveStore } from "@/store";
+import { sequelize, socSettingStore, executiveStore } from "@/store";
 
 import { getClientIp } from "request-ip";
 
 export const JWT_SECRET_KEY = "jwt_secret";
 export const CLIENT_ID_KEY = "client_id";
 export const CLIENT_SECRET_KEY = "client_secret";
+export const NEW_CLIENT_ID_KEY = "new_client_id";
+export const NEW_CLIENT_SECRET_KEY = "new_client_secret";
 
 /**
  * Get a specific settings from the database
@@ -22,6 +24,25 @@ export const getSetting = async (key: string): Promise<string | undefined> => {
     where: { key },
   });
   return entry?.getDataValue("value");
+};
+
+/**
+ * Get a specific settings from the database with timestamp
+ * @async
+ * @arg key - The key of the settings
+ * @returns the value of the corresponding key
+ */
+export const getSettingWithTime = async (
+  key: string
+): Promise<{ value: string | undefined; updatedAt: Date | undefined }> => {
+  const entry = await socSettingStore.findOne({
+    where: { key },
+    raw: true,
+  });
+  return {
+    value: entry?.value,
+    updatedAt: entry?.updatedAt,
+  };
 };
 
 /**
@@ -140,4 +161,57 @@ export const getUser = async (req: IncomingMessage): Promise<User | null> => {
   } catch {
     return null;
   }
+};
+
+/**
+ * Remove new API keys inputted from user
+ * @async
+ */
+export const deleteNewAPIKey = async (): Promise<void> => {
+  await sequelize.transaction(async (t) => {
+    await socSettingStore.destroy({
+      where: { key: NEW_CLIENT_ID_KEY },
+      transaction: t,
+    });
+    await socSettingStore.destroy({
+      where: { key: NEW_CLIENT_SECRET_KEY },
+      transaction: t,
+    });
+  });
+};
+
+/**
+ * Update API keys with new API keys inputted from user
+ * @async
+ */
+export const swapAPIKey = async (): Promise<void> => {
+  const newID = await socSettingStore.findOne({
+    where: { key: NEW_CLIENT_ID_KEY },
+  });
+  const newIDKey = newID?.getDataValue("value");
+  const newSecret = await socSettingStore.findOne({
+    where: { key: NEW_CLIENT_SECRET_KEY },
+  });
+  const newSecretKey = newSecret?.getDataValue("value");
+  if (!newIDKey || !newSecretKey) {
+    throw new Error("Invalid Key");
+  }
+  await sequelize.transaction(async (t) => {
+    await socSettingStore.upsert(
+      { key: CLIENT_ID_KEY, value: newIDKey },
+      { transaction: t }
+    );
+    await socSettingStore.upsert(
+      { key: CLIENT_SECRET_KEY, value: newSecretKey },
+      { transaction: t }
+    );
+    await socSettingStore.destroy({
+      where: { key: NEW_CLIENT_ID_KEY },
+      transaction: t,
+    });
+    await socSettingStore.destroy({
+      where: { key: NEW_CLIENT_SECRET_KEY },
+      transaction: t,
+    });
+  });
 };
