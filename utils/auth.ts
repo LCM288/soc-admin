@@ -3,7 +3,7 @@ import { IncomingMessage, ServerResponse } from "http";
 import { parseCookies } from "nookies";
 import jwt from "jsonwebtoken";
 import { User } from "@/types/datasources";
-import { socSettingStore, executiveStore } from "@/store";
+import { sequelize, socSettingStore, executiveStore } from "@/store";
 
 import { getClientIp } from "request-ip";
 
@@ -24,6 +24,25 @@ export const getSetting = async (key: string): Promise<string | undefined> => {
     where: { key },
   });
   return entry?.getDataValue("value");
+};
+
+/**
+ * Get a specific settings from the database
+ * @async
+ * @arg key - The key of the settings
+ * @returns the value of the corresponding key
+ */
+export const getSettingWithTime = async (
+  key: string
+): Promise<{ value: string; updatedAt: Date } | undefined> => {
+  const entry = await socSettingStore.findOne({
+    where: { key },
+  });
+  if (!entry || !entry.getDataValue("value")) return undefined;
+  return {
+    value: entry?.getDataValue("value"),
+    updatedAt: entry?.getDataValue("updatedAt"),
+  };
 };
 
 /**
@@ -149,8 +168,20 @@ export const getUser = async (req: IncomingMessage): Promise<User | null> => {
  * @async
  */
 export const deleteNewAPIKey = async (): Promise<void> => {
-  await socSettingStore.destroy({ where: { key: NEW_CLIENT_ID_KEY } });
-  await socSettingStore.destroy({ where: { key: NEW_CLIENT_SECRET_KEY } });
+  try {
+    await sequelize.transaction(async (t) => {
+      await socSettingStore.destroy({
+        where: { key: NEW_CLIENT_ID_KEY },
+        transaction: t,
+      });
+      await socSettingStore.destroy({
+        where: { key: NEW_CLIENT_SECRET_KEY },
+        transaction: t,
+      });
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 /**
@@ -169,7 +200,19 @@ export const swapAPIKey = async (): Promise<void> => {
   if (!newIDKey || !newSecretKey) {
     throw new Error("Invalid Key");
   }
-  await socSettingStore.upsert({ key: CLIENT_ID_KEY, value: newIDKey });
-  await socSettingStore.upsert({ key: CLIENT_SECRET_KEY, value: newSecretKey });
-  deleteNewAPIKey();
+  try {
+    await sequelize.transaction(async (t) => {
+      await socSettingStore.upsert(
+        { key: CLIENT_ID_KEY, value: newIDKey },
+        { transaction: t }
+      );
+      await socSettingStore.upsert(
+        { key: CLIENT_SECRET_KEY, value: newSecretKey },
+        { transaction: t }
+      );
+      deleteNewAPIKey();
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
 };

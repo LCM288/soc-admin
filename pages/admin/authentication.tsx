@@ -84,7 +84,7 @@ const Authentication = (): React.ReactElement => {
               </Control>
             </Field>
             <Button color="primary" type="submit">
-              Authentication
+              Authenticate
             </Button>
           </form>
           {initClientKeysMutationLoading && <p>Loading...</p>}

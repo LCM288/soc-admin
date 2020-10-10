@@ -7,7 +7,6 @@ import {
   setJwtHeader,
   getSetting,
   swapAPIKey,
-  deleteNewAPIKey,
   NEW_CLIENT_ID_KEY,
   NEW_CLIENT_SECRET_KEY,
   CLIENT_ID_KEY,
@@ -25,12 +24,12 @@ interface AccessTokenProps {
  * @async
  * @param {string} baseUrl - The base url of the server
  * @param {string} code - The authorization code
- * @returns {Promise<AccessTokenProps | undefined>} The access token and respective key used
+ * @returns {Promise<AccessTokenProps>} The access token and respective key used
  */
 const getAccessToken = async (
   baseUrl: string,
   code: string
-): Promise<AccessTokenProps | undefined> => {
+): Promise<AccessTokenProps> => {
   const TENANT = "link.cuhk.edu.hk";
   const newClientId = await getSetting(NEW_CLIENT_ID_KEY);
   const newClientSecret = await getSetting(NEW_CLIENT_SECRET_KEY);
@@ -52,17 +51,11 @@ const getAccessToken = async (
   if (newClientId && newClientSecret) {
     body.client_id = newClientId;
     body.client_secret = newClientSecret;
-    try {
-      const tokenResponse = await axios.post(link, qs.stringify(body));
-      return {
-        accessToken: tokenResponse.data.access_token,
-        key: NEW_CLIENT_ID_KEY,
-      };
-    } catch (err) {
-      console.log(err);
-    }
-  } else {
-    console.log("No vaild new API key pairs found");
+    const tokenResponse = await axios.post(link, qs.stringify(body));
+    return {
+      accessToken: tokenResponse.data.access_token,
+      key: NEW_CLIENT_ID_KEY,
+    };
   }
 
   if (!clientId) {
@@ -75,12 +68,8 @@ const getAccessToken = async (
   body.client_id = clientId;
   body.client_secret = clientSecret;
 
-  try {
-    const tokenResponse = await axios.post(link, qs.stringify(body));
-    return { accessToken: tokenResponse.data.access_token, key: CLIENT_ID_KEY };
-  } catch {
-    return undefined;
-  }
+  const tokenResponse = await axios.post(link, qs.stringify(body));
+  return { accessToken: tokenResponse.data.access_token, key: CLIENT_ID_KEY };
 };
 
 /**
@@ -134,19 +123,13 @@ export default async (
       res.status(500).end(err.message);
     }
   );
-  if (res.statusCode === 500) {
-    return;
-  }
 
-  if (!accessToken) {
-    res.status(401).end("No access token recieved.");
+  if (!accessToken || res.statusCode === 500) {
     return;
   }
 
   if (accessToken.key === NEW_CLIENT_ID_KEY) {
     swapAPIKey();
-  } else {
-    deleteNewAPIKey();
   }
 
   const user = await getUser(req, accessToken.accessToken);
