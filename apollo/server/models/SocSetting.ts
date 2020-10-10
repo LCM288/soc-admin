@@ -11,14 +11,10 @@ export interface SocSettingAttributes {
   id: number;
   key: string;
   value: string;
-  updatedAt: Date;
 }
 
 /** All the attributes needed to create an instance of the SocSetting model */
-export type SocSettingCreationAttributes = Optional<
-  SocSettingAttributes,
-  "id" | "updatedAt"
->;
+export type SocSettingCreationAttributes = Optional<SocSettingAttributes, "id">;
 
 /** A class for the SocSetting model */
 export class SocSetting
@@ -59,7 +55,6 @@ export const SocSettingFactory = (sequelize: Sequelize): typeof SocSetting => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,

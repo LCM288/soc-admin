@@ -37,10 +37,11 @@ export const getSettingWithTime = async (
 ): Promise<{ value: string | undefined; updatedAt: Date | undefined }> => {
   const entry = await socSettingStore.findOne({
     where: { key },
+    raw: true,
   });
   return {
-    value: entry?.getDataValue("value"),
-    updatedAt: entry?.getDataValue("updatedAt"),
+    value: entry?.value,
+    updatedAt: entry?.updatedAt,
   };
 };
 
