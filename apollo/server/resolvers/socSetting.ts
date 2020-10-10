@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module SocSetting
  */
-
+import lodash from "lodash";
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import { CLIENT_ID_KEY, CLIENT_SECRET_KEY } from "utils/auth";
@@ -12,9 +12,8 @@ import {
 } from "@/models/SocSetting";
 import publicSocSettings from "utils/socSettings";
 
-const publicSocSettingsArray = Object.values(publicSocSettings).map(
-  (i) => i.key
-);
+const publicSocSettingsArray = lodash.map(publicSocSettings, "key");
+
 const editableKeys = ["client_id", "client_secret"].concat(
   publicSocSettingsArray
 );
@@ -122,6 +121,7 @@ const updateSocSettingResolver: ResolverFn<
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
+  console.log(publicSocSettingsArray);
   if (!isAdmin || !editableKeys.includes(arg.key)) {
     return { success: false, message: "You have no permission to do this" };
   }
