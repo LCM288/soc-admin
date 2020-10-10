@@ -34,11 +34,10 @@ export const getSetting = async (key: string): Promise<string | undefined> => {
  */
 export const getSettingWithTime = async (
   key: string
-): Promise<{ value: string; updatedAt: Date } | undefined> => {
+): Promise<{ value: string | undefined; updatedAt: Date | undefined }> => {
   const entry = await socSettingStore.findOne({
     where: { key },
   });
-  if (!entry || !entry.getDataValue("value")) return undefined;
   return {
     value: entry?.getDataValue("value"),
     updatedAt: entry?.getDataValue("updatedAt"),

@@ -3,11 +3,14 @@ import { GetServerSideProps } from "next";
 import {
   getUserAndRefreshToken,
   getSetting,
+  getSettingWithTime,
   countExecutives,
+  deleteNewAPIKey,
   NEW_CLIENT_ID_KEY,
   CLIENT_ID_KEY,
 } from "utils/auth";
 import { getMicrosoftLoginLink } from "utils/microsoftLogin";
+import { DateTime } from "luxon";
 
 import { Section, Container } from "react-bulma-components";
 
@@ -25,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { host = "" } = ctx.req.headers;
   const protocol = /^localhost/g.test(host) ? "http" : "https";
   const baseUrl = `${protocol}://${ctx.req.headers.host}`;
-  const newClientId = await getSetting(NEW_CLIENT_ID_KEY);
+  const newClientId = await getSettingWithTime(NEW_CLIENT_ID_KEY);
   const clientId = await getSetting(CLIENT_ID_KEY);
   const executives = await countExecutives();
   if (!executives) {
@@ -33,13 +36,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     ctx.res.setHeader("Location", "/initialise");
     return EMPTY_PROPS;
   }
-  if (newClientId) {
-    return {
-      props: {
-        baseUrl,
-        clientId: newClientId,
-      },
-    };
+  if (newClientId.value && newClientId.updatedAt) {
+    if (
+      DateTime.fromJSDate(newClientId.updatedAt).plus({ minutes: 5 }) >=
+      DateTime.local()
+    ) {
+      return {
+        props: {
+          baseUrl,
+          clientId: newClientId.value,
+        },
+      };
+    }
+    deleteNewAPIKey();
   }
   if (!clientId) {
     ctx.res.statusCode = 500;
