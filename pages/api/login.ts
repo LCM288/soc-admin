@@ -6,27 +6,57 @@ import {
   issureJwt,
   setJwtHeader,
   getSetting,
+  swapAPIKey,
+  NEW_CLIENT_ID_KEY,
+  NEW_CLIENT_SECRET_KEY,
   CLIENT_ID_KEY,
   CLIENT_SECRET_KEY,
 } from "utils/auth";
 import { getClientIp } from "request-ip";
+
+interface AccessTokenProps {
+  accessToken: string;
+  key: string;
+}
 
 /**
  * Get access token from microsoft
  * @async
  * @param {string} baseUrl - The base url of the server
  * @param {string} code - The authorization code
- * @returns {Promise<string | undefined>} The access token
+ * @returns {Promise<AccessTokenProps>} The access token and respective key used
  */
 const getAccessToken = async (
   baseUrl: string,
   code: string
-): Promise<string | undefined> => {
-  /* TODO put CLIENT_ID and CLIENT_SECRET to database */
+): Promise<AccessTokenProps> => {
   const TENANT = "link.cuhk.edu.hk";
+  const newClientId = await getSetting(NEW_CLIENT_ID_KEY);
+  const newClientSecret = await getSetting(NEW_CLIENT_SECRET_KEY);
   const clientId = await getSetting(CLIENT_ID_KEY);
   const clientSecret = await getSetting(CLIENT_SECRET_KEY);
   const redirectUrl = `${baseUrl}/api/login`;
+
+  const link = `https://login.microsoftonline.com/${TENANT}/oauth2/v2.0/token`;
+  const body = {
+    client_id: "",
+    scope: "user.read",
+    code,
+    redirect_uri: redirectUrl,
+    grant_type: "authorization_code",
+    client_secret: "",
+  };
+
+  // decision on which set of API keys to use
+  if (newClientId && newClientSecret) {
+    body.client_id = newClientId;
+    body.client_secret = newClientSecret;
+    const tokenResponse = await axios.post(link, qs.stringify(body));
+    return {
+      accessToken: tokenResponse.data.access_token,
+      key: NEW_CLIENT_ID_KEY,
+    };
+  }
 
   if (!clientId) {
     throw new Error("Cannot find client id");
@@ -35,22 +65,11 @@ const getAccessToken = async (
     throw new Error("Cannot find client secret");
   }
 
-  const link = `https://login.microsoftonline.com/${TENANT}/oauth2/v2.0/token`;
-  const body = qs.stringify({
-    client_id: clientId,
-    scope: "user.read",
-    code,
-    redirect_uri: redirectUrl,
-    grant_type: "authorization_code",
-    client_secret: clientSecret,
-  });
+  body.client_id = clientId;
+  body.client_secret = clientSecret;
 
-  try {
-    const tokenResponse = await axios.post(link, body);
-    return tokenResponse.data.access_token;
-  } catch {
-    return undefined;
-  }
+  const tokenResponse = await axios.post(link, qs.stringify(body));
+  return { accessToken: tokenResponse.data.access_token, key: CLIENT_ID_KEY };
 };
 
 /**
@@ -104,16 +123,16 @@ export default async (
       res.status(500).end(err.message);
     }
   );
-  if (res.statusCode === 500) {
+
+  if (!accessToken || res.statusCode === 500) {
     return;
   }
 
-  if (!accessToken) {
-    res.status(401).end("No access token recieved.");
-    return;
+  if (accessToken.key === NEW_CLIENT_ID_KEY) {
+    swapAPIKey();
   }
 
-  const user = await getUser(req, accessToken);
+  const user = await getUser(req, accessToken.accessToken);
 
   if (!user) {
     res.status(401).end("Cannot access user data.");

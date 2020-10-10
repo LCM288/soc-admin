@@ -90,6 +90,11 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
                   Settings
                 </Navbar.Item>
               </Link>
+              <Link href="/admin/authentication">
+                <Navbar.Item onClick={() => setActive(false)}>
+                  Authentication
+                </Navbar.Item>
+              </Link>
             </Navbar.Container>
             <Navbar.Container position="end">
               <Link href="/api/logout">
