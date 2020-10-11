@@ -7,6 +7,7 @@ import { DataSource } from "apollo-datasource";
 import {
   Person,
   PersonAttributes,
+  PersonModalAttributes,
   PersonCreationAttributes,
   PersonUpdateAttributes,
 } from "@/models/Person";
@@ -86,45 +87,15 @@ export default class PersonAPI extends DataSource<ContextBase> {
   }
 
   /**
-   * Find all ***active*** members \
-   * A member if active iff he/her has not graduated and membership not expired
+   * Find all ***active and expired*** members \
+   * Including expired members but not those who have never finished registration
    * @async
-   * @returns {Promise<PersonAttributes[]>} An array of ***active*** members
+   * @returns {Promise<PersonAttributes[]>} An array of ***active and expired*** members
    */
   public async findMembers(): Promise<PersonAttributes[]> {
     const members = await this.store.findAll({
       where: {
-        [Op.and]: [
-          Sequelize.where(
-            Sequelize.cast(
-              Sequelize.col("memberSince"),
-              "TIMESTAMP WITH TIME ZONE"
-            ),
-            Op.lt,
-            Sequelize.fn("NOW")
-          ),
-          Sequelize.where(
-            Sequelize.cast(
-              Sequelize.col("expectedGraduationDate"),
-              "TIMESTAMP WITH TIME ZONE"
-            ),
-            Op.gt,
-            Sequelize.fn("NOW")
-          ),
-          {
-            [Op.or]: [
-              { memberUntil: { [Op.eq]: null } },
-              Sequelize.where(
-                Sequelize.cast(
-                  Sequelize.col("memberUntil"),
-                  "TIMESTAMP WITH TIME ZONE"
-                ),
-                Op.gt,
-                Sequelize.fn("NOW")
-              ),
-            ],
-          },
-        ],
+        memberSince: { [Op.ne]: null },
       },
       raw: true,
     });
@@ -149,7 +120,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
    */
   public async addNewPerson(
     arg: PersonCreationAttributes
-  ): Promise<PersonAttributes> {
+  ): Promise<PersonModalAttributes> {
     return (await this.store.create(arg)).get({ plain: true });
   }
 
@@ -161,7 +132,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
    */
   public async updatePerson(
     arg: PersonUpdateAttributes
-  ): Promise<PersonAttributes> {
+  ): Promise<PersonModalAttributes> {
     const [count, people] = await this.store.update(arg, {
       where: { sid: arg.sid },
       returning: true,

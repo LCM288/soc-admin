@@ -7,6 +7,7 @@ import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import { gql } from "apollo-server";
 import { Major } from "@/models/Major";
 import { College } from "@/models/College";
+import { DateTime } from "luxon";
 
 enum GenderEnum {
   Male = "Male",
@@ -27,6 +28,17 @@ export enum CollegeEnum {
   LWS = "LWS",
   GS = "GS",
   None = "None",
+}
+
+export enum MemberStatusEnum {
+  Unactivated = "Unactivated",
+  Activated = "Activated",
+  Expired = "Expired",
+}
+
+export enum RegistrationTypeEnum {
+  New = "New",
+  Renew = "Renew",
 }
 
 /** All the attributes in the Person model */
@@ -53,18 +65,28 @@ export interface PersonAttributes {
   memberSince: string | null;
   /** The date that the membership expires, null for until grad */
   memberUntil: string | null;
+  /** The status of the person */
+  status: MemberStatusEnum;
+  /** The type of the registration */
+  registrationType: RegistrationTypeEnum | null;
 }
 
+/** All the attributes stored in the database */
+export type PersonModalAttributes = Omit<
+  PersonAttributes,
+  "status" | "registrationType"
+>;
+
 /** All the attributes needed to create an instance of the Person model */
-export type PersonCreationAttributes = Optional<PersonAttributes, "id">;
+export type PersonCreationAttributes = Optional<PersonModalAttributes, "id">;
 
 /** All the attributes needed to update an instance of the Person model */
-export type PersonUpdateAttributes = Partial<PersonAttributes> &
-  Pick<PersonAttributes, "sid">;
+export type PersonUpdateAttributes = Partial<PersonModalAttributes> &
+  Pick<PersonModalAttributes, "sid">;
 
 /** A class for the Person model */
 export class Person
-  extends Model<PersonAttributes, PersonCreationAttributes>
+  extends Model<PersonModalAttributes, PersonCreationAttributes>
   implements PersonAttributes {
   public id!: number;
 
@@ -102,10 +124,52 @@ export class Person
   /** The date that the membership expires, null for until grad */
   public memberUntil!: string | null;
 
-  // timestamps!
-  public readonly createdAt!: string;
+  /** The status of the person */
+  public get status(): MemberStatusEnum {
+    return Person.status(this);
+  }
 
-  public readonly updatedAt!: string;
+  /** The type of the registration */
+  public get registrationType(): RegistrationTypeEnum | null {
+    return Person.registrationType(this);
+  }
+
+  /** The status of the person */
+  public static status(person: Person): MemberStatusEnum {
+    if (!person.memberSince) {
+      return MemberStatusEnum.Unactivated;
+    }
+    if (DateTime.fromISO(person.expectedGraduationDate) < DateTime.local()) {
+      return MemberStatusEnum.Expired;
+    }
+    if (
+      person.memberUntil &&
+      DateTime.fromISO(person.memberUntil) < DateTime.local()
+    ) {
+      return MemberStatusEnum.Expired;
+    }
+    return MemberStatusEnum.Activated;
+  }
+
+  /** The type of the registration */
+  public static registrationType(person: Person): RegistrationTypeEnum | null {
+    if (!person.memberSince) {
+      return RegistrationTypeEnum.New;
+    }
+    if (
+      person.memberUntil &&
+      DateTime.fromJSDate(person.updatedAt) >
+        DateTime.fromISO(person.memberUntil)
+    ) {
+      return RegistrationTypeEnum.Renew;
+    }
+    return null;
+  }
+
+  // timestamps!
+  public readonly createdAt!: Date;
+
+  public readonly updatedAt!: Date;
 }
 
 /** A helper function to create a store for the Person model
@@ -203,6 +267,17 @@ export const typeDefs = gql`
     None
   }
 
+  enum MemberStatus_ENUM {
+    Unactivated
+    Activated
+    Expired
+  }
+
+  enum RegistrationType_ENUM {
+    New
+    Renew
+  }
+
   type Person {
     id: ID!
     sid: String!
@@ -216,5 +291,8 @@ export const typeDefs = gql`
     expectedGraduationDate: Date!
     memberSince: Date
     memberUntil: Date
+    status: MemberStatus_ENUM!
+    registrationType: RegistrationType_ENUM
+    updatedAt: DateTime
   }
 `;

@@ -8,9 +8,12 @@ import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
   Person,
   PersonAttributes,
+  PersonModalAttributes,
   PersonUpdateAttributes,
   PersonCreationAttributes,
   CollegeEnum,
+  MemberStatusEnum,
+  RegistrationTypeEnum,
 } from "@/models/Person";
 import { Major } from "@/models/Major";
 import { College } from "@/models/College";
@@ -31,7 +34,7 @@ interface PersonUpdateResponse {
   /** Additional information about the mutation */
   message: string;
   /** The new person's attributes */
-  person?: PersonAttributes;
+  person?: PersonModalAttributes;
 }
 
 // Field resolvers
@@ -60,6 +63,31 @@ const collegeResolver: ResolverFn<null, College> = (
   { dataSources }
 ): College => {
   return dataSources.collegeAPI.getCollege(college as CollegeEnum);
+};
+
+/**
+ * The resolver for the status field of a Person
+ * @returns The status of the member
+ * @category Field Resolver
+ */
+const statusResolver: ResolverFn<null, MemberStatusEnum> = (
+  person: Person,
+  _,
+  __
+): MemberStatusEnum => {
+  return person.status || Person.status(person);
+};
+
+/**
+ * The resolver for the registrationType field of a Person
+ * @returns The registrationType of the member
+ * @category Field Resolver
+ */
+const registrationTypeResolver: ResolverFn<
+  null,
+  RegistrationTypeEnum | null
+> = (person: Person, _, __): RegistrationTypeEnum | null => {
+  return person.registrationType || Person.registrationType(person);
 };
 
 // Query resolvers
@@ -248,6 +276,10 @@ export const resolvers: Resolvers = {
     major: majorResolver,
     /** see {@link collegeResolver} */
     college: collegeResolver,
+    /** see {@link statusResolver} */
+    status: statusResolver,
+    /** see {@link registrationTypeResolver} */
+    registrationType: registrationTypeResolver,
   },
   Query: {
     /** see {@link peopleResolver} */
