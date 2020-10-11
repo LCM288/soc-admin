@@ -7,8 +7,7 @@ import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
   Person,
-  PersonAttributes,
-  PersonModalAttributes,
+  PersonModelAttributes,
   PersonUpdateAttributes,
   PersonCreationAttributes,
   CollegeEnum,
@@ -34,7 +33,7 @@ interface PersonUpdateResponse {
   /** Additional information about the mutation */
   message: string;
   /** The new person's attributes */
-  person?: PersonModalAttributes;
+  person?: PersonModelAttributes;
 }
 
 // Field resolvers
@@ -45,7 +44,7 @@ interface PersonUpdateResponse {
  * @category Field Resolver
  */
 const majorResolver: ResolverFn<null, Major | undefined> = (
-  { major }: Person,
+  { major }: PersonModelAttributes,
   _,
   { dataSources }
 ): Major | undefined => {
@@ -58,7 +57,7 @@ const majorResolver: ResolverFn<null, Major | undefined> = (
  * @category Field Resolver
  */
 const collegeResolver: ResolverFn<null, College> = (
-  { college }: Person,
+  { college }: PersonModelAttributes,
   _,
   { dataSources }
 ): College => {
@@ -71,11 +70,11 @@ const collegeResolver: ResolverFn<null, College> = (
  * @category Field Resolver
  */
 const statusResolver: ResolverFn<null, MemberStatusEnum> = (
-  person: Person,
+  person: PersonModelAttributes,
   _,
   __
 ): MemberStatusEnum => {
-  return person.status || Person.status(person);
+  return Person.status(person);
 };
 
 /**
@@ -86,8 +85,8 @@ const statusResolver: ResolverFn<null, MemberStatusEnum> = (
 const registrationTypeResolver: ResolverFn<
   null,
   RegistrationTypeEnum | null
-> = (person: Person, _, __): RegistrationTypeEnum | null => {
-  return person.registrationType || Person.registrationType(person);
+> = (person: PersonModelAttributes, _, __): RegistrationTypeEnum | null => {
+  return Person.registrationType(person);
 };
 
 // Query resolvers
@@ -98,11 +97,11 @@ const registrationTypeResolver: ResolverFn<
  * @returns All the people
  * @category Query Resolver
  */
-const peopleResolver: ResolverFn<unknown, PersonAttributes[]> = async (
+const peopleResolver: ResolverFn<unknown, PersonModelAttributes[]> = async (
   _,
   __,
   { user, dataSources }
-): Promise<PersonAttributes[]> => {
+): Promise<PersonModelAttributes[]> => {
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
@@ -118,11 +117,10 @@ const peopleResolver: ResolverFn<unknown, PersonAttributes[]> = async (
  * @returns All the registrations (as PersonAttributes[])
  * @category Query Resolver
  */
-const registrationsResolver: ResolverFn<unknown, PersonAttributes[]> = async (
-  _,
-  __,
-  { user, dataSources }
-): Promise<PersonAttributes[]> => {
+const registrationsResolver: ResolverFn<
+  unknown,
+  PersonModelAttributes[]
+> = async (_, __, { user, dataSources }): Promise<PersonModelAttributes[]> => {
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
@@ -138,11 +136,11 @@ const registrationsResolver: ResolverFn<unknown, PersonAttributes[]> = async (
  * @returns All the active members (as PersonAttributes[])
  * @category Query Resolver
  */
-const membersResolver: ResolverFn<unknown, PersonAttributes[]> = async (
+const membersResolver: ResolverFn<unknown, PersonModelAttributes[]> = async (
   _,
   __,
   { user, dataSources }
-): Promise<PersonAttributes[]> => {
+): Promise<PersonModelAttributes[]> => {
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
@@ -160,12 +158,12 @@ const membersResolver: ResolverFn<unknown, PersonAttributes[]> = async (
  */
 const personResolver: ResolverFn<
   PersonResolverArgs,
-  PersonAttributes | null
+  PersonModelAttributes | null
 > = async (
   _,
   { sid },
   { user, dataSources }
-): Promise<PersonAttributes | null> => {
+): Promise<PersonModelAttributes | null> => {
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );

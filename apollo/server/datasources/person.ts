@@ -6,8 +6,7 @@
 import { DataSource } from "apollo-datasource";
 import {
   Person,
-  PersonAttributes,
-  PersonModalAttributes,
+  PersonModelAttributes,
   PersonCreationAttributes,
   PersonUpdateAttributes,
 } from "@/models/Person";
@@ -42,9 +41,9 @@ export default class PersonAPI extends DataSource<ContextBase> {
   /**
    * Find all people
    * @async
-   * @returns {Promise<PersonAttributes[]>} An array of people
+   * @returns An array of people
    */
-  public async findPeople(): Promise<PersonAttributes[]> {
+  public async findPeople(): Promise<PersonModelAttributes[]> {
     return this.store.findAll({ raw: true });
   }
 
@@ -52,9 +51,9 @@ export default class PersonAPI extends DataSource<ContextBase> {
    * Find all ***pending*** registrations \
    * A registration maybe for new member or for renewal of membership
    * @async
-   * @returns {Promise<PersonAttributes[]>} An array of ***pending*** registrations
+   * @returns An array of ***pending*** registrations
    */
-  public async findRegistrations(): Promise<PersonAttributes[]> {
+  public async findRegistrations(): Promise<PersonModelAttributes[]> {
     const registrations = await this.store.findAll({
       where: {
         [Op.or]: [
@@ -90,9 +89,9 @@ export default class PersonAPI extends DataSource<ContextBase> {
    * Find all ***active and expired*** members \
    * Including expired members but not those who have never finished registration
    * @async
-   * @returns {Promise<PersonAttributes[]>} An array of ***active and expired*** members
+   * @returns An array of ***active and expired*** members
    */
-  public async findMembers(): Promise<PersonAttributes[]> {
+  public async findMembers(): Promise<PersonModelAttributes[]> {
     const members = await this.store.findAll({
       where: {
         memberSince: { [Op.ne]: null },
@@ -106,21 +105,21 @@ export default class PersonAPI extends DataSource<ContextBase> {
    * Find a person by sid
    * @param {string} sid - The sid of the person
    * @async
-   * @returns {Promise<PersonAttributes>} The matched person or null if not found
+   * @returns The matched person or null if not found
    */
-  public async findPerson(sid: string): Promise<PersonAttributes | null> {
+  public async findPerson(sid: string): Promise<PersonModelAttributes | null> {
     return this.store.findOne({ where: { sid }, raw: true });
   }
 
   /**
    * Add a new person
    * @async
-   * @param {PersonCreationAttributes} arg - The arg for the new person
-   * @returns {Promise<PersonAttributes>} An instance of the new person
+   * @param arg - The arg for the new person
+   * @returns An instance of the new person
    */
   public async addNewPerson(
     arg: PersonCreationAttributes
-  ): Promise<PersonModalAttributes> {
+  ): Promise<PersonModelAttributes> {
     return (await this.store.create(arg)).get({ plain: true });
   }
 
@@ -132,7 +131,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
    */
   public async updatePerson(
     arg: PersonUpdateAttributes
-  ): Promise<PersonModalAttributes> {
+  ): Promise<PersonModelAttributes> {
     const [count, people] = await this.store.update(arg, {
       where: { sid: arg.sid },
       returning: true,
@@ -152,7 +151,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
   public async approveMembership({
     sid,
     memberUntil,
-  }: ApproveMembershipAttribute): Promise<PersonAttributes> {
+  }: ApproveMembershipAttribute): Promise<PersonModelAttributes> {
     const result = await this.sequelize.transaction(async (t) => {
       const person = await this.store.findOne({
         where: {
