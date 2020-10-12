@@ -195,11 +195,12 @@ export const typeDefs = gql`
     UC
     NA
     SC
-    WS
-    WYS
-    SHHO
     MC
+    SHHO
     CW
+    WYS
+    LWS
+    GS
     None
   }
 
