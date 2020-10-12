@@ -120,7 +120,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
 
   const onGlobalFilterChange = useAsyncDebounce((value) => {
     setGlobalFilter(value || undefined);
-  }, 200);
+  }, 500);
 
   if (data && data !== membersData) {
     setMembersData(data);
