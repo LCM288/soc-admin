@@ -3,12 +3,10 @@
 import React, { useMemo, useState } from "react";
 import Papa from "papaparse";
 import _ from "lodash";
-import { useTable, CellProps } from "react-table";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useTable } from "react-table";
+import { useMutation } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
-import { College } from "@/models/College";
-import { Major } from "@/models/Major";
 import {
   Level,
   Table,
@@ -17,8 +15,6 @@ import {
   Container,
   Form,
 } from "react-bulma-components";
-import toast from "utils/toast";
-import membersQuery from "apollo/queries/person/members.gql";
 import importPeopleMutation from "apollo/queries/person/importPeople.gql";
 
 export { getServerSideProps } from "utils/getServerSideProps";
@@ -26,10 +22,6 @@ export { getServerSideProps } from "utils/getServerSideProps";
 const { InputFile } = Form;
 
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
-  /* const { data, loading, error } = useQuery(membersQuery, {
-    fetchPolicy: "cache-and-network",
-    pollInterval: 5000,
-  }); */
   const [
     importPeople,
     { loading: importPeopleMutationLoading, error: importPeopleMutationError },
@@ -38,7 +30,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const [membersData, setMembersData] = useState<
     { members: Record<string, unknown>[] } | undefined
   >(undefined);
-  const [importFile, setImportFile] = useState<File>();
 
   const tableColumns = useMemo(
     () => [
@@ -119,26 +110,16 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   });
 
   const upload = () => {
-    importPeople({
-      variables: {
-        people: membersData?.members.map((member) => _.omit(member, "id")),
-      },
-    });
+    // remove member id to prevent data collision
+    const members = membersData?.members.map((member) => _.omit(member, "id"));
+    _.chunk(members, 10).forEach((people) =>
+      importPeople({
+        variables: {
+          people,
+        },
+      })
+    );
   };
-
-  /* if (data && data !== membersData) {
-    console.log("Original: ", data);
-    setMembersData(data);
-  } */
-
-  /* if (!membersData) {
-    if (loading) return <p>loading</p>;
-    if (error) return <p>{error.message}</p>;
-  } else if (error) {
-    toast.danger(error.message, {
-      position: toast.POSITION.TOP_LEFT,
-    });
-  } */
 
   const {
     getTableProps,
@@ -152,104 +133,99 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
 
   if (user) {
     return (
-      <>
-        <Level>
-          <Level.Side align="left">
-            <Level.Item>
-              <InputFile
-                color="primary"
-                placeholder="Textarea"
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  if (event.target.files && event.target.files[0]) {
-                    setImportFile(event.target.files[0]);
-                    console.log(event.target.files[0]);
-                    Papa.parse(event.target.files[0], {
-                      ...papaConfig,
-                      complete(results) {
-                        console.log("Finished:", results.data);
-                        const result = {
-                          members: results.data.map(
-                            ({
-                              ID: id,
-                              SID: sid,
-                              "Chinese Name": chineseName,
-                              "English Name": englishName,
-                              Gender: gender,
-                              "Date of Birth": dateOfBirth,
-                              Email: email,
-                              Phone: phone,
-                              College: college,
-                              Major: major,
-                              "Date of Entry": dateOfEntry,
-                              "Expected Graduation Date": expectedGraduationDate,
-                              "Member Since": memberSince,
-                            }) => ({
-                              id,
-                              sid,
-                              chineseName,
-                              englishName,
-                              gender,
-                              dateOfBirth,
-                              email,
-                              phone,
-                              college,
-                              major,
-                              dateOfEntry,
-                              expectedGraduationDate,
-                              memberSince,
-                            })
-                          ),
-                        };
-                        console.log("Mapped:", result);
-                        if (result && result !== membersData) {
-                          setMembersData(result);
-                        }
-                      },
-                    });
-                  } else {
-                    setImportFile(undefined);
-                    console.log("No files");
-                  }
-                }}
-              />
-            </Level.Item>
-          </Level.Side>
-          <Level.Side align="right">
-            <Level.Item>
-              <Button color="primary" onClick={upload}>
-                Upload
-              </Button>
-            </Level.Item>
-          </Level.Side>
-        </Level>
-        <Table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
+      <Section>
+        <Container fluid>
+          <Level>
+            <Level.Side align="left">
+              <Level.Item>
+                <InputFile
+                  color="primary"
+                  placeholder="Textarea"
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    if (event.target.files && event.target.files[0]) {
+                      Papa.parse(event.target.files[0], {
+                        ...papaConfig,
+                        complete(results) {
+                          const result = {
+                            members: results.data.map(
+                              ({
+                                ID: id,
+                                SID: sid,
+                                "Chinese Name": chineseName,
+                                "English Name": englishName,
+                                Gender: gender,
+                                "Date of Birth": dateOfBirth,
+                                Email: email,
+                                Phone: phone,
+                                College: college,
+                                Major: major,
+                                "Date of Entry": dateOfEntry,
+                                "Expected Graduation Date": expectedGraduationDate,
+                                "Member Since": memberSince,
+                              }) => ({
+                                id,
+                                sid,
+                                chineseName,
+                                englishName,
+                                gender,
+                                dateOfBirth,
+                                email,
+                                phone,
+                                college,
+                                major,
+                                dateOfEntry,
+                                expectedGraduationDate,
+                                memberSince,
+                              })
+                            ),
+                          };
+                          if (result && result !== membersData) {
+                            setMembersData(result);
+                          }
+                        },
+                      });
+                    }
+                  }}
+                />
+              </Level.Item>
+            </Level.Side>
+            <Level.Side align="right">
+              <Level.Item>
+                <Button color="primary" onClick={upload}>
+                  Upload
+                </Button>
+              </Level.Item>
+            </Level.Side>
+          </Level>
+          <Table {...getTableProps()}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th {...column.getHeaderProps()}>
+                      {column.render("Header")}
+                    </th>
+                  ))}
                 </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-      </>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Container>
+      </Section>
     );
   }
   return <a href="/login">Please login first </a>;
