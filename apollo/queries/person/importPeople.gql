@@ -1,0 +1,25 @@
+mutation($people: [PersonInput!]!) {
+  importPeople(people: $people) {
+    success
+    message
+    person {
+      id
+      sid
+      chineseName
+      englishName
+      gender
+      dateOfBirth
+      email
+      phone
+      college {
+        code
+      }
+      dateOfEntry
+      expectedGraduationDate
+      memberSince
+      major {
+        code
+      }
+    }
+  }
+}
