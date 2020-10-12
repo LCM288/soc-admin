@@ -81,6 +81,10 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: "expectedGraduationDate",
       },
       {
+        Header: "Type of registration",
+        accessor: "registrationType",
+      },
+      {
         Header: "Approve",
         accessor: (row: Record<string, unknown>) => row.sid,
         id: "approve",
@@ -127,6 +131,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
 
   if (data && data !== registrationsData) {
     setRegistrationsData(data);
+    onGlobalFilterChange(globalFilterInput);
   }
 
   if (!registrationsData) {

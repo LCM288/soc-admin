@@ -79,6 +79,10 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Expected Graduation Date",
         accessor: "expectedGraduationDate",
       },
+      {
+        Header: "Status",
+        accessor: "status",
+      },
     ],
     []
   );
@@ -120,6 +124,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
 
   if (data && data !== membersData) {
     setMembersData(data);
+    onGlobalFilterChange(globalFilterInput);
   }
 
   if (!membersData) {

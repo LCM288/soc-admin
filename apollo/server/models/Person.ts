@@ -38,7 +38,7 @@ export enum MemberStatusEnum {
 
 export enum RegistrationTypeEnum {
   New = "New",
-  Renew = "Renew",
+  Renewal = "Renewal",
 }
 
 /** All the attributes in the Person model */
@@ -170,7 +170,7 @@ export class Person
       DateTime.fromJSDate(person.updatedAt) >
         DateTime.fromISO(person.memberUntil)
     ) {
-      return RegistrationTypeEnum.Renew;
+      return RegistrationTypeEnum.Renewal;
     }
     return null;
   }
@@ -292,7 +292,7 @@ export const typeDefs = gql`
 
   enum RegistrationType_ENUM {
     New
-    Renew
+    Renewal
   }
 
   type Person {
