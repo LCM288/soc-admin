@@ -1,7 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState } from "react";
-import { useGlobalFilter, useAsyncDebounce } from "react-table";
+import {
+  useGlobalFilter,
+  useFilters,
+  useAsyncDebounce,
+  Row,
+} from "react-table";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
@@ -14,7 +19,7 @@ import { useMemberTable } from "utils/reactTableTypeFix";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
-const { Input, Field, Control, Label } = Form;
+const { Input, Field, Control, Label, Select } = Form;
 
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(membersQuery, {
@@ -25,6 +30,18 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const [membersData, setMembersData] = useState<
     { members: Record<string, unknown>[] } | undefined
   >(undefined);
+
+  const statusFilter = useMemo(
+    () => (
+      rows: Array<Row<Record<string, unknown>>>,
+      id: string,
+      filterValue: string
+    ) =>
+      filterValue === "All"
+        ? rows
+        : rows.filter((row) => row.values[id] === filterValue),
+    []
+  );
 
   const tableColumns = useMemo(
     () => [
@@ -82,9 +99,10 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "Status",
         accessor: "status",
+        filter: statusFilter,
       },
     ],
-    []
+    [statusFilter]
   );
 
   const tableData = useMemo(() => {
@@ -95,12 +113,26 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     return (row: Record<string, unknown>) => (row.id as number).toString();
   }, []);
 
+  const initialFilters = useMemo(
+    () => [
+      {
+        id: "status",
+        value: "Activated",
+      },
+    ],
+    []
+  );
+
   const tableInstance = useMemberTable(
     {
       columns: tableColumns,
       data: tableData,
       getRowId: tableGetRowId,
+      autoResetFilters: false,
+      autoResetGlobalFilter: false,
+      initialState: { filters: initialFilters },
     },
+    useFilters,
     useGlobalFilter
   );
 
@@ -112,19 +144,27 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     prepareRow,
     state,
     setGlobalFilter,
+    setFilter,
   } = tableInstance;
 
   const [globalFilterInput, setGlobalFilterInput] = useState(
     state.globalFilter
   );
 
+  const [statusFilterInput, setStatusFilterInput] = useState(
+    state.filters.find(({ id }) => id === "status")?.value
+  );
+
   const onGlobalFilterChange = useAsyncDebounce((value) => {
     setGlobalFilter(value || undefined);
   }, 500);
 
+  const onStatusFilterChange = useAsyncDebounce((value) => {
+    setFilter("status", value || undefined);
+  }, 500);
+
   if (data && data !== membersData) {
     setMembersData(data);
-    onGlobalFilterChange(globalFilterInput);
   }
 
   if (!membersData) {
@@ -150,6 +190,21 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                 onGlobalFilterChange(event.target.value);
               }}
             />
+          </Control>
+        </Field>
+        <Field>
+          <Control>
+            <Select
+              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+                setStatusFilterInput(event.target.value);
+                onStatusFilterChange(event.target.value);
+              }}
+              value={statusFilterInput}
+            >
+              <option>All</option>
+              <option>Activated</option>
+              <option>Expired</option>
+            </Select>
           </Control>
         </Field>
         <Table {...getTableProps()}>

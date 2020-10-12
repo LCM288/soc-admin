@@ -107,6 +107,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
       columns: tableColumns,
       data: tableData,
       getRowId: tableGetRowId,
+      autoResetGlobalFilter: false,
     },
     useGlobalFilter
   );
@@ -131,7 +132,6 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
 
   if (data && data !== registrationsData) {
     setRegistrationsData(data);
-    onGlobalFilterChange(globalFilterInput);
   }
 
   if (!registrationsData) {
