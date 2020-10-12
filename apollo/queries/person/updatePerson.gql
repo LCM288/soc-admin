@@ -35,14 +35,22 @@ mutation(
       dateOfBirth
       email
       phone
-      college {
-        code
-      }
       dateOfEntry
       expectedGraduationDate
       memberSince
+      memberUntil
+      status
+      registrationType
+      updatedAt
       major {
         code
+        chineseName
+        englishName
+      }
+      college {
+        code
+        chineseName
+        englishName
       }
     }
   }
