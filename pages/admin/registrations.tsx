@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState } from "react";
-import { useGlobalFilter, useAsyncDebounce } from "react-table";
+import { useGlobalFilter, useFilters, Row } from "react-table";
+import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
@@ -15,7 +16,7 @@ import { useRegistrationTable } from "utils/reactTableTypeFix";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
-const { Input, Field, Control, Label } = Form;
+const { Input, Field, Control, Label, Select } = Form;
 
 const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(registrationsQuery, {
@@ -26,6 +27,18 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   const [registrationsData, setRegistrationsData] = useState<
     { registrations: Record<string, unknown>[] } | undefined
   >(undefined);
+
+  const typeFilter = useMemo(
+    () => (
+      rows: Array<Row<Record<string, unknown>>>,
+      id: string,
+      filterValue: string
+    ) =>
+      filterValue === "All"
+        ? rows
+        : rows.filter((row) => row.values[id] === filterValue),
+    []
+  );
 
   const tableColumns = useMemo(
     () => [
@@ -83,6 +96,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "Type of registration",
         accessor: "registrationType",
+        filter: typeFilter,
       },
       {
         Header: "Approve",
@@ -91,7 +105,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         Cell: ApproveCell,
       },
     ],
-    []
+    [typeFilter]
   );
 
   const tableData = useMemo(() => {
@@ -102,13 +116,26 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     return (row: Record<string, unknown>) => (row.id as number).toString();
   }, []);
 
+  const initialFilters = useMemo(
+    () => [
+      {
+        id: "registrationType",
+        value: "All",
+      },
+    ],
+    []
+  );
+
   const tableInstance = useRegistrationTable(
     {
       columns: tableColumns,
       data: tableData,
       getRowId: tableGetRowId,
+      autoResetFilters: false,
       autoResetGlobalFilter: false,
+      initialState: { filters: initialFilters },
     },
+    useFilters,
     useGlobalFilter
   );
 
@@ -119,6 +146,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     rows,
     prepareRow,
     state,
+    setFilter,
     setGlobalFilter,
   } = tableInstance;
 
@@ -126,8 +154,16 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     state.globalFilter
   );
 
+  const [typeFilterInput, setTypeFilterInput] = useState(
+    state.filters.find(({ id }) => id === "registrationType")?.value
+  );
+
   const onGlobalFilterChange = useAsyncDebounce((value) => {
     setGlobalFilter(value || undefined);
+  }, 500);
+
+  const onTypeFilterChange = useAsyncDebounce((value) => {
+    setFilter("registrationType", value || undefined);
   }, 500);
 
   if (data && data !== registrationsData) {
@@ -157,6 +193,21 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
                 onGlobalFilterChange(event.target.value);
               }}
             />
+          </Control>
+        </Field>
+        <Field>
+          <Control>
+            <Select
+              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+                setTypeFilterInput(event.target.value);
+                onTypeFilterChange(event.target.value);
+              }}
+              value={typeFilterInput}
+            >
+              <option>All</option>
+              <option>New</option>
+              <option>Renewal</option>
+            </Select>
           </Control>
         </Field>
         <Table {...getTableProps()}>
