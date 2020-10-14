@@ -85,7 +85,10 @@ export type PersonModelAttributes = Omit<
   ModelTimestamps;
 
 /** All the attributes needed to create an instance of the Person model */
-export type PersonCreationAttributes = Optional<PersonModelAttributes, "id">;
+export type PersonCreationAttributes = Optional<
+  Omit<PersonModelAttributes, "createdAt" | "updatedAt">,
+  "id"
+>;
 
 /** All the attributes needed to update an instance of the Person model */
 export type PersonUpdateAttributes = Partial<PersonModelAttributes> &
