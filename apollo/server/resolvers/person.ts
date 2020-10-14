@@ -7,10 +7,12 @@ import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
   Person,
-  PersonAttributes,
+  PersonModelAttributes,
   PersonUpdateAttributes,
   PersonCreationAttributes,
   CollegeEnum,
+  MemberStatusEnum,
+  RegistrationTypeEnum,
 } from "@/models/Person";
 import { Major } from "@/models/Major";
 import { College } from "@/models/College";
@@ -31,7 +33,7 @@ interface PersonUpdateResponse {
   /** Additional information about the mutation */
   message: string;
   /** The new person's attributes */
-  person?: PersonAttributes;
+  person?: PersonModelAttributes;
 }
 
 // Field resolvers
@@ -42,7 +44,7 @@ interface PersonUpdateResponse {
  * @category Field Resolver
  */
 const majorResolver: ResolverFn<null, Major | undefined> = (
-  { major }: Person,
+  { major }: PersonModelAttributes,
   _,
   { dataSources }
 ): Major | undefined => {
@@ -55,11 +57,36 @@ const majorResolver: ResolverFn<null, Major | undefined> = (
  * @category Field Resolver
  */
 const collegeResolver: ResolverFn<null, College> = (
-  { college }: Person,
+  { college }: PersonModelAttributes,
   _,
   { dataSources }
 ): College => {
   return dataSources.collegeAPI.getCollege(college as CollegeEnum);
+};
+
+/**
+ * The resolver for the status field of a Person
+ * @returns The status of the member
+ * @category Field Resolver
+ */
+const statusResolver: ResolverFn<null, MemberStatusEnum> = (
+  person: PersonModelAttributes,
+  _,
+  __
+): MemberStatusEnum => {
+  return Person.status(person);
+};
+
+/**
+ * The resolver for the registrationType field of a Person
+ * @returns The registrationType of the member
+ * @category Field Resolver
+ */
+const registrationTypeResolver: ResolverFn<
+  null,
+  RegistrationTypeEnum | null
+> = (person: PersonModelAttributes, _, __): RegistrationTypeEnum | null => {
+  return Person.registrationType(person);
 };
 
 // Query resolvers
@@ -70,11 +97,11 @@ const collegeResolver: ResolverFn<null, College> = (
  * @returns All the people
  * @category Query Resolver
  */
-const peopleResolver: ResolverFn<unknown, PersonAttributes[]> = async (
+const peopleResolver: ResolverFn<unknown, PersonModelAttributes[]> = async (
   _,
   __,
   { user, dataSources }
-): Promise<PersonAttributes[]> => {
+): Promise<PersonModelAttributes[]> => {
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
@@ -90,11 +117,10 @@ const peopleResolver: ResolverFn<unknown, PersonAttributes[]> = async (
  * @returns All the registrations (as PersonAttributes[])
  * @category Query Resolver
  */
-const registrationsResolver: ResolverFn<unknown, PersonAttributes[]> = async (
-  _,
-  __,
-  { user, dataSources }
-): Promise<PersonAttributes[]> => {
+const registrationsResolver: ResolverFn<
+  unknown,
+  PersonModelAttributes[]
+> = async (_, __, { user, dataSources }): Promise<PersonModelAttributes[]> => {
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
@@ -110,11 +136,11 @@ const registrationsResolver: ResolverFn<unknown, PersonAttributes[]> = async (
  * @returns All the active members (as PersonAttributes[])
  * @category Query Resolver
  */
-const membersResolver: ResolverFn<unknown, PersonAttributes[]> = async (
+const membersResolver: ResolverFn<unknown, PersonModelAttributes[]> = async (
   _,
   __,
   { user, dataSources }
-): Promise<PersonAttributes[]> => {
+): Promise<PersonModelAttributes[]> => {
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
@@ -132,12 +158,12 @@ const membersResolver: ResolverFn<unknown, PersonAttributes[]> = async (
  */
 const personResolver: ResolverFn<
   PersonResolverArgs,
-  PersonAttributes | null
+  PersonModelAttributes | null
 > = async (
   _,
   { sid },
   { user, dataSources }
-): Promise<PersonAttributes | null> => {
+): Promise<PersonModelAttributes | null> => {
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
@@ -280,6 +306,10 @@ export const resolvers: Resolvers = {
     major: majorResolver,
     /** see {@link collegeResolver} */
     college: collegeResolver,
+    /** see {@link statusResolver} */
+    status: statusResolver,
+    /** see {@link registrationTypeResolver} */
+    registrationType: registrationTypeResolver,
   },
   Query: {
     /** see {@link peopleResolver} */
