@@ -31,7 +31,7 @@ export enum CollegeEnum {
 }
 
 export enum MemberStatusEnum {
-  Unactivated = "Unactivated",
+  Unactivated = "Unactivated", // for those who have not finished registration
   Activated = "Activated",
   Expired = "Expired",
 }
