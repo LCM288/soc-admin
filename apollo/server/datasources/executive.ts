@@ -83,4 +83,15 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
     }
     return executives[0].get({ plain: true });
   }
+
+  /**
+   * Delete executive
+   * @async
+   * @param {{ key: string }} arg - The arg for the executive
+   * @returns {Promise<number>} Number of executives deleted
+   */
+  public async deleteExecutive(arg: { sid: string }): Promise<number> {
+    const count = await this.store.destroy({ where: arg });
+    return count;
+  }
 }
