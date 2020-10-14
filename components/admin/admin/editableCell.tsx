@@ -18,14 +18,14 @@ const EditableCell = ({
   // If the initialValue is changed external, sync it up with our state
   React.useEffect(() => {
     // @ts-expect-error react-table types not updated
-    cell.setState(initialValue);
-  }, [initialValue, cell]);
+    if (cell.state !== initialValue) cell.setState(initialValue);
+  }, [cell, initialValue]);
 
   return (
     <Input
       isStatic={!state.cellState.edit}
       // @ts-expect-error react-table types not updated
-      value={cell.state}
+      value={cell.state || ""}
       onChange={onChange}
     />
   );

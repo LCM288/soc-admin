@@ -1,15 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState } from "react";
-import { useTable, useRowState, CellProps } from "react-table";
+import { useTable, useRowState } from "react-table";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
-import { Table } from "react-bulma-components";
+import { Button, Table } from "react-bulma-components";
 import toast from "utils/toast";
 import executivesQuery from "apollo/queries/executive/executives.gql";
 import EditableCell from "components/admin/admin/editableCell";
 import ActionsCell from "components/admin/admin/actionsCell";
+import AdminInputModal from "components/admin/admin/adminInputModal";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -18,6 +19,8 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     fetchPolicy: "cache-and-network",
     pollInterval: 5000,
   });
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   const [executivesData, setExecutivesData] = useState<
     { executives: Record<string, unknown>[] } | undefined
@@ -89,33 +92,50 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     prepareRow,
   } = tableInstance;
 
+  const onModalOpen = () => {
+    setModalOpen(true);
+  };
+
   if (user) {
     return (
-      <Table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
+      <div>
+        <AdminInputModal
+          open={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+          }}
+        />
+        <Button color="primary" onClick={onModalOpen}>
+          Add person
+        </Button>
+        <Table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </div>
     );
   }
   return <a href="/login">Please login first </a>;
