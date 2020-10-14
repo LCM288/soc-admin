@@ -12,7 +12,12 @@ import { typeDefs as facultyTypeDefs } from "@/models/Faculty";
 import { typeDefs as collegeTypeDefs } from "@/models/College";
 
 // resolvers
-import { DateResolver, DateTypeDefinition } from "graphql-scalars";
+import {
+  DateResolver,
+  DateTypeDefinition,
+  DateTimeResolver,
+  DateTimeTypeDefinition,
+} from "graphql-scalars";
 import {
   resolverTypeDefs as personResolverTypeDefs,
   resolvers as personResolvers,
@@ -103,6 +108,7 @@ const apolloServer = new apolloServerMicro.ApolloServer({
   typeDefs: [
     gql`
       ${DateTypeDefinition}
+      ${DateTimeTypeDefinition}
     `,
     dummyTypeDefs,
     personTypeDefs,
@@ -119,7 +125,7 @@ const apolloServer = new apolloServerMicro.ApolloServer({
     collegeResolverTypeDefs,
   ],
   resolvers: [
-    { Date: DateResolver },
+    { Date: DateResolver, DateTime: DateTimeResolver },
     personResolvers,
     executiveResolvers,
     socSettingResolvers,

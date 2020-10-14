@@ -1,17 +1,21 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState } from "react";
-import { useTable, CellProps } from "react-table";
+import { useGlobalFilter, useFilters, Row } from "react-table";
+import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import { Table } from "react-bulma-components";
+import { Table, Form } from "react-bulma-components";
 import toast from "utils/toast";
 import membersQuery from "apollo/queries/person/members.gql";
+import { useMemberTable } from "utils/reactTableTypeFix";
 
 export { getServerSideProps } from "utils/getServerSideProps";
+
+const { Input, Field, Control, Label, Select } = Form;
 
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(membersQuery, {
@@ -22,6 +26,18 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const [membersData, setMembersData] = useState<
     { members: Record<string, unknown>[] } | undefined
   >(undefined);
+
+  const statusFilter = useMemo(
+    () => (
+      rows: Array<Row<Record<string, unknown>>>,
+      id: string,
+      filterValue: string
+    ) =>
+      filterValue === "All"
+        ? rows
+        : rows.filter((row) => row.values[id] === filterValue),
+    []
+  );
 
   const tableColumns = useMemo(
     () => [
@@ -59,17 +75,14 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       },
       {
         Header: "College",
-        accessor: "college",
-        Cell: ({ value }: CellProps<Record<string, unknown>, College>) => {
-          return <div>{`${value.code}`}</div>;
-        },
+        accessor: (row: Record<string, unknown>) =>
+          (row.college as College).code,
+        id: "college",
       },
       {
         Header: "Major",
-        accessor: "major",
-        Cell: ({ value }: CellProps<Record<string, unknown>, Major>) => {
-          return <div>{`${value.code}`}</div>;
-        },
+        accessor: (row: Record<string, unknown>) => (row.major as Major).code,
+        id: "major",
       },
       {
         Header: "Date of Entry",
@@ -79,8 +92,13 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Expected Graduation Date",
         accessor: "expectedGraduationDate",
       },
+      {
+        Header: "Status",
+        accessor: "status",
+        filter: statusFilter,
+      },
     ],
-    []
+    [statusFilter]
   );
 
   const tableData = useMemo(() => {
@@ -91,11 +109,55 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     return (row: Record<string, unknown>) => (row.id as number).toString();
   }, []);
 
-  const tableInstance = useTable({
-    columns: tableColumns,
-    data: tableData,
-    getRowId: tableGetRowId,
-  });
+  const initialFilters = useMemo(
+    () => [
+      {
+        id: "status",
+        value: "Activated",
+      },
+    ],
+    []
+  );
+
+  const tableInstance = useMemberTable(
+    {
+      columns: tableColumns,
+      data: tableData,
+      getRowId: tableGetRowId,
+      autoResetFilters: false,
+      autoResetGlobalFilter: false,
+      initialState: { filters: initialFilters },
+    },
+    useFilters,
+    useGlobalFilter
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state,
+    setGlobalFilter,
+    setFilter,
+  } = tableInstance;
+
+  const [globalFilterInput, setGlobalFilterInput] = useState(
+    state.globalFilter
+  );
+
+  const [statusFilterInput, setStatusFilterInput] = useState(
+    state.filters.find(({ id }) => id === "status")?.value
+  );
+
+  const onGlobalFilterChange = useAsyncDebounce((value) => {
+    setGlobalFilter(value || undefined);
+  }, 500);
+
+  const onStatusFilterChange = useAsyncDebounce((value) => {
+    setFilter("status", value || undefined);
+  }, 500);
 
   if (data && data !== membersData) {
     setMembersData(data);
@@ -110,41 +172,62 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     });
   }
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = tableInstance;
-
   if (user) {
     return (
-      <Table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
+      <>
+        <Field kind="addons">
+          <Control>
+            <Select
+              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+                setStatusFilterInput(event.target.value);
+                onStatusFilterChange(event.target.value);
+              }}
+              value={statusFilterInput}
+            >
+              <option>All</option>
+              <option>Activated</option>
+              <option>Expired</option>
+            </Select>
+          </Control>
+          <Control fullwidth>
+            <Input
+              placeholder="Filter for keyword"
+              value={globalFilterInput}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+                setGlobalFilterInput(event.target.value);
+                onGlobalFilterChange(event.target.value);
+              }}
+            />
+          </Control>
+        </Field>
+        <Table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </>
     );
   }
   return <a href="/login">Please login first </a>;
