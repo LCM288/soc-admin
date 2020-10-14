@@ -55,15 +55,18 @@ interface ClientKeysAttributes {
  * @returns All the soc settings
  * @category Query Resolver
  */
-const socSettingsResolver: ResolverFn<unknown, SocSettingAttributes[]> = (
+const socSettingsResolver: ResolverFn<unknown, SocSettingAttributes[]> = async (
   _,
   __,
   { dataSources }
 ): Promise<SocSettingAttributes[]> => {
+  const allSettings = await dataSources.socSettingAPI.findSocSettings();
   if (process.env.NODE_ENV === "development") {
-    return dataSources.socSettingAPI.findSocSettings();
+    return allSettings;
   }
-  throw new Error("You have no permission to read this");
+  return allSettings.filter((setting) =>
+    publicSocSettingsArray.includes(setting.key)
+  );
 };
 
 // Mutation resolvers
