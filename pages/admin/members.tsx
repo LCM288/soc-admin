@@ -1,12 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState } from "react";
-import {
-  useGlobalFilter,
-  useFilters,
-  useAsyncDebounce,
-  Row,
-} from "react-table";
+import { useGlobalFilter, useFilters, Row } from "react-table";
+import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
