@@ -104,7 +104,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
           </Navbar.Menu>
         </Navbar>
       </div>
-      {children}
+      <div className="px-4 py-4">{children}</div>
     </div>
   );
 };

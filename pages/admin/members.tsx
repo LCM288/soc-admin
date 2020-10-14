@@ -175,20 +175,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <>
-        <Field>
-          <Label>Filter</Label>
-          <Control>
-            <Input
-              placeholder="Filter for keyword"
-              value={globalFilterInput}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                setGlobalFilterInput(event.target.value);
-                onGlobalFilterChange(event.target.value);
-              }}
-            />
-          </Control>
-        </Field>
-        <Field>
+        <Field kind="addons">
           <Control>
             <Select
               onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -201,6 +188,16 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
               <option>Activated</option>
               <option>Expired</option>
             </Select>
+          </Control>
+          <Control fullwidth>
+            <Input
+              placeholder="Filter for keyword"
+              value={globalFilterInput}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+                setGlobalFilterInput(event.target.value);
+                onGlobalFilterChange(event.target.value);
+              }}
+            />
           </Control>
         </Field>
         <Table {...getTableProps()}>
