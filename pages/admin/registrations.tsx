@@ -1,14 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState } from "react";
-import { useGlobalFilter, useFilters, Row } from "react-table";
+import { useGlobalFilter, useFilters, usePagination, Row } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import { Table, Form } from "react-bulma-components";
+import { Table, Form, Button } from "react-bulma-components";
 import toast from "utils/toast";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import ApproveCell from "components/admin/registrations/approveCell";
@@ -16,7 +16,7 @@ import { useRegistrationTable } from "utils/reactTableTypeFix";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
-const { Input, Field, Control, Label, Select } = Form;
+const { Input, Field, Control, Select } = Form;
 
 const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(registrationsQuery, {
@@ -133,29 +133,36 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
       getRowId: tableGetRowId,
       autoResetFilters: false,
       autoResetGlobalFilter: false,
-      initialState: { filters: initialFilters },
+      autoResetPage: false,
+      initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
     },
     useFilters,
-    useGlobalFilter
+    useGlobalFilter,
+    usePagination
   );
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
-    state,
+    state: { globalFilter, filters, pageIndex, pageSize },
     setFilter,
     setGlobalFilter,
+    canPreviousPage,
+    previousPage,
+    page,
+    pageCount,
+    canNextPage,
+    nextPage,
+    setPageSize,
+    gotoPage,
   } = tableInstance;
 
-  const [globalFilterInput, setGlobalFilterInput] = useState(
-    state.globalFilter
-  );
+  const [globalFilterInput, setGlobalFilterInput] = useState(globalFilter);
 
   const [typeFilterInput, setTypeFilterInput] = useState(
-    state.filters.find(({ id }) => id === "registrationType")?.value
+    filters.find(({ id }) => id === "registrationType")?.value
   );
 
   const onGlobalFilterChange = useAsyncDebounce((value) => {
@@ -220,7 +227,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
+            {page.map((row) => {
               prepareRow(row);
               return (
                 <tr {...row.getRowProps()}>
@@ -234,6 +241,63 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
             })}
           </tbody>
         </Table>
+        <Field kind="group">
+          <Control>
+            <Button disabled={!canPreviousPage} onClick={() => gotoPage(0)}>
+              First
+            </Button>
+          </Control>
+          <Control>
+            <Button disabled={!canPreviousPage} onClick={previousPage}>
+              Prev
+            </Button>
+          </Control>
+          <Control style={{ "align-self": "center" }}>
+            {pageIndex + 1} of {pageCount}
+          </Control>
+          <Control>
+            <Button disabled={!canNextPage} onClick={nextPage}>
+              Next
+            </Button>
+          </Control>
+          <Control>
+            <Button
+              disabled={!canNextPage}
+              onClick={() => gotoPage(pageCount - 1)}
+            >
+              Last
+            </Button>
+          </Control>
+        </Field>
+        <Field kind="group">
+          <Control>
+            <Input
+              type="number"
+              value={pageIndex + 1}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+                gotoPage(parseInt(event.target.value, 10) - 1);
+              }}
+              min="0"
+              max={pageCount}
+            />
+          </Control>
+          <Control>
+            <Select
+              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+                setPageSize(parseInt(event.target.value, 10));
+              }}
+              value={pageSize.toString()}
+            >
+              <option>1</option>
+              <option>2</option>
+              <option>5</option>
+              <option>10</option>
+              <option>20</option>
+              <option>50</option>
+              <option>100</option>
+            </Select>
+          </Control>
+        </Field>
       </>
     );
   }

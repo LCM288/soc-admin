@@ -15,7 +15,7 @@ import { useMemberTable } from "utils/reactTableTypeFix";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
-const { Input, Field, Control, Label, Select } = Form;
+const { Input, Field, Control, Select } = Form;
 
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(membersQuery, {
