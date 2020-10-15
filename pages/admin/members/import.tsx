@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from "react";
 import Papa from "papaparse";
 import _ from "lodash";
+import { DateTime } from "luxon";
 import { useTable } from "react-table";
 import { useMutation } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
@@ -111,7 +112,12 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
 
   const upload = () => {
     // remove member id to prevent data collision
-    const members = membersData?.members.map((member) => _.omit(member, "id"));
+    const members = membersData?.members.map((member) => {
+      const result = _.omit(member, "id");
+      const { memberSince } = result;
+      result.memberSince = memberSince || DateTime.local();
+      return result;
+    });
     _.chunk(members, 10).forEach((people) =>
       importPeople({
         variables: {
@@ -141,6 +147,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                 <InputFile
                   color="primary"
                   placeholder="Textarea"
+                  inputProps={{ accept: ".csv,.tsv,.txt" }}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     if (event.target.files && event.target.files[0]) {
                       Papa.parse(event.target.files[0], {
