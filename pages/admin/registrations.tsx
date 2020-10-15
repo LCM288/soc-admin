@@ -8,15 +8,16 @@ import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import { Table, Form, Button } from "react-bulma-components";
+import { Table, Form, Button, Level } from "react-bulma-components";
 import toast from "utils/toast";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import ApproveCell from "components/admin/registrations/approveCell";
 import { useRegistrationTable } from "utils/reactTableTypeFix";
+import getPageIndices from "utils/getPageIndices";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
-const { Input, Field, Control, Select } = Form;
+const { Input, Field, Label, Control, Select } = Form;
 
 const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(registrationsQuery, {
@@ -149,12 +150,8 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     state: { globalFilter, filters, pageIndex, pageSize },
     setFilter,
     setGlobalFilter,
-    canPreviousPage,
-    previousPage,
     page,
     pageCount,
-    canNextPage,
-    nextPage,
     setPageSize,
     gotoPage,
   } = tableInstance;
@@ -187,6 +184,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   }
 
   if (user) {
+    const pageIndices = getPageIndices(pageIndex, pageCount);
     return (
       <>
         <Field kind="addons">
@@ -241,63 +239,50 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
             })}
           </tbody>
         </Table>
-        <Field kind="group">
-          <Control>
-            <Button disabled={!canPreviousPage} onClick={() => gotoPage(0)}>
-              First
-            </Button>
-          </Control>
-          <Control>
-            <Button disabled={!canPreviousPage} onClick={previousPage}>
-              Prev
-            </Button>
-          </Control>
-          <Control style={{ "align-self": "center" }}>
-            {pageIndex + 1} of {pageCount}
-          </Control>
-          <Control>
-            <Button disabled={!canNextPage} onClick={nextPage}>
-              Next
-            </Button>
-          </Control>
-          <Control>
-            <Button
-              disabled={!canNextPage}
-              onClick={() => gotoPage(pageCount - 1)}
-            >
-              Last
-            </Button>
-          </Control>
-        </Field>
-        <Field kind="group">
-          <Control>
-            <Input
-              type="number"
-              value={pageIndex + 1}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                gotoPage(parseInt(event.target.value, 10) - 1);
-              }}
-              min="0"
-              max={pageCount}
-            />
-          </Control>
-          <Control>
-            <Select
-              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                setPageSize(parseInt(event.target.value, 10));
-              }}
-              value={pageSize.toString()}
-            >
-              <option>1</option>
-              <option>2</option>
-              <option>5</option>
-              <option>10</option>
-              <option>20</option>
-              <option>50</option>
-              <option>100</option>
-            </Select>
-          </Control>
-        </Field>
+        <Level>
+          <Level.Item>
+            <Field horizontal>
+              <Label className="mr-2" style={{ alignSelf: "center" }}>
+                Result per page
+              </Label>
+              <Control>
+                <Select
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => {
+                    setPageSize(parseInt(event.target.value, 10));
+                  }}
+                  value={pageSize.toString()}
+                >
+                  <option>1</option>
+                  <option>2</option>
+                  <option>5</option>
+                  <option>10</option>
+                  <option>20</option>
+                  <option>50</option>
+                  <option>100</option>
+                </Select>
+              </Control>
+            </Field>
+          </Level.Item>
+        </Level>
+        <Level>
+          <Level.Item>
+            <Field kind="addons">
+              {pageIndices.map((p) => (
+                <Control>
+                  <Button
+                    key={p}
+                    onClick={() => gotoPage(p)}
+                    className={{ "is-info": pageIndex === p }}
+                  >
+                    {p + 1}
+                  </Button>
+                </Control>
+              ))}
+            </Field>
+          </Level.Item>
+        </Level>
       </>
     );
   }
