@@ -56,17 +56,24 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
     <div>
       <LogoutReminderModal open={openModel} />
       <div ref={navBarRef}>
-        <Navbar color="primary" fixed="top" active={isActive}>
+        <Navbar
+          color="primary"
+          fixed="top"
+          active={isActive}
+          onClick={() => {
+            if (isActive) setActive(false);
+          }}
+        >
           <Navbar.Brand>
             <Link href="/admin">
-              <Navbar.Item onClick={() => setActive(false)}>
+              <a href="/admin" className="navbar-item">
                 <img
                   src="https://bulma.io/images/bulma-logo.png"
                   alt="Bulma: a modern CSS framework based on Flexbox"
                   width="112"
                   height="28"
                 />
-              </Navbar.Item>
+              </a>
             </Link>
             <Navbar.Item renderAs="div">
               <LogoutTimer time={logoutTime} />
@@ -76,29 +83,31 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
           <Navbar.Menu>
             <Navbar.Container>
               <Link href="/admin/members">
-                <Navbar.Item onClick={() => setActive(false)}>
+                <a href="/admin/members" className="navbar-item">
                   Members
-                </Navbar.Item>
+                </a>
               </Link>
               <Link href="/admin/registrations">
-                <Navbar.Item onClick={() => setActive(false)}>
+                <a href="/admin/registrations" className="navbar-item">
                   Registrations
-                </Navbar.Item>
+                </a>
               </Link>
               <Link href="/admin/soc_settings">
-                <Navbar.Item onClick={() => setActive(false)}>
+                <a href="/admin/soc_settings" className="navbar-item">
                   Settings
-                </Navbar.Item>
+                </a>
               </Link>
               <Link href="/admin/authentication">
-                <Navbar.Item onClick={() => setActive(false)}>
+                <a href="/admin/authentication" className="navbar-item">
                   Authentication
-                </Navbar.Item>
+                </a>
               </Link>
             </Navbar.Container>
             <Navbar.Container position="end">
               <Link href="/api/logout">
-                <Navbar.Item>Logout</Navbar.Item>
+                <a href="/api/logout" className="navbar-item">
+                  Logout
+                </a>
               </Link>
             </Navbar.Container>
           </Navbar.Menu>
