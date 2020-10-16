@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 import { useTable } from "react-table";
 import { useMutation } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
+import toast from "utils/toast";
 import { ServerSideProps } from "utils/getServerSideProps";
 import {
   Level,
@@ -69,16 +70,10 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "College",
         accessor: "college",
-        /* Cell: ({ value }: CellProps<Record<string, unknown>, College>) => {
-          return <div>{`${value.code}`}</div>;
-        }, */
       },
       {
         Header: "Major",
         accessor: "major",
-        /* Cell: ({ value }: CellProps<Record<string, unknown>, Major>) => {
-          return <div>{`${value.code}`}</div>;
-        }, */
       },
       {
         Header: "Date of Entry",
@@ -109,21 +104,53 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     data: tableData,
     getRowId: tableGetRowId,
   });
-
+  const [isUploading, setIsUploading] = useState(false);
+  const [isFileProcessing, setIsFileProcessing] = useState(false);
   const upload = () => {
     // remove member id to prevent data collision
-    const members = membersData?.members.map((member) => {
+    if (!membersData || membersData === undefined) {
+      toast.danger("No member data found", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      return;
+    }
+    const members = membersData.members.map((member) => {
       const result = _.omit(member, "id");
       const { memberSince } = result;
       result.memberSince = memberSince || DateTime.local().toISODate();
       return result;
     });
-    _.chunk(members, 100).forEach((people) =>
+    setIsUploading(true);
+    _.chunk(members, 100).forEach((people, batch) =>
       importPeople({
         variables: {
           people,
         },
       })
+        .then(({ data }) => {
+          data.importPeople.forEach(
+            (
+              { success, message }: { success: boolean; message: string },
+              count: number
+            ) => {
+              if (!success) {
+                toast.danger(
+                  `Error on ${members[batch * 100 + count].sid}: ${message}`,
+                  {
+                    position: toast.POSITION.TOP_LEFT,
+                  }
+                );
+              }
+            }
+          );
+          setIsUploading(false);
+        })
+        .catch((err) => {
+          toast.danger(err.message, {
+            position: toast.POSITION.TOP_LEFT,
+          });
+          setIsUploading(false);
+        })
     );
   };
 
@@ -139,6 +166,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
 
   const onImport = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
+      setIsFileProcessing(true);
       Papa.parse(event.target.files[0], {
         ...papaConfig,
         complete(results) {
@@ -178,6 +206,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
           if (result && result !== membersData) {
             setMembersData(result);
           }
+          setIsFileProcessing(false);
         },
       });
     }
@@ -200,7 +229,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             </Level.Side>
             <Level.Side align="right">
               <Level.Item>
-                <Button color="primary" onClick={upload}>
+                <Button color="primary" onClick={upload} loading={isUploading}>
                   Upload
                 </Button>
               </Level.Item>
