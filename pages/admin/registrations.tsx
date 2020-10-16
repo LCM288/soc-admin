@@ -8,12 +8,12 @@ import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import { Table, Form, Button, Level } from "react-bulma-components";
+import { Table, Form, Level } from "react-bulma-components";
 import toast from "utils/toast";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import ApproveCell from "components/admin/registrations/approveCell";
+import PaginationControl from "components/admin/table/paginationControl";
 import { useRegistrationTable } from "utils/reactTableTypeFix";
-import getPageIndices from "utils/getPageIndices";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -184,34 +184,67 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   }
 
   if (user) {
-    const pageIndices = getPageIndices(pageIndex, pageCount);
     return (
       <>
-        <Field kind="addons">
-          <Control>
-            <Select
-              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                setTypeFilterInput(event.target.value);
-                onTypeFilterChange(event.target.value);
-              }}
-              value={typeFilterInput}
-            >
-              <option>All</option>
-              <option>New</option>
-              <option>Renewal</option>
-            </Select>
-          </Control>
-          <Control fullwidth>
-            <Input
-              placeholder="Filter for keyword"
-              value={globalFilterInput}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                setGlobalFilterInput(event.target.value);
-                onGlobalFilterChange(event.target.value);
-              }}
-            />
-          </Control>
-        </Field>
+        <PaginationControl
+          gotoPage={gotoPage}
+          pageIndex={pageIndex}
+          pageCount={pageCount}
+        />
+        <Level>
+          <Level.Side align="left">
+            <Field kind="addons">
+              <Control>
+                <Select
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => {
+                    setTypeFilterInput(event.target.value);
+                    onTypeFilterChange(event.target.value);
+                  }}
+                  value={typeFilterInput}
+                >
+                  <option>All</option>
+                  <option>New</option>
+                  <option>Renewal</option>
+                </Select>
+              </Control>
+              <Control fullwidth>
+                <Input
+                  placeholder="Filter for keyword"
+                  value={globalFilterInput}
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => {
+                    setGlobalFilterInput(event.target.value);
+                    onGlobalFilterChange(event.target.value);
+                  }}
+                />
+              </Control>
+            </Field>
+          </Level.Side>
+          <Level.Side align="right">
+            <Field horizontal>
+              <Label className="mr-2" style={{ alignSelf: "center" }}>
+                Result per page
+              </Label>
+              <Control>
+                <Select
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => {
+                    setPageSize(parseInt(event.target.value, 10));
+                  }}
+                  value={pageSize.toString()}
+                >
+                  {[1, 2, 5, 10, 20, 50, 100].map((pageSizeOption) => (
+                    <option>{pageSizeOption}</option>
+                  ))}
+                </Select>
+              </Control>
+            </Field>
+          </Level.Side>
+        </Level>
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
@@ -239,50 +272,11 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
             })}
           </tbody>
         </Table>
-        <Level>
-          <Level.Item>
-            <Field horizontal>
-              <Label className="mr-2" style={{ alignSelf: "center" }}>
-                Result per page
-              </Label>
-              <Control>
-                <Select
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>
-                  ): void => {
-                    setPageSize(parseInt(event.target.value, 10));
-                  }}
-                  value={pageSize.toString()}
-                >
-                  <option>1</option>
-                  <option>2</option>
-                  <option>5</option>
-                  <option>10</option>
-                  <option>20</option>
-                  <option>50</option>
-                  <option>100</option>
-                </Select>
-              </Control>
-            </Field>
-          </Level.Item>
-        </Level>
-        <Level>
-          <Level.Item>
-            <Field kind="addons">
-              {pageIndices.map((p) => (
-                <Control>
-                  <Button
-                    key={p}
-                    onClick={() => gotoPage(p)}
-                    className={{ "is-info": pageIndex === p }}
-                  >
-                    {p + 1}
-                  </Button>
-                </Control>
-              ))}
-            </Field>
-          </Level.Item>
-        </Level>
+        <PaginationControl
+          gotoPage={gotoPage}
+          pageIndex={pageIndex}
+          pageCount={pageCount}
+        />
       </>
     );
   }
