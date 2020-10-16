@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/components_register.html">components\register</a>
+					<a href="../modules/components_admin_table.html">components\admin\table</a>
 				</li>
 				<li>
-					<a href="components_register.props-10.html">Props</a>
+					<a href="components_admin_table.props.html">Props</a>
 				</li>
 			</ul>
 			<h1>Interface Props</h1>
@@ -84,7 +84,9 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_register.props-10.html#sid" class="tsd-kind-icon">sid</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_table.props.html#gotopage" class="tsd-kind-icon">goto<wbr>Page</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_table.props.html#pagecount" class="tsd-kind-icon">page<wbr>Count</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_table.props.html#pageindex" class="tsd-kind-icon">page<wbr>Index</a></li>
 							</ul>
 						</section>
 					</div>
@@ -93,12 +95,53 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="sid" class="tsd-anchor"></a>
-					<h3>sid</h3>
-					<div class="tsd-signature tsd-kind-icon">sid<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="gotopage" class="tsd-anchor"></a>
+					<h3>goto<wbr>Page</h3>
+					<div class="tsd-signature tsd-kind-icon">goto<wbr>Page<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>page<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/03a5ecf/components/register/sidField.tsx#L7">components/register/sidField.tsx:7</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/03a5ecf/components/admin/table/paginationControl.tsx#L5">components/admin/table/paginationControl.tsx:5</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>page<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>page: <span class="tsd-signature-type">number</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="pagecount" class="tsd-anchor"></a>
+					<h3>page<wbr>Count</h3>
+					<div class="tsd-signature tsd-kind-icon">page<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/03a5ecf/components/admin/table/paginationControl.tsx#L7">components/admin/table/paginationControl.tsx:7</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="pageindex" class="tsd-anchor"></a>
+					<h3>page<wbr>Index</h3>
+					<div class="tsd-signature tsd-kind-icon">page<wbr>Index<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/03a5ecf/components/admin/table/paginationControl.tsx#L6">components/admin/table/paginationControl.tsx:6</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -146,10 +189,10 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/components_admin_socsettings.html">components\admin\soc<wbr>Settings</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/components_admin_table.html">components\admin\table</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/components_register.html">components\register</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -183,15 +226,33 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="components_register.props-10.html" class="tsd-kind-icon">Props</a>
+						<a href="components_admin_table.props.html" class="tsd-kind-icon">Props</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="components_register.props-10.html#sid" class="tsd-kind-icon">sid</a>
+								<a href="components_admin_table.props.html#gotopage" class="tsd-kind-icon">goto<wbr>Page</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="components_admin_table.props.html#pagecount" class="tsd-kind-icon">page<wbr>Count</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="components_admin_table.props.html#pageindex" class="tsd-kind-icon">page<wbr>Index</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/components_admin_table.html#control" class="tsd-kind-icon">Control</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/components_admin_table.html#field" class="tsd-kind-icon">Field</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="../modules/components_admin_table.html#paginationcontrol" class="tsd-kind-icon">Pagination<wbr>Control</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/components_admin_table.html#getpageindices" class="tsd-kind-icon">get<wbr>Page<wbr>Indices</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
