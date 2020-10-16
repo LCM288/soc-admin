@@ -208,7 +208,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
                   value={typeFilterInput}
                 >
                   {typeOptions.map((typeOption) => (
-                    <option>{typeOption}</option>
+                    <option key={typeOption}>{typeOption}</option>
                   ))}
                 </Select>
               </Control>
@@ -241,7 +241,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
                   value={pageSize.toString()}
                 >
                   {pageSizeOptions.map((pageSizeOption) => (
-                    <option>{pageSizeOption}</option>
+                    <option key={pageSizeOption}>{pageSizeOption}</option>
                   ))}
                 </Select>
               </Control>

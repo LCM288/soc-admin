@@ -39,11 +39,10 @@ const PaginationControl = ({
       <Level.Item>
         <Field kind="addons">
           {pageIndices.map((p) => (
-            <Control>
+            <Control key={p}>
               <Button
-                key={p}
                 onClick={() => gotoPage(p)}
-                className={{ "is-info": pageIndex === p }}
+                className={pageIndex === p ? "is-info" : ""}
               >
                 {p + 1}
               </Button>

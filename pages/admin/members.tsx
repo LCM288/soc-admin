@@ -200,7 +200,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                   value={statusFilterInput}
                 >
                   {statusOptions.map((statusOption) => (
-                    <option>{statusOption}</option>
+                    <option key={statusOption}>{statusOption}</option>
                   ))}
                 </Select>
               </Control>
@@ -233,7 +233,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                   value={pageSize.toString()}
                 >
                   {pageSizeOptions.map((pageSizeOption) => (
-                    <option>{pageSizeOption}</option>
+                    <option key={pageSizeOption}>{pageSizeOption}</option>
                   ))}
                 </Select>
               </Control>
