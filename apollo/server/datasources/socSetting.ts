@@ -35,6 +35,17 @@ export default class SocSettingAPI extends DataSource<ContextBase> {
   }
 
   /**
+   * Find a specific soc setting
+   * @async
+   * @returns {Promise<SocSettingAttributes | null>} The sepecified soc settings or null
+   */
+  public async findSocSetting(
+    key: string
+  ): Promise<SocSettingAttributes | null> {
+    return this.store.findOne({ where: { key }, raw: true });
+  }
+
+  /**
    * Add or update a new soc setting
    * @async
    * @param {SocSettingCreationAttributes} arg - The arg for the soc setting

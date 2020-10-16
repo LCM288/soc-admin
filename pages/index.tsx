@@ -128,7 +128,6 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
       position: toast.POSITION.TOP_LEFT,
     });
   }
-  console.log(socSettingsQueryResult);
   if (!countExecutivesQueryResult.data.countExecutives && user) {
     return (
       <div>

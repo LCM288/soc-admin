@@ -37,12 +37,14 @@ function App({ Component, pageProps }: AppProps): React.ReactElement {
       Layout: React.ComponentType;
     }).Layout ?? React.Fragment;
   return (
-    <Layout>
+    <>
       <ApolloProvider client={client}>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ApolloProvider>
       <ToastContainer closeButton={BulmaCloseBtn} />
-    </Layout>
+    </>
   );
 }
 

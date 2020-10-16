@@ -1,22 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState } from "react";
-import { useGlobalFilter, useFilters, Row } from "react-table";
+import { useGlobalFilter, useFilters, usePagination, Row } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import { Table, Form } from "react-bulma-components";
+import { Table, Form, Level } from "react-bulma-components";
 import toast from "utils/toast";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import ApproveCell from "components/admin/registrations/approveCell";
+import PaginationControl from "components/admin/table/paginationControl";
 import { useRegistrationTable } from "utils/reactTableTypeFix";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
-const { Input, Field, Control, Label, Select } = Form;
+const { Input, Field, Label, Control, Select } = Form;
+
+const typeOptions = ["All", "New", "Renewal"];
+const pageSizeOptions = [1, 2, 5, 10, 20, 50];
 
 const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(registrationsQuery, {
@@ -133,29 +137,32 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
       getRowId: tableGetRowId,
       autoResetFilters: false,
       autoResetGlobalFilter: false,
-      initialState: { filters: initialFilters },
+      autoResetPage: false,
+      initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
     },
     useFilters,
-    useGlobalFilter
+    useGlobalFilter,
+    usePagination
   );
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
-    state,
+    state: { globalFilter, filters, pageIndex, pageSize },
     setFilter,
     setGlobalFilter,
+    page,
+    pageCount,
+    setPageSize,
+    gotoPage,
   } = tableInstance;
 
-  const [globalFilterInput, setGlobalFilterInput] = useState(
-    state.globalFilter
-  );
+  const [globalFilterInput, setGlobalFilterInput] = useState(globalFilter);
 
   const [typeFilterInput, setTypeFilterInput] = useState(
-    state.filters.find(({ id }) => id === "registrationType")?.value
+    filters.find(({ id }) => id === "registrationType")?.value
   );
 
   const onGlobalFilterChange = useAsyncDebounce((value) => {
@@ -182,31 +189,65 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <>
-        <Field kind="addons">
-          <Control>
-            <Select
-              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                setTypeFilterInput(event.target.value);
-                onTypeFilterChange(event.target.value);
-              }}
-              value={typeFilterInput}
-            >
-              <option>All</option>
-              <option>New</option>
-              <option>Renewal</option>
-            </Select>
-          </Control>
-          <Control fullwidth>
-            <Input
-              placeholder="Filter for keyword"
-              value={globalFilterInput}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                setGlobalFilterInput(event.target.value);
-                onGlobalFilterChange(event.target.value);
-              }}
-            />
-          </Control>
-        </Field>
+        <PaginationControl
+          gotoPage={gotoPage}
+          pageIndex={pageIndex}
+          pageCount={pageCount}
+        />
+        <Level>
+          <Level.Side align="left">
+            <Field kind="addons">
+              <Control>
+                <Select
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => {
+                    setTypeFilterInput(event.target.value);
+                    onTypeFilterChange(event.target.value);
+                  }}
+                  value={typeFilterInput}
+                >
+                  {typeOptions.map((typeOption) => (
+                    <option key={typeOption}>{typeOption}</option>
+                  ))}
+                </Select>
+              </Control>
+              <Control fullwidth>
+                <Input
+                  placeholder="Filter for keyword"
+                  value={globalFilterInput}
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => {
+                    setGlobalFilterInput(event.target.value);
+                    onGlobalFilterChange(event.target.value);
+                  }}
+                />
+              </Control>
+            </Field>
+          </Level.Side>
+          <Level.Side align="right">
+            <Field horizontal>
+              <Label className="mr-2" style={{ alignSelf: "center" }}>
+                Result per page
+              </Label>
+              <Control>
+                <Select
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => {
+                    setPageSize(parseInt(event.target.value, 10));
+                  }}
+                  value={pageSize.toString()}
+                >
+                  {pageSizeOptions.map((pageSizeOption) => (
+                    <option key={pageSizeOption}>{pageSizeOption}</option>
+                  ))}
+                </Select>
+              </Control>
+            </Field>
+          </Level.Side>
+        </Level>
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
@@ -220,7 +261,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
+            {page.map((row) => {
               prepareRow(row);
               return (
                 <tr {...row.getRowProps()}>
@@ -234,6 +275,11 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
             })}
           </tbody>
         </Table>
+        <PaginationControl
+          gotoPage={gotoPage}
+          pageIndex={pageIndex}
+          pageCount={pageCount}
+        />
       </>
     );
   }
