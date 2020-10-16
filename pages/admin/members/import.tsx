@@ -115,10 +115,10 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     const members = membersData?.members.map((member) => {
       const result = _.omit(member, "id");
       const { memberSince } = result;
-      result.memberSince = memberSince || DateTime.local();
+      result.memberSince = memberSince || DateTime.local().toISODate();
       return result;
     });
-    _.chunk(members, 10).forEach((people) =>
+    _.chunk(members, 100).forEach((people) =>
       importPeople({
         variables: {
           people,
@@ -137,6 +137,52 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
 
   const papaConfig = { header: true, skipEmptyLines: true };
 
+  const onImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      Papa.parse(event.target.files[0], {
+        ...papaConfig,
+        complete(results) {
+          const result = {
+            members: results.data.map(
+              ({
+                ID: id,
+                SID: sid,
+                "Chinese Name": chineseName,
+                "English Name": englishName,
+                Gender: gender,
+                "Date of Birth": dateOfBirth,
+                Email: email,
+                Phone: phone,
+                College: college,
+                Major: major,
+                "Date of Entry": dateOfEntry,
+                "Expected Graduation Date": expectedGraduationDate,
+                "Member Since": memberSince,
+              }) => ({
+                id,
+                sid,
+                chineseName,
+                englishName,
+                gender,
+                dateOfBirth,
+                email,
+                phone,
+                college,
+                major,
+                dateOfEntry,
+                expectedGraduationDate,
+                memberSince,
+              })
+            ),
+          };
+          if (result && result !== membersData) {
+            setMembersData(result);
+          }
+        },
+      });
+    }
+  };
+
   if (user) {
     return (
       <Section>
@@ -148,51 +194,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                   color="primary"
                   placeholder="Textarea"
                   inputProps={{ accept: ".csv,.tsv,.txt" }}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    if (event.target.files && event.target.files[0]) {
-                      Papa.parse(event.target.files[0], {
-                        ...papaConfig,
-                        complete(results) {
-                          const result = {
-                            members: results.data.map(
-                              ({
-                                ID: id,
-                                SID: sid,
-                                "Chinese Name": chineseName,
-                                "English Name": englishName,
-                                Gender: gender,
-                                "Date of Birth": dateOfBirth,
-                                Email: email,
-                                Phone: phone,
-                                College: college,
-                                Major: major,
-                                "Date of Entry": dateOfEntry,
-                                "Expected Graduation Date": expectedGraduationDate,
-                                "Member Since": memberSince,
-                              }) => ({
-                                id,
-                                sid,
-                                chineseName,
-                                englishName,
-                                gender,
-                                dateOfBirth,
-                                email,
-                                phone,
-                                college,
-                                major,
-                                dateOfEntry,
-                                expectedGraduationDate,
-                                memberSince,
-                              })
-                            ),
-                          };
-                          if (result && result !== membersData) {
-                            setMembersData(result);
-                          }
-                        },
-                      });
-                    }
-                  }}
+                  onChange={onImport}
                 />
               </Level.Item>
             </Level.Side>

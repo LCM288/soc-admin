@@ -256,15 +256,22 @@ const importPeopleResolver: ResolverFn<
   if (!isAdmin) {
     return [{ success: false, message: "You have no permission to do this" }];
   }
-  const result = people.map(async (person) => {
-    try {
-      const personResult = await dataSources.personAPI.addNewPerson(person);
-      return { success: true, message: "success", personResult };
-    } catch (err) {
-      return { success: false, message: err.message };
-    }
-  });
-  return Promise.all(result);
+  const mutations = people.map(
+    (person) =>
+      new Promise<PersonUpdateResponse>((resolve) => {
+        dataSources.personAPI
+          .addNewPerson(person)
+          .then((personResult) =>
+            resolve({
+              success: true,
+              message: "success",
+              person: personResult,
+            })
+          )
+          .catch((err) => resolve({ success: false, message: err.message }));
+      })
+  );
+  return Promise.all(mutations);
 };
 
 /**
