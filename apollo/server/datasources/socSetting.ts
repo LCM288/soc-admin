@@ -37,7 +37,7 @@ export default class SocSettingAPI extends DataSource<ContextBase> {
   /**
    * Find a specific soc setting
    * @async
-   * @returns {Promise<SocSettingAttributes | >} An array of soc settings
+   * @returns {Promise<SocSettingAttributes | null>} The sepecified soc settings or null
    */
   public async findSocSetting(
     key: string
