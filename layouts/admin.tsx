@@ -3,6 +3,8 @@ import { Navbar } from "react-bulma-components";
 import Link from "next/link";
 import LogoutTimer from "components/logoutTimer";
 import LogoutReminderModal from "components/logoutReminderModal";
+import { useQuery } from "@apollo/react-hooks";
+import socNameQuery from "apollo/queries/socSetting/socName.gql";
 import { DateTime } from "luxon";
 
 interface Props {
@@ -17,6 +19,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
     DateTime.local().plus({ minutes: 30 })
   );
   const [openModel, setOpenModel] = useState(false);
+  const { data, loading, error } = useQuery(socNameQuery);
 
   const toggleActive = () => {
     setActive(!isActive);
@@ -67,12 +70,9 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
           <Navbar.Brand>
             <Link href="/admin">
               <a href="/admin" className="navbar-item">
-                <img
-                  src="https://bulma.io/images/bulma-logo.png"
-                  alt="Bulma: a modern CSS framework based on Flexbox"
-                  width="112"
-                  height="28"
-                />
+                {loading && <p>loading</p>}
+                {error && <p>error</p>}
+                {data?.socName || <></>}
               </a>
             </Link>
             <Navbar.Item renderAs="div">
