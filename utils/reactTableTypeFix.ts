@@ -50,8 +50,12 @@ type MembersTableInstance<
   D extends Record<string, unknown> = Record<string, unknown>
 > = TableInstance<D> &
   UseFiltersInstanceProps<D> &
-  UseGlobalFiltersInstanceProps<D> & {
-    state: TableState<D> & UseFiltersState<D> & UseGlobalFiltersState<D>;
+  UseGlobalFiltersInstanceProps<D> &
+  UsePaginationInstanceProps<D> & {
+    state: TableState<D> &
+      UseFiltersState<D> &
+      UseGlobalFiltersState<D> &
+      UsePaginationState<D>;
   };
 
 type MemberTableHook<
@@ -59,14 +63,16 @@ type MemberTableHook<
 > = (
   options: TableOptions<D> &
     UseFiltersOptions<D> &
-    UseGlobalFiltersOptions<D> & {
+    UseGlobalFiltersOptions<D> &
+    UsePaginationOptions<D> & {
       initialState:
         | TableState<D>
         | UseFiltersState<D>
-        | UseGlobalFiltersState<D>;
+        | UseGlobalFiltersState<D>
+        | UsePaginationState<D>;
     },
   ...plugins: Array<PluginHook<D>>
 ) => MembersTableInstance;
 
-/** Must be used with the useGlobalFilter and useFilters plugin */
+/** Must be used with the useGlobalFilter, useFilters and usePagination plugin */
 export const useMemberTable = useTable as MemberTableHook;

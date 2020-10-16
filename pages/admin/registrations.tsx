@@ -19,6 +19,9 @@ export { getServerSideProps } from "utils/getServerSideProps";
 
 const { Input, Field, Label, Control, Select } = Form;
 
+const typeOptions = ["All", "New", "Renewal"];
+const pageSizeOptions = [1, 2, 5, 10, 20, 50];
+
 const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(registrationsQuery, {
     fetchPolicy: "cache-and-network",
@@ -204,9 +207,9 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
                   }}
                   value={typeFilterInput}
                 >
-                  <option>All</option>
-                  <option>New</option>
-                  <option>Renewal</option>
+                  {typeOptions.map((typeOption) => (
+                    <option>{typeOption}</option>
+                  ))}
                 </Select>
               </Control>
               <Control fullwidth>
@@ -237,7 +240,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
                   }}
                   value={pageSize.toString()}
                 >
-                  {[1, 2, 5, 10, 20, 50, 100].map((pageSizeOption) => (
+                  {pageSizeOptions.map((pageSizeOption) => (
                     <option>{pageSizeOption}</option>
                   ))}
                 </Select>
