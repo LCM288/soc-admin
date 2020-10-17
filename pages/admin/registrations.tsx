@@ -116,7 +116,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         filter: typeFilter,
       },
       {
-        Header: "Approve",
+        Header: "Action",
         accessor: (row: Record<string, unknown>) => row.sid,
         id: "approve",
         Cell: ApproveCell,

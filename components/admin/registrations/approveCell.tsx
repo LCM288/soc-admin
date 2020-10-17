@@ -53,7 +53,7 @@ const ApproveCell = ({
         />
       )}
       <Button color="success" onClick={promptApprove} loading={approveLoading}>
-        Approve {row.values.englishName}
+        Approve
       </Button>
     </>
   );
