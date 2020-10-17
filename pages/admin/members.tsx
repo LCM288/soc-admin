@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState } from "react";
-import { useGlobalFilter, useFilters, usePagination, Row } from "react-table";
+import { Row } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
@@ -12,7 +12,7 @@ import { Table, Form, Level } from "react-bulma-components";
 import toast from "utils/toast";
 import membersQuery from "apollo/queries/person/members.gql";
 import PaginationControl from "components/admin/table/paginationControl";
-import { useMemberTable } from "utils/reactTableTypeFix";
+import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -20,6 +20,15 @@ const { Input, Field, Label, Control, Select } = Form;
 
 const statusOptions = ["All", "Activated", "Expired"];
 const pageSizeOptions = [1, 2, 5, 10, 20, 50];
+const getSortDirectionIndicatior = (column: MemberColumnInstance): string => {
+  if (column.isSorted) {
+    if (column.isSortedDesc) {
+      return " 🔽";
+    }
+    return " 🔼";
+  }
+  return "";
+};
 
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(membersQuery, {
@@ -100,6 +109,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Status",
         accessor: "status",
         filter: statusFilter,
+        disableSortBy: true,
       },
     ],
     [statusFilter]
@@ -123,19 +133,14 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  const tableInstance = useMemberTable(
-    {
-      columns: tableColumns,
-      data: tableData,
-      getRowId: tableGetRowId,
-      autoResetFilters: false,
-      autoResetGlobalFilter: false,
-      initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
-    },
-    useFilters,
-    useGlobalFilter,
-    usePagination
-  );
+  const tableInstance = useMemberTable({
+    columns: tableColumns,
+    data: tableData,
+    getRowId: tableGetRowId,
+    autoResetFilters: false,
+    autoResetGlobalFilter: false,
+    initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
+  });
 
   const {
     getTableProps,
@@ -245,8 +250,9 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                     {column.render("Header")}
+                    <span>{getSortDirectionIndicatior(column)}</span>
                   </th>
                 ))}
               </tr>

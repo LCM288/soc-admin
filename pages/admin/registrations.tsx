@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState } from "react";
-import { useGlobalFilter, useFilters, usePagination, Row } from "react-table";
+import { Row } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
@@ -13,7 +13,9 @@ import toast from "utils/toast";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import ApproveCell from "components/admin/registrations/approveCell";
 import PaginationControl from "components/admin/table/paginationControl";
-import { useRegistrationTable } from "utils/reactTableTypeFix";
+import useRegistrationTable, {
+  RegistrationColumnInstance,
+} from "utils/useRegistrationTable";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -21,6 +23,17 @@ const { Input, Field, Label, Control, Select } = Form;
 
 const typeOptions = ["All", "New", "Renewal"];
 const pageSizeOptions = [1, 2, 5, 10, 20, 50];
+const getSortDirectionIndicatior = (
+  column: RegistrationColumnInstance
+): string => {
+  if (column.isSorted) {
+    if (column.isSortedDesc) {
+      return " 🔽";
+    }
+    return " 🔼";
+  }
+  return "";
+};
 
 const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(registrationsQuery, {
@@ -101,12 +114,14 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Type of registration",
         accessor: "registrationType",
         filter: typeFilter,
+        disableSortBy: true,
       },
       {
-        Header: "Approve",
+        Header: "Action",
         accessor: (row: Record<string, unknown>) => row.sid,
         id: "approve",
         Cell: ApproveCell,
+        disableSortBy: true,
       },
     ],
     [typeFilter]
@@ -130,20 +145,15 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  const tableInstance = useRegistrationTable(
-    {
-      columns: tableColumns,
-      data: tableData,
-      getRowId: tableGetRowId,
-      autoResetFilters: false,
-      autoResetGlobalFilter: false,
-      autoResetPage: false,
-      initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
-    },
-    useFilters,
-    useGlobalFilter,
-    usePagination
-  );
+  const tableInstance = useRegistrationTable({
+    columns: tableColumns,
+    data: tableData,
+    getRowId: tableGetRowId,
+    autoResetFilters: false,
+    autoResetGlobalFilter: false,
+    autoResetPage: false,
+    initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
+  });
 
   const {
     getTableProps,
@@ -253,8 +263,9 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                     {column.render("Header")}
+                    <span>{getSortDirectionIndicatior(column)}</span>
                   </th>
                 ))}
               </tr>
