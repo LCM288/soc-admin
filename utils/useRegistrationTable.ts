@@ -42,7 +42,52 @@ import {
 
 import { ReactNode } from "react";
 
-// region should not be modified start
+export interface RegistrationTableState<
+  D extends Record<string, unknown> = Record<string, unknown>
+> extends UseFiltersState<D>,
+    UseGlobalFiltersState<D>,
+    UsePaginationState<D>,
+    UseSortByState<D> {
+  hiddenColumns?: Array<IdType<D>>;
+}
+
+export interface RegistrationColumnInstance<
+  D extends Record<string, unknown> = Record<string, unknown>
+> extends Omit<RegistrationColumnInterface<D>, "id">,
+    RegistrationColumnInterfaceBasedOnValue<D>,
+    UseRegistrationTableColumnProps<D>,
+    UseFiltersColumnProps<D>,
+    UseSortByColumnProps<D> {}
+
+export interface RegistrationTableOptions<
+  D extends Record<string, unknown> = Record<string, unknown>
+> extends UseRegistrationTableOptions<D>,
+    UseFiltersOptions<D>,
+    UseGlobalFiltersOptions<D>,
+    UsePaginationOptions<D>,
+    UseSortByOptions<D> {}
+
+export interface RegistrationTableInstance<
+  D extends Record<string, unknown> = Record<string, unknown>
+> extends Omit<RegistrationTableOptions<D>, "columns" | "pageCount">,
+    UseRegistrationTableInstanceProps<D>,
+    UseFiltersInstanceProps<D>,
+    UseGlobalFiltersInstanceProps<D>,
+    UsePaginationInstanceProps<D>,
+    UseSortByInstanceProps<D> {}
+
+const useRegistrationTable: RegistrationTableHook = (options) =>
+  (useTable as (...args: unknown[]) => RegistrationTableInstance)(
+    options,
+    useFilters,
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
+
+export default useRegistrationTable;
+
+// the following should not be modified
 
 export type UpdateHiddenColumns<
   D extends Record<string, unknown> = Record<string, unknown>
@@ -248,50 +293,3 @@ export type UseRegistrationTableOptions<
 export type RegistrationTableHook<
   D extends Record<string, unknown> = Record<string, unknown>
 > = (options: RegistrationTableOptions<D>) => RegistrationTableInstance;
-
-// region should not be modified end
-
-export interface RegistrationTableState<
-  D extends Record<string, unknown> = Record<string, unknown>
-> extends UseFiltersState<D>,
-    UseGlobalFiltersState<D>,
-    UsePaginationState<D>,
-    UseSortByState<D> {
-  hiddenColumns?: Array<IdType<D>>;
-}
-
-export interface RegistrationColumnInstance<
-  D extends Record<string, unknown> = Record<string, unknown>
-> extends Omit<RegistrationColumnInterface<D>, "id">,
-    RegistrationColumnInterfaceBasedOnValue<D>,
-    UseRegistrationTableColumnProps<D>,
-    UseFiltersColumnProps<D>,
-    UseSortByColumnProps<D> {}
-
-export interface RegistrationTableOptions<
-  D extends Record<string, unknown> = Record<string, unknown>
-> extends UseRegistrationTableOptions<D>,
-    UseFiltersOptions<D>,
-    UseGlobalFiltersOptions<D>,
-    UsePaginationOptions<D>,
-    UseSortByOptions<D> {}
-
-export interface RegistrationTableInstance<
-  D extends Record<string, unknown> = Record<string, unknown>
-> extends Omit<RegistrationTableOptions<D>, "columns" | "pageCount">,
-    UseRegistrationTableInstanceProps<D>,
-    UseFiltersInstanceProps<D>,
-    UseGlobalFiltersInstanceProps<D>,
-    UsePaginationInstanceProps<D>,
-    UseSortByInstanceProps<D> {}
-
-const useRegistrationTable: RegistrationTableHook = (options) =>
-  (useTable as (...args: unknown[]) => RegistrationTableInstance)(
-    options,
-    useFilters,
-    useGlobalFilter,
-    useSortBy,
-    usePagination
-  );
-
-export default useRegistrationTable;

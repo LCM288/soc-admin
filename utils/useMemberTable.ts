@@ -42,7 +42,52 @@ import {
 
 import { ReactNode } from "react";
 
-// region should not be modified start
+export interface MemberTableState<
+  D extends Record<string, unknown> = Record<string, unknown>
+> extends UseFiltersState<D>,
+    UseGlobalFiltersState<D>,
+    UsePaginationState<D>,
+    UseSortByState<D> {
+  hiddenColumns?: Array<IdType<D>>;
+}
+
+export interface MemberColumnInstance<
+  D extends Record<string, unknown> = Record<string, unknown>
+> extends Omit<MemberColumnInterface<D>, "id">,
+    MemberColumnInterfaceBasedOnValue<D>,
+    UseMemberTableColumnProps<D>,
+    UseFiltersColumnProps<D>,
+    UseSortByColumnProps<D> {}
+
+export interface MemberTableOptions<
+  D extends Record<string, unknown> = Record<string, unknown>
+> extends UseMemberTableOptions<D>,
+    UseFiltersOptions<D>,
+    UseGlobalFiltersOptions<D>,
+    UsePaginationOptions<D>,
+    UseSortByOptions<D> {}
+
+export interface MemberTableInstance<
+  D extends Record<string, unknown> = Record<string, unknown>
+> extends Omit<MemberTableOptions<D>, "columns" | "pageCount">,
+    UseMemberTableInstanceProps<D>,
+    UseFiltersInstanceProps<D>,
+    UseGlobalFiltersInstanceProps<D>,
+    UsePaginationInstanceProps<D>,
+    UseSortByInstanceProps<D> {}
+
+const useMemberTable: MemberTableHook = (options) =>
+  (useTable as (...args: unknown[]) => MemberTableInstance)(
+    options,
+    useFilters,
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
+
+export default useMemberTable;
+
+// the following should not be modified
 
 export type UpdateHiddenColumns<
   D extends Record<string, unknown> = Record<string, unknown>
@@ -236,50 +281,3 @@ export type UseMemberTableOptions<
 export type MemberTableHook<
   D extends Record<string, unknown> = Record<string, unknown>
 > = (options: MemberTableOptions<D>) => MemberTableInstance;
-
-// region should not be modified end
-
-export interface MemberTableState<
-  D extends Record<string, unknown> = Record<string, unknown>
-> extends UseFiltersState<D>,
-    UseGlobalFiltersState<D>,
-    UsePaginationState<D>,
-    UseSortByState<D> {
-  hiddenColumns?: Array<IdType<D>>;
-}
-
-export interface MemberColumnInstance<
-  D extends Record<string, unknown> = Record<string, unknown>
-> extends Omit<MemberColumnInterface<D>, "id">,
-    MemberColumnInterfaceBasedOnValue<D>,
-    UseMemberTableColumnProps<D>,
-    UseFiltersColumnProps<D>,
-    UseSortByColumnProps<D> {}
-
-export interface MemberTableOptions<
-  D extends Record<string, unknown> = Record<string, unknown>
-> extends UseMemberTableOptions<D>,
-    UseFiltersOptions<D>,
-    UseGlobalFiltersOptions<D>,
-    UsePaginationOptions<D>,
-    UseSortByOptions<D> {}
-
-export interface MemberTableInstance<
-  D extends Record<string, unknown> = Record<string, unknown>
-> extends Omit<MemberTableOptions<D>, "columns" | "pageCount">,
-    UseMemberTableInstanceProps<D>,
-    UseFiltersInstanceProps<D>,
-    UseGlobalFiltersInstanceProps<D>,
-    UsePaginationInstanceProps<D>,
-    UseSortByInstanceProps<D> {}
-
-const useMemberTable: MemberTableHook = (options) =>
-  (useTable as (...args: unknown[]) => MemberTableInstance)(
-    options,
-    useFilters,
-    useGlobalFilter,
-    useSortBy,
-    usePagination
-  );
-
-export default useMemberTable;
