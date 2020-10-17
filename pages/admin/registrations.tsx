@@ -114,12 +114,14 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Type of registration",
         accessor: "registrationType",
         filter: typeFilter,
+        disableSortBy: true,
       },
       {
         Header: "Action",
         accessor: (row: Record<string, unknown>) => row.sid,
         id: "approve",
         Cell: ApproveCell,
+        disableSortBy: true,
       },
     ],
     [typeFilter]

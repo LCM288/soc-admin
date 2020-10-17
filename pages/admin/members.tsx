@@ -109,6 +109,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Status",
         accessor: "status",
         filter: statusFilter,
+        disableSortBy: true,
       },
     ],
     [statusFilter]
