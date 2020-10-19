@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import Papa from "papaparse";
 import _ from "lodash";
 import { DateTime } from "luxon";
@@ -117,7 +117,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     const members = membersData.members.map((member) => {
       const result = _.omit(member, "id");
       const { memberSince } = result;
-      result.memberSince = memberSince || DateTime.local().toISODate();
+      result.memberSince = memberSince ?? DateTime.local().toISODate();
       return result;
     });
     setIsUploading(true);
@@ -162,55 +162,62 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     prepareRow,
   } = tableInstance;
 
-  const papaConfig = { header: true, skipEmptyLines: true };
-
-  const onImport = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setIsFileProcessing(true);
-      Papa.parse(event.target.files[0], {
-        ...papaConfig,
-        complete(results) {
-          const result = {
-            members: results.data.map(
-              ({
-                ID: id,
-                SID: sid,
-                "Chinese Name": chineseName,
-                "English Name": englishName,
-                Gender: gender,
-                "Date of Birth": dateOfBirth,
-                Email: email,
-                Phone: phone,
-                College: college,
-                Major: major,
-                "Date of Entry": dateOfEntry,
-                "Expected Graduation Date": expectedGraduationDate,
-                "Member Since": memberSince,
-              }) => ({
-                id,
-                sid,
-                chineseName,
-                englishName,
-                gender,
-                dateOfBirth,
-                email,
-                phone,
-                college,
-                major,
-                dateOfEntry,
-                expectedGraduationDate,
-                memberSince,
-              })
-            ),
-          };
-          if (result && result !== membersData) {
-            setMembersData(result);
-          }
-          setIsFileProcessing(false);
-        },
-      });
-    }
-  };
+  const onImport = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files && event.target.files[0]) {
+        setIsFileProcessing(true);
+        Papa.parse(event.target.files[0], {
+          header: true,
+          skipEmptyLines: true,
+          complete(results) {
+            const result = {
+              members: results.data.map(
+                ({
+                  ID: id,
+                  SID: sid,
+                  "Chinese Name": chineseName,
+                  "English Name": englishName,
+                  Gender: gender,
+                  "Date of Birth": dateOfBirth,
+                  Email: email,
+                  Phone: phone,
+                  College: college,
+                  Major: major,
+                  "Date of Entry": dateOfEntry,
+                  "Expected Graduation Date": expectedGraduationDate,
+                  "Member Since": memberSince,
+                }) => ({
+                  id,
+                  sid,
+                  chineseName,
+                  englishName,
+                  gender,
+                  dateOfBirth,
+                  email,
+                  phone,
+                  college,
+                  major,
+                  dateOfEntry,
+                  expectedGraduationDate,
+                  memberSince,
+                })
+              ),
+            };
+            if (result && result !== membersData) {
+              setMembersData(result);
+            }
+            setIsFileProcessing(false);
+          },
+        });
+      } else {
+        toast.danger("No files were selected.", {
+          position: toast.POSITION.TOP_LEFT,
+        });
+        setIsFileProcessing(false);
+      }
+    },
+    [membersData]
+  );
 
   if (user) {
     return (
