@@ -143,7 +143,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
               }
             }
           );
-          setIsUploading(false);
         })
         .catch((err) => {
           toast.danger(err.message, {
@@ -151,6 +150,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
           });
           setIsUploading(false);
         })
+        .finally(() => setIsUploading(false))
     );
   };
 
