@@ -17,14 +17,15 @@ interface Labels {
   month: string;
 }
 
-const formatOptionLabel = ({ label, month }: Labels) => (
-  <div className="is-flex">
-    <div>{label}</div>
-    <Tag className="ml-2" color="info">
-      {month}
-    </Tag>
-  </div>
-);
+const formatOptionLabel = ({ label, month }: Labels) =>
+  (month && (
+    <div className="is-flex">
+      <div>{label}</div>
+      <Tag className="ml-2" color="info">
+        {month}
+      </Tag>
+    </div>
+  )) || <div />;
 
 const DOGradField: React.FunctionComponent<Props> = ({
   doGrad,
