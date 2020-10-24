@@ -52,7 +52,12 @@ const DOEntryField: React.FunctionComponent<Props> = ({
   }, []);
 
   const termStart = useMemo(
-    () => termStarts.find((term) => term.value === doEntry),
+    () =>
+      termStarts.find((term) => term.value === doEntry) ?? {
+        value: "",
+        label: "",
+        month: "",
+      },
     [termStarts, doEntry]
   );
 

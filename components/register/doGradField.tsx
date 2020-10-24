@@ -51,7 +51,12 @@ const DOGradField: React.FunctionComponent<Props> = ({
   }, []);
 
   const termEnd = useMemo(
-    () => termEnds.find((term) => term.value === doGrad),
+    () =>
+      termEnds.find((term) => term.value === doGrad) ?? {
+        value: "",
+        label: "",
+        month: "",
+      },
     [termEnds, doGrad]
   );
 
