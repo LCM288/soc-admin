@@ -50,7 +50,10 @@ const DOGradField: React.FunctionComponent<Props> = ({
     return [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => calcTermEnd(i)).flat();
   }, []);
 
-  const termEnd = termEnds.find((term) => term.value === doGrad);
+  const termEnd = useMemo(
+    () => termEnds.find((term) => term.value === doGrad),
+    [termEnds, doGrad]
+  );
 
   return (
     <Field>

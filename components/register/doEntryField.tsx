@@ -51,7 +51,10 @@ const DOEntryField: React.FunctionComponent<Props> = ({
       .flat();
   }, []);
 
-  const termStart = termStarts.find((term) => term.value === doEntry);
+  const termStart = useMemo(
+    () => termStarts.find((term) => term.value === doEntry),
+    [termStarts, doEntry]
+  );
 
   return (
     <Field>
