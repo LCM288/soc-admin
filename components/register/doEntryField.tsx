@@ -36,14 +36,14 @@ const DOEntryField: React.FunctionComponent<Props> = ({
       const year = yearDiff + DateTime.local().year;
       return [
         {
-          value: `${year}-09-01`,
-          label: `${year}-${year + 1} Term 1`,
-          month: `Sept ${year}`,
-        },
-        {
           value: `${year + 1}-01-01`,
           label: `${year}-${year + 1} Term 2`,
           month: `Jan ${year + 1}`,
+        },
+        {
+          value: `${year}-09-01`,
+          label: `${year}-${year + 1} Term 1`,
+          month: `Sept ${year}`,
         },
       ];
     };
