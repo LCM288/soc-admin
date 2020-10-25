@@ -17,6 +17,7 @@ const publicSocSettingsArray = lodash.map(publicSocSettings, "key");
 const editableKeys = ["client_id", "client_secret"].concat(
   publicSocSettingsArray
 );
+
 /** The response when initiating with client keys */
 interface ClientKeysUpdateResponse {
   /** Whether the mutation is successful or not */
@@ -55,15 +56,38 @@ interface ClientKeysAttributes {
  * @returns All the soc settings
  * @category Query Resolver
  */
-const socSettingsResolver: ResolverFn<unknown, SocSettingAttributes[]> = (
+const socSettingsResolver: ResolverFn<unknown, SocSettingAttributes[]> = async (
   _,
   __,
   { dataSources }
 ): Promise<SocSettingAttributes[]> => {
+  const allSettings = await dataSources.socSettingAPI.findSocSettings();
   if (process.env.NODE_ENV === "development") {
-    return dataSources.socSettingAPI.findSocSettings();
+    return allSettings;
   }
-  throw new Error("You have no permission to read this");
+  return allSettings.filter((setting) =>
+    publicSocSettingsArray.includes(setting.key)
+  );
+};
+
+/**
+ * The resolver for socName Query
+ * @async
+ * @returns The socName
+ * @category Query Resolver
+ */
+const socNameResolver: ResolverFn<unknown, string> = async (
+  _,
+  __,
+  { dataSources }
+): Promise<string> => {
+  return (
+    (
+      await dataSources.socSettingAPI.findSocSetting(
+        publicSocSettings.SOC_NAME.key
+      )
+    )?.value ?? "NoName Soc"
+  );
 };
 
 // Mutation resolvers
@@ -172,6 +196,8 @@ export const resolvers: Resolvers = {
   Query: {
     /** see {@link socSettingsResolver} */
     socSettings: socSettingsResolver,
+    /** see {@link socNameResolver} */
+    socName: socNameResolver,
   },
   Mutation: {
     /** see {@link initClientKeysResolver} */
@@ -190,6 +216,7 @@ export const resolvers: Resolvers = {
 export const resolverTypeDefs = gql`
   extend type Query {
     socSettings: [SocSetting!]!
+    socName: String!
   }
 
   extend type Mutation {

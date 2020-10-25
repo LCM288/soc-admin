@@ -17,14 +17,15 @@ interface Labels {
   month: string;
 }
 
-const formatOptionLabel = ({ label, month }: Labels) => (
-  <div className="is-flex">
-    <div>{label}</div>
-    <Tag className="ml-2" color="info">
-      {month}
-    </Tag>
-  </div>
-);
+const formatOptionLabel = ({ label, month }: Labels) =>
+  (month && (
+    <div className="is-flex">
+      <div>{label}</div>
+      <Tag className="ml-2" color="info">
+        {month}
+      </Tag>
+    </div>
+  )) || <div />;
 
 const DOEntryField: React.FunctionComponent<Props> = ({
   doEntry,
@@ -35,14 +36,14 @@ const DOEntryField: React.FunctionComponent<Props> = ({
       const year = yearDiff + DateTime.local().year;
       return [
         {
-          value: `${year}-09-01`,
-          label: `${year}-${year + 1} Term 1`,
-          month: `Sept ${year}`,
-        },
-        {
           value: `${year + 1}-01-01`,
           label: `${year}-${year + 1} Term 2`,
           month: `Jan ${year + 1}`,
+        },
+        {
+          value: `${year}-09-01`,
+          label: `${year}-${year + 1} Term 1`,
+          month: `Sept ${year}`,
         },
       ];
     };
@@ -51,7 +52,15 @@ const DOEntryField: React.FunctionComponent<Props> = ({
       .flat();
   }, []);
 
-  const termStart = termStarts.find((term) => term.value === doEntry);
+  const termStart = useMemo(
+    () =>
+      termStarts.find((term) => term.value === doEntry) ?? {
+        value: "",
+        label: "",
+        month: "",
+      },
+    [termStarts, doEntry]
+  );
 
   return (
     <Field>

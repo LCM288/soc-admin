@@ -87,17 +87,17 @@ export default function Register({
   if (!user) {
     return <div>no user</div>;
   }
-  const { person } = personQueryResult.data as { person: Person };
+  const { person } = personQueryResult.data as { person?: Person };
   const setData = () => {
-    setChineseName(person.chineseName ?? "");
-    setGender(person.gender ?? "None");
-    setDob(person.dateOfBirth ?? "");
-    setEmail(person.email ?? "");
-    setPhone(person.phone ?? "");
-    setCollegeCode((person.college as College).code);
-    setMajorCode((person.major as Major).code);
-    setDoEntry(person.dateOfEntry);
-    setDoGrad(person.expectedGraduationDate);
+    setChineseName(person?.chineseName ?? "");
+    setGender(person?.gender ?? "None");
+    setDob(person?.dateOfBirth ?? "");
+    setEmail(person?.email ?? `${user?.sid}@link.cuhk.edu.hk`);
+    setPhone(person?.phone ?? "");
+    setCollegeCode((person?.college as College | undefined)?.code ?? "");
+    setMajorCode((person?.major as Major | undefined)?.code ?? "");
+    setDoEntry(person?.dateOfEntry ?? "");
+    setDoGrad(person?.expectedGraduationDate ?? "");
   };
   if (!personLoaded.current && person) {
     setData();

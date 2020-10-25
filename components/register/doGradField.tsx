@@ -17,14 +17,15 @@ interface Labels {
   month: string;
 }
 
-const formatOptionLabel = ({ label, month }: Labels) => (
-  <div className="is-flex">
-    <div>{label}</div>
-    <Tag className="ml-2" color="info">
-      {month}
-    </Tag>
-  </div>
-);
+const formatOptionLabel = ({ label, month }: Labels) =>
+  (month && (
+    <div className="is-flex">
+      <div>{label}</div>
+      <Tag className="ml-2" color="info">
+        {month}
+      </Tag>
+    </div>
+  )) || <div />;
 
 const DOGradField: React.FunctionComponent<Props> = ({
   doGrad,
@@ -50,7 +51,15 @@ const DOGradField: React.FunctionComponent<Props> = ({
     return [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => calcTermEnd(i)).flat();
   }, []);
 
-  const termEnd = termEnds.find((term) => term.value === doGrad);
+  const termEnd = useMemo(
+    () =>
+      termEnds.find((term) => term.value === doGrad) ?? {
+        value: "",
+        label: "",
+        month: "",
+      },
+    [termEnds, doGrad]
+  );
 
   return (
     <Field>

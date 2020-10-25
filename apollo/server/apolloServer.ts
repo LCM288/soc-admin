@@ -89,16 +89,14 @@ const context = async ({
 };
 
 /**
- * A dummy type def for graphql so that Mutation and Query can be extended
+ * A base type def for graphql
  * @internal
  */
-const dummyTypeDefs = gql`
-  type Mutation {
-    dummy: Boolean
-  }
-  type Query {
-    dummy: Boolean
-  }
+const baseTypeDefs = gql`
+  type Mutation
+  type Query
+  ${DateTypeDefinition}
+  ${DateTimeTypeDefinition}
 `;
 
 /**
@@ -106,11 +104,7 @@ const dummyTypeDefs = gql`
  */
 const apolloServer = new apolloServerMicro.ApolloServer({
   typeDefs: [
-    gql`
-      ${DateTypeDefinition}
-      ${DateTimeTypeDefinition}
-    `,
-    dummyTypeDefs,
+    baseTypeDefs,
     personTypeDefs,
     personResolverTypeDefs,
     executiveTypeDefs,
