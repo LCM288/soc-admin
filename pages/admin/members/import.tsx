@@ -1,10 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState, useCallback } from "react";
+import { Row } from "react-table";
+import useAsyncDebounce from "utils/useAsyncDebounce";
+import PaginationControl from "components/admin/table/paginationControl";
 import Papa from "papaparse";
 import _ from "lodash";
 import { DateTime } from "luxon";
-import { useTable } from "react-table";
 import { useMutation } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import toast from "utils/toast";
@@ -18,10 +20,23 @@ import {
   Form,
 } from "react-bulma-components";
 import importPeopleMutation from "apollo/queries/person/importPeople.gql";
+import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
-const { InputFile } = Form;
+const { InputFile, Input, Field, Label, Control, Select } = Form;
+
+const statusOptions = ["All", "Activated", "Expired"];
+const pageSizeOptions = [1, 2, 5, 10, 20, 50];
+const getSortDirectionIndicatior = (column: MemberColumnInstance): string => {
+  if (column.isSorted) {
+    if (column.isSortedDesc) {
+      return " 🔽";
+    }
+    return " 🔼";
+  }
+  return "";
+};
 
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const [
@@ -32,6 +47,18 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const [membersData, setMembersData] = useState<
     { members: Record<string, unknown>[] } | undefined
   >(undefined);
+
+  const statusFilter = useMemo(
+    () => (
+      rows: Array<Row<Record<string, unknown>>>,
+      id: string,
+      filterValue: string
+    ) =>
+      filterValue === "All"
+        ? rows
+        : rows.filter((row) => row.values[id] === filterValue),
+    []
+  );
 
   const tableColumns = useMemo(
     () => [
@@ -99,11 +126,25 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     return (row: Record<string, unknown>) => (row.id as number).toString();
   }, []);
 
-  const tableInstance = useTable({
+  const initialFilters = useMemo(
+    () => [
+      {
+        id: "status",
+        value: "Activated",
+      },
+    ],
+    []
+  );
+
+  const tableInstance = useMemberTable({
     columns: tableColumns,
     data: tableData,
     getRowId: tableGetRowId,
+    autoResetFilters: false,
+    autoResetGlobalFilter: false,
+    initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
   });
+
   const [isUploading, setIsUploading] = useState(false);
   const [isFileProcessing, setIsFileProcessing] = useState(false);
   const upload = () => {
@@ -160,7 +201,28 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     headerGroups,
     rows,
     prepareRow,
+    state: { globalFilter, filters, pageIndex, pageSize },
+    setGlobalFilter,
+    setFilter,
+    page,
+    pageCount,
+    setPageSize,
+    gotoPage,
   } = tableInstance;
+
+  const [globalFilterInput, setGlobalFilterInput] = useState(globalFilter);
+
+  const [statusFilterInput, setStatusFilterInput] = useState(
+    filters.find(({ id }) => id === "status")?.value
+  );
+
+  const onGlobalFilterChange = useAsyncDebounce((value) => {
+    setGlobalFilter(value || undefined);
+  }, 500);
+
+  const onStatusFilterChange = useAsyncDebounce((value) => {
+    setFilter("status", value || undefined);
+  }, 500);
 
   const onImport = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -242,20 +304,82 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
               </Level.Item>
             </Level.Side>
           </Level>
+          <PaginationControl
+            gotoPage={gotoPage}
+            pageIndex={pageIndex}
+            pageCount={pageCount}
+          />
+          <Level>
+            <Level.Side align="left">
+              <Field kind="addons">
+                <Control>
+                  <Select
+                    onChange={(
+                      event: React.ChangeEvent<HTMLInputElement>
+                    ): void => {
+                      setStatusFilterInput(event.target.value);
+                      onStatusFilterChange(event.target.value);
+                    }}
+                    value={statusFilterInput}
+                  >
+                    {statusOptions.map((statusOption) => (
+                      <option key={statusOption}>{statusOption}</option>
+                    ))}
+                  </Select>
+                </Control>
+                <Control fullwidth>
+                  <Input
+                    placeholder="Filter for keyword"
+                    value={globalFilterInput}
+                    onChange={(
+                      event: React.ChangeEvent<HTMLInputElement>
+                    ): void => {
+                      setGlobalFilterInput(event.target.value);
+                      onGlobalFilterChange(event.target.value);
+                    }}
+                  />
+                </Control>
+              </Field>
+            </Level.Side>
+            <Level.Side align="right">
+              <Field horizontal>
+                <Label className="mr-2" style={{ alignSelf: "center" }}>
+                  Result per page
+                </Label>
+                <Control>
+                  <Select
+                    onChange={(
+                      event: React.ChangeEvent<HTMLInputElement>
+                    ): void => {
+                      setPageSize(parseInt(event.target.value, 10));
+                    }}
+                    value={pageSize.toString()}
+                  >
+                    {pageSizeOptions.map((pageSizeOption) => (
+                      <option key={pageSizeOption}>{pageSizeOption}</option>
+                    ))}
+                  </Select>
+                </Control>
+              </Field>
+            </Level.Side>
+          </Level>
           <Table {...getTableProps()}>
             <thead>
               {headerGroups.map((headerGroup) => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
-                    <th {...column.getHeaderProps()}>
+                    <th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                    >
                       {column.render("Header")}
+                      <span>{getSortDirectionIndicatior(column)}</span>
                     </th>
                   ))}
                 </tr>
               ))}
             </thead>
             <tbody {...getTableBodyProps()}>
-              {rows.map((row) => {
+              {page.map((row) => {
                 prepareRow(row);
                 return (
                   <tr {...row.getRowProps()}>
@@ -269,6 +393,11 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
               })}
             </tbody>
           </Table>
+          <PaginationControl
+            gotoPage={gotoPage}
+            pageIndex={pageIndex}
+            pageCount={pageCount}
+          />
         </Container>
       </Section>
     );
