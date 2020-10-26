@@ -39,10 +39,11 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
   }, [navBarRef, setActive]);
 
   useEffect(() => {
-    if (!openModel) {
+    const time = logoutTime.minus({ minutes: 5 }).diffNow().as("milliseconds");
+    if (!openModel && time > 0) {
       const openModalTimeout = setTimeout(() => {
         setOpenModel(true);
-      }, logoutTime.minus({ minutes: 5 }).diffNow().as("milliseconds"));
+      }, time);
       return () => {
         clearTimeout(openModalTimeout);
       };
@@ -57,7 +58,12 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
 
   return (
     <div>
-      <LogoutReminderModal open={openModel} />
+      <LogoutReminderModal
+        open={openModel}
+        onClose={() => {
+          setOpenModel(false);
+        }}
+      />
       <div ref={navBarRef}>
         <Navbar
           color="primary"
