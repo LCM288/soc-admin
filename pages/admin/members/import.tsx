@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState, useCallback } from "react";
 import { Row } from "react-table";
+import { statusOf, PersonModelAttributes } from "@/utils/Person";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import PaginationControl from "components/admin/table/paginationControl";
 import Papa from "papaparse";
@@ -114,8 +115,15 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Member Since",
         accessor: "memberSince",
       },
+      {
+        Header: "Status",
+        accessor: (row: Record<string, unknown>) =>
+          statusOf(row as PersonModelAttributes),
+        filter: statusFilter,
+        disableSortBy: true,
+      },
     ],
-    []
+    [statusFilter]
   );
 
   const tableData = useMemo(() => {
@@ -189,7 +197,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
           toast.danger(err.message, {
             position: toast.POSITION.TOP_LEFT,
           });
-          setIsUploading(false);
         })
         .finally(() => setIsUploading(false))
     );
@@ -199,7 +206,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
     state: { globalFilter, filters, pageIndex, pageSize },
     setGlobalFilter,

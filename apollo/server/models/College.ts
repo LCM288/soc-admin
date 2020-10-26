@@ -3,7 +3,7 @@
  * @module College
  */
 
-import { gql } from "apollo-server";
+import gql from "graphql-tag";
 
 /** A college */
 export interface College {

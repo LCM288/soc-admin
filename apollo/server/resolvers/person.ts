@@ -6,13 +6,14 @@
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
-  Person,
   PersonModelAttributes,
   PersonUpdateAttributes,
   PersonCreationAttributes,
   CollegeEnum,
   MemberStatusEnum,
   RegistrationTypeEnum,
+  statusOf,
+  registrationTypeOf,
 } from "@/models/Person";
 import { Major } from "@/models/Major";
 import { College } from "@/models/College";
@@ -74,7 +75,7 @@ const statusResolver: ResolverFn<null, MemberStatusEnum> = (
   _,
   __
 ): MemberStatusEnum => {
-  return Person.status(person);
+  return statusOf(person);
 };
 
 /**
@@ -86,7 +87,7 @@ const registrationTypeResolver: ResolverFn<
   null,
   RegistrationTypeEnum | null
 > = (person: PersonModelAttributes, _, __): RegistrationTypeEnum | null => {
-  return Person.registrationType(person);
+  return registrationTypeOf(person);
 };
 
 // Query resolvers

@@ -3,7 +3,7 @@
  * @module Faculty
  */
 
-import { gql } from "apollo-server";
+import gql from "graphql-tag";
 
 /** A faculty */
 export interface Faculty {
