@@ -12,6 +12,7 @@ import { Table, Form, Level } from "react-bulma-components";
 import toast from "utils/toast";
 import membersQuery from "apollo/queries/person/members.gql";
 import PaginationControl from "components/admin/table/paginationControl";
+import EditCell from "components/admin/table/EditCell";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
 
 export { getServerSideProps } from "utils/getServerSideProps";
@@ -109,6 +110,13 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Status",
         accessor: "status",
         filter: statusFilter,
+        disableSortBy: true,
+      },
+      {
+        Header: "Action",
+        accessor: (row: Record<string, unknown>) => row.sid,
+        id: "edit",
+        Cell: EditCell,
         disableSortBy: true,
       },
     ],
