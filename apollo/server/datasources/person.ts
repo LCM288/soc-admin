@@ -127,13 +127,19 @@ export default class PersonAPI extends DataSource<ContextBase> {
    * Update a person
    * @async
    * @param arg - The arg for updating the person
+   * @param onlyNewRegistration - Update only if it is a new registration
    * @returns The updated people
    */
   public async updatePerson(
-    arg: PersonUpdateAttributes
+    arg: PersonUpdateAttributes,
+    onlyNewRegistration: boolean
   ): Promise<PersonModelAttributes> {
+    const conditions: Sequelize.WhereOptions<PersonModelAttributes> = {
+      sid: arg.sid,
+      ...(onlyNewRegistration ? { memberSince: { [Op.eq]: null } } : null),
+    };
     const [count, people] = await this.store.update(arg, {
-      where: { sid: arg.sid },
+      where: conditions,
       returning: true,
     });
     if (!count) {

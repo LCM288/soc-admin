@@ -9,7 +9,7 @@ import { Major } from "@/models/Major";
 import { College } from "@/models/College";
 import { DateTime } from "luxon";
 
-enum GenderEnum {
+export enum GenderEnum {
   Male = "Male",
   Female = "Female",
   None = "None",
