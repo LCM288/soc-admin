@@ -136,7 +136,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
   ): Promise<PersonModelAttributes> {
     const conditions: Sequelize.WhereOptions<PersonModelAttributes> = {
       sid: arg.sid,
-      ...(onlyNewRegistration ? { memberSince: { [Op.ne]: null } } : null),
+      ...(onlyNewRegistration ? { memberSince: { [Op.eq]: null } } : null),
     };
     const [count, people] = await this.store.update(arg, {
       where: conditions,
