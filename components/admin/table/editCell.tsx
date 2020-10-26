@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { CellProps } from "react-table";
 import { Button } from "react-bulma-components";
 import EditPersonModal from "components/admin/table/editPersonModal";
-import { Person } from "@/models/Person";
 
 const EditCell = ({
   row,
 }: CellProps<Record<string, unknown>, number>): React.ReactElement => {
-  console.log(Person);
   const [openModal, setOpenModal] = useState(false);
   const save = () => {};
   const promptEdit = () => {
