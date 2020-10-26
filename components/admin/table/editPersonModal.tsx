@@ -26,16 +26,26 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
   row,
 }: Props) => {
   const sid = row.sid as string;
-  const [englishName, setEnglishName] = useState(row.englishName as string);
-  const [chineseName, setChineseName] = useState(row.chineseName as string);
-  const [gender, setGender] = useState(row.gender as string);
-  const [dob, setDob] = useState(row.dateOfBirth as string);
-  const [email, setEmail] = useState(row.email as string);
-  const [phone, setPhone] = useState(row.phone as string);
-  const [collegeCode, setCollegeCode] = useState((row.college as College).code);
-  const [majorCode, setMajorCode] = useState((row.major as Major).code);
-  const [doEntry, setDoEntry] = useState(row.dateOfEntry as string);
-  const [doGrad, setDoGrad] = useState(row.expectedGraduationDate as string);
+  const [englishName, setEnglishName] = useState(
+    (row.englishName ?? "") as string
+  );
+  const [chineseName, setChineseName] = useState(
+    (row.chineseName ?? "") as string
+  );
+  const [gender, setGender] = useState((row.gender ?? "") as string);
+  const [dob, setDob] = useState((row.dateOfBirth ?? "") as string);
+  const [email, setEmail] = useState((row.email ?? "") as string);
+  const [phone, setPhone] = useState((row.phone ?? "") as string);
+  const [collegeCode, setCollegeCode] = useState(
+    (row.college as College | undefined)?.code ?? ""
+  );
+  const [majorCode, setMajorCode] = useState(
+    (row.major as Major | undefined)?.code ?? ""
+  );
+  const [doEntry, setDoEntry] = useState((row.dateOfEntry ?? "") as string);
+  const [doGrad, setDoGrad] = useState(
+    (row.expectedGraduationDate ?? "") as string
+  );
   return (
     <Modal show closeOnEsc={false} showClose={false} onClose={onCancel}>
       <Modal.Content className="has-background-white box">
