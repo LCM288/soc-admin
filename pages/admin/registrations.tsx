@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState } from "react";
-import { Row } from "react-table";
+import { Row, CellProps } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
@@ -12,6 +12,7 @@ import { Table, Form, Level } from "react-bulma-components";
 import toast from "utils/toast";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import ApproveCell from "components/admin/registrations/approveCell";
+import EditCell from "components/admin/table/editCell";
 import PaginationControl from "components/admin/table/paginationControl";
 import useRegistrationTable, {
   RegistrationColumnInstance,
@@ -118,9 +119,14 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
       },
       {
         Header: "Action",
-        accessor: (row: Record<string, unknown>) => row.sid,
+        accessor: () => false,
         id: "approve",
-        Cell: ApproveCell,
+        Cell: (cellPrpos: CellProps<Record<string, unknown>, boolean>) => (
+          <>
+            <ApproveCell {...cellPrpos} />
+            <EditCell {...cellPrpos} />
+          </>
+        ),
         disableSortBy: true,
       },
     ],

@@ -1,13 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { CellProps } from "react-table";
 import { Button } from "react-bulma-components";
 import EditPersonModal from "components/admin/table/editPersonModal";
+import { PersonUpdateAttributes } from "@/models/Person";
+import updatePersonMutation from "apollo/queries/person/updatePerson.gql";
+import { useMutation } from "@apollo/react-hooks";
+import membersQuery from "apollo/queries/person/members.gql";
+import registrationsQuery from "apollo/queries/person/registrations.gql";
+import toast from "utils/toast";
 
 const EditCell = ({
   row,
-}: CellProps<Record<string, unknown>, number>): React.ReactElement => {
+  value: isMember,
+}: CellProps<Record<string, unknown>, boolean>): React.ReactElement => {
+  const [updatePerson] = useMutation(updatePersonMutation, {
+    refetchQueries: [{ query: membersQuery }, { query: registrationsQuery }],
+  });
+  const [editLoading, setEditLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const save = () => {};
+  const onSave = useCallback(
+    (person: PersonUpdateAttributes) => {
+      updatePerson({ variables: person })
+        .then((payload) => {
+          if (!payload.data?.updatePerson.success) {
+            throw new Error(
+              payload.data?.updatePerson.message ?? "some error occurs"
+            );
+          }
+          toast.success(payload.data.updatePerson.message, {
+            position: toast.POSITION.TOP_LEFT,
+          });
+          setOpenModal(false);
+        })
+        .catch((err) => {
+          toast.danger(err.message, { position: toast.POSITION.TOP_LEFT });
+        })
+        .finally(() => {
+          setEditLoading(false);
+        });
+    },
+    [updatePerson]
+  );
   const promptEdit = () => {
     setOpenModal(true);
   };
@@ -17,9 +50,15 @@ const EditCell = ({
   return (
     <>
       {openModal && (
-        <EditPersonModal onSave={save} onCancel={cancelEdit} row={row.values} />
+        <EditPersonModal
+          onSave={onSave}
+          onCancel={cancelEdit}
+          row={row.values}
+          loading={editLoading}
+          isMember={isMember}
+        />
       )}
-      <Button color="success" onClick={promptEdit}>
+      <Button color="info" onClick={promptEdit}>
         Edit
       </Button>
     </>

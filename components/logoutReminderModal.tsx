@@ -24,7 +24,13 @@ const LogoutReminderModal: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Modal show={open} closeOnEsc={false} showClose={false} onClose={refresh}>
+    <Modal
+      show={open}
+      closeOnEsc={false}
+      showClose={false}
+      onClose={refresh}
+      style={{ zIndex: 50 }}
+    >
       <Modal.Content className="has-background-white box">
         <Section>You are about to logout, are you still here?</Section>
         <div className="is-pulled-right buttons">

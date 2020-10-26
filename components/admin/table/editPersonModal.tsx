@@ -12,18 +12,27 @@ import SIDField from "components/register/sidField";
 import DOBField from "components/register/dobField";
 import EmailField from "components/register/emailField";
 import MajorField from "components/register/majorField";
-import { Modal, Section, Button } from "react-bulma-components";
+import { Modal, Section, Button, Loader } from "react-bulma-components";
+import {
+  PersonUpdateAttributes,
+  GenderEnum,
+  CollegeEnum,
+} from "@/models/Person";
 
 interface Props {
-  onSave: () => void;
+  onSave: (person: PersonUpdateAttributes) => void;
   onCancel: () => void;
   row: Record<string, unknown>;
+  loading: boolean;
+  isMember: boolean;
 }
 
 const EditPersonModal: React.FunctionComponent<Props> = ({
   onSave,
   onCancel,
   row,
+  loading,
+  isMember,
 }: Props) => {
   const sid = row.sid as string;
   const [englishName, setEnglishName] = useState(
@@ -34,9 +43,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
   );
   const [gender, setGender] = useState((row.gender ?? "None") as string);
   const [dob, setDob] = useState((row.dateOfBirth ?? "") as string);
-  const [email, setEmail] = useState(
-    (row.email ?? `${row.sid as string}@link.cuhk.edu.hk`) as string
-  );
+  const [email, setEmail] = useState((row.email ?? "") as string);
   const [phone, setPhone] = useState((row.phone ?? "") as string);
   const [collegeCode, setCollegeCode] = useState(
     (row.college as College | undefined)?.code ?? ""
@@ -53,64 +60,95 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
     setChineseName((row.chineseName ?? "") as string);
     setGender((row.gender ?? "None") as string);
     setDob((row.dateOfBirth ?? "") as string);
-    setEmail((row.email ?? `${row.sid as string}@link.cuhk.edu.hk`) as string);
+    setEmail((row.email ?? "") as string);
     setPhone((row.phone ?? "") as string);
     setCollegeCode((row.college as College | undefined)?.code ?? "");
     setMajorCode((row.major as Major | undefined)?.code ?? "");
     setDoEntry((row.dateOfEntry ?? "") as string);
     setDoGrad((row.expectedGraduationDate ?? "") as string);
+  }, [row]);
+  const onConfirm = useCallback(() => {
+    onSave({
+      sid,
+      englishName,
+      chineseName: chineseName || null,
+      gender: (gender as GenderEnum) || null,
+      dateOfBirth: dob || null,
+      email: email || null,
+      phone: phone || null,
+      college: (collegeCode as CollegeEnum) || undefined,
+      major: majorCode || undefined,
+      dateOfEntry: doEntry || undefined,
+      expectedGraduationDate: doGrad || undefined,
+    });
   }, [
-    row,
-    setEnglishName,
-    setChineseName,
-    setGender,
-    setDob,
-    setEmail,
-    setPhone,
-    setCollegeCode,
-    setMajorCode,
-    setDoEntry,
-    setDoGrad,
+    onSave,
+    sid,
+    englishName,
+    chineseName,
+    gender,
+    dob,
+    email,
+    phone,
+    collegeCode,
+    majorCode,
+    doEntry,
+    doGrad,
   ]);
   return (
-    <Modal show closeOnEsc={false} showClose={false} onClose={onCancel}>
-      <Modal.Content className="has-background-white box">
-        <Section>
-          <SIDField sid={sid} />
-          <EnglishNameField
-            englishName={englishName}
-            setEnglishName={setEnglishName}
-            isAdmin
+    <>
+      <Modal show closeOnEsc={false} showClose={false} onClose={onCancel}>
+        <Modal.Content className="has-background-white box">
+          <h1 className="title has-text-centered">
+            Edit {isMember ? "Member" : "Registration"}
+          </h1>
+          <Section className="pt-4">
+            <SIDField sid={sid} />
+            <EnglishNameField
+              englishName={englishName}
+              setEnglishName={setEnglishName}
+              isAdmin
+            />
+            <ChineseNameField
+              chineseName={chineseName}
+              setChineseName={setChineseName}
+            />
+            <GenderField gender={gender} setGender={setGender} />
+            <DOBField dob={dob} setDob={setDob} />
+            <EmailField email={email} setEmail={setEmail} />
+            <PhoneField phone={phone} setPhone={setPhone} />
+            <CollegeField
+              collegeCode={collegeCode}
+              setCollegeCode={setCollegeCode}
+            />
+            <MajorField majorCode={majorCode} setMajorCode={setMajorCode} />
+            <DOEntryField doEntry={doEntry} setDoEntry={setDoEntry} />
+            <DOGradField doGrad={doGrad} setDoGrad={setDoGrad} />
+          </Section>
+          <div className="is-pulled-right buttons">
+            <Button type="button" onClick={onReset}>
+              Reset
+            </Button>
+            <Button type="button" color="primary" onClick={onConfirm}>
+              Confirm
+            </Button>
+            <Button type="button" color="danger" onClick={onCancel}>
+              Cancel
+            </Button>
+          </div>
+        </Modal.Content>
+        <Modal show={loading} closeOnEsc={false} showClose={false}>
+          <Loader
+            style={{
+              position: "absolute",
+              margin: "auto",
+              height: "50vmin",
+              width: "50vmin",
+            }}
           />
-          <ChineseNameField
-            chineseName={chineseName}
-            setChineseName={setChineseName}
-          />
-          <GenderField gender={gender} setGender={setGender} />
-          <DOBField dob={dob} setDob={setDob} />
-          <EmailField email={email} setEmail={setEmail} />
-          <PhoneField phone={phone} setPhone={setPhone} />
-          <CollegeField
-            collegeCode={collegeCode}
-            setCollegeCode={setCollegeCode}
-          />
-          <MajorField majorCode={majorCode} setMajorCode={setMajorCode} />
-          <DOEntryField doEntry={doEntry} setDoEntry={setDoEntry} />
-          <DOGradField doGrad={doGrad} setDoGrad={setDoGrad} />
-        </Section>
-        <div className="is-pulled-right buttons">
-          <Button type="button" onClick={onReset}>
-            Reset
-          </Button>
-          <Button type="button" color="primary" onClick={() => onSave()}>
-            Confirm
-          </Button>
-          <Button type="button" color="danger" onClick={onCancel}>
-            Cancel
-          </Button>
-        </div>
-      </Modal.Content>
-    </Modal>
+        </Modal>
+      </Modal>
+    </>
   );
 };
 

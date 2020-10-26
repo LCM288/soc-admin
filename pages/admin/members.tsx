@@ -114,7 +114,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       },
       {
         Header: "Action",
-        accessor: (row: Record<string, unknown>) => row.sid,
+        accessor: () => true,
         id: "edit",
         Cell: EditCell,
         disableSortBy: true,
