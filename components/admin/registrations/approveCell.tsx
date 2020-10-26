@@ -40,7 +40,7 @@ const ApproveCell = ({
   const promptApprove = () => {
     setOpenModal(true);
   };
-  const cencelApprove = () => {
+  const cancelApprove = () => {
     setOpenModal(false);
   };
   return (
@@ -48,7 +48,7 @@ const ApproveCell = ({
       {openModal && (
         <ConfirmApproveModal
           onConfirm={approve}
-          onCancel={cencelApprove}
+          onCancel={cancelApprove}
           row={row.values}
         />
       )}
