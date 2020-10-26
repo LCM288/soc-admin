@@ -119,9 +119,9 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
       },
       {
         Header: "Action",
-        accessor: () => false,
+        accessor: () => "Registration",
         id: "approve",
-        Cell: (cellPrpos: CellProps<Record<string, unknown>, boolean>) => (
+        Cell: (cellPrpos: CellProps<Record<string, unknown>, string>) => (
           <>
             <ApproveCell {...cellPrpos} />
             <EditCell {...cellPrpos} />

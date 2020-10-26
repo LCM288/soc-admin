@@ -11,8 +11,8 @@ import toast from "utils/toast";
 
 const EditCell = ({
   row,
-  value: isMember,
-}: CellProps<Record<string, unknown>, boolean>): React.ReactElement => {
+  value: title,
+}: CellProps<Record<string, unknown>, string>): React.ReactElement => {
   const [updatePerson] = useMutation(updatePersonMutation, {
     refetchQueries: [{ query: membersQuery }, { query: registrationsQuery }],
   });
@@ -55,7 +55,7 @@ const EditCell = ({
           onCancel={cancelEdit}
           row={row.values}
           loading={editLoading}
-          isMember={isMember}
+          title={title}
         />
       )}
       <Button color="info" onClick={promptEdit}>

@@ -22,7 +22,7 @@ interface Props {
   onCancel: () => void;
   row: Record<string, unknown>;
   loading: boolean;
-  isMember: boolean;
+  title: string;
 }
 
 const EditPersonModal: React.FunctionComponent<Props> = ({
@@ -30,7 +30,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
   onCancel,
   row,
   loading,
-  isMember,
+  title,
 }: Props) => {
   const sid = row.sid as string;
   const [englishName, setEnglishName] = useState(
@@ -93,9 +93,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
     <>
       <Modal show closeOnEsc={false} showClose={false} onClose={onCancel}>
         <Modal.Content className="has-background-white box">
-          <h1 className="title has-text-centered">
-            Edit {isMember ? "Member" : "Registration"}
-          </h1>
+          <h1 className="title has-text-centered">Edit {title}</h1>
           <Section className="pt-4">
             <SIDField sid={sid} />
             <EnglishNameField
