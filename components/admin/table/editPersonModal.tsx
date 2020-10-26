@@ -1,6 +1,4 @@
 import React, { useState, useCallback } from "react";
-import { College } from "@/models/College";
-import { Major } from "@/models/Major";
 import ChineseNameField from "components/register/chineseNameField";
 import DOEntryField from "components/register/doEntryField";
 import EnglishNameField from "components/register/englishNameField";
@@ -45,12 +43,8 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
   const [dob, setDob] = useState((row.dateOfBirth ?? "") as string);
   const [email, setEmail] = useState((row.email ?? "") as string);
   const [phone, setPhone] = useState((row.phone ?? "") as string);
-  const [collegeCode, setCollegeCode] = useState(
-    (row.college as College | undefined)?.code ?? ""
-  );
-  const [majorCode, setMajorCode] = useState(
-    (row.major as Major | undefined)?.code ?? ""
-  );
+  const [collegeCode, setCollegeCode] = useState((row.college ?? "") as string);
+  const [majorCode, setMajorCode] = useState((row.major ?? "") as string);
   const [doEntry, setDoEntry] = useState((row.dateOfEntry ?? "") as string);
   const [doGrad, setDoGrad] = useState(
     (row.expectedGraduationDate ?? "") as string
@@ -62,8 +56,8 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
     setDob((row.dateOfBirth ?? "") as string);
     setEmail((row.email ?? "") as string);
     setPhone((row.phone ?? "") as string);
-    setCollegeCode((row.college as College | undefined)?.code ?? "");
-    setMajorCode((row.major as Major | undefined)?.code ?? "");
+    setCollegeCode((row.college ?? "") as string);
+    setMajorCode((row.major ?? "") as string);
     setDoEntry((row.dateOfEntry ?? "") as string);
     setDoGrad((row.expectedGraduationDate ?? "") as string);
   }, [row]);
