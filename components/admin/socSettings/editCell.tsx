@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { CellProps } from "react-table";
 import { Form, Button, Content, Tile } from "react-bulma-components";
 import ReactMarkdown from "react-markdown/with-html";
@@ -7,8 +7,12 @@ import { useMutation } from "@apollo/react-hooks";
 import toast from "utils/toast";
 import updateSocSettingMutation from "apollo/queries/socSetting/updateSocSetting.gql";
 import socSettingsQuery from "apollo/queries/socSetting/socSettings.gql";
+import socNameQuery from "apollo/queries/socSetting/socName.gql";
+import { SimpleMDEEditorProps } from "react-simplemde-editor";
 
-const SimpleMDE = dynamic<any>(() => import("react-simplemde-editor"));
+const SimpleMDE = dynamic<SimpleMDEEditorProps>(
+  () => import("react-simplemde-editor")
+);
 
 const { Input, Field, Control } = Form;
 
@@ -17,12 +21,20 @@ const EditCell = ({
   value,
 }: CellProps<Record<string, unknown>, string>): React.ReactElement => {
   const [updateSocSetting] = useMutation(updateSocSettingMutation, {
-    refetchQueries: [{ query: socSettingsQuery }],
+    refetchQueries: [{ query: socSettingsQuery }, { query: socNameQuery }],
   });
+  const oldValue = useRef<string | undefined>();
   const [keyValue, setKeyValue] = useState(value);
   // https://github.com/RIP21/react-simplemde-editor/issues/79
   const [forceRefresh, setForceRefresh] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
+
+  if (oldValue.current !== value) {
+    if (keyValue === oldValue.current) {
+      setKeyValue(value);
+    }
+    oldValue.current = value;
+  }
   const resetValue = () => {
     setForceRefresh(forceRefresh + 1);
     setKeyValue(value);

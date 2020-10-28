@@ -6,7 +6,7 @@ import PersonAPI from "@/datasources/person";
 import ExecutiveAPI from "@/datasources/executive";
 import SocSettingAPI from "@/datasources/socSetting";
 import { Major } from "@/models/Major";
-import { Person } from "@/models/Person";
+import { PersonModelAttributes } from "@/models/Person";
 import { DataSources } from "apollo-server-core/src/graphqlOptions";
 import { ContextBase } from "./datasources";
 
@@ -27,7 +27,7 @@ export interface ResolverDatasource extends DataSources<ContextBase> {
 }
 
 /** The parent nodes of a resolver */
-export type ResolverParent = Person | Major | null;
+export type ResolverParent = PersonModelAttributes | Major | null;
 
 /** The context of a resolver */
 export interface ResolverContext extends ContextBase {

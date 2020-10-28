@@ -11,18 +11,20 @@ interface Props {
   setDoGrad: (value: string) => void;
 }
 
-interface Labels {
+interface Option {
   value: string;
   label: string;
   month: string;
 }
 
-const formatOptionLabel = ({ label, month }: Labels) => (
+const formatOptionLabel = ({ label, month }: Option) => (
   <div className="is-flex">
     <div>{label}</div>
-    <Tag className="ml-2" color="info">
-      {month}
-    </Tag>
+    {month && (
+      <Tag className="ml-2" color="info">
+        {month}
+      </Tag>
+    )}
   </div>
 );
 
@@ -30,7 +32,7 @@ const DOGradField: React.FunctionComponent<Props> = ({
   doGrad,
   setDoGrad,
 }: Props) => {
-  const termEnds = useMemo(() => {
+  const termEnds = useMemo<Option[]>(() => {
     const calcTermEnd = (yearDiff: number) => {
       const year = yearDiff + DateTime.local().year;
       // `value` corresponds to the date where student status becomes ineffective
@@ -50,7 +52,28 @@ const DOGradField: React.FunctionComponent<Props> = ({
     return [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => calcTermEnd(i)).flat();
   }, []);
 
-  const termEnd = termEnds.find((term) => term.value === doGrad);
+  const termEnd = useMemo<Option>(() => {
+    if (/^\d{4}-0(1|8)-01$/.test(doGrad)) {
+      const [year, month] = doGrad.split("-").map((s) => parseInt(s, 10));
+      if (month === 1) {
+        return {
+          value: doGrad,
+          label: `${year - 1}-${year} Term 1`,
+          month: `Dec ${year - 1}`,
+        };
+      }
+      return {
+        value: doGrad,
+        label: `${year - 1}-${year} Term 2`,
+        month: `Jul ${year}`,
+      };
+    }
+    return {
+      value: doGrad,
+      label: doGrad,
+      month: "",
+    };
+  }, [doGrad]);
 
   return (
     <Field>
@@ -60,7 +83,7 @@ const DOGradField: React.FunctionComponent<Props> = ({
           <ReactSelect
             value={termEnd}
             options={termEnds}
-            onChange={(input: Labels): void => {
+            onChange={(input: Option): void => {
               setDoGrad(input.value);
             }}
             formatOptionLabel={formatOptionLabel}

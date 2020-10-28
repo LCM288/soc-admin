@@ -9,8 +9,7 @@ import registrationsQuery from "apollo/queries/person/registrations.gql";
 
 const ApproveCell = ({
   row,
-  value: sid,
-}: CellProps<Record<string, unknown>, number>): React.ReactElement => {
+}: CellProps<Record<string, unknown>, string>): React.ReactElement => {
   const [approveMembership] = useMutation(approveMembershipMutation, {
     refetchQueries: [{ query: registrationsQuery }],
   });
@@ -19,7 +18,7 @@ const ApproveCell = ({
   const approve = () => {
     setOpenModal(false);
     setApproveLoading(true);
-    approveMembership({ variables: { sid } })
+    approveMembership({ variables: { sid: row.values.sid as string } })
       .then((payload) => {
         if (!payload.data?.approveMembership.success) {
           throw new Error(
@@ -40,7 +39,7 @@ const ApproveCell = ({
   const promptApprove = () => {
     setOpenModal(true);
   };
-  const cencelApprove = () => {
+  const cancelApprove = () => {
     setOpenModal(false);
   };
   return (
@@ -48,12 +47,12 @@ const ApproveCell = ({
       {openModal && (
         <ConfirmApproveModal
           onConfirm={approve}
-          onCancel={cencelApprove}
+          onCancel={cancelApprove}
           row={row.values}
         />
       )}
       <Button color="success" onClick={promptApprove} loading={approveLoading}>
-        Approve {row.values.englishName}
+        Approve
       </Button>
     </>
   );

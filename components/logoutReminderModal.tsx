@@ -4,10 +4,12 @@ import { Modal, Section, Button } from "react-bulma-components";
 
 interface Props {
   open: boolean;
+  onClose: () => void;
 }
 
 const LogoutReminderModal: React.FunctionComponent<Props> = ({
   open,
+  onClose,
 }: Props) => {
   const router = useRouter();
 
@@ -19,20 +21,19 @@ const LogoutReminderModal: React.FunctionComponent<Props> = ({
     router.reload();
   };
 
-  const logout = () => {
-    router.push("/api/logout");
-  };
-
   return (
     <Modal show={open} closeOnEsc={false} showClose={false} onClose={refresh}>
-      <Modal.Content className="has-background-white box">
+      <Modal.Content
+        className="has-background-white box"
+        style={{ position: "fixed", zIndex: 50 }}
+      >
         <Section>You are about to logout, are you still here?</Section>
         <div className="is-pulled-right buttons">
           <Button color="primary" onClick={refresh}>
-            I am still here!
+            Refresh
           </Button>
-          <Button color="danger" onClick={logout}>
-            Logout
+          <Button color="danger" onClick={onClose}>
+            Close
           </Button>
         </div>
       </Modal.Content>
