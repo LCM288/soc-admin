@@ -62,6 +62,7 @@ export default function Register({
   const [doEntry, setDoEntry] = useState("");
   const [doGrad, setDoGrad] = useState("");
   const personLoaded = useRef(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // TODO: toast
   if (
@@ -108,6 +109,7 @@ export default function Register({
   };
   const formSubmit = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const options = {
       variables: {
         sid: user.sid,
@@ -124,9 +126,23 @@ export default function Register({
       },
     };
     if (person) {
-      updatePerson(options);
+      updatePerson(options)
+        .catch((err) => {
+          toast.danger(err.message, {
+            position: toast.POSITION.TOP_LEFT,
+          });
+          setIsSubmitting(false);
+        })
+        .finally(() => setIsSubmitting(false));
     } else {
-      newPerson(options);
+      newPerson(options)
+        .catch((err) => {
+          toast.danger(err.message, {
+            position: toast.POSITION.TOP_LEFT,
+          });
+          setIsSubmitting(false);
+        })
+        .finally(() => setIsSubmitting(false));
     }
   };
   return (
@@ -156,17 +172,11 @@ export default function Register({
               <Button type="button" onClick={() => setData()}>
                 Reset
               </Button>
-              <Button color="primary" type="submit">
+              <Button color="primary" type="submit" disabled={isSubmitting}>
                 {person ? "Update" : "Register"}
               </Button>
             </Button.Group>
           </form>
-          {(newPersonMutationLoading || updatePersonMutationLoading) && (
-            <p>Loading...</p>
-          )}
-          {(newPersonMutationError || updatePersonMutationError) && (
-            <p>Error :( Please try again</p>
-          )}
         </Container>
       </Section>
     </div>
