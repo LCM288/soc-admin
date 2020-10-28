@@ -11,27 +11,28 @@ interface Props {
   setDoEntry: (value: string) => void;
 }
 
-interface Labels {
+interface Option {
   value: string;
   label: string;
   month: string;
 }
 
-const formatOptionLabel = ({ label, month }: Labels) =>
-  (month && (
-    <div className="is-flex">
-      <div>{label}</div>
+const formatOptionLabel = ({ label, month }: Option) => (
+  <div className="is-flex">
+    <div>{label}</div>
+    {month && (
       <Tag className="ml-2" color="info">
         {month}
       </Tag>
-    </div>
-  )) || <div />;
+    )}
+  </div>
+);
 
 const DOEntryField: React.FunctionComponent<Props> = ({
   doEntry,
   setDoEntry,
 }: Props) => {
-  const termStarts = useMemo(() => {
+  const termStarts = useMemo<Option[]>(() => {
     const calcTermStart = (yearDiff: number) => {
       const year = yearDiff + DateTime.local().year;
       return [
@@ -52,15 +53,28 @@ const DOEntryField: React.FunctionComponent<Props> = ({
       .flat();
   }, []);
 
-  const termStart = useMemo(
-    () =>
-      termStarts.find((term) => term.value === doEntry) ?? {
-        value: "",
-        label: "",
-        month: "",
-      },
-    [termStarts, doEntry]
-  );
+  const termStart = useMemo<Option>(() => {
+    if (/^\d{4}-0(1|9)-01$/.test(doEntry)) {
+      const [year, month] = doEntry.split("-").map((s) => parseInt(s, 10));
+      if (month === 1) {
+        return {
+          value: doEntry,
+          label: `${year - 1}-${year} Term 2`,
+          month: `Jan ${year}`,
+        };
+      }
+      return {
+        value: doEntry,
+        label: `${year}-${year + 1} Term 1`,
+        month: `Sept ${year}`,
+      };
+    }
+    return {
+      value: doEntry,
+      label: doEntry,
+      month: "",
+    };
+  }, [doEntry]);
 
   return (
     <Field>
@@ -70,7 +84,7 @@ const DOEntryField: React.FunctionComponent<Props> = ({
           <ReactSelect
             value={termStart}
             options={termStarts}
-            onChange={(input: Labels): void => {
+            onChange={(input: Option): void => {
               setDoEntry(input.value);
             }}
             formatOptionLabel={formatOptionLabel}

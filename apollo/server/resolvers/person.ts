@@ -224,7 +224,8 @@ const updatePersonResolver: ResolverFn<
   }
   try {
     const person = await dataSources.personAPI.updatePerson(
-      omit(arg, isAdmin ? ["memberSince"] : ["memberSince", "memberUntil"])
+      omit(arg, isAdmin ? ["memberSince"] : ["memberSince", "memberUntil"]),
+      !isAdmin
     );
     return {
       success: true,
