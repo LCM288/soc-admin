@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { Row } from "react-table";
 import { statusOf, PersonModelAttributes } from "@/utils/Person";
 import useAsyncDebounce from "utils/useAsyncDebounce";
@@ -22,6 +22,8 @@ import {
 } from "react-bulma-components";
 import importPeopleMutation from "apollo/queries/person/importPeople.gql";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
+import ImportCell from "components/admin/table/importCell";
+import ImportEditCell from "components/admin/table/importEditCell";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -48,6 +50,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const [membersData, setMembersData] = useState<
     { members: Record<string, unknown>[] } | undefined
   >(undefined);
+  const [skipPageReset, setSkipPageReset] = useState(false);
 
   const statusFilter = useMemo(
     () => (
@@ -70,56 +73,75 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "SID",
         accessor: "sid",
+        Cell: ImportCell,
       },
       {
         Header: "Chinese Name",
         accessor: "chineseName",
+        Cell: ImportCell,
       },
       {
         Header: "English Name",
         accessor: "englishName",
+        Cell: ImportCell,
       },
       {
         Header: "Gender",
         accessor: "gender",
+        Cell: ImportCell,
       },
       {
         Header: "Date of Birth",
         accessor: "dateOfBirth",
+        Cell: ImportCell,
       },
       {
         Header: "Email",
         accessor: "email",
+        Cell: ImportCell,
       },
       {
         Header: "Phone",
         accessor: "phone",
+        Cell: ImportCell,
       },
       {
         Header: "College",
         accessor: "college",
+        Cell: ImportCell,
       },
       {
         Header: "Major",
         accessor: "major",
+        Cell: ImportCell,
       },
       {
         Header: "Date of Entry",
         accessor: "dateOfEntry",
+        Cell: ImportCell,
       },
       {
         Header: "Expected Graduation Date",
         accessor: "expectedGraduationDate",
+        Cell: ImportCell,
       },
       {
         Header: "Member Since",
         accessor: "memberSince",
+        Cell: ImportCell,
       },
       {
         Header: "Status",
         accessor: (row: Record<string, unknown>) =>
           statusOf(row as PersonModelAttributes),
         filter: statusFilter,
+        disableSortBy: true,
+      },
+      {
+        Header: "Action",
+        accessor: () => "Member",
+        id: "edit",
+        Cell: ImportEditCell,
         disableSortBy: true,
       },
     ],
@@ -144,6 +166,16 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
+  const dataUpdate = (rowIndex: number, diff: Record<string, unknown>) => {
+    setSkipPageReset(true);
+    setMembersData((old: { members: Record<string, unknown>[] }) => {
+      return _.set({ ...old }, ["members", rowIndex], {
+        ..._.get(old, ["members", rowIndex]),
+        ...diff,
+      });
+    });
+  };
+
   const tableInstance = useMemberTable({
     columns: tableColumns,
     data: tableData,
@@ -151,10 +183,13 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     autoResetFilters: false,
     autoResetGlobalFilter: false,
     initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
+    autoResetPage: !skipPageReset,
+    dataUpdate,
   });
 
   const [isUploading, setIsUploading] = useState(false);
   const [isFileProcessing, setIsFileProcessing] = useState(false);
+
   const upload = () => {
     // remove member id to prevent data collision
     if (!membersData || membersData === undefined) {
@@ -201,6 +236,10 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         .finally(() => setIsUploading(false))
     );
   };
+
+  useEffect(() => {
+    setSkipPageReset(false);
+  }, [membersData]);
 
   const {
     getTableProps,

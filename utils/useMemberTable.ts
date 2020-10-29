@@ -59,13 +59,18 @@ export interface MemberColumnInstance<
     UseFiltersColumnProps<D>,
     UseSortByColumnProps<D> {}
 
+export type UseCustomOptions = Partial<{
+  dataUpdate: (rowIndex: number, diff: Record<string, unknown>) => void;
+}>;
+
 export interface MemberTableOptions<
   D extends Record<string, unknown> = Record<string, unknown>
 > extends UseMemberTableOptions<D>,
     UseFiltersOptions<D>,
     UseGlobalFiltersOptions<D>,
     UsePaginationOptions<D>,
-    UseSortByOptions<D> {}
+    UseSortByOptions<D>,
+    UseCustomOptions {}
 
 export interface MemberTableInstance<
   D extends Record<string, unknown> = Record<string, unknown>
