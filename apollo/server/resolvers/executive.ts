@@ -113,6 +113,16 @@ const newExecutiveResolver: ResolverFn<
     return { success: false, message: "You have no permission to do this" };
   }
   try {
+    const hasMembers = Boolean(await dataSources.personAPI.countPeople());
+    if (hasMembers) {
+      // Not allowing adding executive if he/she is not a member except there is no members
+      const newExecutiveIsMember = Boolean(
+        await dataSources.personAPI.findPerson(arg.sid)
+      );
+      if (!newExecutiveIsMember) {
+        throw new Error("The one you are trying to add is not a member");
+      }
+    }
     const executive = await dataSources.executiveAPI.addNewExecutive(arg);
     return { success: true, message: "success", executive };
   } catch (err) {
@@ -170,7 +180,10 @@ const deleteExecutiveResolver: ResolverFn<
   if (!isAdmin) {
     return { success: false, message: "You have no permission to do this" };
   }
-  const count = await dataSources.executiveAPI.deleteExecutive({ sid });
+  if (user?.sid === sid) {
+    return { success: false, message: "You cannot remove yourself" };
+  }
+  const count = await dataSources.executiveAPI.removeExecutive(sid);
   if (!count) {
     return { success: false, message: `cannot remove executive ${sid}` };
   }
