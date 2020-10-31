@@ -328,123 +328,119 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
 
   if (user) {
     return (
-      <Section>
-        <Container fluid>
-          <Level>
-            <Level.Side align="left">
-              <Level.Item>
-                <InputFile
-                  color="primary"
-                  placeholder="Textarea"
-                  inputProps={{ accept: ".csv,.tsv,.txt" }}
-                  onChange={onImport}
-                />
-              </Level.Item>
-            </Level.Side>
-            <Level.Side align="right">
-              <Level.Item>
-                <Button color="primary" onClick={upload} loading={isUploading}>
-                  Upload
-                </Button>
-              </Level.Item>
-            </Level.Side>
-          </Level>
-          <PaginationControl
-            gotoPage={gotoPage}
-            pageIndex={pageIndex}
-            pageCount={pageCount}
-          />
-          <Level>
-            <Level.Side align="left">
-              <Field kind="addons">
-                <Control>
-                  <Select
-                    onChange={(
-                      event: React.ChangeEvent<HTMLInputElement>
-                    ): void => {
-                      setStatusFilterInput(event.target.value);
-                      onStatusFilterChange(event.target.value);
-                    }}
-                    value={statusFilterInput}
-                  >
-                    {statusOptions.map((statusOption) => (
-                      <option key={statusOption}>{statusOption}</option>
-                    ))}
-                  </Select>
-                </Control>
-                <Control fullwidth>
-                  <Input
-                    placeholder="Filter for keyword"
-                    value={globalFilterInput}
-                    onChange={(
-                      event: React.ChangeEvent<HTMLInputElement>
-                    ): void => {
-                      setGlobalFilterInput(event.target.value);
-                      onGlobalFilterChange(event.target.value);
-                    }}
-                  />
-                </Control>
-              </Field>
-            </Level.Side>
-            <Level.Side align="right">
-              <Field horizontal>
-                <Label className="mr-2" style={{ alignSelf: "center" }}>
-                  Result per page
-                </Label>
-                <Control>
-                  <Select
-                    onChange={(
-                      event: React.ChangeEvent<HTMLInputElement>
-                    ): void => {
-                      setPageSize(parseInt(event.target.value, 10));
-                    }}
-                    value={pageSize.toString()}
-                  >
-                    {pageSizeOptions.map((pageSizeOption) => (
-                      <option key={pageSizeOption}>{pageSizeOption}</option>
-                    ))}
-                  </Select>
-                </Control>
-              </Field>
-            </Level.Side>
-          </Level>
-          <Table {...getTableProps()}>
-            <thead>
-              {headerGroups.map((headerGroup) => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column) => (
-                    <th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                    >
-                      {column.render("Header")}
-                      <span>{getSortDirectionIndicatior(column)}</span>
-                    </th>
+      <>
+        <Level>
+          <Level.Side align="left">
+            <Level.Item>
+              <InputFile
+                color="primary"
+                placeholder="Textarea"
+                inputProps={{ accept: ".csv,.tsv,.txt" }}
+                onChange={onImport}
+              />
+            </Level.Item>
+          </Level.Side>
+          <Level.Side align="right">
+            <Level.Item>
+              <Button color="primary" onClick={upload} loading={isUploading}>
+                Upload
+              </Button>
+            </Level.Item>
+          </Level.Side>
+        </Level>
+        <PaginationControl
+          gotoPage={gotoPage}
+          pageIndex={pageIndex}
+          pageCount={pageCount}
+        />
+        <Level>
+          <Level.Side align="left">
+            <Field kind="addons">
+              <Control>
+                <Select
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => {
+                    setStatusFilterInput(event.target.value);
+                    onStatusFilterChange(event.target.value);
+                  }}
+                  value={statusFilterInput}
+                >
+                  {statusOptions.map((statusOption) => (
+                    <option key={statusOption}>{statusOption}</option>
                   ))}
+                </Select>
+              </Control>
+              <Control fullwidth>
+                <Input
+                  placeholder="Filter for keyword"
+                  value={globalFilterInput}
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => {
+                    setGlobalFilterInput(event.target.value);
+                    onGlobalFilterChange(event.target.value);
+                  }}
+                />
+              </Control>
+            </Field>
+          </Level.Side>
+          <Level.Side align="right">
+            <Field horizontal>
+              <Label className="mr-2" style={{ alignSelf: "center" }}>
+                Result per page
+              </Label>
+              <Control>
+                <Select
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => {
+                    setPageSize(parseInt(event.target.value, 10));
+                  }}
+                  value={pageSize.toString()}
+                >
+                  {pageSizeOptions.map((pageSizeOption) => (
+                    <option key={pageSizeOption}>{pageSizeOption}</option>
+                  ))}
+                </Select>
+              </Control>
+            </Field>
+          </Level.Side>
+        </Level>
+        <Table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render("Header")}
+                    <span>{getSortDirectionIndicatior(column)}</span>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
                 </tr>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
-                prepareRow(row);
-                return (
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map((cell) => {
-                      return (
-                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-          <PaginationControl
-            gotoPage={gotoPage}
-            pageIndex={pageIndex}
-            pageCount={pageCount}
-          />
-        </Container>
-      </Section>
+              );
+            })}
+          </tbody>
+        </Table>
+        <PaginationControl
+          gotoPage={gotoPage}
+          pageIndex={pageIndex}
+          pageCount={pageCount}
+        />
+      </>
     );
   }
   return <a href="/login">Please login first </a>;
