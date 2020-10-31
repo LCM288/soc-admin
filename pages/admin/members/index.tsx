@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback, useRef } from "react";
 import { Row } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
@@ -8,7 +8,10 @@ import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import { Table, Form, Level } from "react-bulma-components";
+import { Person } from "@/models/Person";
+import { Table, Form, Level, Button } from "react-bulma-components";
+import Papa from "papaparse";
+import { DateTime } from "luxon";
 import toast from "utils/toast";
 import membersQuery from "apollo/queries/person/members.gql";
 import PaginationControl from "components/admin/table/paginationControl";
@@ -162,6 +165,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     pageCount,
     setPageSize,
     gotoPage,
+    rows,
   } = tableInstance;
 
   const [globalFilterInput, setGlobalFilterInput] = useState(globalFilter);
@@ -182,6 +186,99 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     setMembersData(data);
   }
 
+  const [isFileProcessing, setIsFileProcessing] = useState(false);
+
+  const onExport = useCallback((exportData: Record<string, unknown>[]) => {
+    if (exportData.length) {
+      setIsFileProcessing(true);
+      const memberExport = exportData.map(
+        ({
+          id,
+          sid,
+          chineseName,
+          englishName,
+          gender,
+          dateOfBirth,
+          email,
+          phone,
+          college,
+          major,
+          dateOfEntry,
+          expectedGraduationDate,
+          memberSince,
+        }) => ({
+          ID: id,
+          SID: sid,
+          "Chinese Name": chineseName,
+          "English Name": englishName,
+          Gender: gender,
+          "Date of Birth": dateOfBirth,
+          Email: email,
+          Phone: phone,
+          College: (college as College).code,
+          Major: (major as Major).code,
+          "Date of Entry": dateOfEntry,
+          "Expected Graduation Date": expectedGraduationDate,
+          "Member Since": memberSince,
+        })
+      );
+      const csv = Papa.unparse(memberExport, {
+        quotes: [
+          false,
+          false,
+          true,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+        ],
+      });
+      console.log(csv);
+      const element = document.createElement("a");
+      const file = new Blob([csv], { type: "text/plain" });
+      element.href = URL.createObjectURL(file);
+      const time = DateTime.local();
+      element.download = `members-${time.toISO()}.csv`;
+      document.body.appendChild(element); // Required for this to work in FireFox
+      element.click();
+      document.body.removeChild(element);
+      setIsFileProcessing(false);
+    } else {
+      toast.danger("No member data.", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      setIsFileProcessing(false);
+    }
+  }, []);
+
+  const onExportAll = useCallback(() => {
+    if (membersData?.members.length) {
+      onExport(membersData.members);
+    } else {
+      toast.danger("No member data.", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      setIsFileProcessing(false);
+    }
+  }, [membersData, onExport]);
+
+  const onExportFiltered = useCallback(() => {
+    if (rows.length) {
+      onExport(rows.map((r) => r.original));
+    } else {
+      toast.danger("No member data.", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      setIsFileProcessing(false);
+    }
+  }, [rows, onExport]);
+
   if (!membersData) {
     if (loading) return <p>loading</p>;
     if (error) return <p>{error.message}</p>;
@@ -194,6 +291,18 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <>
+        <Button.Group position="right">
+          <Button onClick={onExportAll} loading={isFileProcessing}>
+            Export All
+          </Button>
+          <Button
+            color="primary"
+            onClick={onExportFiltered}
+            loading={isFileProcessing}
+          >
+            Export Filtered
+          </Button>
+        </Button.Group>
         <PaginationControl
           gotoPage={gotoPage}
           pageIndex={pageIndex}
