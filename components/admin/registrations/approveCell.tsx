@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CellProps } from "react-table";
 import { Button } from "react-bulma-components";
 import { useMutation } from "@apollo/react-hooks";
-import ConfirmApproveModal from "components/admin/registrations/confirmApproveModal";
+import PromptModal from "components/promptModal";
 import toast from "utils/toast";
 import approveMembershipMutation from "apollo/queries/person/approveMembership.gql";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
@@ -45,10 +45,10 @@ const ApproveCell = ({
   return (
     <>
       {openModal && (
-        <ConfirmApproveModal
+        <PromptModal
+          message={`Are you sure you want to approve the membership of ${row.values.englishName}?`}
           onConfirm={approve}
           onCancel={cancelApprove}
-          row={row.values}
         />
       )}
       <Button color="success" onClick={promptApprove} loading={approveLoading}>

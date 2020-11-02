@@ -70,9 +70,7 @@ const collegeResolver: ResolverFn<null, College> = (
  * @category Field Resolver
  */
 const statusResolver: ResolverFn<null, MemberStatusEnum> = (
-  person: PersonModelAttributes,
-  _,
-  __
+  person: PersonModelAttributes
 ): MemberStatusEnum => {
   return Person.status(person);
 };
@@ -85,7 +83,7 @@ const statusResolver: ResolverFn<null, MemberStatusEnum> = (
 const registrationTypeResolver: ResolverFn<
   null,
   RegistrationTypeEnum | null
-> = (person: PersonModelAttributes, _, __): RegistrationTypeEnum | null => {
+> = (person: PersonModelAttributes): RegistrationTypeEnum | null => {
   return Person.registrationType(person);
 };
 

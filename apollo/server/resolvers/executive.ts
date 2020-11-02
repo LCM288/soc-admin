@@ -21,6 +21,14 @@ interface ExecutiveUpdateResponse {
   executive?: ExecutiveAttributes;
 }
 
+/** The response when deleting executive(s) */
+interface ExecutiveDeleteResponse {
+  /** Whether the mutation is successful or not */
+  success: boolean;
+  /** Additional information about the mutation */
+  message: string;
+}
+
 /** The input arguments for the faculty query's resolver */
 interface ExecutiveResolverArgs {
   sid: string;
@@ -105,6 +113,16 @@ const newExecutiveResolver: ResolverFn<
     return { success: false, message: "You have no permission to do this" };
   }
   try {
+    const hasMembers = Boolean(await dataSources.personAPI.countPeople());
+    if (hasMembers) {
+      // Not allowing adding executive if he/she is not a member except there is no members
+      const newExecutiveIsMember = Boolean(
+        await dataSources.personAPI.findPerson(arg.sid)
+      );
+      if (!newExecutiveIsMember) {
+        throw new Error(`SID ${arg.sid} is not a member`);
+      }
+    }
     const executive = await dataSources.executiveAPI.addNewExecutive(arg);
     return { success: true, message: "success", executive };
   } catch (err) {
@@ -141,6 +159,40 @@ const updateExecutiveResolver: ResolverFn<
   }
 };
 
+/**
+ * The resolver for deleteExecutive Mutation
+ * @async
+ * @param arg - The arguments for the deleteExecutive mutation
+ * @returns The update response
+ * @category Mutation Resolver
+ */
+const deleteExecutiveResolver: ResolverFn<
+  { sid: string },
+  ExecutiveDeleteResponse
+> = async (
+  _,
+  { sid },
+  { user, dataSources }
+): Promise<ExecutiveDeleteResponse> => {
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  if (!isAdmin) {
+    return { success: false, message: "You have no permission to do this" };
+  }
+  if (user?.sid === sid) {
+    return { success: false, message: "You cannot remove yourself" };
+  }
+  const count = await dataSources.executiveAPI.removeExecutive(sid);
+  if (!count) {
+    return { success: false, message: `cannot remove executive ${sid}` };
+  }
+  return {
+    success: true,
+    message: `executive "${sid}" removed`,
+  };
+};
+
 /** The resolvers associated with the Executive model */
 export const resolvers: Resolvers = {
   Query: {
@@ -156,6 +208,8 @@ export const resolvers: Resolvers = {
     newExecutive: newExecutiveResolver,
     /** see {@link updateExecutiveResolver} */
     updateExecutive: updateExecutiveResolver,
+    /** see {@link deleteExecutiveResolver} */
+    deleteExecutive: deleteExecutiveResolver,
   },
 };
 
@@ -181,6 +235,7 @@ export const resolverTypeDefs = gql`
       nickname: String
       pos: String
     ): ExecutiveUpdateResponse!
+    deleteExecutive(sid: String!): ExecutiveUpdateResponse!
   }
 
   type ExecutiveUpdateResponse {
