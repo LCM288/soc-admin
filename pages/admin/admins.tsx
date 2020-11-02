@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useMemo, useState } from "react";
-import useAdminTable from "utils/useAdminTable";
+import useAdminTable, { AdminColumnInstance } from "utils/useAdminTable";
+import { CellProps } from "react-table";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
@@ -12,6 +13,16 @@ import ActionsCell from "components/admin/admins/actionsCell";
 import AddAdmin from "components/admin/admins/addAdmin";
 
 export { getServerSideProps } from "utils/getServerSideProps";
+
+const getSortDirectionIndicatior = (column: AdminColumnInstance): string => {
+  if (column.isSorted) {
+    if (column.isSortedDesc) {
+      return " 🔽";
+    }
+    return " 🔼";
+  }
+  return "";
+};
 
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const { data, loading, error } = useQuery(executivesQuery, {
@@ -93,8 +104,9 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                     {column.render("Header")}
+                    <span>{getSortDirectionIndicatior(column)}</span>
                   </th>
                 ))}
               </tr>
