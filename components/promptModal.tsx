@@ -1,0 +1,30 @@
+import React from "react";
+import { Modal, Button, Heading } from "react-bulma-components";
+
+interface Props {
+  message: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+const PromptModal: React.FunctionComponent<Props> = ({
+  message,
+  onConfirm,
+  onCancel,
+}: Props) => (
+  <Modal show closeOnEsc onClose={onCancel}>
+    <Modal.Content className="has-background-white box">
+      <Heading>{message}</Heading>
+      <div className="is-pulled-right buttons pt-4">
+        <Button type="button" color="primary" onClick={onConfirm}>
+          Confirm
+        </Button>
+        <Button color="danger" onClick={onCancel}>
+          Cancel
+        </Button>
+      </div>
+    </Modal.Content>
+  </Modal>
+);
+
+export default PromptModal;

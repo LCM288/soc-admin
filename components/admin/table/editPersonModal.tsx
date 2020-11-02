@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import Loading from "components/loading";
 import ChineseNameField from "components/register/chineseNameField";
 import DOEntryField from "components/register/doEntryField";
 import EnglishNameField from "components/register/englishNameField";
@@ -10,7 +11,7 @@ import SIDField from "components/register/sidField";
 import DOBField from "components/register/dobField";
 import EmailField from "components/register/emailField";
 import MajorField from "components/register/majorField";
-import { Modal, Section, Button, Loader } from "react-bulma-components";
+import { Modal, Section, Button } from "react-bulma-components";
 import {
   PersonUpdateAttributes,
   GenderEnum,
@@ -129,16 +130,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
             </Button>
           </div>
         </Modal.Content>
-        <Modal show={loading} closeOnEsc={false} showClose={false}>
-          <Loader
-            style={{
-              position: "absolute",
-              margin: "auto",
-              height: "50vmin",
-              width: "50vmin",
-            }}
-          />
-        </Modal>
+        <Loading loading={loading} />
       </Modal>
     </>
   );
