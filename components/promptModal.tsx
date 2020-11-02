@@ -15,7 +15,7 @@ const PromptModal: React.FunctionComponent<Props> = ({
   <Modal show closeOnEsc onClose={onCancel}>
     <Modal.Content className="has-background-white box">
       {(typeof message === "string" && (
-        <Heading className="has-text-centered" size={4}>
+        <Heading className="has-text-centered" size={5}>
           {message}
         </Heading>
       )) ||
