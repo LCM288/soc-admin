@@ -11,7 +11,7 @@ import SIDField from "components/register/sidField";
 import DOBField from "components/register/dobField";
 import EmailField from "components/register/emailField";
 import MajorField from "components/register/majorField";
-import { Modal, Section, Button } from "react-bulma-components";
+import { Modal, Section, Button, Heading } from "react-bulma-components";
 import {
   PersonUpdateAttributes,
   GenderEnum,
@@ -94,7 +94,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
     <>
       <Modal show closeOnEsc={false} showClose={false} onClose={onCancel}>
         <Modal.Content className="has-background-white box">
-          <h1 className="title has-text-centered">Edit {title}</h1>
+          <Heading className="has-text-centered">Edit {title}</Heading>
           <Section className="pt-4">
             <SIDField sid={sid} />
             <EnglishNameField
