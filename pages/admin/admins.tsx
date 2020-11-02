@@ -38,12 +38,15 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: "pos",
       },
       {
-        Header: "",
+        Header: "Actions",
         id: "edit",
-        Cell: ActionsCell,
+        Cell: (props: CellProps<Record<string, unknown>, string>) => (
+          <ActionsCell {...props} user={user} />
+        ),
+        disableSortBy: true,
       },
     ],
-    []
+    [user]
   );
 
   const tableData = useMemo(() => {

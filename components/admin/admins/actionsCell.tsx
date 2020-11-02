@@ -10,10 +10,13 @@ import { ExecutiveUpdateAttributes } from "@/models/Executive";
 import EditAdminModal from "components/admin/admins/editAdminModal";
 import PromptModal from "components/promptModal";
 import Loading from "components/loading";
+import { User } from "@/types/datasources";
 
-const ActionsCell = ({
-  row,
-}: CellProps<Record<string, unknown>, string>): React.ReactElement => {
+interface Props extends CellProps<Record<string, unknown>, string> {
+  user: User | null;
+}
+
+const ActionsCell = ({ row, user }: Props): React.ReactElement => {
   const [updateExecutive] = useMutation(updateExecutiveMutation, {
     refetchQueries: [{ query: executivesQuery }],
   });
@@ -103,7 +106,11 @@ const ActionsCell = ({
       <Button color="info" onClick={promptEdit}>
         Edit
       </Button>
-      <Button color="danger" onClick={promptDelete}>
+      <Button
+        color="danger"
+        onClick={promptDelete}
+        disabled={row.values.sid === user?.sid}
+      >
         Delete
       </Button>
       {!openEditModal && <Loading loading={loading} />}
