@@ -6,7 +6,7 @@ interface Props {
 }
 
 const Loading: React.FunctionComponent<Props> = ({ loading }: Props) => (
-  <Modal show={loading} closeOnEsc={false} showClose={false}>
+  <Modal show={loading} closeOnEsc={false} showClose={false} onClose={() => {}}>
     <Loader
       style={{
         position: "absolute",
