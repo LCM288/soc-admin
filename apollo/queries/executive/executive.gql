@@ -1,5 +1,6 @@
 query($sid: String!) {
   executive(sid: $sid) {
+    id
     sid
     nickname
     pos

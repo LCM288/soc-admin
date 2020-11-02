@@ -3,6 +3,7 @@ mutation($key: String!, $value: String!) {
     success
     message
     socSetting {
+      id
       key
       value
     }
