@@ -1,7 +1,21 @@
-import React, { useState } from "react";
-import { Heading, Modal, Button, Form } from "react-bulma-components";
+import React, { useState, useCallback, useMemo } from "react";
+import {
+  Heading,
+  Modal,
+  Button,
+  Form,
+  Loader,
+  Columns,
+} from "react-bulma-components";
 import Loading from "components/loading";
 import { ExecutiveCreationAttributes } from "@/models/Executive";
+import PromptModal from "components/promptModal";
+import toast from "utils/toast";
+import { useLazyQuery } from "@apollo/client";
+import personQuery from "apollo/queries/person/person.gql";
+import { PersonAttributes } from "@/models/Person";
+import { College } from "@/models/College";
+import { Major } from "@/models/Major";
 
 const { Input, Field, Label, Control } = Form;
 
@@ -17,12 +31,58 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
   loading,
 }: Props) => {
   const [sid, setSID] = useState("");
+  const [
+    getMember,
+    { loading: memberLoading, data: memberData, error },
+  ] = useLazyQuery(personQuery);
   const [nickname, setNickname] = useState("");
   const [pos, setPos] = useState("");
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const messageElement = useMemo(() => {
+    const person = (memberData?.person as PersonAttributes) || null;
+    return (
+      <>
+        <Heading className="has-text-centered" size={4}>
+          {`Are you sure to add ${sid} as an admin ?`}
+        </Heading>
+        {memberLoading && <Loader />}
+        {error && <div>error.message</div>}
+        {!person && <div>{sid} cannot be found on the member list</div>}
+        {person && (
+          <Columns className="has-text-centered">
+            <Columns.Column>
+              <div>{person.englishName}</div>
+              <div>{person.chineseName}</div>
+            </Columns.Column>
+            <Columns.Column>
+              <div>{(person.college as College).englishName}</div>
+              <div>{(person.college as College).chineseName}</div>
+            </Columns.Column>
+            <Columns.Column style={{ justify: "center" }}>
+              <div>{(person.major as Major).englishName}</div>
+              <div>{(person.major as Major).chineseName}</div>
+            </Columns.Column>
+          </Columns>
+        )}
+      </>
+    );
+  }, [sid, memberLoading, memberData, error]);
 
-  const onConfirm = () => {
+  const onConfirm = useCallback(() => {
     onSave({ sid, nickname, pos });
-  };
+  }, [onSave, sid, nickname, pos]);
+
+  const promptConfirm = useCallback(() => {
+    if (sid.length !== 10) {
+      toast.danger("Incorrect sid");
+      return;
+    }
+    getMember({ variables: { sid } });
+    setOpenConfirmModal(true);
+  }, [sid, getMember]);
+  const cancelConfirm = useCallback(() => {
+    setOpenConfirmModal(false);
+  }, []);
 
   return (
     <Modal show closeOnEsc={false} onClose={onClose}>
@@ -66,7 +126,7 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
           </Control>
         </Field>
         <div className="is-pulled-right buttons pt-4">
-          <Button color="primary" onClick={onConfirm}>
+          <Button color="primary" onClick={promptConfirm}>
             Add
           </Button>
           <Button color="danger" onClick={onClose}>
@@ -74,6 +134,13 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
           </Button>
         </div>
       </Modal.Content>
+      {openConfirmModal && (
+        <PromptModal
+          message={messageElement}
+          onConfirm={onConfirm}
+          onCancel={cancelConfirm}
+        />
+      )}
       <Loading loading={loading} />
     </Modal>
   );
