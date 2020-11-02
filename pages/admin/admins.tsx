@@ -98,7 +98,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <div>
-        <AddAdmin />
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
@@ -127,6 +126,9 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             })}
           </tbody>
         </Table>
+        <div className="is-pulled-right">
+          <AddAdmin />
+        </div>
       </div>
     );
   }
