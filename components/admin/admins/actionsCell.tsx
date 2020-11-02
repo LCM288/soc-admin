@@ -7,7 +7,7 @@ import deleteExecutiveMutation from "apollo/queries/executive/deleteExecutive.gq
 import executivesQuery from "apollo/queries/executive/executives.gql";
 import toast from "utils/toast";
 import { ExecutiveUpdateAttributes } from "@/models/Executive";
-import EditAdminModal from "components/admin/admin/editAdminModal";
+import EditAdminModal from "components/admin/admins/editAdminModal";
 import PromptModal from "components/promptModal";
 import Loading from "components/loading";
 

@@ -88,6 +88,11 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
           </Navbar.Brand>
           <Navbar.Menu>
             <Navbar.Container>
+              <Link href="/admin/admins">
+                <a href="/admin/admins" className="navbar-item">
+                  Admins
+                </a>
+              </Link>
               <Link href="/admin/members">
                 <a href="/admin/members" className="navbar-item">
                   Members

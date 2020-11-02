@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Button } from "react-bulma-components";
 import { useMutation } from "@apollo/react-hooks";
-import AddAdminModal from "components/admin/admin/addAdminModal";
+import AddAdminModal from "components/admin/admins/addAdminModal";
 import newExecutiveMutation from "apollo/queries/executive/newExecutive.gql";
 import executivesQuery from "apollo/queries/executive/executives.gql";
 import { ExecutiveCreationAttributes } from "@/models/Executive";

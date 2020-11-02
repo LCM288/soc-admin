@@ -8,8 +8,8 @@ import { ServerSideProps } from "utils/getServerSideProps";
 import { Table } from "react-bulma-components";
 import toast from "utils/toast";
 import executivesQuery from "apollo/queries/executive/executives.gql";
-import ActionsCell from "components/admin/admin/actionsCell";
-import AddAdmin from "components/admin/admin/addAdmin";
+import ActionsCell from "components/admin/admins/actionsCell";
+import AddAdmin from "components/admin/admins/addAdmin";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
