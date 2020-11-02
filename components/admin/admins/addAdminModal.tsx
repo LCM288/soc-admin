@@ -27,12 +27,13 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
   return (
     <Modal show closeOnEsc={false} onClose={onClose}>
       <Modal.Content className="has-background-white box">
-        <Heading>New Admin</Heading>
+        <Heading className="has-text-centered">New Admin</Heading>
         <Field>
           <Label>SID</Label>
           <Control>
             <Input
               placeholder="SID"
+              type="number"
               value={sid}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setSID(e.target.value)

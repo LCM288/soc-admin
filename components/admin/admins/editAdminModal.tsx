@@ -34,7 +34,7 @@ const EditAdminModal: React.FunctionComponent<Props> = ({
   return (
     <Modal show closeOnEsc={false} onClose={onCancel}>
       <Modal.Content className="has-background-white box">
-        <Heading>Edit Admin</Heading>
+        <Heading className="has-text-centered">Edit Admin</Heading>
         <Field>
           <Label>SID</Label>
           <Control>
