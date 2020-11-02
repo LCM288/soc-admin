@@ -127,7 +127,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
           </tbody>
         </Table>
         <div className="is-pulled-right">
-          <AddAdmin />
+          <AddAdmin executives={executivesData?.executives ?? []} />
         </div>
       </div>
     );

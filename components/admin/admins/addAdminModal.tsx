@@ -20,12 +20,14 @@ import { Major } from "@/models/Major";
 const { Input, Field, Label, Control } = Form;
 
 interface Props {
+  executives: Array<Record<string, unknown>>;
   onSave: (person: ExecutiveCreationAttributes) => void;
   onClose: () => void;
   loading: boolean;
 }
 
 const AddAdminModal: React.FunctionComponent<Props> = ({
+  executives,
   onSave,
   onClose,
   loading,
@@ -70,6 +72,7 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
 
   const onConfirm = useCallback(() => {
     onSave({ sid, nickname, pos });
+    setOpenConfirmModal(false);
   }, [onSave, sid, nickname, pos]);
 
   const promptConfirm = useCallback(() => {
@@ -77,9 +80,13 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
       toast.danger("Incorrect sid");
       return;
     }
+    if (executives.map((executive) => executive.sid).includes(sid)) {
+      toast.danger(`${sid} is already an executive`);
+      return;
+    }
     getMember({ variables: { sid } });
     setOpenConfirmModal(true);
-  }, [sid, getMember]);
+  }, [sid, getMember, executives]);
   const cancelConfirm = useCallback(() => {
     setOpenConfirmModal(false);
   }, []);

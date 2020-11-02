@@ -7,7 +7,11 @@ import executivesQuery from "apollo/queries/executive/executives.gql";
 import { ExecutiveCreationAttributes } from "@/models/Executive";
 import toast from "utils/toast";
 
-const AddAdmin: React.FunctionComponent = () => {
+interface Props {
+  executives: Array<Record<string, unknown>>;
+}
+
+const AddAdmin: React.FunctionComponent<Props> = ({ executives }: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [newExecutive] = useMutation(newExecutiveMutation, {
@@ -47,6 +51,7 @@ const AddAdmin: React.FunctionComponent = () => {
     <>
       {modalOpen && (
         <AddAdminModal
+          executives={executives}
           onSave={onAdd}
           onClose={() => {
             setModalOpen(false);
