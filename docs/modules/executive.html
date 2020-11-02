@@ -81,6 +81,7 @@
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/executive.executiveattributes.html" class="tsd-kind-icon">Executive<wbr>Attributes</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported"><a href="../interfaces/executive.executivedeleteresponse.html" class="tsd-kind-icon">Executive<wbr>Delete<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported"><a href="../interfaces/executive.executiveresolverargs.html" class="tsd-kind-icon">Executive<wbr>Resolver<wbr>Args</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported"><a href="../interfaces/executive.executiveupdateresponse.html" class="tsd-kind-icon">Executive<wbr>Update<wbr>Response</a></li>
 							</ul>
@@ -99,6 +100,7 @@
 							</ul>
 							<h3>Mutation Resolver Functions</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="executive.html#deleteexecutiveresolver" class="tsd-kind-icon">delete<wbr>Executive<wbr>Resolver</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="executive.html#newexecutiveresolver" class="tsd-kind-icon">new<wbr>Executive<wbr>Resolver</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="executive.html#updateexecutiveresolver" class="tsd-kind-icon">update<wbr>Executive<wbr>Resolver</a></li>
 							</ul>
@@ -126,7 +128,7 @@
 					<div class="tsd-signature tsd-kind-icon">Executive<wbr>Creation<wbr>Attributes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/executive.executiveattributes.html" class="tsd-signature-type">ExecutiveAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/models/Executive.ts#L20">apollo/server/models/Executive.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/models/Executive.ts#L20">apollo/server/models/Executive.ts:20</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -141,7 +143,7 @@
 					<div class="tsd-signature tsd-kind-icon">Executive<wbr>Update<wbr>Attributes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/executive.executiveattributes.html" class="tsd-signature-type">ExecutiveAttributes</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/executive.executiveattributes.html" class="tsd-signature-type">ExecutiveAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"sid"</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/models/Executive.ts#L23">apollo/server/models/Executive.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/models/Executive.ts#L23">apollo/server/models/Executive.ts:23</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -163,7 +165,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/models/Executive.ts#L51">apollo/server/models/Executive.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/models/Executive.ts#L51">apollo/server/models/Executive.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -191,6 +193,58 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Mutation Resolver Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="deleteexecutiveresolver" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> delete<wbr>Executive<wbr>Resolver</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Executive<wbr>Resolver<span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>sid<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol">; </span>user<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/apollo_server_types.user.html" class="tsd-signature-type">User</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/executive.executivedeleteresponse.html" class="tsd-signature-type">ExecutiveDeleteResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L172">apollo/server/resolvers/executive.ts:172</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The resolver for deleteExecutive Mutation</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>_: <a href="apollo_server_types.html#resolverparent" class="tsd-signature-type">ResolverParent</a></h5>
+								</li>
+								<li>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>sid<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>sid<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>dataSources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a><span class="tsd-signature-symbol">; </span>user<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/apollo_server_types.user.html" class="tsd-signature-type">User</a><span class="tsd-signature-symbol"> }</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>data<wbr>Sources<span class="tsd-signature-symbol">: </span><a href="../interfaces/apollo_server_types.resolverdatasource.html" class="tsd-signature-type">ResolverDatasource</a></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5>user<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/apollo_server_types.user.html" class="tsd-signature-type">User</a></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/executive.executivedeleteresponse.html" class="tsd-signature-type">ExecutiveDeleteResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The update response</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
 					<a name="newexecutiveresolver" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> new<wbr>Executive<wbr>Resolver</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
@@ -200,7 +254,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L97">apollo/server/resolvers/executive.ts:97</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L105">apollo/server/resolvers/executive.ts:105</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -252,7 +306,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L125">apollo/server/resolvers/executive.ts:125</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L143">apollo/server/resolvers/executive.ts:143</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -307,7 +361,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L77">apollo/server/resolvers/executive.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L85">apollo/server/resolvers/executive.ts:85</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -351,7 +405,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L57">apollo/server/resolvers/executive.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L65">apollo/server/resolvers/executive.ts:65</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -403,7 +457,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L36">apollo/server/resolvers/executive.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L44">apollo/server/resolvers/executive.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -449,7 +503,7 @@
 					<div class="tsd-signature tsd-kind-icon">resolvers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L145">apollo/server/resolvers/executive.ts:145</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L197">apollo/server/resolvers/executive.ts:197</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -463,16 +517,31 @@
 						<div class="tsd-signature tsd-kind-icon">Mutation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L154">apollo/server/resolvers/executive.ts:154</a></li>
+								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L206">apollo/server/resolvers/executive.ts:206</a></li>
 							</ul>
 						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="resolvers.mutation.deleteexecutive" class="tsd-anchor"></a>
+							<h3>delete<wbr>Executive</h3>
+							<div class="tsd-signature tsd-kind-icon">delete<wbr>Executive<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>sid<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/executive.executivedeleteresponse.html" class="tsd-signature-type">ExecutiveDeleteResponse</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = deleteExecutiveResolver</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L212">apollo/server/resolvers/executive.ts:212</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>see <a href="executive.html#deleteexecutiveresolver">deleteExecutiveResolver</a></p>
+								</div>
+							</div>
+						</section>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 							<a name="resolvers.mutation.newexecutive" class="tsd-anchor"></a>
 							<h3>new<wbr>Executive</h3>
 							<div class="tsd-signature tsd-kind-icon">new<wbr>Executive<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Optional</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/executive.executiveattributes.html" class="tsd-signature-type">ExecutiveAttributes</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/executive.executiveupdateresponse.html" class="tsd-signature-type">ExecutiveUpdateResponse</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = newExecutiveResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L156">apollo/server/resolvers/executive.ts:156</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L208">apollo/server/resolvers/executive.ts:208</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -487,7 +556,7 @@
 							<div class="tsd-signature tsd-kind-icon">update<wbr>Executive<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><a href="executive.html#executiveupdateattributes" class="tsd-signature-type">ExecutiveUpdateAttributes</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/executive.executiveupdateresponse.html" class="tsd-signature-type">ExecutiveUpdateResponse</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = updateExecutiveResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L158">apollo/server/resolvers/executive.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L210">apollo/server/resolvers/executive.ts:210</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -503,7 +572,7 @@
 						<div class="tsd-signature tsd-kind-icon">Query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L146">apollo/server/resolvers/executive.ts:146</a></li>
+								<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L198">apollo/server/resolvers/executive.ts:198</a></li>
 							</ul>
 						</aside>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -512,7 +581,7 @@
 							<div class="tsd-signature tsd-kind-icon">count<wbr>Executives<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = countExecutivesResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L152">apollo/server/resolvers/executive.ts:152</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L204">apollo/server/resolvers/executive.ts:204</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -527,7 +596,7 @@
 							<div class="tsd-signature tsd-kind-icon">executive<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/executive.executiveresolverargs.html" class="tsd-signature-type">ExecutiveResolverArgs</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/executive.executiveattributes.html" class="tsd-signature-type">ExecutiveAttributes</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = executiveResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L150">apollo/server/resolvers/executive.ts:150</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L202">apollo/server/resolvers/executive.ts:202</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -542,7 +611,7 @@
 							<div class="tsd-signature tsd-kind-icon">executives<span class="tsd-signature-symbol">:</span> <a href="apollo_server_types.html#resolverfn" class="tsd-signature-type">ResolverFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/executive.executiveattributes.html" class="tsd-signature-type">ExecutiveAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = executivesResolver</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/0b21dd0/apollo/server/resolvers/executive.ts#L148">apollo/server/resolvers/executive.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/bd1b8e1/apollo/server/resolvers/executive.ts#L200">apollo/server/resolvers/executive.ts:200</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -590,6 +659,9 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="components.html">components</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="components_admin_admins.html">components\admin\admins</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="components_admin_registrations.html">components\admin\registrations</a>
@@ -641,6 +713,9 @@
 						<a href="../interfaces/executive.executiveattributes.html" class="tsd-kind-icon">Executive<wbr>Attributes</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../interfaces/executive.executivedeleteresponse.html" class="tsd-kind-icon">Executive<wbr>Delete<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../interfaces/executive.executiveresolverargs.html" class="tsd-kind-icon">Executive<wbr>Resolver<wbr>Args</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
@@ -657,6 +732,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
 						<a href="executive.html#countexecutivesresolver" class="tsd-kind-icon">count<wbr>Executives<wbr>Resolver</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="executive.html#deleteexecutiveresolver" class="tsd-kind-icon">delete<wbr>Executive<wbr>Resolver</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
 						<a href="executive.html#executiveresolver" class="tsd-kind-icon">executive<wbr>Resolver</a>
