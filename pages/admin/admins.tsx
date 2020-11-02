@@ -49,7 +49,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: "pos",
       },
       {
-        Header: "Actions",
+        Header: "Action",
         id: "edit",
         Cell: (props: CellProps<Record<string, unknown>, string>) => (
           <ActionsCell {...props} user={user} />

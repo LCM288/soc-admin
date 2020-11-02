@@ -44,7 +44,7 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
     const person = (memberData?.person as PersonAttributes) || null;
     return (
       <>
-        <Heading className="has-text-centered" size={4}>
+        <Heading className="has-text-centered" size={5}>
           {`Are you sure to add ${sid} as an admin ?`}
         </Heading>
         {memberLoading && <Loader />}
@@ -60,7 +60,7 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
               <div>{(person.college as College).englishName}</div>
               <div>{(person.college as College).chineseName}</div>
             </Columns.Column>
-            <Columns.Column style={{ justify: "center" }}>
+            <Columns.Column>
               <div>{(person.major as Major).englishName}</div>
               <div>{(person.major as Major).chineseName}</div>
             </Columns.Column>

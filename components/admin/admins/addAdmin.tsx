@@ -18,7 +18,7 @@ const AddAdmin: React.FunctionComponent<Props> = ({ executives }: Props) => {
     refetchQueries: [{ query: executivesQuery }],
   });
 
-  const proptAdd = useCallback(() => {
+  const promptAdd = useCallback(() => {
     setModalOpen(true);
   }, []);
 
@@ -59,7 +59,7 @@ const AddAdmin: React.FunctionComponent<Props> = ({ executives }: Props) => {
           loading={loading}
         />
       )}
-      <Button color="primary" onClick={proptAdd}>
+      <Button color="primary" onClick={promptAdd}>
         Add person
       </Button>
     </>

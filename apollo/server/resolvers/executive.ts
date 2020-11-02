@@ -120,7 +120,7 @@ const newExecutiveResolver: ResolverFn<
         await dataSources.personAPI.findPerson(arg.sid)
       );
       if (!newExecutiveIsMember) {
-        throw new Error("The one you are trying to add is not a member");
+        throw new Error(`SID ${arg.sid} is not a member`);
       }
     }
     const executive = await dataSources.executiveAPI.addNewExecutive(arg);
