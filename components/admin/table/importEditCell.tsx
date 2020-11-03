@@ -3,6 +3,7 @@ import { Button } from "react-bulma-components";
 import EditPersonModal from "components/admin/table/editPersonModal";
 import { PersonUpdateAttributes } from "@/models/Person";
 import _ from "lodash";
+import { CellProps } from "react-table";
 
 const ImportEditCell = ({
   row,

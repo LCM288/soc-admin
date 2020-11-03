@@ -23,6 +23,7 @@ import toast from "utils/toast";
 import membersQuery from "apollo/queries/person/members.gql";
 import PaginationControl from "components/admin/table/paginationControl";
 import EditCell from "components/admin/table/editCell";
+import TableRow from "components/admin/table/tableRow";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
 import _ from "lodash";
 
@@ -328,6 +329,8 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         "dateOfEntry",
         "expectedGraduationDate",
       ]);
+    } else {
+      setHiddenColumns([]);
     }
   }, [sizes.width, setHiddenColumns]);
 
@@ -450,17 +453,11 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             {page.map((row) => {
               prepareRow(row);
               return (
-                <>
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map((cell) => {
-                      return (
-                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                      );
-                    })}
-                  </tr>
-                  <tr />
-                  <tr>{expanded(row)}</tr>
-                </>
+                <TableRow
+                  row={row}
+                  allColumns={allColumns}
+                  visibleColumns={visibleColumns}
+                />
               );
             })}
           </tbody>
