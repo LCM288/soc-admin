@@ -1,6 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useMemo, useState, useCallback, useRef } from "react";
+import React, {
+  useMemo,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+} from "react";
+import useResizeAware from "react-resize-aware";
 import { Row } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
@@ -17,6 +24,7 @@ import membersQuery from "apollo/queries/person/members.gql";
 import PaginationControl from "components/admin/table/paginationControl";
 import EditCell from "components/admin/table/editCell";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
+import _ from "lodash";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -43,6 +51,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const [membersData, setMembersData] = useState<
     { members: Record<string, unknown>[] } | undefined
   >(undefined);
+  const [resizeListener, sizes] = useResizeAware();
 
   const statusFilter = useMemo(
     () => (
@@ -161,6 +170,9 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     state: { globalFilter, filters, pageIndex, pageSize },
     setGlobalFilter,
     setFilter,
+    setHiddenColumns,
+    allColumns,
+    visibleColumns,
     page,
     pageCount,
     setPageSize,
@@ -278,6 +290,64 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       setIsFileProcessing(false);
     }
   }, [rows, onExport]);
+  useEffect(() => {
+    if (sizes.width < 640) {
+      setHiddenColumns([
+        "id",
+        "chineseName",
+        "gender",
+        "dateOfBirth",
+        "email",
+        "phone",
+        "dateOfEntry",
+        "expectedGraduationDate",
+      ]);
+    } else if (sizes.width < 768) {
+      setHiddenColumns([
+        "id",
+        "gender",
+        "dateOfBirth",
+        "email",
+        "phone",
+        "dateOfEntry",
+        "expectedGraduationDate",
+      ]);
+    } else if (sizes.width < 1024) {
+      setHiddenColumns([
+        "id",
+        "gender",
+        "dateOfBirth",
+        "email",
+        "dateOfEntry",
+        "expectedGraduationDate",
+      ]);
+    } else if (sizes.width < 1440) {
+      setHiddenColumns([
+        "gender",
+        "dateOfBirth",
+        "dateOfEntry",
+        "expectedGraduationDate",
+      ]);
+    }
+  }, [sizes.width, setHiddenColumns]);
+
+  const expanded = (row: any) => {
+    const hiddenColumns = _.difference(allColumns, visibleColumns);
+    if (hiddenColumns.length) {
+      return (
+        <td colSpan={visibleColumns.length}>
+          {_.difference(allColumns, visibleColumns).map((column) => {
+            return (
+              <p>
+                <strong>{column.Header}:</strong> {row.values[column.id]}
+              </p>
+            );
+          })}
+        </td>
+      );
+    }
+    return null;
+  };
 
   if (!membersData) {
     if (loading) return <p>loading</p>;
@@ -291,6 +361,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <>
+        {resizeListener}
         <Button.Group position="right">
           <Button onClick={onExportAll} loading={isFileProcessing}>
             Export All
@@ -379,13 +450,17 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             {page.map((row) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
+                <>
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      );
+                    })}
+                  </tr>
+                  <tr />
+                  <tr>{expanded(row)}</tr>
+                </>
               );
             })}
           </tbody>

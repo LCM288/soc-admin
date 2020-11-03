@@ -65,6 +65,7 @@
     "react-day-picker": "^7.4.8",
     "react-dom": "16.13.1",
     "react-markdown": "^4.3.1",
+    "react-resize-aware": "^3.0.1",
     "react-router-dom": "^5.2.0",
     "react-select": "^3.1.0",
     "react-simplemde-editor": "^4.1.3",
