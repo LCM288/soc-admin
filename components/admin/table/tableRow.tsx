@@ -1,36 +1,41 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback } from "react";
+import { Row, ColumnInstance } from "react-table";
 
 import _ from "lodash";
+
+interface Props {
+  row: Row<Record<string, unknown>>;
+  allColumns: ColumnInstance<Record<string, unknown>>[];
+  visibleColumns: ColumnInstance<Record<string, unknown>>[];
+}
 
 const TableRow = ({
   row,
   allColumns,
   visibleColumns,
-}: any): React.ReactElement => {
+}: Props): React.ReactElement => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const hiddenColumns = useMemo(() => {
     return _.difference(allColumns, visibleColumns);
   }, [allColumns, visibleColumns]);
 
-  const expanded = () => {
+  const expandedHiddenColumns = useMemo(() => {
     if (hiddenColumns.length) {
       return (
         <td colSpan={visibleColumns.length}>
-          {hiddenColumns.map((column: { Header: string; id: number }) => {
-            return (
-              <p>
-                <strong>{column.Header}:</strong> {row.values[column.id]}
-              </p>
-            );
-          })}
+          {hiddenColumns.map((column) => (
+            <p key={column.id}>
+              <strong>{column.Header}:</strong> {row.values[column.id]}
+            </p>
+          ))}
         </td>
       );
     }
-    return null;
-  };
+    return <></>;
+  }, [hiddenColumns, row, visibleColumns]);
 
   const rowStyle = useMemo(() => {
     if (hiddenColumns.length) {
@@ -39,26 +44,23 @@ const TableRow = ({
     return {};
   }, [hiddenColumns]);
 
-  const onRowClick = () => {
+  const onRowClick = useCallback(() => {
     if (hiddenColumns.length) {
       setIsExpanded(!isExpanded);
     }
-  };
+  }, [hiddenColumns, isExpanded]);
 
   return (
     <>
       <tr {...row.getRowProps()} onClick={onRowClick} style={rowStyle}>
-        {row.cells.map(
-          (cell: {
-            getCellProps: () => Record<string, unknown>;
-            render: (string: string) => HTMLElement;
-          }) => {
-            return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
-          }
-        )}
+        {row.cells.map((cell) => (
+          <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+        ))}
       </tr>
       <tr className={!isExpanded ? "is-hidden" : ""} />
-      <tr className={!isExpanded ? "is-hidden" : ""}>{expanded()}</tr>
+      <tr className={!isExpanded ? "is-hidden" : ""}>
+        {expandedHiddenColumns}
+      </tr>
     </>
   );
 };

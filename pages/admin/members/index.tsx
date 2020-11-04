@@ -1,12 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
-import React, {
-  useMemo,
-  useState,
-  useCallback,
-  useRef,
-  useEffect,
-} from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import useResizeAware from "react-resize-aware";
 import { Row } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
@@ -15,7 +7,6 @@ import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import { Person } from "@/models/Person";
 import { Table, Form, Level, Button } from "react-bulma-components";
 import Papa from "papaparse";
 import { DateTime } from "luxon";
@@ -25,25 +16,27 @@ import PaginationControl from "components/admin/table/paginationControl";
 import EditCell from "components/admin/table/editCell";
 import TableRow from "components/admin/table/tableRow";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
-import _ from "lodash";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
 const { Input, Field, Label, Control, Select } = Form;
 
-const statusOptions = ["All", "Activated", "Expired"];
-const pageSizeOptions = [1, 2, 5, 10, 20, 50];
-const getSortDirectionIndicatior = (column: MemberColumnInstance): string => {
-  if (column.isSorted) {
-    if (column.isSortedDesc) {
-      return " 🔽";
-    }
-    return " 🔼";
-  }
-  return "";
-};
-
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
+  const statusOptions = useMemo(() => ["All", "Activated", "Expired"], []);
+  const pageSizeOptions = useMemo(() => [1, 2, 5, 10, 20, 50], []);
+  const getSortDirectionIndicatior = useCallback(
+    (column: MemberColumnInstance) => {
+      if (column.isSorted) {
+        if (column.isSortedDesc) {
+          return " 🔽";
+        }
+        return " 🔼";
+      }
+      return "";
+    },
+    []
+  );
+
   const { data, loading, error } = useQuery(membersQuery, {
     fetchPolicy: "cache-and-network",
     pollInterval: 5000,
@@ -54,8 +47,8 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   >(undefined);
   const [resizeListener, sizes] = useResizeAware();
 
-  const statusFilter = useMemo(
-    () => (
+  const statusFilter = useCallback(
+    (
       rows: Array<Row<Record<string, unknown>>>,
       id: string,
       filterValue: string
@@ -154,15 +147,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  const tableInstance = useMemberTable({
-    columns: tableColumns,
-    data: tableData,
-    getRowId: tableGetRowId,
-    autoResetFilters: false,
-    autoResetGlobalFilter: false,
-    initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
-  });
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -179,7 +163,14 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     setPageSize,
     gotoPage,
     rows,
-  } = tableInstance;
+  } = useMemberTable({
+    columns: tableColumns,
+    data: tableData,
+    getRowId: tableGetRowId,
+    autoResetFilters: false,
+    autoResetGlobalFilter: false,
+    initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
+  });
 
   const [globalFilterInput, setGlobalFilterInput] = useState(globalFilter);
 
@@ -194,10 +185,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const onStatusFilterChange = useAsyncDebounce((value) => {
     setFilter("status", value || undefined);
   }, 500);
-
-  if (data && data !== membersData) {
-    setMembersData(data);
-  }
 
   const [isFileProcessing, setIsFileProcessing] = useState(false);
 
@@ -252,7 +239,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
           false,
         ],
       });
-      console.log(csv);
       const element = document.createElement("a");
       const file = new Blob([csv], { type: "text/plain" });
       element.href = URL.createObjectURL(file);
@@ -334,23 +320,9 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     }
   }, [sizes.width, setHiddenColumns]);
 
-  const expanded = (row: any) => {
-    const hiddenColumns = _.difference(allColumns, visibleColumns);
-    if (hiddenColumns.length) {
-      return (
-        <td colSpan={visibleColumns.length}>
-          {_.difference(allColumns, visibleColumns).map((column) => {
-            return (
-              <p>
-                <strong>{column.Header}:</strong> {row.values[column.id]}
-              </p>
-            );
-          })}
-        </td>
-      );
-    }
-    return null;
-  };
+  if (data && data !== membersData) {
+    setMembersData(data);
+  }
 
   if (!membersData) {
     if (loading) return <p>loading</p>;
@@ -454,6 +426,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
               prepareRow(row);
               return (
                 <TableRow
+                  key={row.id}
                   row={row}
                   allColumns={allColumns}
                   visibleColumns={visibleColumns}
