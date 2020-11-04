@@ -1,0 +1,6 @@
+mutation($sid: String!) {
+  deleteExecutive(sid: $sid) {
+    success
+    message
+  }
+}

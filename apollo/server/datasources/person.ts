@@ -39,6 +39,15 @@ export default class PersonAPI extends DataSource<ContextBase> {
   }
 
   /**
+   * Count number of people
+   * @async
+   * @returns Number of people
+   */
+  public async countPeople(): Promise<number> {
+    return this.store.count();
+  }
+
+  /**
    * Find all people
    * @async
    * @returns An array of people
