@@ -49,5 +49,6 @@ module.exports = {
     ],
     "comma-spacing": "error",
     "comma-style": "error",
+    "react/jsx-props-no-spreading": "off",
   },
 };

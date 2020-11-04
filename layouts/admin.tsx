@@ -99,9 +99,9 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
                 </a>
               </Link>
               <Link href="/admin/members/import">
-                <Navbar.Item onClick={() => setActive(false)}>
+                <a href="/admin/members/import" className="navbar-item">
                   Import Member
-                </Navbar.Item>
+                </a>
               </Link>
               <Link href="/admin/registrations">
                 <a href="/admin/registrations" className="navbar-item">
