@@ -2,29 +2,35 @@ import React, { useState, useCallback } from "react";
 import { Button } from "react-bulma-components";
 import EditPersonModal from "components/admin/table/editPersonModal";
 import { PersonUpdateAttributes } from "@/models/Person";
-import _ from "lodash";
 import { CellProps } from "react-table";
+import toast from "utils/toast";
+
+interface Props extends CellProps<Record<string, unknown>, string> {
+  updateMemberData: (
+    rowIndex: number,
+    updatedPerson: PersonUpdateAttributes
+  ) => void;
+}
 
 const ImportEditCell = ({
   row,
   value: title,
-  dataUpdate,
-}: any): React.ReactElement => {
+  updateMemberData,
+}: Props): React.ReactElement => {
   const [editLoading, setEditLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const onSave = useCallback(
     (person: PersonUpdateAttributes) => {
-      const diff = _.fromPairs(
-        _.compact(
-          _.toPairs(person).map(([key, value]) =>
-            row.values[key] && row.values[key] === value ? null : [key, value]
-          )
-        )
-      );
-      dataUpdate(row.index, diff);
+      if (person.sid.length !== 10) {
+        toast.danger("Incorrect sid");
+        return;
+      }
+      setEditLoading(true);
+      updateMemberData(row.index, person);
+      setEditLoading(false);
       setOpenModal(false);
     },
-    [row, dataUpdate]
+    [row, updateMemberData]
   );
   const promptEdit = () => {
     setOpenModal(true);
