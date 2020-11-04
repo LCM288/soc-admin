@@ -20,6 +20,7 @@ const EditCell = ({
   const [openModal, setOpenModal] = useState(false);
   const onSave = useCallback(
     (person: PersonUpdateAttributes) => {
+      setEditLoading(true);
       updatePerson({ variables: person })
         .then((payload) => {
           if (!payload.data?.updatePerson.success) {
