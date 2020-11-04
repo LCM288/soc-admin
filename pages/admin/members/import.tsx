@@ -2,7 +2,12 @@
 
 import React, { useMemo, useState, useCallback } from "react";
 import { Row, CellProps } from "react-table";
-import { statusOf, PersonModelAttributes } from "@/utils/Person";
+import {
+  statusOf,
+  PersonModelAttributes,
+  GenderEnum,
+  CollegeEnum,
+} from "@/utils/Person";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import PaginationControl from "components/admin/table/paginationControl";
 import Papa from "papaparse";
@@ -124,6 +129,10 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: "memberSince",
       },
       {
+        Header: "Member Until",
+        accessor: "memberUntil",
+      },
+      {
         Header: "Status",
         accessor: (row: Record<string, unknown>) =>
           statusOf(row as PersonModelAttributes),
@@ -184,36 +193,62 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       return result;
     });
     setIsUploading(true);
-    _.chunk(members, 100).forEach((people, batch) =>
-      importPeople({
-        variables: {
-          people,
-        },
-      })
-        .then(({ data }) => {
-          data.importPeople.forEach(
-            (
-              { success, message }: { success: boolean; message: string },
-              count: number
-            ) => {
-              if (!success) {
-                toast.danger(
-                  `Error on ${members[batch * 100 + count].sid}: ${message}`,
-                  {
-                    position: toast.POSITION.TOP_LEFT,
+    const importPeoplePromises = _.chunk(members, 100).map(
+      (people, batch) =>
+        new Promise<string[]>((resolve) =>
+          importPeople({
+            variables: {
+              people,
+            },
+          })
+            .then(({ data }) => {
+              data.importPeople.forEach(
+                (
+                  { success, message }: { success: boolean; message: string },
+                  count: number
+                ) => {
+                  if (!success) {
+                    toast.danger(
+                      `Error on ${
+                        members[batch * 100 + count].sid
+                      }: ${message}`,
+                      {
+                        position: toast.POSITION.TOP_LEFT,
+                      }
+                    );
                   }
-                );
-              }
-            }
-          );
-        })
-        .catch((err) => {
-          toast.danger(err.message, {
-            position: toast.POSITION.TOP_LEFT,
-          });
-        })
-        .finally(() => setIsUploading(false))
+                }
+              );
+              resolve(
+                data.importPeople
+                  .filter(({ success }: { success: boolean }) => success)
+                  .map(
+                    ({ person }: { person: PersonModelAttributes }) =>
+                      person.sid
+                  )
+              );
+            })
+            .catch((err) => {
+              toast.danger(err.message, {
+                position: toast.POSITION.TOP_LEFT,
+              });
+              resolve([]);
+            })
+            .finally(() => setIsUploading(false))
+        )
     );
+    Promise.all(importPeoplePromises).then((importPeopleSuccessSIDBatches) => {
+      const importPeopleSuccessSIDFlat = importPeopleSuccessSIDBatches.flat();
+      const failedUploadSID = _.difference(
+        membersData.members.map((member) => member.sid as string),
+        importPeopleSuccessSIDFlat
+      );
+      setMembersData({
+        members: membersData.members.filter((member) =>
+          failedUploadSID.includes(member.sid as string)
+        ),
+      });
+    });
   };
 
   const {
@@ -260,10 +295,15 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
           header: true,
           skipEmptyLines: true,
           complete(results) {
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+            const { year, month } = DateTime.local();
+            const prevEntry =
+              month >= 9 ? `${year}-09-01` : `${year - 1}-09-01`;
+            const prevEntryGrad =
+              month >= 9 ? `${year + 4}-08-01` : `${year + 3}-08-01`;
             const result = {
               members: results.data.map(
                 ({
-                  ID: id,
                   SID: sid,
                   "Chinese Name": chineseName,
                   "English Name": englishName,
@@ -277,19 +317,26 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                   "Expected Graduation Date": expectedGraduationDate,
                   "Member Since": memberSince,
                 }) => ({
-                  id,
                   sid,
                   chineseName,
                   englishName,
-                  gender,
-                  dateOfBirth,
+                  gender: Object.values(GenderEnum).includes(gender)
+                    ? gender
+                    : GenderEnum.None,
+                  dateOfBirth: dateRegex.test(dateOfBirth) ? dateOfBirth : null,
                   email,
                   phone,
-                  college,
+                  college: Object.values(CollegeEnum).includes(college)
+                    ? college
+                    : CollegeEnum.None,
                   major,
-                  dateOfEntry,
-                  expectedGraduationDate,
-                  memberSince,
+                  dateOfEntry: dateRegex.test(dateOfEntry)
+                    ? dateOfEntry
+                    : prevEntry,
+                  expectedGraduationDate: dateRegex.test(expectedGraduationDate)
+                    ? expectedGraduationDate
+                    : prevEntryGrad,
+                  memberSince: dateRegex.test(memberSince) ? memberSince : null,
                 })
               ),
             };

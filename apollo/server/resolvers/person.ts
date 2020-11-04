@@ -254,7 +254,7 @@ const importPeopleResolver: ResolverFn<
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
   if (!isAdmin) {
-    return [{ success: false, message: "You have no permission to do this" }];
+    throw new Error("You have no permission to do this");
   }
   const mutations = people.map(
     (person) =>
