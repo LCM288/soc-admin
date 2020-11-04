@@ -23,9 +23,7 @@ const SIDField: React.FunctionComponent<Props> = ({
           value={sid}
           disabled={!editable}
           onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-            if (editable) {
-              setSID(event.target.value);
-            }
+            setSID(event.target.value);
           }}
           required
         />

@@ -20,6 +20,7 @@ import SIDField from "components/register/sidField";
 import DOBField from "components/register/dobField";
 import EmailField from "components/register/emailField";
 import MajorField from "components/register/majorField";
+import Loading from "components/loading";
 import updatePersonMutation from "../apollo/queries/person/updatePerson.gql";
 import newPersonMutation from "../apollo/queries/person/newPerson.gql";
 import personQuery from "../apollo/queries/person/person.gql";
@@ -39,16 +40,10 @@ export default function Register({
   const personQueryResult = useQuery(personQuery, {
     variables: { sid: user?.sid },
   });
-  const [
-    newPerson,
-    { loading: newPersonMutationLoading, error: newPersonMutationError },
-  ] = useMutation(newPersonMutation, {
+  const [newPerson] = useMutation(newPersonMutation, {
     onCompleted: () => router.push("/"),
   });
-  const [
-    updatePerson,
-    { loading: updatePersonMutationLoading, error: updatePersonMutationError },
-  ] = useMutation(updatePersonMutation, {
+  const [updatePerson] = useMutation(updatePersonMutation, {
     onCompleted: () => router.push("/"),
   });
 
@@ -131,7 +126,6 @@ export default function Register({
           toast.danger(err.message, {
             position: toast.POSITION.TOP_LEFT,
           });
-          setIsSubmitting(false);
         })
         .finally(() => setIsSubmitting(false));
     } else {
@@ -140,7 +134,6 @@ export default function Register({
           toast.danger(err.message, {
             position: toast.POSITION.TOP_LEFT,
           });
-          setIsSubmitting(false);
         })
         .finally(() => setIsSubmitting(false));
     }
@@ -179,6 +172,7 @@ export default function Register({
           </form>
         </Container>
       </Section>
+      <Loading loading={isSubmitting} />
     </div>
   );
 }
