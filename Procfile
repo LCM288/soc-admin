@@ -1,1 +1,1 @@
-release: node ./scripts/release.js
+release: yarn release
