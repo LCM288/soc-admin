@@ -287,73 +287,67 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     setFilter("status", value || undefined);
   }, 500);
 
-  const onImport = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.files && event.target.files[0]) {
-        setIsFileProcessing(true);
-        Papa.parse(event.target.files[0], {
-          header: true,
-          skipEmptyLines: true,
-          complete(results) {
-            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-            const { year, month } = DateTime.local();
-            const prevEntry =
-              month >= 9 ? `${year}-09-01` : `${year - 1}-09-01`;
-            const prevEntryGrad =
-              month >= 9 ? `${year + 4}-08-01` : `${year + 3}-08-01`;
-            const result = {
-              members: results.data.map(
-                ({
-                  SID: sid,
-                  "Chinese Name": chineseName,
-                  "English Name": englishName,
-                  Gender: gender,
-                  "Date of Birth": dateOfBirth,
-                  Email: email,
-                  Phone: phone,
-                  College: college,
-                  Major: major,
-                  "Date of Entry": dateOfEntry,
-                  "Expected Graduation Date": expectedGraduationDate,
-                  "Member Since": memberSince,
-                }) => ({
-                  sid,
-                  chineseName,
-                  englishName: englishName ?? "",
-                  gender: Object.values(GenderEnum).includes(gender)
-                    ? gender
-                    : GenderEnum.None,
-                  dateOfBirth: dateRegex.test(dateOfBirth) ? dateOfBirth : null,
-                  email,
-                  phone,
-                  college: Object.values(CollegeEnum).includes(college)
-                    ? college
-                    : CollegeEnum.None,
-                  major,
-                  dateOfEntry: dateRegex.test(dateOfEntry)
-                    ? dateOfEntry
-                    : prevEntry,
-                  expectedGraduationDate: dateRegex.test(expectedGraduationDate)
-                    ? expectedGraduationDate
-                    : prevEntryGrad,
-                  memberSince: dateRegex.test(memberSince) ? memberSince : null,
-                })
-              ),
-            };
-            if (result && result !== membersData) {
-              setMembersData(result);
-            }
-            setIsFileProcessing(false);
-          },
-        });
-      } else {
-        toast.danger("No files were selected.", {
-          position: toast.POSITION.TOP_LEFT,
-        });
-      }
-    },
-    [membersData]
-  );
+  const onImport = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setIsFileProcessing(true);
+      Papa.parse(event.target.files[0], {
+        header: true,
+        skipEmptyLines: true,
+        complete(results) {
+          const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+          const { year, month } = DateTime.local();
+          const prevEntry = month >= 9 ? `${year}-09-01` : `${year - 1}-09-01`;
+          const prevEntryGrad =
+            month >= 9 ? `${year + 4}-08-01` : `${year + 3}-08-01`;
+          const result = {
+            members: results.data.map(
+              ({
+                SID: sid,
+                "Chinese Name": chineseName,
+                "English Name": englishName,
+                Gender: gender,
+                "Date of Birth": dateOfBirth,
+                Email: email,
+                Phone: phone,
+                College: college,
+                Major: major,
+                "Date of Entry": dateOfEntry,
+                "Expected Graduation Date": expectedGraduationDate,
+                "Member Since": memberSince,
+              }) => ({
+                sid,
+                chineseName,
+                englishName: englishName ?? "",
+                gender: Object.values(GenderEnum).includes(gender)
+                  ? gender
+                  : GenderEnum.None,
+                dateOfBirth: dateRegex.test(dateOfBirth) ? dateOfBirth : null,
+                email,
+                phone,
+                college: Object.values(CollegeEnum).includes(college)
+                  ? college
+                  : CollegeEnum.None,
+                major,
+                dateOfEntry: dateRegex.test(dateOfEntry)
+                  ? dateOfEntry
+                  : prevEntry,
+                expectedGraduationDate: dateRegex.test(expectedGraduationDate)
+                  ? expectedGraduationDate
+                  : prevEntryGrad,
+                memberSince: dateRegex.test(memberSince) ? memberSince : null,
+              })
+            ),
+          };
+          setMembersData(result);
+          setIsFileProcessing(false);
+        },
+      });
+    } else {
+      toast.danger("No files were selected.", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, []);
 
   if (user) {
     return (
