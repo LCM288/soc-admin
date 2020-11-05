@@ -1,6 +1,5 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
+import useResizeAware from "react-resize-aware";
 import { Row } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
@@ -8,30 +7,36 @@ import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import { Table, Form, Level } from "react-bulma-components";
+import { Table, Form, Level, Button } from "react-bulma-components";
+import Papa from "papaparse";
+import { DateTime } from "luxon";
 import toast from "utils/toast";
 import membersQuery from "apollo/queries/person/members.gql";
 import PaginationControl from "components/admin/table/paginationControl";
 import EditCell from "components/admin/table/editCell";
+import TableRow from "components/admin/table/tableRow";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
 const { Input, Field, Label, Control, Select } = Form;
 
-const statusOptions = ["All", "Activated", "Expired"];
-const pageSizeOptions = [1, 2, 5, 10, 20, 50];
-const getSortDirectionIndicatior = (column: MemberColumnInstance): string => {
-  if (column.isSorted) {
-    if (column.isSortedDesc) {
-      return " 🔽";
-    }
-    return " 🔼";
-  }
-  return "";
-};
-
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
+  const statusOptions = useMemo(() => ["All", "Activated", "Expired"], []);
+  const pageSizeOptions = useMemo(() => [1, 2, 5, 10, 20, 50], []);
+  const getSortDirectionIndicatior = useCallback(
+    (column: MemberColumnInstance) => {
+      if (column.isSorted) {
+        if (column.isSortedDesc) {
+          return " 🔽";
+        }
+        return " 🔼";
+      }
+      return "";
+    },
+    []
+  );
+
   const { data, loading, error } = useQuery(membersQuery, {
     fetchPolicy: "cache-and-network",
     pollInterval: 5000,
@@ -40,9 +45,10 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const [membersData, setMembersData] = useState<
     { members: Record<string, unknown>[] } | undefined
   >(undefined);
+  const [resizeListener, sizes] = useResizeAware();
 
-  const statusFilter = useMemo(
-    () => (
+  const statusFilter = useCallback(
+    (
       rows: Array<Row<Record<string, unknown>>>,
       id: string,
       filterValue: string
@@ -141,15 +147,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  const tableInstance = useMemberTable({
-    columns: tableColumns,
-    data: tableData,
-    getRowId: tableGetRowId,
-    autoResetFilters: false,
-    autoResetGlobalFilter: false,
-    initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
-  });
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -158,11 +155,22 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     state: { globalFilter, filters, pageIndex, pageSize },
     setGlobalFilter,
     setFilter,
+    setHiddenColumns,
+    allColumns,
+    visibleColumns,
     page,
     pageCount,
     setPageSize,
     gotoPage,
-  } = tableInstance;
+    rows,
+  } = useMemberTable({
+    columns: tableColumns,
+    data: tableData,
+    getRowId: tableGetRowId,
+    autoResetFilters: false,
+    autoResetGlobalFilter: false,
+    initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
+  });
 
   const [globalFilterInput, setGlobalFilterInput] = useState(globalFilter);
 
@@ -177,6 +185,140 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const onStatusFilterChange = useAsyncDebounce((value) => {
     setFilter("status", value || undefined);
   }, 500);
+
+  const [isFileProcessing, setIsFileProcessing] = useState(false);
+
+  const onExport = useCallback((exportData: Record<string, unknown>[]) => {
+    if (exportData.length) {
+      setIsFileProcessing(true);
+      const memberExport = exportData.map(
+        ({
+          id,
+          sid,
+          chineseName,
+          englishName,
+          gender,
+          dateOfBirth,
+          email,
+          phone,
+          college,
+          major,
+          dateOfEntry,
+          expectedGraduationDate,
+          memberSince,
+        }) => ({
+          ID: id,
+          SID: sid,
+          "Chinese Name": chineseName,
+          "English Name": englishName,
+          Gender: gender,
+          "Date of Birth": dateOfBirth,
+          Email: email,
+          Phone: phone,
+          College: (college as College).code,
+          Major: (major as Major).code,
+          "Date of Entry": dateOfEntry,
+          "Expected Graduation Date": expectedGraduationDate,
+          "Member Since": memberSince,
+        })
+      );
+      const csv = Papa.unparse(memberExport, {
+        quotes: [
+          false,
+          false,
+          true,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+        ],
+      });
+      const element = document.createElement("a");
+      const file = new Blob([csv], { type: "text/plain" });
+      element.href = URL.createObjectURL(file);
+      const time = DateTime.local();
+      element.download = `members-${time.toISO()}.csv`;
+      document.body.appendChild(element); // Required for this to work in FireFox
+      element.click();
+      document.body.removeChild(element);
+      setIsFileProcessing(false);
+    } else {
+      toast.danger("No member data.", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      setIsFileProcessing(false);
+    }
+  }, []);
+
+  const onExportAll = useCallback(() => {
+    if (membersData?.members.length) {
+      onExport(membersData.members);
+    } else {
+      toast.danger("No member data.", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      setIsFileProcessing(false);
+    }
+  }, [membersData, onExport]);
+
+  const onExportFiltered = useCallback(() => {
+    if (rows.length) {
+      onExport(rows.map((r) => r.original));
+    } else {
+      toast.danger("No member data.", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      setIsFileProcessing(false);
+    }
+  }, [rows, onExport]);
+  useEffect(() => {
+    if (sizes.width < 640) {
+      setHiddenColumns([
+        "id",
+        "chineseName",
+        "gender",
+        "dateOfBirth",
+        "email",
+        "phone",
+        "dateOfEntry",
+        "expectedGraduationDate",
+      ]);
+    } else if (sizes.width < 768) {
+      setHiddenColumns([
+        "id",
+        "gender",
+        "dateOfBirth",
+        "email",
+        "phone",
+        "dateOfEntry",
+        "expectedGraduationDate",
+      ]);
+    } else if (sizes.width < 1024) {
+      setHiddenColumns([
+        "id",
+        "gender",
+        "dateOfBirth",
+        "email",
+        "dateOfEntry",
+        "expectedGraduationDate",
+      ]);
+    } else if (sizes.width < 1440) {
+      setHiddenColumns([
+        "gender",
+        "dateOfBirth",
+        "dateOfEntry",
+        "expectedGraduationDate",
+      ]);
+    } else {
+      setHiddenColumns([]);
+    }
+  }, [sizes.width, setHiddenColumns]);
 
   if (data && data !== membersData) {
     setMembersData(data);
@@ -194,6 +336,19 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <>
+        {resizeListener}
+        <Button.Group position="right">
+          <Button onClick={onExportAll} loading={isFileProcessing}>
+            Export All
+          </Button>
+          <Button
+            color="primary"
+            onClick={onExportFiltered}
+            loading={isFileProcessing}
+          >
+            Export Filtered
+          </Button>
+        </Button.Group>
         <PaginationControl
           gotoPage={gotoPage}
           pageIndex={pageIndex}
@@ -270,13 +425,12 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             {page.map((row) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
+                <TableRow
+                  key={row.id}
+                  row={row}
+                  allColumns={allColumns}
+                  visibleColumns={visibleColumns}
+                />
               );
             })}
           </tbody>

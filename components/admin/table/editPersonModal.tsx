@@ -24,6 +24,7 @@ interface Props {
   row: Record<string, unknown>;
   loading: boolean;
   title: string;
+  sidEditable?: boolean;
 }
 
 const EditPersonModal: React.FunctionComponent<Props> = ({
@@ -32,8 +33,9 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
   row,
   loading,
   title,
+  sidEditable = false,
 }: Props) => {
-  const sid = row.sid as string;
+  const [sid, setSID] = useState(row.sid as string);
   const [englishName, setEnglishName] = useState(
     (row.englishName ?? "") as string
   );
@@ -51,6 +53,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
     (row.expectedGraduationDate ?? "") as string
   );
   const onReset = useCallback(() => {
+    setSID(row.sid as string);
     setEnglishName((row.englishName ?? "") as string);
     setChineseName((row.chineseName ?? "") as string);
     setGender((row.gender ?? "None") as string);
@@ -96,7 +99,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
         <Modal.Content className="has-background-white box">
           <Heading className="has-text-centered">Edit {title}</Heading>
           <Section className="pt-4">
-            <SIDField sid={sid} />
+            <SIDField sid={sid} setSID={setSID} editable={sidEditable} />
             <EnglishNameField
               englishName={englishName}
               setEnglishName={setEnglishName}
@@ -134,6 +137,10 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
       </Modal>
     </>
   );
+};
+
+EditPersonModal.defaultProps = {
+  sidEditable: false,
 };
 
 export default EditPersonModal;

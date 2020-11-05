@@ -24,6 +24,10 @@ const AddAdmin: React.FunctionComponent<Props> = ({ executives }: Props) => {
 
   const onAdd = useCallback(
     (executive: ExecutiveCreationAttributes) => {
+      if (executive.sid.length !== 10) {
+        toast.danger("Incorrect sid");
+        return;
+      }
       setLoading(true);
       newExecutive({ variables: executive })
         .then((payload) => {

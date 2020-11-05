@@ -6,13 +6,14 @@
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
 import {
-  Person,
   PersonModelAttributes,
   PersonUpdateAttributes,
   PersonCreationAttributes,
   CollegeEnum,
   MemberStatusEnum,
   RegistrationTypeEnum,
+  statusOf,
+  registrationTypeOf,
 } from "@/models/Person";
 import { Major } from "@/models/Major";
 import { College } from "@/models/College";
@@ -72,7 +73,7 @@ const collegeResolver: ResolverFn<null, College> = (
 const statusResolver: ResolverFn<null, MemberStatusEnum> = (
   person: PersonModelAttributes
 ): MemberStatusEnum => {
-  return Person.status(person);
+  return statusOf(person);
 };
 
 /**
@@ -84,7 +85,7 @@ const registrationTypeResolver: ResolverFn<
   null,
   RegistrationTypeEnum | null
 > = (person: PersonModelAttributes): RegistrationTypeEnum | null => {
-  return Person.registrationType(person);
+  return registrationTypeOf(person);
 };
 
 // Query resolvers
@@ -235,6 +236,45 @@ const updatePersonResolver: ResolverFn<
 };
 
 /**
+ * The resolver for importPeople Mutation
+ * @async
+ * @param arg - The arguments for the importPeople mutation
+ * @returns The update response
+ * @category Mutation Resolver
+ */
+const importPeopleResolver: ResolverFn<
+  { people: PersonCreationAttributes[] },
+  PersonUpdateResponse[]
+> = async (
+  _,
+  { people },
+  { user, dataSources }
+): Promise<PersonUpdateResponse[]> => {
+  const isAdmin = Boolean(
+    user && (await dataSources.executiveAPI.findExecutive(user.sid))
+  );
+  if (!isAdmin) {
+    throw new Error("You have no permission to do this");
+  }
+  const mutations = people.map(
+    (person) =>
+      new Promise<PersonUpdateResponse>((resolve) => {
+        dataSources.personAPI
+          .addNewPerson(person)
+          .then((personResult) =>
+            resolve({
+              success: true,
+              message: "success",
+              person: personResult,
+            })
+          )
+          .catch((err) => resolve({ success: false, message: err.message }));
+      })
+  );
+  return Promise.all(mutations);
+};
+
+/**
  * The resolver for approveMembership Mutation
  * @async
  * @param arg - The arguments for the approveMembership mutation
@@ -293,6 +333,8 @@ export const resolvers: Resolvers = {
     newPerson: newPersonResolver,
     /** see {@link updatePersonResolver} */
     updatePerson: updatePersonResolver,
+    /** see {@link importPeopleResolver} */
+    importPeople: importPeopleResolver,
     /** see {@link approveMembershipResolver} */
     approveMembership: approveMembershipResolver,
   },
@@ -339,6 +381,8 @@ export const resolverTypeDefs = gql`
       expectedGraduationDate: Date
     ): PersonUpdateResponse!
 
+    importPeople(people: [PersonInput!]!): [PersonUpdateResponse!]!
+
     approveMembership(sid: String!, memberUntil: Date): PersonUpdateResponse!
   }
 
@@ -351,5 +395,21 @@ export const resolverTypeDefs = gql`
     success: Boolean!
     message: String!
     person: Person
+  }
+
+  input PersonInput {
+    sid: String!
+    chineseName: String
+    englishName: String!
+    gender: Gender_ENUM
+    dateOfBirth: Date
+    email: String
+    phone: String
+    college: College_ENUM
+    major: String
+    dateOfEntry: Date!
+    expectedGraduationDate: Date!
+    memberSince: Date
+    memberUntil: Date
   }
 `;

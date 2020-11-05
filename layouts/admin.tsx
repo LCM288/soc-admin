@@ -98,6 +98,11 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
                   Members
                 </a>
               </Link>
+              <Link href="/admin/members/import">
+                <a href="/admin/members/import" className="navbar-item">
+                  Import Member
+                </a>
+              </Link>
               <Link href="/admin/registrations">
                 <a href="/admin/registrations" className="navbar-item">
                   Registrations

@@ -3,7 +3,7 @@
  * @module Major
  */
 
-import { gql } from "apollo-server";
+import gql from "graphql-tag";
 import { Faculty } from "@/models/Faculty";
 
 /** A major program */

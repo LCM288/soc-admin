@@ -41,7 +41,7 @@ const formatMajorOptionLabel = ({ label, faculties }: Labels) => (
     </Level.Side>
     <Level.Side align="right" style={{ marginLeft: "auto" }}>
       {faculties.map((f) => (
-        <Level.Item>
+        <Level.Item key={f.value}>
           <Tag
             className="ml-2 has-text-weight-medium"
             color={facultyColor[f.value]}

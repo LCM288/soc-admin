@@ -20,6 +20,7 @@ import SIDField from "components/register/sidField";
 import DOBField from "components/register/dobField";
 import EmailField from "components/register/emailField";
 import MajorField from "components/register/majorField";
+import Loading from "components/loading";
 import updatePersonMutation from "../apollo/queries/person/updatePerson.gql";
 import newPersonMutation from "../apollo/queries/person/newPerson.gql";
 import personQuery from "../apollo/queries/person/person.gql";
@@ -39,16 +40,10 @@ export default function Register({
   const personQueryResult = useQuery(personQuery, {
     variables: { sid: user?.sid },
   });
-  const [
-    newPerson,
-    { loading: newPersonMutationLoading, error: newPersonMutationError },
-  ] = useMutation(newPersonMutation, {
+  const [newPerson] = useMutation(newPersonMutation, {
     onCompleted: () => router.push("/"),
   });
-  const [
-    updatePerson,
-    { loading: updatePersonMutationLoading, error: updatePersonMutationError },
-  ] = useMutation(updatePersonMutation, {
+  const [updatePerson] = useMutation(updatePersonMutation, {
     onCompleted: () => router.push("/"),
   });
 
@@ -62,6 +57,7 @@ export default function Register({
   const [doEntry, setDoEntry] = useState("");
   const [doGrad, setDoGrad] = useState("");
   const personLoaded = useRef(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // TODO: toast
   if (
@@ -108,6 +104,7 @@ export default function Register({
   };
   const formSubmit = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const options = {
       variables: {
         sid: user.sid,
@@ -124,9 +121,21 @@ export default function Register({
       },
     };
     if (person) {
-      updatePerson(options);
+      updatePerson(options)
+        .catch((err) => {
+          toast.danger(err.message, {
+            position: toast.POSITION.TOP_LEFT,
+          });
+        })
+        .finally(() => setIsSubmitting(false));
     } else {
-      newPerson(options);
+      newPerson(options)
+        .catch((err) => {
+          toast.danger(err.message, {
+            position: toast.POSITION.TOP_LEFT,
+          });
+        })
+        .finally(() => setIsSubmitting(false));
     }
   };
   return (
@@ -156,19 +165,14 @@ export default function Register({
               <Button type="button" onClick={() => setData()}>
                 Reset
               </Button>
-              <Button color="primary" type="submit">
+              <Button color="primary" type="submit" disabled={isSubmitting}>
                 {person ? "Update" : "Register"}
               </Button>
             </Button.Group>
           </form>
-          {(newPersonMutationLoading || updatePersonMutationLoading) && (
-            <p>Loading...</p>
-          )}
-          {(newPersonMutationError || updatePersonMutationError) && (
-            <p>Error :( Please try again</p>
-          )}
         </Container>
       </Section>
+      <Loading loading={isSubmitting} />
     </div>
   );
 }

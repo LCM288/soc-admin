@@ -4,7 +4,7 @@
  */
 
 import { Sequelize, Model, DataTypes, Optional } from "sequelize";
-import { gql } from "apollo-server";
+import gql from "graphql-tag";
 
 /** All the attributes in the SocSetting model */
 export interface SocSettingAttributes {
