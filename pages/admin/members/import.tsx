@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
+import useResizeAware from "react-resize-aware";
 import { Row, CellProps } from "react-table";
 import {
   statusOf,
@@ -22,6 +23,7 @@ import importPeopleMutation from "apollo/queries/person/importPeople.gql";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
 import { PersonUpdateAttributes } from "@/models/Person";
 import ImportEditCell from "components/admin/table/importEditCell";
+import TableRow from "components/admin/table/tableRow";
 import Loading from "components/loading";
 
 export { getServerSideProps } from "utils/getServerSideProps";
@@ -49,6 +51,8 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const [membersData, setMembersData] = useState<
     { members: Record<string, unknown>[] } | undefined
   >(undefined);
+
+  const [resizeListener, sizes] = useResizeAware();
 
   const statusFilter = useCallback(
     (
@@ -259,6 +263,9 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     state: { globalFilter, filters, pageIndex, pageSize },
     setGlobalFilter,
     setFilter,
+    setHiddenColumns,
+    allColumns,
+    visibleColumns,
     page,
     pageCount,
     setPageSize,
@@ -349,9 +356,57 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     }
   }, []);
 
+  useEffect(() => {
+    if (sizes.width < 640) {
+      setHiddenColumns([
+        "id",
+        "chineseName",
+        "gender",
+        "dateOfBirth",
+        "email",
+        "phone",
+        "dateOfEntry",
+        "expectedGraduationDate",
+        "memberSince",
+        "memberUntil",
+      ]);
+    } else if (sizes.width < 768) {
+      setHiddenColumns([
+        "id",
+        "gender",
+        "dateOfBirth",
+        "email",
+        "phone",
+        "dateOfEntry",
+        "expectedGraduationDate",
+        "memberSince",
+        "memberUntil",
+      ]);
+    } else if (sizes.width < 1024) {
+      setHiddenColumns([
+        "id",
+        "gender",
+        "dateOfBirth",
+        "email",
+        "dateOfEntry",
+        "expectedGraduationDate",
+      ]);
+    } else if (sizes.width < 1440) {
+      setHiddenColumns([
+        "gender",
+        "dateOfBirth",
+        "dateOfEntry",
+        "expectedGraduationDate",
+      ]);
+    } else {
+      setHiddenColumns([]);
+    }
+  }, [sizes.width, setHiddenColumns]);
+
   if (user) {
     return (
       <>
+        {resizeListener}
         <Level>
           <Level.Side align="left">
             <Level.Item>
@@ -447,13 +502,12 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             {page.map((row) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
+                <TableRow
+                  key={row.id}
+                  row={row}
+                  allColumns={allColumns}
+                  visibleColumns={visibleColumns}
+                />
               );
             })}
           </tbody>
