@@ -12,13 +12,14 @@
 1. install `postgresql`, `node.js` and `yarn`
 2. put a `.env` file in root following the variables in `.env.example`
 3. run `yarn install` to install all dependencies
-4. run `yarn newdb` then `yarn migrate` to set up the database
-5. run `yarn generate` to generate jwt secret
+4. run `yarn newdb` set up the database
+5. run `yarn release` to generate sync the database and generate jwt secret
 6. run `yarn dev` to start the server
 
 ## Useful docs
+
 - [Soc-admin](https://lcm288.github.io/soc-admin/)
 - Database: [Sequelize](https://sequelize.org/master/index.html) / [Umzug](https://github.com/sequelize/umzug/tree/v2.x)
 - Backend: [Graphql](https://graphql.org/learn/) / [Apollo Server](https://www.apollographql.com/docs/apollo-server/)
 - Frontend: [Apollo Client](https://www.apollographql.com/docs/react/) / [Next](https://nextjs.org/docs/getting-started) / [React](https://reactjs.org/docs/getting-started.html) / [react-bulma-components](https://github.com/couds/react-bulma-components) / [Bulma](https://bulma.io/)
-- Miscellaneous:  [Axios](https://github.com/axios/axios) / [Typescript](https://www.typescriptlang.org/docs/handbook/intro.html) / [Jest](https://jestjs.io/docs/en/getting-started)
+- Miscellaneous: [Axios](https://github.com/axios/axios) / [Typescript](https://www.typescriptlang.org/docs/handbook/intro.html) / [Jest](https://jestjs.io/docs/en/getting-started)

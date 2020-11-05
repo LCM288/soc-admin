@@ -12,10 +12,9 @@
     "format": "prettier --ignore-path .gitignore --write \"**/*.{js,jsx,ts,tsx,html,json,css,scss,gql}\"",
     "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore .",
     "lintfix": "tsc --noEmit && eslint --fix --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore .",
-    "migrate": "node ./migrations/index.js",
+    "release": "node ./scripts/release.js",
     "newdb": "node ./scripts/create_db.js",
-    "test": "jest --coverage",
-    "generate": "node ./scripts/create_jwt_secret.js"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@apollo/client": "^3.2.0",
