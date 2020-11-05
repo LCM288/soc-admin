@@ -319,7 +319,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                 }) => ({
                   sid,
                   chineseName,
-                  englishName,
+                  englishName: englishName ?? "",
                   gender: Object.values(GenderEnum).includes(gender)
                     ? gender
                     : GenderEnum.None,

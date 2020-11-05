@@ -400,15 +400,15 @@ export const resolverTypeDefs = gql`
   input PersonInput {
     sid: String!
     chineseName: String
-    englishName: String
+    englishName: String!
     gender: Gender_ENUM
     dateOfBirth: Date
     email: String
     phone: String
     college: College_ENUM
     major: String
-    dateOfEntry: Date
-    expectedGraduationDate: Date
+    dateOfEntry: Date!
+    expectedGraduationDate: Date!
     memberSince: Date
     memberUntil: Date
   }
