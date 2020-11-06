@@ -9,14 +9,12 @@ interface Props {
   row: Row<Record<string, unknown>>;
   allColumns: ColumnInstance<Record<string, unknown>>[];
   visibleColumns: ColumnInstance<Record<string, unknown>>[];
-  canExpand: boolean;
 }
 
 const TableRow = ({
   row,
   allColumns,
   visibleColumns,
-  canExpand,
 }: Props): React.ReactElement => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -47,10 +45,10 @@ const TableRow = ({
   }, [hiddenColumns]);
 
   const onRowClick = useCallback(() => {
-    if (hiddenColumns.length && canExpand) {
+    if (hiddenColumns.length) {
       setIsExpanded(!isExpanded);
     }
-  }, [hiddenColumns, isExpanded, canExpand]);
+  }, [hiddenColumns, isExpanded]);
 
   return (
     <>

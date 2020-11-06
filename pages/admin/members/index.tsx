@@ -59,8 +59,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  const [canExpand, setCanExpand] = useState(true);
-
   const tableColumns = useMemo(
     () => [
       {
@@ -125,7 +123,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: () => "Member",
         id: "edit",
         Cell: (cellProps: CellProps<Record<string, unknown>, string>) => (
-          <EditCell {...cellProps} setCanExpand={setCanExpand} />
+          <EditCell {...cellProps} />
         ),
         disableSortBy: true,
       },
@@ -434,7 +432,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                   row={row}
                   allColumns={allColumns}
                   visibleColumns={visibleColumns}
-                  canExpand={canExpand}
                 />
               );
             })}

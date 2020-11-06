@@ -62,8 +62,6 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  const [canExpand, setCanExpand] = useState(true);
-
   const tableColumns = useMemo(
     () => [
       {
@@ -129,8 +127,8 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         id: "approve",
         Cell: (cellPrpos: CellProps<Record<string, unknown>, string>) => (
           <>
-            <ApproveCell {...cellPrpos} setCanExpand={setCanExpand} />
-            <EditCell {...cellPrpos} setCanExpand={setCanExpand} />
+            <ApproveCell {...cellPrpos} />
+            <EditCell {...cellPrpos} />
           </>
         ),
         disableSortBy: true,
@@ -339,7 +337,6 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
                   row={row}
                   allColumns={allColumns}
                   visibleColumns={visibleColumns}
-                  canExpand={canExpand}
                 />
               );
             })}

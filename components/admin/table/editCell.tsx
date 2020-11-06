@@ -8,16 +8,11 @@ import { useMutation } from "@apollo/react-hooks";
 import membersQuery from "apollo/queries/person/members.gql";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import toast from "utils/toast";
+import { StopClickDiv } from "utils/domEventHelpers";
 
-interface Props extends CellProps<Record<string, unknown>, string> {
-  setCanExpand: (newValue: boolean) => void;
-}
+type Props = CellProps<Record<string, unknown>, string>;
 
-const EditCell = ({
-  row,
-  value: title,
-  setCanExpand,
-}: Props): React.ReactElement => {
+const EditCell = ({ row, value: title }: Props): React.ReactElement => {
   const [updatePerson] = useMutation(updatePersonMutation, {
     refetchQueries: [{ query: membersQuery }, { query: registrationsQuery }],
   });
@@ -37,7 +32,6 @@ const EditCell = ({
             position: toast.POSITION.TOP_LEFT,
           });
           setOpenModal(false);
-          setCanExpand(true);
         })
         .catch((err) => {
           toast.danger(err.message, { position: toast.POSITION.TOP_LEFT });
@@ -46,31 +40,31 @@ const EditCell = ({
           setEditLoading(false);
         });
     },
-    [updatePerson, setCanExpand]
+    [updatePerson]
   );
   const promptEdit = () => {
     setOpenModal(true);
-    setCanExpand(false);
   };
   const cancelEdit = () => {
     setOpenModal(false);
-    setCanExpand(true);
   };
   return (
-    <>
-      {openModal && (
-        <EditPersonModal
-          onSave={onSave}
-          onCancel={cancelEdit}
-          row={row.values}
-          loading={editLoading}
-          title={title}
-        />
-      )}
-      <Button color="info" onClick={promptEdit}>
-        Edit
-      </Button>
-    </>
+    <StopClickDiv>
+      <>
+        {openModal && (
+          <EditPersonModal
+            onSave={onSave}
+            onCancel={cancelEdit}
+            row={row.values}
+            loading={editLoading}
+            title={title}
+          />
+        )}
+        <Button color="info" onClick={promptEdit}>
+          Edit
+        </Button>
+      </>
+    </StopClickDiv>
   );
 };
 

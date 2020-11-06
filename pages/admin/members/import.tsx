@@ -66,8 +66,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  const [canExpand, setCanExpand] = useState(true);
-
   const updateMemberData = useCallback(
     (rowIndex: number, updatedPerson: PersonUpdateAttributes) => {
       const updatedMembers = membersData?.members ?? [];
@@ -150,11 +148,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: () => "Member",
         id: "edit",
         Cell: (cellProps: CellProps<Record<string, unknown>, string>) => (
-          <ImportEditCell
-            {...cellProps}
-            updateMemberData={updateMemberData}
-            setCanExpand={setCanExpand}
-          />
+          <ImportEditCell {...cellProps} updateMemberData={updateMemberData} />
         ),
         disableSortBy: true,
       },
@@ -513,7 +507,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                   row={row}
                   allColumns={allColumns}
                   visibleColumns={visibleColumns}
-                  canExpand={canExpand}
                 />
               );
             })}

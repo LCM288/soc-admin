@@ -6,12 +6,11 @@ import ApproveModal from "components/admin/registrations/approveModal";
 import toast from "utils/toast";
 import approveMembershipMutation from "apollo/queries/person/approveMembership.gql";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
+import { StopClickDiv } from "utils/domEventHelpers";
 
-interface Props extends CellProps<Record<string, unknown>, string> {
-  setCanExpand: (newValue: boolean) => void;
-}
+type Props = CellProps<Record<string, unknown>, string>;
 
-const ApproveCell = ({ row, setCanExpand }: Props): React.ReactElement => {
+const ApproveCell = ({ row }: Props): React.ReactElement => {
   const [approveMembership] = useMutation(approveMembershipMutation, {
     refetchQueries: [{ query: registrationsQuery }],
   });
@@ -32,7 +31,6 @@ const ApproveCell = ({ row, setCanExpand }: Props): React.ReactElement => {
           position: toast.POSITION.TOP_LEFT,
         });
         setOpenModal(false);
-        setCanExpand(true);
       })
       .catch((err) => {
         toast.danger(err.message, { position: toast.POSITION.TOP_LEFT });
@@ -43,26 +41,30 @@ const ApproveCell = ({ row, setCanExpand }: Props): React.ReactElement => {
   };
   const promptApprove = () => {
     setOpenModal(true);
-    setCanExpand(false);
   };
   const cancelApprove = () => {
     setOpenModal(false);
-    setCanExpand(true);
   };
   return (
-    <>
-      {openModal && (
-        <ApproveModal
-          sid={row.values.sid as string}
-          englishName={row.values.englishName as string}
-          onConfirm={approve}
-          onCancel={cancelApprove}
-        />
-      )}
-      <Button color="success" onClick={promptApprove} loading={approveLoading}>
-        Approve
-      </Button>
-    </>
+    <StopClickDiv>
+      <>
+        {openModal && (
+          <ApproveModal
+            sid={row.values.sid as string}
+            englishName={row.values.englishName as string}
+            onConfirm={approve}
+            onCancel={cancelApprove}
+          />
+        )}
+        <Button
+          color="success"
+          onClick={promptApprove}
+          loading={approveLoading}
+        >
+          Approve
+        </Button>
+      </>
+    </StopClickDiv>
   );
 };
 
