@@ -4,6 +4,7 @@ import "bulma/bulma.sass";
 import "styles/select-fix.css";
 import "styles/toast-fix.css";
 import "styles/markdown-edit.css";
+import "styles/modal/modal-overflowing.css";
 import "react-day-picker/lib/style.css";
 import "easymde/dist/easymde.min.css";
 import { AppProps } from "next/app";

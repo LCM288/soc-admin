@@ -9,10 +9,15 @@ import membersQuery from "apollo/queries/person/members.gql";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import toast from "utils/toast";
 
+interface Props extends CellProps<Record<string, unknown>, string> {
+  setCanExpand: (newValue: boolean) => void;
+}
+
 const EditCell = ({
   row,
   value: title,
-}: CellProps<Record<string, unknown>, string>): React.ReactElement => {
+  setCanExpand,
+}: Props): React.ReactElement => {
   const [updatePerson] = useMutation(updatePersonMutation, {
     refetchQueries: [{ query: membersQuery }, { query: registrationsQuery }],
   });
@@ -32,6 +37,7 @@ const EditCell = ({
             position: toast.POSITION.TOP_LEFT,
           });
           setOpenModal(false);
+          setCanExpand(true);
         })
         .catch((err) => {
           toast.danger(err.message, { position: toast.POSITION.TOP_LEFT });
@@ -40,13 +46,15 @@ const EditCell = ({
           setEditLoading(false);
         });
     },
-    [updatePerson]
+    [updatePerson, setCanExpand]
   );
   const promptEdit = () => {
     setOpenModal(true);
+    setCanExpand(false);
   };
   const cancelEdit = () => {
     setOpenModal(false);
+    setCanExpand(true);
   };
   return (
     <>

@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import useResizeAware from "react-resize-aware";
-import { Row } from "react-table";
+import { Row, CellProps } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
@@ -58,6 +58,8 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         : rows.filter((row) => row.values[id] === filterValue),
     []
   );
+
+  const [canExpand, setCanExpand] = useState(true);
 
   const tableColumns = useMemo(
     () => [
@@ -122,7 +124,9 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Action",
         accessor: () => "Member",
         id: "edit",
-        Cell: EditCell,
+        Cell: (cellProps: CellProps<Record<string, unknown>, string>) => (
+          <EditCell {...cellProps} setCanExpand={setCanExpand} />
+        ),
         disableSortBy: true,
       },
     ],
@@ -430,6 +434,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                   row={row}
                   allColumns={allColumns}
                   visibleColumns={visibleColumns}
+                  canExpand={canExpand}
                 />
               );
             })}
