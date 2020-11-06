@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CellProps } from "react-table";
 import { Button } from "react-bulma-components";
 import { useMutation } from "@apollo/react-hooks";
@@ -16,6 +16,13 @@ const ApproveCell = ({ row }: Props): React.ReactElement => {
   });
   const [approveLoading, setApproveLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  useEffect(() => {
+    if (openModal) {
+      document.scrollingElement?.classList.add("is-clipped");
+    } else {
+      document.scrollingElement?.classList.remove("is-clipped");
+    }
+  }, [openModal]);
   const approve = (memberUntil: string | undefined) => {
     setApproveLoading(true);
     approveMembership({

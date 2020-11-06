@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { CellProps } from "react-table";
 import { Button } from "react-bulma-components";
 import EditPersonModal from "components/admin/table/editPersonModal";
@@ -18,6 +18,13 @@ const EditCell = ({ row, value: title }: Props): React.ReactElement => {
   });
   const [editLoading, setEditLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  useEffect(() => {
+    if (openModal) {
+      document.scrollingElement?.classList.add("is-clipped");
+    } else {
+      document.scrollingElement?.classList.remove("is-clipped");
+    }
+  }, [openModal]);
   const onSave = useCallback(
     (person: PersonUpdateAttributes) => {
       setEditLoading(true);
