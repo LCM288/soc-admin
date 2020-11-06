@@ -40,12 +40,12 @@ const ImportEditCell = ({
     },
     [row, updateMemberData]
   );
-  const promptEdit = () => {
+  const promptEdit = useCallback(() => {
     setOpenModal(true);
-  };
-  const cancelEdit = () => {
+  }, []);
+  const cancelEdit = useCallback(() => {
     setOpenModal(false);
-  };
+  }, []);
   return (
     <StopClickDiv>
       <>

@@ -49,12 +49,12 @@ const EditCell = ({ row, value: title }: Props): React.ReactElement => {
     },
     [updatePerson]
   );
-  const promptEdit = () => {
+  const promptEdit = useCallback(() => {
     setOpenModal(true);
-  };
-  const cancelEdit = () => {
+  }, []);
+  const cancelEdit = useCallback(() => {
     setOpenModal(false);
-  };
+  }, []);
   return (
     <StopClickDiv>
       <>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { CellProps } from "react-table";
 import { Button } from "react-bulma-components";
 import { useMutation } from "@apollo/react-hooks";
@@ -23,35 +23,38 @@ const ApproveCell = ({ row }: Props): React.ReactElement => {
       document.scrollingElement?.classList.remove("is-clipped");
     }
   }, [openModal]);
-  const approve = (memberUntil: string | undefined) => {
-    setApproveLoading(true);
-    approveMembership({
-      variables: { sid: row.values.sid as string, memberUntil },
-    })
-      .then((payload) => {
-        if (!payload.data?.approveMembership.success) {
-          throw new Error(
-            payload.data?.approveMembership.message ?? "some error occurs"
-          );
-        }
-        toast.success(payload.data.approveMembership.message, {
-          position: toast.POSITION.TOP_LEFT,
+  const approve = useCallback(
+    (memberUntil: string | undefined) => {
+      setApproveLoading(true);
+      approveMembership({
+        variables: { sid: row.values.sid as string, memberUntil },
+      })
+        .then((payload) => {
+          if (!payload.data?.approveMembership.success) {
+            throw new Error(
+              payload.data?.approveMembership.message ?? "some error occurs"
+            );
+          }
+          toast.success(payload.data.approveMembership.message, {
+            position: toast.POSITION.TOP_LEFT,
+          });
+          setOpenModal(false);
+        })
+        .catch((err) => {
+          toast.danger(err.message, { position: toast.POSITION.TOP_LEFT });
+        })
+        .finally(() => {
+          setApproveLoading(false);
         });
-        setOpenModal(false);
-      })
-      .catch((err) => {
-        toast.danger(err.message, { position: toast.POSITION.TOP_LEFT });
-      })
-      .finally(() => {
-        setApproveLoading(false);
-      });
-  };
-  const promptApprove = () => {
+    },
+    [approveMembership, row.values.sid]
+  );
+  const promptApprove = useCallback(() => {
     setOpenModal(true);
-  };
-  const cancelApprove = () => {
+  }, []);
+  const cancelApprove = useCallback(() => {
     setOpenModal(false);
-  };
+  }, []);
   return (
     <StopClickDiv>
       <>

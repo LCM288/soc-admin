@@ -182,7 +182,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const [isUploading, setIsUploading] = useState(false);
   const [isFileProcessing, setIsFileProcessing] = useState(false);
 
-  const upload = () => {
+  const upload = useCallback(() => {
     // remove member id to prevent data collision
     if (!membersData || membersData === undefined) {
       toast.danger("No member data found", {
@@ -266,7 +266,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         });
       }
     });
-  };
+  }, [importPeople, membersData]);
 
   const {
     getTableProps,
