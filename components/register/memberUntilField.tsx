@@ -12,7 +12,6 @@ interface Props {
   nullLabel: string | null;
   date: string | null;
   setDate: (value: string | null) => void;
-  nullable: boolean;
 }
 
 const DateField: React.FunctionComponent<Props> = ({
@@ -20,7 +19,6 @@ const DateField: React.FunctionComponent<Props> = ({
   nullLabel = null,
   date,
   setDate,
-  nullable = false,
 }: Props) => {
   const [calMonth, setCalMonth] = useState(new Date());
   const [isNull, setIsNull] = useState(date === null);
@@ -35,9 +33,7 @@ const DateField: React.FunctionComponent<Props> = ({
       <Label>{label}</Label>
       <Control>
         <DayPickerInput
-          component={(props: unknown) => (
-            <Input {...props} disabled={nullable && isNull} />
-          )}
+          component={(props: unknown) => <Input {...props} disabled={isNull} />}
           inputProps={{ ref: null }}
           classNames={{
             container: "",
@@ -45,32 +41,30 @@ const DateField: React.FunctionComponent<Props> = ({
             overlay: "DayPickerInput-Overlay",
           }}
           format="yyyy-MM-dd"
-          formatDate={(date: Date) => DateTime.fromJSDate(date).toISODate()}
+          formatDate={(d: Date) => DateTime.fromJSDate(d).toISODate()}
           parseDate={(str: string, format: string) => {
             const day = DateTime.fromFormat(str, format);
             return day.isValid ? day.toJSDate() : undefined;
           }}
           value={date || ""}
-          onDayChange={(date: Date) => {
-            const dateTime = DateTime.fromJSDate(date);
+          onDayChange={(d: Date) => {
+            const dateTime = DateTime.fromJSDate(d);
             setDate(dateTime ? dateTime.toISODate() : "");
           }}
           placeholder="YYYY-MM-DD"
           dayPickerProps={{
             month: calMonth,
-            captionElement: ({ date }: { date: Date }) => (
+            captionElement: ({ d }: { d: Date }) => (
               <YearMonthForm
-                date={date}
+                date={d}
                 onChange={(month: Date) => setCalMonth(month)}
               />
             ),
           }}
         />
-        {nullable ? (
-          <Checkbox onChange={onNullChange} checked={isNull}>
-            {nullLabel}
-          </Checkbox>
-        ) : null}
+        <Checkbox onChange={onNullChange} checked={isNull}>
+          {nullLabel}
+        </Checkbox>
       </Control>
     </Field>
   );

@@ -8,8 +8,8 @@ import CollegeField from "components/register/collegeField";
 import DOGradField from "components/register/doGradField";
 import GenderField from "components/register/genderField";
 import SIDField from "components/register/sidField";
-import DOBField from "components/register/dobField";
 import DateField from "components/register/dateField";
+import MemberUntilField from "components/register/memberUntilField";
 import EmailField from "components/register/emailField";
 import MajorField from "components/register/majorField";
 import { Modal, Section, Button, Heading } from "react-bulma-components";
@@ -44,9 +44,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
     (row.chineseName ?? "") as string
   );
   const [gender, setGender] = useState((row.gender ?? "None") as string);
-  const [dob, setDob] = useState(
-    row.dateOfBirth ? (row.dateOfBirth as string) : null
-  );
+  const [dob, setDob] = useState((row.dateOfBirth ?? "") as string);
   const [email, setEmail] = useState((row.email ?? "") as string);
   const [phone, setPhone] = useState((row.phone ?? "") as string);
   const [collegeCode, setCollegeCode] = useState((row.college ?? "") as string);
@@ -56,7 +54,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
     (row.expectedGraduationDate ?? "") as string
   );
   const [memberSince, setMemberSince] = useState(
-    row.memberSince ? (row.memberSince as string) : null
+    (row.memberSince ?? "") as string
   );
   const [memberUntil, setMemberUntil] = useState(
     row.memberUntil ? (row.memberUntil as string) : null
@@ -140,12 +138,11 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
               date={memberSince}
               setDate={setMemberSince}
             />
-            <DateField
+            <MemberUntilField
               label="Member Until"
               nullLabel="Until Grad"
               date={memberUntil}
               setDate={setMemberUntil}
-              nullable
             />
           </Section>
           <div className="is-pulled-right buttons">
