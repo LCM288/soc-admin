@@ -414,7 +414,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     } else {
       setHiddenColumns([]);
     }
-  }, [sizes.width, setHiddenColumns]);
+  }, [sizes.width, setHiddenColumns, visibleColumns]);
 
   if (user) {
     return (
