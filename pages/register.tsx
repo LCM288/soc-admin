@@ -9,15 +9,13 @@ import { Major } from "@/models/Major";
 import { College } from "@/models/College";
 import { Person } from "@/models/Person";
 
-import ChineseNameField from "components/register/chineseNameField";
 import DOEntryField from "components/register/doEntryField";
-import EnglishNameField from "components/register/englishNameField";
+import TextField from "components/register/textField";
 import PhoneField from "components/register/phoneField";
 import CollegeField from "components/register/collegeField";
 import DOGradField from "components/register/doGradField";
 import GenderField from "components/register/genderField";
-import SIDField from "components/register/sidField";
-import DOBField from "components/register/dobField";
+import DateField from "components/register/dateField";
 import EmailField from "components/register/emailField";
 import MajorField from "components/register/majorField";
 import Loading from "components/loading";
@@ -144,14 +142,26 @@ export default function Register({
         <Container>
           <Heading>Register</Heading>
           <form onSubmit={(e) => formSubmit(e)}>
-            <SIDField sid={user?.sid} />
-            <EnglishNameField englishName={user.name} isAdmin={false} />
-            <ChineseNameField
-              chineseName={chineseName}
-              setChineseName={setChineseName}
+            <TextField value={user?.sid} label="Student ID" />
+            <TextField
+              value={user.name}
+              label="English Name"
+              placeholder="English Name as in CU Link Card"
+            />
+            <TextField
+              value={chineseName}
+              setValue={setChineseName}
+              label="Chinese Name"
+              placeholder="Chinese Name as in CU Link Card"
+              editable
             />
             <GenderField gender={gender} setGender={setGender} />
-            <DOBField dob={dob} setDob={setDob} />
+            <DateField
+              label="Date of Birth"
+              dateValue={dob}
+              setDateValue={setDob}
+              editable
+            />
             <EmailField email={email} setEmail={setEmail} />
             <PhoneField phone={phone} setPhone={setPhone} />
             <CollegeField

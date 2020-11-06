@@ -1,13 +1,11 @@
 import React, { useState, useCallback } from "react";
 import Loading from "components/loading";
-import ChineseNameField from "components/register/chineseNameField";
+import TextField from "components/register/textField";
 import DOEntryField from "components/register/doEntryField";
-import EnglishNameField from "components/register/englishNameField";
 import PhoneField from "components/register/phoneField";
 import CollegeField from "components/register/collegeField";
 import DOGradField from "components/register/doGradField";
 import GenderField from "components/register/genderField";
-import SIDField from "components/register/sidField";
 import DateField from "components/register/dateField";
 import MemberUntilField from "components/register/memberUntilField";
 import EmailField from "components/register/emailField";
@@ -112,15 +110,25 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
         <Modal.Content className="has-background-white box">
           <Heading className="has-text-centered">Edit {title}</Heading>
           <Section className="pt-4">
-            <SIDField sid={sid} setSID={setSID} editable={fullyEditable} />
-            <EnglishNameField
-              englishName={englishName}
-              setEnglishName={setEnglishName}
-              isAdmin
+            <TextField
+              value={sid}
+              setValue={setSID}
+              label="Student ID"
+              editable={fullyEditable}
             />
-            <ChineseNameField
-              chineseName={chineseName}
-              setChineseName={setChineseName}
+            <TextField
+              value={englishName}
+              setValue={setEnglishName}
+              label="English Name"
+              placeholder="English Name as in CU Link Card"
+              editable
+            />
+            <TextField
+              value={chineseName}
+              setValue={setChineseName}
+              label="Chinese Name"
+              placeholder="Chinese Name as in CU Link Card"
+              editable
             />
             <GenderField gender={gender} setGender={setGender} />
             <DateField
