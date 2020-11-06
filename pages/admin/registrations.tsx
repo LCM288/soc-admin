@@ -241,7 +241,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     } else {
       setHiddenColumns([]);
     }
-  }, [sizes.width, setHiddenColumns]);
+  }, [sizes.width, setHiddenColumns, visibleColumns]);
 
   if (!registrationsData) {
     if (loading) return <p>loading</p>;

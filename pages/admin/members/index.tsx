@@ -320,7 +320,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     } else {
       setHiddenColumns([]);
     }
-  }, [sizes.width, setHiddenColumns]);
+  }, [sizes.width, setHiddenColumns, visibleColumns]);
 
   if (data && data !== membersData) {
     setMembersData(data);

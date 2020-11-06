@@ -243,6 +243,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     );
     Promise.all(importPeoplePromises).then((importPeopleSuccessSIDBatches) => {
       const importPeopleSuccessSIDFlat = importPeopleSuccessSIDBatches.flat();
+      const importedCount = importPeopleSuccessSIDFlat.length;
       const failedUploadSID = _.difference(
         membersData.members.map((member) => member.sid as string),
         importPeopleSuccessSIDFlat
@@ -252,6 +253,18 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
           failedUploadSID.includes(member.sid as string)
         ),
       });
+      if (importedCount) {
+        toast.success(
+          `${importedCount} member${importedCount !== 1 ? "s" : ""} imported.`,
+          {
+            position: toast.POSITION.TOP_LEFT,
+          }
+        );
+      } else {
+        toast.danger("No members were imported", {
+          position: toast.POSITION.TOP_LEFT,
+        });
+      }
     });
   };
 
@@ -401,7 +414,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     } else {
       setHiddenColumns([]);
     }
-  }, [sizes.width, setHiddenColumns]);
+  }, [sizes.width, setHiddenColumns, visibleColumns]);
 
   if (user) {
     return (
