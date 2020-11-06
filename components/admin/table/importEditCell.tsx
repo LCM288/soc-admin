@@ -5,6 +5,7 @@ import { PersonUpdateAttributes } from "@/models/Person";
 import { CellProps } from "react-table";
 import toast from "utils/toast";
 import { StopClickDiv } from "utils/domEventHelpers";
+import useClipped from "utils/useClipped";
 
 interface Props extends CellProps<Record<string, unknown>, string> {
   updateMemberData: (
@@ -20,13 +21,7 @@ const ImportEditCell = ({
 }: Props): React.ReactElement => {
   const [editLoading, setEditLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  useEffect(() => {
-    if (openModal) {
-      document.scrollingElement?.classList.add("is-clipped");
-    } else {
-      document.scrollingElement?.classList.remove("is-clipped");
-    }
-  }, [openModal]);
+  useClipped(openModal);
   const onSave = useCallback(
     (person: PersonUpdateAttributes) => {
       if (person.sid.length !== 10) {

@@ -7,6 +7,7 @@ import toast from "utils/toast";
 import approveMembershipMutation from "apollo/queries/person/approveMembership.gql";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import { StopClickDiv } from "utils/domEventHelpers";
+import useClipped from "utils/useClipped";
 
 type Props = CellProps<Record<string, unknown>, string>;
 
@@ -16,13 +17,7 @@ const ApproveCell = ({ row }: Props): React.ReactElement => {
   });
   const [approveLoading, setApproveLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  useEffect(() => {
-    if (openModal) {
-      document.scrollingElement?.classList.add("is-clipped");
-    } else {
-      document.scrollingElement?.classList.remove("is-clipped");
-    }
-  }, [openModal]);
+  useClipped(openModal);
   const approve = useCallback(
     (memberUntil: string | undefined) => {
       setApproveLoading(true);

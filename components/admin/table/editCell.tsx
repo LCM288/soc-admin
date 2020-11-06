@@ -9,6 +9,7 @@ import membersQuery from "apollo/queries/person/members.gql";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import toast from "utils/toast";
 import { StopClickDiv } from "utils/domEventHelpers";
+import useClipped from "utils/useClipped";
 
 type Props = CellProps<Record<string, unknown>, string>;
 
@@ -18,13 +19,7 @@ const EditCell = ({ row, value: title }: Props): React.ReactElement => {
   });
   const [editLoading, setEditLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  useEffect(() => {
-    if (openModal) {
-      document.scrollingElement?.classList.add("is-clipped");
-    } else {
-      document.scrollingElement?.classList.remove("is-clipped");
-    }
-  }, [openModal]);
+  useClipped(openModal);
   const onSave = useCallback(
     (person: PersonUpdateAttributes) => {
       setEditLoading(true);
