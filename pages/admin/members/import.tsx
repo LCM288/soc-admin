@@ -125,7 +125,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: "dateOfEntry",
       },
       {
-        Header: "Expected Graduation Date",
+        Header: "Expected Graduation",
         accessor: "expectedGraduationDate",
       },
       {

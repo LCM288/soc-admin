@@ -112,11 +112,11 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: "dateOfEntry",
       },
       {
-        Header: "Expected Graduation Date",
+        Header: "Expected Graduation",
         accessor: "expectedGraduationDate",
       },
       {
-        Header: "Type of registration",
+        Header: "Type",
         accessor: "registrationType",
         filter: typeFilter,
         disableSortBy: true,
@@ -126,10 +126,10 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: () => "Registration",
         id: "approve",
         Cell: (cellPrpos: CellProps<Record<string, unknown>, string>) => (
-          <>
+          <div className="buttons">
             <ApproveCell {...cellPrpos} />
             <EditCell {...cellPrpos} />
-          </>
+          </div>
         ),
         disableSortBy: true,
       },
