@@ -25,7 +25,7 @@ interface Props {
   row: Record<string, unknown>;
   loading: boolean;
   title: string;
-  sidEditable?: boolean;
+  fullyEditable?: boolean;
 }
 
 const EditPersonModal: React.FunctionComponent<Props> = ({
@@ -34,7 +34,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
   row,
   loading,
   title,
-  sidEditable = false,
+  fullyEditable = false,
 }: Props) => {
   const [sid, setSID] = useState(row.sid as string);
   const [englishName, setEnglishName] = useState(
@@ -112,7 +112,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
         <Modal.Content className="has-background-white box">
           <Heading className="has-text-centered">Edit {title}</Heading>
           <Section className="pt-4">
-            <SIDField sid={sid} setSID={setSID} editable={sidEditable} />
+            <SIDField sid={sid} setSID={setSID} editable={fullyEditable} />
             <EnglishNameField
               englishName={englishName}
               setEnglishName={setEnglishName}
@@ -123,7 +123,12 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
               setChineseName={setChineseName}
             />
             <GenderField gender={gender} setGender={setGender} />
-            <DateField label="Date of Birth" date={dob} setDate={setDob} />
+            <DateField
+              label="Date of Birth"
+              dateValue={dob}
+              setDateValue={setDob}
+              editable
+            />
             <EmailField email={email} setEmail={setEmail} />
             <PhoneField phone={phone} setPhone={setPhone} />
             <CollegeField
@@ -135,14 +140,16 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
             <DOGradField doGrad={doGrad} setDoGrad={setDoGrad} />
             <DateField
               label="Member Since"
-              date={memberSince}
-              setDate={setMemberSince}
+              dateValue={memberSince}
+              setDateValue={setMemberSince}
+              editable={fullyEditable}
             />
             <MemberUntilField
               label="Member Until"
               nullLabel="Until Grad"
-              date={memberUntil}
-              setDate={setMemberUntil}
+              dateValue={memberUntil}
+              setDateValue={setMemberUntil}
+              editable={fullyEditable}
             />
           </Section>
           <div className="is-pulled-right buttons">
@@ -164,7 +171,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
 };
 
 EditPersonModal.defaultProps = {
-  sidEditable: false,
+  fullyEditable: false,
 };
 
 export default EditPersonModal;

@@ -5,18 +5,20 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import { DateTime } from "luxon";
 import YearMonthForm from "../yearMonthForm";
 
-const { Input, Field, Control, Label, Checkbox } = Form;
+const { Input, Field, Control, Label } = Form;
 
 interface Props {
   label: string;
-  date: string | null;
-  setDate: (value: string) => void;
+  dateValue: string;
+  setDateValue?: (value: string) => void;
+  editable: boolean;
 }
 
 const DateField: React.FunctionComponent<Props> = ({
   label,
-  date,
-  setDate,
+  dateValue,
+  setDateValue = () => {},
+  editable = true,
 }: Props) => {
   const [calMonth, setCalMonth] = useState(new Date());
 
@@ -25,7 +27,9 @@ const DateField: React.FunctionComponent<Props> = ({
       <Label>{label}</Label>
       <Control>
         <DayPickerInput
-          component={(props: unknown) => <Input {...props} />}
+          component={(props: unknown) => (
+            <Input {...props} disabled={!editable} />
+          )}
           inputProps={{ ref: null }}
           classNames={{
             container: "",
@@ -33,22 +37,24 @@ const DateField: React.FunctionComponent<Props> = ({
             overlay: "DayPickerInput-Overlay",
           }}
           format="yyyy-MM-dd"
-          formatDate={(d: Date) => DateTime.fromJSDate(d).toISODate()}
+          formatDate={(date: Date) => DateTime.fromJSDate(date).toISODate()}
           parseDate={(str: string, format: string) => {
             const day = DateTime.fromFormat(str, format);
             return day.isValid ? day.toJSDate() : undefined;
           }}
-          onDayChange={(d: Date) => {
-            const dateTime = DateTime.fromJSDate(d);
-            setDate(dateTime ? dateTime.toISODate() : "");
+          value={dateValue}
+          onDayChange={(date: Date) => {
+            const dateTime = DateTime.fromJSDate(date);
+            setDateValue(dateTime ? dateTime.toISODate() : "");
           }}
           placeholder="YYYY-MM-DD"
           dayPickerProps={{
             month: calMonth,
-            captionElement: ({ d }: { d: Date }) => (
+            captionElement: ({ date }: { date: Date }) => (
               <YearMonthForm
-                date={d}
+                date={date}
                 onChange={(month: Date) => setCalMonth(month)}
+                yearRange={[-30, 0]}
               />
             ),
           }}
@@ -56,6 +62,10 @@ const DateField: React.FunctionComponent<Props> = ({
       </Control>
     </Field>
   );
+};
+
+DateField.defaultProps = {
+  setDateValue: () => {},
 };
 
 export default DateField;

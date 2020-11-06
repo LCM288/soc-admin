@@ -47,7 +47,7 @@ const ImportEditCell = ({
           row={row.values}
           loading={editLoading}
           title={title}
-          sidEditable
+          fullyEditable
         />
       )}
       <Button color="info" onClick={promptEdit}>
