@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Navbar } from "react-bulma-components";
 import Link from "next/link";
 import LogoutTimer from "components/logoutTimer";
@@ -6,6 +6,7 @@ import LogoutReminderModal from "components/logoutReminderModal";
 import { useQuery } from "@apollo/react-hooks";
 import socNameQuery from "apollo/queries/socSetting/socName.gql";
 import { DateTime } from "luxon";
+import useClipped from "utils/useClipped";
 
 interface Props {
   children: React.ReactElement;
@@ -18,12 +19,12 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
   const [logoutTime, setLogoutTime] = useState(
     DateTime.local().plus({ minutes: 30 })
   );
-  const [openModel, setOpenModel] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const { data, loading, error } = useQuery(socNameQuery);
 
-  const toggleActive = () => {
+  const toggleActive = useCallback(() => {
     setActive(!isActive);
-  };
+  }, [isActive]);
 
   useEffect(() => {
     const handleClickOutside = (event: Event) => {
@@ -36,20 +37,21 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [navBarRef, setActive]);
+  }, [navBarRef]);
 
   useEffect(() => {
     const time = logoutTime.minus({ minutes: 5 }).diffNow().as("milliseconds");
-    if (!openModel && time > 0) {
+    if (!openModal && time > 0) {
       const openModalTimeout = setTimeout(() => {
-        setOpenModel(true);
+        setOpenModal(true);
       }, time);
       return () => {
         clearTimeout(openModalTimeout);
       };
     }
     return () => {};
-  }, [logoutTime, setOpenModel, openModel]);
+  }, [logoutTime, setOpenModal, openModal]);
+  useClipped(openModal);
 
   if (oldChildren.current !== children) {
     setLogoutTime(DateTime.local().plus({ minutes: 30 }));
@@ -59,9 +61,9 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
   return (
     <div>
       <LogoutReminderModal
-        open={openModel}
+        open={openModal}
         onClose={() => {
-          setOpenModel(false);
+          setOpenModal(false);
         }}
       />
       <div ref={navBarRef}>

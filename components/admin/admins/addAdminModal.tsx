@@ -16,6 +16,7 @@ import personQuery from "apollo/queries/person/person.gql";
 import { PersonAttributes } from "@/models/Person";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
+import useClipped from "utils/useClipped";
 
 const { Input, Field, Label, Control } = Form;
 
@@ -40,6 +41,7 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
   const [nickname, setNickname] = useState("");
   const [pos, setPos] = useState("");
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  useClipped(openConfirmModal);
   const messageElement = useMemo(() => {
     const person = (memberData?.person as PersonAttributes) || null;
     return (

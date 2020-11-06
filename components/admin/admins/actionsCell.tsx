@@ -11,6 +11,8 @@ import EditAdminModal from "components/admin/admins/editAdminModal";
 import PromptModal from "components/promptModal";
 import Loading from "components/loading";
 import { User } from "@/types/datasources";
+import { StopClickDiv } from "utils/domEventHelpers";
+import useClipped from "utils/useClipped";
 
 interface Props extends CellProps<Record<string, unknown>, string> {
   user: User | null;
@@ -27,6 +29,8 @@ const ActionsCell = ({ row, user }: Props): React.ReactElement => {
   const [loading, setLoading] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  useClipped(openEditModal);
+  useClipped(openDeleteModal);
   const onSave = useCallback(
     (executive: ExecutiveUpdateAttributes) => {
       setLoading(true);
@@ -87,34 +91,36 @@ const ActionsCell = ({ row, user }: Props): React.ReactElement => {
   }, []);
 
   return (
-    <>
-      {openEditModal && (
-        <EditAdminModal
-          onSave={onSave}
-          onCancel={cancelEdit}
-          row={row.values}
-          loading={loading}
-        />
-      )}
-      {openDeleteModal && (
-        <PromptModal
-          message={`Are you sure to remove ${row.values.sid} from the admin list ?`}
-          onConfirm={onDelete}
-          onCancel={cancelDelete}
-        />
-      )}
-      <Button color="info" onClick={promptEdit}>
-        Edit
-      </Button>
-      <Button
-        color="danger"
-        onClick={promptDelete}
-        disabled={row.values.sid === user?.sid}
-      >
-        Delete
-      </Button>
-      {!openEditModal && <Loading loading={loading} />}
-    </>
+    <StopClickDiv>
+      <>
+        {openEditModal && (
+          <EditAdminModal
+            onSave={onSave}
+            onCancel={cancelEdit}
+            row={row.values}
+            loading={loading}
+          />
+        )}
+        {openDeleteModal && (
+          <PromptModal
+            message={`Are you sure to remove ${row.values.sid} from the admin list ?`}
+            onConfirm={onDelete}
+            onCancel={cancelDelete}
+          />
+        )}
+        <Button color="info" onClick={promptEdit}>
+          Edit
+        </Button>
+        <Button
+          color="danger"
+          onClick={promptDelete}
+          disabled={row.values.sid === user?.sid}
+        >
+          Delete
+        </Button>
+        {!openEditModal && <Loading loading={loading} />}
+      </>
+    </StopClickDiv>
   );
 };
 
