@@ -13,6 +13,7 @@ interface Props {
   setDateValue?: (value: string) => void;
   editable?: boolean;
   yearRange?: number[];
+  required?: boolean;
 }
 
 const DateField: React.FunctionComponent<Props> = ({
@@ -21,6 +22,7 @@ const DateField: React.FunctionComponent<Props> = ({
   setDateValue = () => {},
   editable = false,
   yearRange = [-30, 0],
+  required = false,
 }: Props) => {
   const [calMonth, setCalMonth] = useState(new Date());
 
@@ -30,7 +32,7 @@ const DateField: React.FunctionComponent<Props> = ({
       <Control>
         <DayPickerInput
           component={(props: unknown) => (
-            <Input {...props} disabled={!editable} />
+            <Input {...props} disabled={!editable} required={required} />
           )}
           inputProps={{ ref: null }}
           classNames={{
@@ -70,6 +72,7 @@ DateField.defaultProps = {
   setDateValue: () => {},
   editable: false,
   yearRange: [-30, 0],
+  required: false,
 };
 
 export default DateField;

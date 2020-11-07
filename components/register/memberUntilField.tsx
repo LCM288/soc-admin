@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { Form } from "react-bulma-components";
 import DateField from "components/register/dateField";
 
@@ -28,21 +28,20 @@ const MemberUntilField: React.FunctionComponent<Props> = ({
     if (isNull) setDateValue(null);
   };
 
-  useEffect(() => {
-    setIsNull(dateValue === null);
-    setStringValue((dateValue ?? "") as string);
-  }, [dateValue]);
-
-  useEffect(() => {
-    setDateValue(isNull ? null : stringValue);
-  }, [setDateValue, isNull, stringValue]);
+  const setStringValueCallback = useCallback(
+    (string: string) => {
+      setDateValue(isNull ? null : string);
+      setStringValue(string);
+    },
+    [setDateValue, isNull]
+  );
 
   return (
     <>
       <DateField
         label={label}
         dateValue={stringValue}
-        setDateValue={setStringValue}
+        setDateValue={setStringValueCallback}
         editable={!isNull && editable}
         yearRange={[-10, 10]}
       />

@@ -19,7 +19,7 @@ const ApproveCell = ({ row }: Props): React.ReactElement => {
   const [openModal, setOpenModal] = useState(false);
   useClipped(openModal);
   const approve = useCallback(
-    (memberUntil: string | undefined) => {
+    (memberUntil: string | null) => {
       setApproveLoading(true);
       approveMembership({
         variables: { sid: row.values.sid as string, memberUntil },

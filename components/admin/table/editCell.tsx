@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { CellProps } from "react-table";
 import { Button } from "react-bulma-components";
 import EditPersonModal from "components/admin/table/editPersonModal";
