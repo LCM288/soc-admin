@@ -3,7 +3,6 @@ import {
   Heading,
   Modal,
   Button,
-  Form,
   Loader,
   Columns,
 } from "react-bulma-components";
@@ -16,9 +15,9 @@ import personQuery from "apollo/queries/person/person.gql";
 import { PersonAttributes } from "@/models/Person";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
+import TextField from "components/register/textField";
+import { PreventDefaultForm } from "utils/domEventHelpers";
 import useClipped from "utils/useClipped";
-
-const { Input, Field, Label, Control } = Form;
 
 interface Props {
   executives: Array<Record<string, unknown>>;
@@ -78,10 +77,6 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
   }, [onSave, sid, nickname, pos]);
 
   const promptConfirm = useCallback(() => {
-    if (sid.length !== 10) {
-      toast.danger("Incorrect sid");
-      return;
-    }
     if (executives.map((executive) => executive.sid).includes(sid)) {
       toast.danger(`${sid} is already an executive`);
       return;
@@ -96,52 +91,42 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
   return (
     <Modal show closeOnEsc={false} onClose={onClose}>
       <Modal.Content className="has-background-white box">
-        <Heading className="has-text-centered">New Admin</Heading>
-        <Field>
-          <Label>SID</Label>
-          <Control>
-            <Input
-              placeholder="SID"
-              type="number"
+        <PreventDefaultForm onSubmit={promptConfirm}>
+          <>
+            <Heading className="has-text-centered">New Admin</Heading>
+            <TextField
               value={sid}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSID(e.target.value)
-              }
+              setValue={setSID}
+              pattern="^\d{10}$"
+              label="Student ID"
+              placeholder="Student ID"
+              editable
+              required
             />
-          </Control>
-        </Field>
-        <Field>
-          <Label>Nickname</Label>
-          <Control>
-            <Input
-              placeholder="Nickname"
+            <TextField
               value={nickname}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setNickname(e.target.value)
-              }
+              setValue={setNickname}
+              label="Nickname"
+              placeholder="Nickname"
+              editable
             />
-          </Control>
-        </Field>
-        <Field>
-          <Label>Position</Label>
-          <Control>
-            <Input
-              placeholder="Position"
+            <TextField
               value={pos}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPos(e.target.value)
-              }
+              setValue={setPos}
+              label="Position"
+              placeholder="Position"
+              editable
             />
-          </Control>
-        </Field>
-        <div className="is-pulled-right buttons pt-4">
-          <Button color="primary" onClick={promptConfirm}>
-            Add
-          </Button>
-          <Button color="danger" onClick={onClose}>
-            Cancel
-          </Button>
-        </div>
+            <div className="is-pulled-right buttons pt-4">
+              <Button color="primary" type="submit">
+                Add
+              </Button>
+              <Button color="danger" onClick={onClose}>
+                Cancel
+              </Button>
+            </div>
+          </>
+        </PreventDefaultForm>
       </Modal.Content>
       {openConfirmModal && (
         <PromptModal

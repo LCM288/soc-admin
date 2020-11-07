@@ -1,9 +1,9 @@
 import React, { useCallback, useState, useMemo } from "react";
-import { Heading, Modal, Button, Form } from "react-bulma-components";
+import { Heading, Modal, Button } from "react-bulma-components";
 import Loading from "components/loading";
 import { ExecutiveUpdateAttributes } from "@/models/Executive";
-
-const { Input, Field, Label, Control } = Form;
+import TextField from "components/register/textField";
+import { PreventDefaultForm } from "utils/domEventHelpers";
 
 interface Props {
   onSave: (person: ExecutiveUpdateAttributes) => void;
@@ -34,48 +34,43 @@ const EditAdminModal: React.FunctionComponent<Props> = ({
   return (
     <Modal show closeOnEsc={false} onClose={onCancel}>
       <Modal.Content className="has-background-white box">
-        <Heading className="has-text-centered">Edit Admin</Heading>
-        <Field>
-          <Label>SID</Label>
-          <Control>
-            <Input type="number" value={sid} disabled />
-          </Control>
-        </Field>
-        <Field>
-          <Label>Nickname</Label>
-          <Control>
-            <Input
-              placeholder="Nickname"
+        <PreventDefaultForm onSubmit={onConfirm}>
+          <>
+            <Heading className="has-text-centered">Edit Admin</Heading>
+            <TextField
+              value={sid}
+              pattern="^\d{10}$"
+              label="Student ID"
+              placeholder="Student ID"
+              required
+            />
+            <TextField
               value={nickname}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setNickname(e.target.value)
-              }
+              setValue={setNickname}
+              label="Nickname"
+              placeholder="Nickname"
+              editable
             />
-          </Control>
-        </Field>
-        <Field>
-          <Label>Position</Label>
-          <Control>
-            <Input
-              placeholder="Position"
+            <TextField
               value={pos}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPos(e.target.value)
-              }
+              setValue={setPos}
+              label="Position"
+              placeholder="Position"
+              editable
             />
-          </Control>
-        </Field>
-        <div className="is-pulled-right buttons pt-4">
-          <Button type="button" onClick={onReset}>
-            Reset
-          </Button>
-          <Button type="button" color="primary" onClick={onConfirm}>
-            Confirm
-          </Button>
-          <Button color="danger" onClick={onCancel}>
-            Cancel
-          </Button>
-        </div>
+            <div className="is-pulled-right buttons pt-4">
+              <Button type="button" onClick={onReset}>
+                Reset
+              </Button>
+              <Button type="submit" color="primary">
+                Confirm
+              </Button>
+              <Button color="danger" onClick={onCancel}>
+                Cancel
+              </Button>
+            </div>
+          </>
+        </PreventDefaultForm>
       </Modal.Content>
       <Loading loading={loading} />
     </Modal>
