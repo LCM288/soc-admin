@@ -1,32 +1,35 @@
 import React from "react";
-import { useRouter } from "next/router";
-import { useQuery } from "@apollo/react-hooks";
+import { DateTime } from "luxon";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
-
-import query from "apollo/queries/executive/executives.gql";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
 export default function Index({ user }: ServerSideProps): React.ReactElement {
-  const router = useRouter();
-  const { data, loading, error } = useQuery(query, {
-    variables: { sid: user?.sid ?? "" },
-  });
-  const logout = () => {
-    router.push("/api/logout");
+  const getGreetingTime = () => {
+    // ref: https://gist.github.com/James1x0/8443042
+    let g = null; // return g
+
+    const splitMoring = 5; // 24hr time to split the afternoon
+    const splitAfternoon = 12; // 24hr time to split the afternoon
+    const splitEvening = 17; // 24hr time to split the evening
+    const currentHour = DateTime.local().hour;
+
+    if (currentHour >= splitAfternoon && currentHour <= splitEvening) {
+      g = "Good afternoon";
+    } else if (currentHour >= splitEvening || currentHour <= splitMoring) {
+      g = "Good evening";
+    } else {
+      g = "Good morning";
+    }
+
+    return g;
   };
-  if (loading) return <p>loading</p>;
-  if (error) return <p>ERROR</p>;
 
   if (user) {
     return (
       <div>
-        <div>Hi, {user.name}</div>
-        <div>{JSON.stringify(data)}</div>
-        <button type="button" onClick={logout}>
-          logout
-        </button>
+        {getGreetingTime()}, {user.name}
       </div>
     );
   }
