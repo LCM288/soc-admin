@@ -114,6 +114,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
                 setValue={setSID}
                 label="Student ID"
                 editable={fullyEditable}
+                pattern="^\d{10}$"
                 required
               />
               <TextField

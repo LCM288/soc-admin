@@ -140,7 +140,11 @@ export default function Register({
         <Container>
           <Heading>Register</Heading>
           <form onSubmit={(e) => formSubmit(e)}>
-            <TextField value={user?.sid} label="Student ID" />
+            <TextField
+              value={user?.sid}
+              pattern="^\d{10}$"
+              label="Student ID"
+            />
             <TextField
               value={user.name}
               label="English Name"
