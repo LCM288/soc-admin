@@ -1,0 +1,22 @@
+.level.react-select-major-label {
+  flex-wrap: wrap;
+
+  .level-left,
+  .level-right {
+    flex-wrap: wrap;
+    flex-shrink: 1;
+
+    .level-item {
+      flex-shrink: 1;
+      flex-grow: 0;
+
+      &.has-tag {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .level-right {
+    margin-left: auto;
+  }
+}

@@ -40,27 +40,14 @@ const formatMajorOptionLabel = ({
   englishLabel,
   faculties,
 }: Labels) => (
-  <Level style={{ flexWrap: "wrap" }} className="is-mobile">
-    <Level.Side
-      align="left"
-      style={{ marginRight: "auto", flexWrap: "wrap", flexShrink: 1 }}
-    >
-      <Level.Item style={{ flexShrink: 1, flexGrow: 0 }}>
-        {englishLabel}
-      </Level.Item>
-      <Level.Item style={{ flexShrink: 1, flexGrow: 0 }}>
-        {chineseLabel}
-      </Level.Item>
+  <Level className="is-mobile react-select-major-label">
+    <Level.Side align="left">
+      <Level.Item>{englishLabel}</Level.Item>
+      <Level.Item>{chineseLabel}</Level.Item>
     </Level.Side>
-    <Level.Side
-      align="right"
-      style={{ marginLeft: "auto", flexWrap: "wrap", flexShrink: 1 }}
-    >
+    <Level.Side align="right">
       {faculties.map((f) => (
-        <Level.Item
-          key={f.value}
-          style={{ flexShrink: 1, flexGrow: 0, marginRight: 0 }}
-        >
+        <Level.Item key={f.value} className="has-tag">
           <Tag
             className="ml-2 has-text-weight-medium"
             color={facultyColor[f.value]}
