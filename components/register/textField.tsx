@@ -10,6 +10,9 @@ interface Props {
   label: string;
   placeholder?: string;
   editable?: boolean;
+  type?: string;
+  pattern?: string | null;
+  required?: boolean;
 }
 
 const TextField: React.FunctionComponent<Props> = ({
@@ -18,22 +21,29 @@ const TextField: React.FunctionComponent<Props> = ({
   label,
   placeholder = "",
   editable = false,
+  type = "text",
+  pattern = null,
+  required = false,
 }: Props) => {
   return (
-    <Field>
-      <Label>{label}</Label>
-      <Control>
-        <Input
-          placeholder={placeholder}
-          value={value}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-            setValue(event.target.value)
-          }
-          disabled={!editable}
-          required
-        />
-      </Control>
-    </Field>
+    <>
+      <Field>
+        <Label>{label}</Label>
+        <Control>
+          <Input
+            placeholder={placeholder}
+            value={value}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+              setValue(event.target.value)
+            }
+            disabled={!editable}
+            type={type}
+            pattern={pattern}
+            required={required}
+          />
+        </Control>
+      </Field>
+    </>
   );
 };
 
@@ -41,6 +51,9 @@ TextField.defaultProps = {
   placeholder: "",
   setValue: () => {},
   editable: false,
+  type: "text",
+  pattern: null,
+  required: false,
 };
 
 export default TextField;

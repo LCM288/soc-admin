@@ -11,12 +11,10 @@ import { Person } from "@/models/Person";
 
 import DOEntryField from "components/register/doEntryField";
 import TextField from "components/register/textField";
-import PhoneField from "components/register/phoneField";
 import CollegeField from "components/register/collegeField";
 import DOGradField from "components/register/doGradField";
 import GenderField from "components/register/genderField";
 import DateField from "components/register/dateField";
-import EmailField from "components/register/emailField";
 import MajorField from "components/register/majorField";
 import Loading from "components/loading";
 import updatePersonMutation from "../apollo/queries/person/updatePerson.gql";
@@ -162,8 +160,23 @@ export default function Register({
               setDateValue={setDob}
               editable
             />
-            <EmailField email={email} setEmail={setEmail} />
-            <PhoneField phone={phone} setPhone={setPhone} />
+            <TextField
+              value={email}
+              setValue={setEmail}
+              label="Email"
+              placeholder="Email address"
+              type="email"
+              editable
+            />
+            <TextField
+              value={phone}
+              setValue={setPhone}
+              label="Phone Number"
+              placeholder="Phone Number"
+              type="tel"
+              pattern="(?:\+[0-9]{2,3}-[0-9]{1,15})|(?:[0-9]{8})"
+              editable
+            />
             <CollegeField
               collegeCode={collegeCode}
               setCollegeCode={setCollegeCode}

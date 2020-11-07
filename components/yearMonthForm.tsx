@@ -29,7 +29,7 @@ const YearMonthForm: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <form className="DayPicker-Caption">
+    <div className="DayPicker-Caption">
       <Select
         name="month"
         onChange={handleChange}
@@ -54,7 +54,7 @@ const YearMonthForm: React.FunctionComponent<Props> = ({
           </option>
         ))}
       </Select>
-    </form>
+    </div>
   );
 };
 
