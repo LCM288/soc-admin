@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Heading } from "react-bulma-components";
 import MemberUntilField from "components/register/memberUntilField";
+import { PreventDefaultForm } from "utils/domEventHelpers";
 
 interface Props {
   sid: string;
@@ -20,26 +21,28 @@ const ApproveModal = ({
   return (
     <Modal show closeOnEsc onClose={onCancel} className="modal-ovrflowing">
       <Modal.Content className="has-background-white box">
-        <form onSubmit={() => onConfirm(memberUntil)}>
-          <Heading className="has-text-centered" size={5}>
-            {`You are going to approve ${englishName}'s (sid: ${sid}) membership.`}
-          </Heading>
-          <MemberUntilField
-            label="Membership Expiration Date"
-            nullLabel="Until Grad"
-            dateValue={memberUntil}
-            setDateValue={setMemberUntil}
-            editable
-          />
-          <div className="is-pulled-right buttons pt-4">
-            <Button type="submit" color="primary">
-              Confirm
-            </Button>
-            <Button color="danger" onClick={onCancel}>
-              Cancel
-            </Button>
-          </div>
-        </form>
+        <PreventDefaultForm onSubmit={() => onConfirm(memberUntil)}>
+          <>
+            <Heading className="has-text-centered" size={5}>
+              {`You are going to approve ${englishName}'s (sid: ${sid}) membership.`}
+            </Heading>
+            <MemberUntilField
+              label="Membership Expiration Date"
+              nullLabel="Until Grad"
+              dateValue={memberUntil}
+              setDateValue={setMemberUntil}
+              editable
+            />
+            <div className="is-pulled-right buttons pt-4">
+              <Button type="submit" color="primary">
+                Confirm
+              </Button>
+              <Button color="danger" onClick={onCancel}>
+                Cancel
+              </Button>
+            </div>
+          </>
+        </PreventDefaultForm>
       </Modal.Content>
     </Modal>
   );

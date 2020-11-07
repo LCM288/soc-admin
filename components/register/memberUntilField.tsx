@@ -43,6 +43,7 @@ const MemberUntilField: React.FunctionComponent<Props> = ({
         dateValue={stringValue}
         setDateValue={setStringValueCallback}
         editable={!isNull && editable}
+        required={!isNull}
         yearRange={[-10, 10]}
       />
       <Checkbox onChange={onNullChange} checked={isNull} disabled={!editable}>
