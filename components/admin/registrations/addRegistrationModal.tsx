@@ -4,7 +4,6 @@ import Loading from "components/loading";
 import { PersonCreationAttributes } from "@/models/Person";
 import { GenderEnum, CollegeEnum } from "@/utils/Person";
 import PromptModal from "components/promptModal";
-import toast from "utils/toast";
 import DOEntryField from "components/register/doEntryField";
 import TextField from "components/register/textField";
 import CollegeField from "components/register/collegeField";
