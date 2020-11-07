@@ -188,7 +188,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
                 Cancel
               </Button>
             </div>
-          </form>{" "}
+          </form>
         </Modal.Content>
         <Loading loading={loading} />
       </Modal>
