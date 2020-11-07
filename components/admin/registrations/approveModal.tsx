@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Modal, Button, Heading, Form } from "react-bulma-components";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { DateTime } from "luxon";
 import YearMonthForm from "components/yearMonthForm";
+import toast from "utils/toast";
 
 interface Props {
   sid: string;
@@ -22,6 +23,16 @@ const ApproveModal = ({
   const [calMonth, setCalMonth] = useState(new Date());
   const [memberUntil, setMemberUntil] = useState<string | undefined>();
   const [memberUntilGrad, setMemberUntilGrad] = useState(true);
+
+  const onApprove = useCallback(() => {
+    if (memberUntilGrad) {
+      onConfirm(undefined);
+    } else if (memberUntil) {
+      onConfirm(memberUntil);
+    } else {
+      toast.danger(`Membership Expiration not Set!`);
+    }
+  }, [onConfirm, memberUntilGrad, memberUntil]);
 
   return (
     <Modal show closeOnEsc onClose={onCancel} className="modal-ovrflowing">
@@ -78,11 +89,7 @@ const ApproveModal = ({
           </Control>
         </Field>
         <div className="is-pulled-right buttons pt-4">
-          <Button
-            type="button"
-            color="primary"
-            onClick={() => onConfirm(memberUntilGrad ? undefined : memberUntil)}
-          >
+          <Button type="button" color="primary" onClick={onApprove}>
             Confirm
           </Button>
           <Button color="danger" onClick={onCancel}>
