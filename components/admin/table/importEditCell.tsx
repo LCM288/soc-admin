@@ -1,9 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Button } from "react-bulma-components";
 import EditPersonModal from "components/admin/table/editPersonModal";
 import { PersonUpdateAttributes } from "@/models/Person";
 import { CellProps } from "react-table";
 import toast from "utils/toast";
+import { StopClickDiv } from "utils/domEventHelpers";
+import useClipped from "utils/useClipped";
 
 interface Props extends CellProps<Record<string, unknown>, string> {
   updateMemberData: (
@@ -19,6 +21,7 @@ const ImportEditCell = ({
 }: Props): React.ReactElement => {
   const [editLoading, setEditLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  useClipped(openModal);
   const onSave = useCallback(
     (person: PersonUpdateAttributes) => {
       if (person.sid.length !== 10) {
@@ -32,28 +35,30 @@ const ImportEditCell = ({
     },
     [row, updateMemberData]
   );
-  const promptEdit = () => {
+  const promptEdit = useCallback(() => {
     setOpenModal(true);
-  };
-  const cancelEdit = () => {
+  }, []);
+  const cancelEdit = useCallback(() => {
     setOpenModal(false);
-  };
+  }, []);
   return (
-    <>
-      {openModal && (
-        <EditPersonModal
-          onSave={onSave}
-          onCancel={cancelEdit}
-          row={row.values}
-          loading={editLoading}
-          title={title}
-          fullyEditable
-        />
-      )}
-      <Button color="info" onClick={promptEdit}>
-        Edit
-      </Button>
-    </>
+    <StopClickDiv>
+      <>
+        {openModal && (
+          <EditPersonModal
+            onSave={onSave}
+            onCancel={cancelEdit}
+            row={row.values}
+            loading={editLoading}
+            title={title}
+            fullyEditable
+          />
+        )}
+        <Button color="info" onClick={promptEdit}>
+          Edit
+        </Button>
+      </>
+    </StopClickDiv>
   );
 };
 

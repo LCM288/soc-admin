@@ -112,11 +112,11 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: "dateOfEntry",
       },
       {
-        Header: "Expected Graduation Date",
+        Header: "Expected Graduation",
         accessor: "expectedGraduationDate",
       },
       {
-        Header: "Type of registration",
+        Header: "Type",
         accessor: "registrationType",
         filter: typeFilter,
         disableSortBy: true,
@@ -126,10 +126,10 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: () => "Registration",
         id: "approve",
         Cell: (cellPrpos: CellProps<Record<string, unknown>, string>) => (
-          <>
+          <div className="buttons">
             <ApproveCell {...cellPrpos} />
             <EditCell {...cellPrpos} />
-          </>
+          </div>
         ),
         disableSortBy: true,
       },
@@ -155,16 +155,6 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  const tableInstance = useRegistrationTable({
-    columns: tableColumns,
-    data: tableData,
-    getRowId: tableGetRowId,
-    autoResetFilters: false,
-    autoResetGlobalFilter: false,
-    autoResetPage: false,
-    initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
-  });
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -180,7 +170,15 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     pageCount,
     setPageSize,
     gotoPage,
-  } = tableInstance;
+  } = useRegistrationTable({
+    columns: tableColumns,
+    data: tableData,
+    getRowId: tableGetRowId,
+    autoResetFilters: false,
+    autoResetGlobalFilter: false,
+    autoResetPage: false,
+    initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
+  });
 
   const [globalFilterInput, setGlobalFilterInput] = useState(globalFilter);
 
@@ -195,10 +193,6 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   const onTypeFilterChange = useAsyncDebounce((value) => {
     setFilter("registrationType", value || undefined);
   }, 500);
-
-  if (data && data !== registrationsData) {
-    setRegistrationsData(data);
-  }
 
   useEffect(() => {
     if (sizes.width < 640) {
@@ -241,7 +235,11 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     } else {
       setHiddenColumns([]);
     }
-  }, [sizes.width, setHiddenColumns]);
+  }, [sizes.width, setHiddenColumns, visibleColumns]);
+
+  if (data && data !== registrationsData) {
+    setRegistrationsData(data);
+  }
 
   if (!registrationsData) {
     if (loading) return <p>loading</p>;
