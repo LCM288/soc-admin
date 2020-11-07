@@ -62,6 +62,13 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
   public async addNewExecutive(
     arg: ExecutiveCreationAttributes
   ): Promise<ExecutiveAttributes> {
+    const executive = await this.store.findOne({
+      where: { sid: arg.sid },
+      raw: true,
+    });
+    if (executive) {
+      throw new Error(`SID ${arg.sid} is an executive already`);
+    }
     return (await this.store.create(arg)).get({ plain: true });
   }
 

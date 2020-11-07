@@ -19,6 +19,7 @@ import PaginationControl from "components/admin/table/paginationControl";
 import useRegistrationTable, {
   RegistrationColumnInstance,
 } from "utils/useRegistrationTable";
+import AddRegistration from "components/admin/registrations/addRegistration";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -345,6 +346,12 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
           pageIndex={pageIndex}
           pageCount={pageCount}
         />
+        <Level>
+          <div />
+          <Level.Side align="right">
+            <AddRegistration />
+          </Level.Side>
+        </Level>
       </>
     );
   }

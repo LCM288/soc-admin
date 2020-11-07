@@ -6,7 +6,7 @@ import { CellProps } from "react-table";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
-import { Table } from "react-bulma-components";
+import { Table, Level } from "react-bulma-components";
 import toast from "utils/toast";
 import executivesQuery from "apollo/queries/executive/executives.gql";
 import ActionsCell from "components/admin/admins/actionsCell";
@@ -126,9 +126,12 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             })}
           </tbody>
         </Table>
-        <div className="is-pulled-right">
-          <AddAdmin executives={executivesData?.executives ?? []} />
-        </div>
+        <Level>
+          <div />
+          <Level.Side align="right">
+            <AddAdmin />
+          </Level.Side>
+        </Level>
       </div>
     );
   }

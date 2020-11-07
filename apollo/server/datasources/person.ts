@@ -9,6 +9,7 @@ import {
   PersonModelAttributes,
   PersonCreationAttributes,
   PersonUpdateAttributes,
+  MemberStatusEnum,
 } from "@/models/Person";
 import { ContextBase } from "@/types/datasources";
 import Sequelize, { Op } from "sequelize";
@@ -129,6 +130,17 @@ export default class PersonAPI extends DataSource<ContextBase> {
   public async addNewPerson(
     arg: PersonCreationAttributes
   ): Promise<PersonModelAttributes> {
+    const person = await this.store.findOne({
+      where: { sid: arg.sid },
+      raw: true,
+    });
+    if (person) {
+      if (person.status === MemberStatusEnum.Unactivated) {
+        throw new Error(`SID ${arg.sid} has a registration already`);
+      } else {
+        throw new Error(`SID ${arg.sid} is a member already`);
+      }
+    }
     return (await this.store.create(arg)).get({ plain: true });
   }
 

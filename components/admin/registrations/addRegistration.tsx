@@ -1,18 +1,18 @@
 import React, { useCallback, useState } from "react";
 import { Button } from "react-bulma-components";
 import { useMutation } from "@apollo/react-hooks";
-import AddAdminModal from "components/admin/admins/addAdminModal";
-import newExecutiveMutation from "apollo/queries/executive/newExecutive.gql";
-import executivesQuery from "apollo/queries/executive/executives.gql";
-import { ExecutiveCreationAttributes } from "@/models/Executive";
+import AddRegistrationModal from "components/admin/registrations/addRegistrationModal";
+import newPersonMutation from "apollo/queries/person/newPerson.gql";
+import registrationsQuery from "apollo/queries/person/registrations.gql";
+import { PersonCreationAttributes } from "@/models/Person";
 import toast from "utils/toast";
 import { StopClickDiv } from "utils/domEventHelpers";
 import useClipped from "utils/useClipped";
 
-const AddAdmin: React.FunctionComponent = () => {
+const AddRegistration: React.FunctionComponent = () => {
   const [loading, setLoading] = useState(false);
-  const [newExecutive] = useMutation(newExecutiveMutation, {
-    refetchQueries: [{ query: executivesQuery }],
+  const [newPerson] = useMutation(newPersonMutation, {
+    refetchQueries: [{ query: registrationsQuery }],
   });
   const [modalOpen, setModalOpen] = useState(false);
   useClipped(modalOpen);
@@ -22,20 +22,16 @@ const AddAdmin: React.FunctionComponent = () => {
   }, []);
 
   const onAdd = useCallback(
-    (executive: ExecutiveCreationAttributes) => {
-      if (executive.sid.length !== 10) {
-        toast.danger("Incorrect sid");
-        return;
-      }
+    (person: PersonCreationAttributes) => {
       setLoading(true);
-      newExecutive({ variables: executive })
+      newPerson({ variables: person })
         .then((payload) => {
-          if (!payload.data?.newExecutive.success) {
+          if (!payload.data?.newPerson.success) {
             throw new Error(
-              payload.data?.newExecutive.message ?? "some error occurs"
+              payload.data?.newPerson.message ?? "some error occurs"
             );
           }
-          toast.success(payload.data.newExecutive.message, {
+          toast.success(payload.data.newPerson.message, {
             position: toast.POSITION.TOP_LEFT,
           });
           setModalOpen(false);
@@ -47,14 +43,14 @@ const AddAdmin: React.FunctionComponent = () => {
           setLoading(false);
         });
     },
-    [newExecutive]
+    [newPerson]
   );
 
   return (
     <StopClickDiv>
       <>
         {modalOpen && (
-          <AddAdminModal
+          <AddRegistrationModal
             onSave={onAdd}
             onClose={() => {
               setModalOpen(false);
@@ -63,11 +59,11 @@ const AddAdmin: React.FunctionComponent = () => {
           />
         )}
         <Button color="primary" onClick={promptAdd}>
-          Add admin
+          Add registration
         </Button>
       </>
     </StopClickDiv>
   );
 };
 
-export default AddAdmin;
+export default AddRegistration;
