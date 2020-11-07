@@ -109,6 +109,7 @@ const AddRegistrationModal: React.FunctionComponent<Props> = ({
               setValue={setSID}
               pattern="^\d{10}$"
               label="Student ID"
+              placeholder="Student ID"
               editable
             />
             <TextField
