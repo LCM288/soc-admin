@@ -8,19 +8,37 @@ import YearMonthForm from "components/yearMonthForm";
 const { Input, Field, Control, Label } = Form;
 
 interface Props {
-  dob: string;
-  setDob: (value: string) => void;
+  label: string;
+  dateValue: string;
+  setDateValue?: (value: string) => void;
+  editable?: boolean;
+  yearRange?: number[];
+  required?: boolean;
 }
 
-const DOBField: React.FunctionComponent<Props> = ({ dob, setDob }: Props) => {
+const DateField: React.FunctionComponent<Props> = ({
+  label,
+  dateValue,
+  setDateValue = () => {},
+  editable = false,
+  yearRange = [-30, 0],
+  required = false,
+}: Props) => {
   const [calMonth, setCalMonth] = useState(new Date());
 
   return (
     <Field>
-      <Label>Date of Birth</Label>
+      <Label>{label}</Label>
       <Control>
         <DayPickerInput
-          component={(props: unknown) => <Input {...props} />}
+          component={(props: unknown) => (
+            <Input
+              {...props}
+              disabled={!editable}
+              required={required}
+              pattern="^\d{4}-\d{2}-\d{2}$"
+            />
+          )}
           inputProps={{ ref: null }}
           classNames={{
             container: "",
@@ -33,10 +51,10 @@ const DOBField: React.FunctionComponent<Props> = ({ dob, setDob }: Props) => {
             const day = DateTime.fromFormat(str, format);
             return day.isValid ? day.toJSDate() : undefined;
           }}
-          value={dob}
+          value={dateValue}
           onDayChange={(date: Date) => {
             const dateTime = DateTime.fromJSDate(date);
-            setDob(dateTime ? dateTime.toISODate() : "");
+            setDateValue(dateTime ? dateTime.toISODate() : "");
           }}
           placeholder="YYYY-MM-DD"
           dayPickerProps={{
@@ -45,6 +63,7 @@ const DOBField: React.FunctionComponent<Props> = ({ dob, setDob }: Props) => {
               <YearMonthForm
                 date={date}
                 onChange={(month: Date) => setCalMonth(month)}
+                yearRange={yearRange}
               />
             ),
           }}
@@ -54,4 +73,11 @@ const DOBField: React.FunctionComponent<Props> = ({ dob, setDob }: Props) => {
   );
 };
 
-export default DOBField;
+DateField.defaultProps = {
+  setDateValue: () => {},
+  editable: false,
+  yearRange: [-30, 0],
+  required: false,
+};
+
+export default DateField;

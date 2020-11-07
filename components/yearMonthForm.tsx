@@ -7,18 +7,20 @@ const { Select } = Form;
 interface Props {
   date: Date;
   onChange: (month: Date) => void;
+  yearRange: number[];
 }
 
 const YearMonthForm: React.FunctionComponent<Props> = ({
   date,
   onChange,
+  yearRange,
 }: Props) => {
-  const yearCount = 30;
+  const [from, to] = yearRange;
   const months = Info.months("long");
 
   const years = Array.from(
-    { length: yearCount + 1 },
-    (_, i) => i + DateTime.local().minus({ year: yearCount }).year
+    { length: to - from + 1 },
+    (_, i) => i + DateTime.local().plus({ year: from }).year
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -27,7 +29,7 @@ const YearMonthForm: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <form className="DayPicker-Caption">
+    <div className="DayPicker-Caption">
       <Select
         name="month"
         onChange={handleChange}
@@ -52,7 +54,7 @@ const YearMonthForm: React.FunctionComponent<Props> = ({
           </option>
         ))}
       </Select>
-    </form>
+    </div>
   );
 };
 
