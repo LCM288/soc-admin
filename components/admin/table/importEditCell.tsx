@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { Button } from "react-bulma-components";
 import EditPersonModal from "components/admin/table/editPersonModal";
 import { PersonUpdateAttributes } from "@/models/Person";
@@ -51,7 +51,7 @@ const ImportEditCell = ({
             row={row.values}
             loading={editLoading}
             title={title}
-            sidEditable
+            fullyEditable
           />
         )}
         <Button color="info" onClick={promptEdit}>

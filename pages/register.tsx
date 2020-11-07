@@ -9,16 +9,12 @@ import { Major } from "@/models/Major";
 import { College } from "@/models/College";
 import { Person } from "@/models/Person";
 
-import ChineseNameField from "components/register/chineseNameField";
 import DOEntryField from "components/register/doEntryField";
-import EnglishNameField from "components/register/englishNameField";
-import PhoneField from "components/register/phoneField";
+import TextField from "components/register/textField";
 import CollegeField from "components/register/collegeField";
 import DOGradField from "components/register/doGradField";
 import GenderField from "components/register/genderField";
-import SIDField from "components/register/sidField";
-import DOBField from "components/register/dobField";
-import EmailField from "components/register/emailField";
+import DateField from "components/register/dateField";
 import MajorField from "components/register/majorField";
 import Loading from "components/loading";
 import updatePersonMutation from "../apollo/queries/person/updatePerson.gql";
@@ -144,16 +140,47 @@ export default function Register({
         <Container>
           <Heading>Register</Heading>
           <form onSubmit={(e) => formSubmit(e)}>
-            <SIDField sid={user?.sid} />
-            <EnglishNameField englishName={user.name} isAdmin={false} />
-            <ChineseNameField
-              chineseName={chineseName}
-              setChineseName={setChineseName}
+            <TextField
+              value={user?.sid}
+              pattern="^\d{10}$"
+              label="Student ID"
+            />
+            <TextField
+              value={user.name}
+              label="English Name"
+              placeholder="English Name as in CU Link Card"
+            />
+            <TextField
+              value={chineseName}
+              setValue={setChineseName}
+              label="Chinese Name"
+              placeholder="Chinese Name as in CU Link Card"
+              editable
             />
             <GenderField gender={gender} setGender={setGender} />
-            <DOBField dob={dob} setDob={setDob} />
-            <EmailField email={email} setEmail={setEmail} />
-            <PhoneField phone={phone} setPhone={setPhone} />
+            <DateField
+              label="Date of Birth"
+              dateValue={dob}
+              setDateValue={setDob}
+              editable
+            />
+            <TextField
+              value={email}
+              setValue={setEmail}
+              label="Email"
+              placeholder="Email address"
+              type="email"
+              editable
+            />
+            <TextField
+              value={phone}
+              setValue={setPhone}
+              label="Phone Number"
+              placeholder="Phone Number"
+              type="tel"
+              pattern="(?:\+[0-9]{2,3}-[0-9]{1,15})|(?:[0-9]{8})"
+              editable
+            />
             <CollegeField
               collegeCode={collegeCode}
               setCollegeCode={setCollegeCode}

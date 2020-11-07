@@ -1,15 +1,12 @@
 import React, { useState, useCallback } from "react";
 import Loading from "components/loading";
-import ChineseNameField from "components/register/chineseNameField";
+import TextField from "components/register/textField";
 import DOEntryField from "components/register/doEntryField";
-import EnglishNameField from "components/register/englishNameField";
-import PhoneField from "components/register/phoneField";
 import CollegeField from "components/register/collegeField";
 import DOGradField from "components/register/doGradField";
 import GenderField from "components/register/genderField";
-import SIDField from "components/register/sidField";
-import DOBField from "components/register/dobField";
-import EmailField from "components/register/emailField";
+import DateField from "components/register/dateField";
+import MemberUntilField from "components/register/memberUntilField";
 import MajorField from "components/register/majorField";
 import { Modal, Section, Button, Heading } from "react-bulma-components";
 import {
@@ -24,7 +21,7 @@ interface Props {
   row: Record<string, unknown>;
   loading: boolean;
   title: string;
-  sidEditable?: boolean;
+  fullyEditable?: boolean;
 }
 
 const EditPersonModal: React.FunctionComponent<Props> = ({
@@ -33,7 +30,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
   row,
   loading,
   title,
-  sidEditable = false,
+  fullyEditable = false,
 }: Props) => {
   const [sid, setSID] = useState(row.sid as string);
   const [englishName, setEnglishName] = useState(
@@ -52,6 +49,12 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
   const [doGrad, setDoGrad] = useState(
     (row.expectedGraduationDate ?? "") as string
   );
+  const [memberSince, setMemberSince] = useState(
+    (row.memberSince ?? "") as string
+  );
+  const [memberUntil, setMemberUntil] = useState(
+    row.memberUntil ? (row.memberUntil as string) : null
+  );
   const onReset = useCallback(() => {
     setSID(row.sid as string);
     setEnglishName((row.englishName ?? "") as string);
@@ -64,6 +67,8 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
     setMajorCode((row.major ?? "") as string);
     setDoEntry((row.dateOfEntry ?? "") as string);
     setDoGrad((row.expectedGraduationDate ?? "") as string);
+    setMemberSince((row.memberSince ?? "") as string);
+    setMemberUntil(row.memberUntil ? (row.memberUntil as string) : null);
   }, [row]);
   const onConfirm = useCallback(() => {
     onSave({
@@ -78,6 +83,8 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
       major: majorCode || undefined,
       dateOfEntry: doEntry || undefined,
       expectedGraduationDate: doGrad || undefined,
+      memberSince: memberSince || undefined,
+      memberUntil: memberUntil || undefined,
     });
   }, [
     onSave,
@@ -92,46 +99,96 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
     majorCode,
     doEntry,
     doGrad,
+    memberSince,
+    memberUntil,
   ]);
   return (
     <>
       <Modal show closeOnEsc={false} showClose={false} onClose={onCancel}>
         <Modal.Content className="has-background-white box">
-          <Heading className="has-text-centered">Edit {title}</Heading>
-          <Section className="pt-4">
-            <SIDField sid={sid} setSID={setSID} editable={sidEditable} />
-            <EnglishNameField
-              englishName={englishName}
-              setEnglishName={setEnglishName}
-              isAdmin
-            />
-            <ChineseNameField
-              chineseName={chineseName}
-              setChineseName={setChineseName}
-            />
-            <GenderField gender={gender} setGender={setGender} />
-            <DOBField dob={dob} setDob={setDob} />
-            <EmailField email={email} setEmail={setEmail} />
-            <PhoneField phone={phone} setPhone={setPhone} />
-            <CollegeField
-              collegeCode={collegeCode}
-              setCollegeCode={setCollegeCode}
-            />
-            <MajorField majorCode={majorCode} setMajorCode={setMajorCode} />
-            <DOEntryField doEntry={doEntry} setDoEntry={setDoEntry} />
-            <DOGradField doGrad={doGrad} setDoGrad={setDoGrad} />
-          </Section>
-          <div className="is-pulled-right buttons">
-            <Button type="button" onClick={onReset}>
-              Reset
-            </Button>
-            <Button type="button" color="primary" onClick={onConfirm}>
-              Confirm
-            </Button>
-            <Button type="button" color="danger" onClick={onCancel}>
-              Cancel
-            </Button>
-          </div>
+          <form onSubmit={onConfirm}>
+            <Heading className="has-text-centered">Edit {title}</Heading>
+            <Section className="pt-4">
+              <TextField
+                value={sid}
+                setValue={setSID}
+                label="Student ID"
+                editable={fullyEditable}
+                pattern="^\d{10}$"
+                required
+              />
+              <TextField
+                value={englishName}
+                setValue={setEnglishName}
+                label="English Name"
+                placeholder="English Name as in CU Link Card"
+                editable
+                required
+              />
+              <TextField
+                value={chineseName}
+                setValue={setChineseName}
+                label="Chinese Name"
+                placeholder="Chinese Name as in CU Link Card"
+                editable
+              />
+              <GenderField gender={gender} setGender={setGender} />
+              <DateField
+                label="Date of Birth"
+                dateValue={dob}
+                setDateValue={setDob}
+                editable
+              />
+              <TextField
+                value={email}
+                setValue={setEmail}
+                label="Email"
+                placeholder="Email address"
+                type="email"
+                editable
+              />
+              <TextField
+                value={phone}
+                setValue={setPhone}
+                label="Phone Number"
+                placeholder="Phone Number"
+                type="tel"
+                pattern="(?:\+[0-9]{2,3}-[0-9]{1,15})|(?:[0-9]{8})"
+                editable
+              />
+              <CollegeField
+                collegeCode={collegeCode}
+                setCollegeCode={setCollegeCode}
+              />
+              <MajorField majorCode={majorCode} setMajorCode={setMajorCode} />
+              <DOEntryField doEntry={doEntry} setDoEntry={setDoEntry} />
+              <DOGradField doGrad={doGrad} setDoGrad={setDoGrad} />
+              <DateField
+                label="Member Since"
+                dateValue={memberSince}
+                setDateValue={setMemberSince}
+                editable={fullyEditable}
+              />
+              <MemberUntilField
+                label="Member Until"
+                nullLabel="Until Grad"
+                dateValue={memberUntil}
+                setDateValue={setMemberUntil}
+                editable={fullyEditable}
+              />
+            </Section>
+            <div className="is-pulled-right buttons">
+              <Button type="button" onClick={onReset}>
+                Reset
+              </Button>
+              <Button type="submit" color="primary">
+                Confirm
+              </Button>
+              <Button type="button" color="danger" onClick={onCancel}>
+                Cancel
+              </Button>
+            </div>
+          </form>
         </Modal.Content>
         <Loading loading={loading} />
       </Modal>
@@ -140,7 +197,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
 };
 
 EditPersonModal.defaultProps = {
-  sidEditable: false,
+  fullyEditable: false,
 };
 
 export default EditPersonModal;
