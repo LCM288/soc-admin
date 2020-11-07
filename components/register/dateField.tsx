@@ -32,7 +32,12 @@ const DateField: React.FunctionComponent<Props> = ({
       <Control>
         <DayPickerInput
           component={(props: unknown) => (
-            <Input {...props} disabled={!editable} required={required} />
+            <Input
+              {...props}
+              disabled={!editable}
+              required={required}
+              pattern="^\d{4}-\d{2}-\d{2}$"
+            />
           )}
           inputProps={{ ref: null }}
           classNames={{
