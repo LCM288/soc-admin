@@ -17,7 +17,8 @@ interface Props {
 
 interface Labels {
   value: string;
-  label: string;
+  chineseLabel: string;
+  englishLabel: string;
   faculties: { value: string; label: string }[];
 }
 
@@ -34,14 +35,32 @@ const facultyColor: { [index: string]: string } = {
   IDM: "white",
 };
 
-const formatMajorOptionLabel = ({ label, faculties }: Labels) => (
-  <Level style={{ flexWrap: "wrap" }}>
-    <Level.Side align="left">
-      <Level.Item>{label}</Level.Item>
+const formatMajorOptionLabel = ({
+  chineseLabel,
+  englishLabel,
+  faculties,
+}: Labels) => (
+  <Level style={{ flexWrap: "wrap" }} className="is-mobile">
+    <Level.Side
+      align="left"
+      style={{ marginRight: "auto", flexWrap: "wrap", flexShrink: 1 }}
+    >
+      <Level.Item style={{ flexShrink: 1, flexGrow: 0 }}>
+        {englishLabel}
+      </Level.Item>
+      <Level.Item style={{ flexShrink: 1, flexGrow: 0 }}>
+        {chineseLabel}
+      </Level.Item>
     </Level.Side>
-    <Level.Side align="right" style={{ marginLeft: "auto" }}>
+    <Level.Side
+      align="right"
+      style={{ marginLeft: "auto", flexWrap: "wrap", flexShrink: 1 }}
+    >
       {faculties.map((f) => (
-        <Level.Item key={f.value}>
+        <Level.Item
+          key={f.value}
+          style={{ flexShrink: 1, flexGrow: 0, marginRight: 0 }}
+        >
           <Tag
             className="ml-2 has-text-weight-medium"
             color={facultyColor[f.value]}
@@ -64,11 +83,12 @@ const MajorField: React.FunctionComponent<Props> = ({
       (m: Major) => m.code === majorCode
     );
     if (!foundMajor) {
-      return { value: "", label: "", faculties: [] };
+      return { value: "", chineseLabel: "", englishLabel: "", faculties: [] };
     }
     return {
       value: foundMajor.code,
-      label: `${foundMajor.englishName} ${foundMajor.chineseName}`,
+      chineseLabel: foundMajor.chineseName,
+      englishLabel: foundMajor.englishName,
       faculties: (foundMajor.faculties as Faculty[]).map((f: Faculty) => ({
         value: f.code,
         label: `${f.englishName} ${f.chineseName}`,
@@ -76,13 +96,16 @@ const MajorField: React.FunctionComponent<Props> = ({
     };
   }, [majorsQueryResult, majorCode]);
   const majors = useMemo(() => {
-    return majorsQueryResult.data?.majors.map((a: Major) => ({
-      value: a.code,
-      label: `${a.englishName} ${a.chineseName}`,
-      faculties: (a.faculties as Faculty[]).map((f: Faculty) => ({
-        value: f.code,
-        label: `${f.englishName} ${f.chineseName}`,
-      })),
+    return majorsQueryResult.data?.majors.map((majorProgram: Major) => ({
+      value: majorProgram.code,
+      chineseLabel: majorProgram.chineseName,
+      englishLabel: majorProgram.englishName,
+      faculties: (majorProgram.faculties as Faculty[]).map(
+        (faculty: Faculty) => ({
+          value: faculty.code,
+          label: `${faculty.englishName} ${faculty.chineseName}`,
+        })
+      ),
     }));
   }, [majorsQueryResult]);
   if (majorsQueryResult.error) {
@@ -105,6 +128,25 @@ const MajorField: React.FunctionComponent<Props> = ({
             setMajorCode(input.value);
           }}
           formatOptionLabel={formatMajorOptionLabel}
+          styles={{
+            input: (provided) => ({
+              ...provided,
+              top: "auto",
+              position: "absolute",
+            }),
+            valueContainer: (provided) => ({
+              ...provided,
+              position: "relative",
+              minHeight: "38px",
+            }),
+            singleValue: (provided) => ({
+              ...provided,
+              position: "relative",
+              top: "calc(50% + 2px)",
+              transform: "none",
+              whiteSpace: "normal",
+            }),
+          }}
         />
         <input
           tabIndex={-1}

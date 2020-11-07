@@ -68,7 +68,7 @@ const AddAdmin: React.FunctionComponent<Props> = ({ executives }: Props) => {
           />
         )}
         <Button color="primary" onClick={promptAdd}>
-          Add person
+          Add admin
         </Button>
       </>
     </StopClickDiv>
