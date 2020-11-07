@@ -129,7 +129,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         <Level>
           <div />
           <Level.Side align="right">
-            <AddAdmin executives={executivesData?.executives ?? []} />
+            <AddAdmin />
           </Level.Side>
         </Level>
       </div>

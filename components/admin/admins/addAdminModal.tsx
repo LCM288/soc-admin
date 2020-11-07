@@ -9,7 +9,6 @@ import {
 import Loading from "components/loading";
 import { ExecutiveCreationAttributes } from "@/models/Executive";
 import PromptModal from "components/promptModal";
-import toast from "utils/toast";
 import { useLazyQuery } from "@apollo/client";
 import personQuery from "apollo/queries/person/person.gql";
 import { PersonAttributes } from "@/models/Person";
@@ -20,14 +19,12 @@ import { PreventDefaultForm } from "utils/domEventHelpers";
 import useClipped from "utils/useClipped";
 
 interface Props {
-  executives: Array<Record<string, unknown>>;
   onSave: (person: ExecutiveCreationAttributes) => void;
   onClose: () => void;
   loading: boolean;
 }
 
 const AddAdminModal: React.FunctionComponent<Props> = ({
-  executives,
   onSave,
   onClose,
   loading,
@@ -77,13 +74,9 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
   }, [onSave, sid, nickname, pos]);
 
   const promptConfirm = useCallback(() => {
-    if (executives.map((executive) => executive.sid).includes(sid)) {
-      toast.danger(`${sid} is already an executive`);
-      return;
-    }
     getMember({ variables: { sid } });
     setOpenConfirmModal(true);
-  }, [sid, getMember, executives]);
+  }, [sid, getMember]);
   const cancelConfirm = useCallback(() => {
     setOpenConfirmModal(false);
   }, []);

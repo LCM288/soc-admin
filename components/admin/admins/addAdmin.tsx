@@ -9,11 +9,7 @@ import toast from "utils/toast";
 import { StopClickDiv } from "utils/domEventHelpers";
 import useClipped from "utils/useClipped";
 
-interface Props {
-  executives: Array<Record<string, unknown>>;
-}
-
-const AddAdmin: React.FunctionComponent<Props> = ({ executives }: Props) => {
+const AddAdmin: React.FunctionComponent = () => {
   const [loading, setLoading] = useState(false);
   const [newExecutive] = useMutation(newExecutiveMutation, {
     refetchQueries: [{ query: executivesQuery }],
@@ -59,7 +55,6 @@ const AddAdmin: React.FunctionComponent<Props> = ({ executives }: Props) => {
       <>
         {modalOpen && (
           <AddAdminModal
-            executives={executives}
             onSave={onAdd}
             onClose={() => {
               setModalOpen(false);
