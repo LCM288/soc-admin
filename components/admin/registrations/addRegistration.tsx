@@ -23,10 +23,6 @@ const AddRegistration: React.FunctionComponent = () => {
 
   const onAdd = useCallback(
     (person: PersonCreationAttributes) => {
-      if (person.sid.length !== 10) {
-        toast.danger("Incorrect sid");
-        return;
-      }
       setLoading(true);
       newPerson({ variables: person })
         .then((payload) => {

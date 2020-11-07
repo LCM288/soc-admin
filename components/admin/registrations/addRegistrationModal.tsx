@@ -78,22 +78,8 @@ const AddRegistrationModal: React.FunctionComponent<Props> = ({
   ]);
 
   const promptConfirm = useCallback(() => {
-    const dateOfEntry = validDate(doEntry);
-    const expectedGraduationDate = validDate(doGrad);
-    if (!collegeCode) {
-      toast.danger("Invalid College");
-      return;
-    }
-    if (!dateOfEntry) {
-      toast.danger("Invalid Date of Entry");
-      return;
-    }
-    if (!expectedGraduationDate) {
-      toast.danger("Invalid Expected Graduation Date");
-      return;
-    }
     setOpenConfirmModal(true);
-  }, [validDate, collegeCode, doEntry, doGrad]);
+  }, []);
   const cancelConfirm = useCallback(() => {
     setOpenConfirmModal(false);
   }, []);
