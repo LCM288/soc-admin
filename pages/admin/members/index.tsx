@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import useResizeAware from "react-resize-aware";
-import { Row } from "react-table";
+import { Row, CellProps } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
 import Layout from "layouts/admin";
@@ -109,7 +109,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: "dateOfEntry",
       },
       {
-        Header: "Expected Graduation Date",
+        Header: "Expected Graduation",
         accessor: "expectedGraduationDate",
       },
       {
@@ -122,7 +122,9 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Action",
         accessor: () => "Member",
         id: "edit",
-        Cell: EditCell,
+        Cell: (cellProps: CellProps<Record<string, unknown>, string>) => (
+          <EditCell {...cellProps} />
+        ),
         disableSortBy: true,
       },
     ],

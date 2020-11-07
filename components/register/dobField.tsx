@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Form } from "react-bulma-components";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { DateTime } from "luxon";
-import YearMonthForm from "../yearMonthForm";
+import YearMonthForm from "components/yearMonthForm";
 
 const { Input, Field, Control, Label } = Form;
 

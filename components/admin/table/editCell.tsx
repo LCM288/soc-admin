@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { CellProps } from "react-table";
 import { Button } from "react-bulma-components";
 import EditPersonModal from "components/admin/table/editPersonModal";
@@ -8,16 +8,18 @@ import { useMutation } from "@apollo/react-hooks";
 import membersQuery from "apollo/queries/person/members.gql";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import toast from "utils/toast";
+import { StopClickDiv } from "utils/domEventHelpers";
+import useClipped from "utils/useClipped";
 
-const EditCell = ({
-  row,
-  value: title,
-}: CellProps<Record<string, unknown>, string>): React.ReactElement => {
+type Props = CellProps<Record<string, unknown>, string>;
+
+const EditCell = ({ row, value: title }: Props): React.ReactElement => {
   const [updatePerson] = useMutation(updatePersonMutation, {
     refetchQueries: [{ query: membersQuery }, { query: registrationsQuery }],
   });
   const [editLoading, setEditLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  useClipped(openModal);
   const onSave = useCallback(
     (person: PersonUpdateAttributes) => {
       setEditLoading(true);
@@ -42,27 +44,29 @@ const EditCell = ({
     },
     [updatePerson]
   );
-  const promptEdit = () => {
+  const promptEdit = useCallback(() => {
     setOpenModal(true);
-  };
-  const cancelEdit = () => {
+  }, []);
+  const cancelEdit = useCallback(() => {
     setOpenModal(false);
-  };
+  }, []);
   return (
-    <>
-      {openModal && (
-        <EditPersonModal
-          onSave={onSave}
-          onCancel={cancelEdit}
-          row={row.values}
-          loading={editLoading}
-          title={title}
-        />
-      )}
-      <Button color="info" onClick={promptEdit}>
-        Edit
-      </Button>
-    </>
+    <StopClickDiv>
+      <>
+        {openModal && (
+          <EditPersonModal
+            onSave={onSave}
+            onCancel={cancelEdit}
+            row={row.values}
+            loading={editLoading}
+            title={title}
+          />
+        )}
+        <Button color="info" onClick={promptEdit}>
+          Edit
+        </Button>
+      </>
+    </StopClickDiv>
   );
 };
 

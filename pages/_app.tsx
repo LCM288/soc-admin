@@ -4,6 +4,7 @@ import "bulma/bulma.sass";
 import "styles/select-fix.css";
 import "styles/toast-fix.css";
 import "styles/markdown-edit.css";
+import "styles/modal/modal-overflowing.css";
 import "react-day-picker/lib/style.css";
 import "easymde/dist/easymde.min.css";
 import { AppProps } from "next/app";
@@ -31,17 +32,38 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   credentials: "same-origin",
 });
 
+export const ClipCountContext = React.createContext({
+  count: 0,
+  add: () => {},
+  remove: () => {},
+});
+
 function App({ Component, pageProps }: AppProps): React.ReactElement {
   const Layout =
     ((Component as unknown) as {
       Layout: React.ComponentType;
     }).Layout ?? React.Fragment;
+  const [clipCount, setClipCount] = React.useState(0);
+  const addClipCount = React.useCallback(() => {
+    setClipCount(clipCount + 1);
+  }, [clipCount]);
+  const removeClipCount = React.useCallback(() => {
+    setClipCount(clipCount - 1);
+  }, [clipCount]);
   return (
     <>
       <ApolloProvider client={client}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <ClipCountContext.Provider
+          value={{
+            count: clipCount,
+            add: addClipCount,
+            remove: removeClipCount,
+          }}
+        >
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ClipCountContext.Provider>
       </ApolloProvider>
       <ToastContainer closeButton={BulmaCloseBtn} />
     </>
