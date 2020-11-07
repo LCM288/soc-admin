@@ -11,14 +11,16 @@ interface Props {
   label: string;
   dateValue: string;
   setDateValue?: (value: string) => void;
-  editable: boolean;
+  editable?: boolean;
+  yearRange?: number[];
 }
 
 const DateField: React.FunctionComponent<Props> = ({
   label,
   dateValue,
   setDateValue = () => {},
-  editable = true,
+  editable = false,
+  yearRange = [-30, 0],
 }: Props) => {
   const [calMonth, setCalMonth] = useState(new Date());
 
@@ -54,7 +56,7 @@ const DateField: React.FunctionComponent<Props> = ({
               <YearMonthForm
                 date={date}
                 onChange={(month: Date) => setCalMonth(month)}
-                yearRange={[-30, 0]}
+                yearRange={yearRange}
               />
             ),
           }}
@@ -66,6 +68,8 @@ const DateField: React.FunctionComponent<Props> = ({
 
 DateField.defaultProps = {
   setDateValue: () => {},
+  editable: false,
+  yearRange: [-30, 0],
 };
 
 export default DateField;
