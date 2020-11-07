@@ -113,6 +113,14 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: "expectedGraduationDate",
       },
       {
+        Header: "Member Since",
+        accessor: "memberSince",
+      },
+      {
+        Header: "Member Until",
+        accessor: "memberUntil",
+      },
+      {
         Header: "Status",
         accessor: "status",
         filter: statusFilter,
@@ -279,6 +287,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       setIsFileProcessing(false);
     }
   }, [rows, onExport]);
+
   useEffect(() => {
     if (sizes.width < 640) {
       setHiddenColumns([
@@ -290,6 +299,8 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         "phone",
         "dateOfEntry",
         "expectedGraduationDate",
+        "memberSince",
+        "memberUntil",
       ]);
     } else if (sizes.width < 768) {
       setHiddenColumns([
@@ -300,6 +311,8 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         "phone",
         "dateOfEntry",
         "expectedGraduationDate",
+        "memberSince",
+        "memberUntil",
       ]);
     } else if (sizes.width < 1024) {
       setHiddenColumns([
