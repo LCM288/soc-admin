@@ -12,6 +12,7 @@ import DOGradField from "components/register/doGradField";
 import GenderField from "components/register/genderField";
 import DateField from "components/register/dateField";
 import MajorField from "components/register/majorField";
+import { PreventDefaultForm } from "utils/domEventHelpers";
 import useClipped from "utils/useClipped";
 
 interface Props {
@@ -77,10 +78,6 @@ const AddRegistrationModal: React.FunctionComponent<Props> = ({
   ]);
 
   const promptConfirm = useCallback(() => {
-    if (sid.length !== 10) {
-      toast.danger("Incorrect sid");
-      return;
-    }
     const dateOfEntry = validDate(doEntry);
     const expectedGraduationDate = validDate(doGrad);
     if (!collegeCode) {
@@ -96,7 +93,7 @@ const AddRegistrationModal: React.FunctionComponent<Props> = ({
       return;
     }
     setOpenConfirmModal(true);
-  }, [validDate, sid, collegeCode, doEntry, doGrad]);
+  }, [validDate, collegeCode, doEntry, doGrad]);
   const cancelConfirm = useCallback(() => {
     setOpenConfirmModal(false);
   }, []);
@@ -104,67 +101,71 @@ const AddRegistrationModal: React.FunctionComponent<Props> = ({
   return (
     <Modal show closeOnEsc={false} onClose={onClose}>
       <Modal.Content className="has-background-white box">
-        <Heading className="has-text-centered">New Registration</Heading>
-        <TextField
-          value={sid}
-          setValue={setSID}
-          pattern="^\d{10}$"
-          label="Student ID"
-          editable
-        />
-        <TextField
-          value={englishName}
-          setValue={setEnglishName}
-          label="English Name"
-          placeholder="English Name as in CU Link Card"
-          editable
-        />
-        <TextField
-          value={chineseName}
-          setValue={setChineseName}
-          label="Chinese Name"
-          placeholder="Chinese Name as in CU Link Card"
-          editable
-        />
-        <GenderField gender={gender} setGender={setGender} />
-        <DateField
-          label="Date of Birth"
-          dateValue={dob}
-          setDateValue={setDob}
-          editable
-        />
-        <TextField
-          value={email}
-          setValue={setEmail}
-          label="Email"
-          placeholder="Email address"
-          type="email"
-          editable
-        />
-        <TextField
-          value={phone}
-          setValue={setPhone}
-          label="Phone Number"
-          placeholder="Phone Number"
-          type="tel"
-          pattern="(?:\+[0-9]{2,3}-[0-9]{1,15})|(?:[0-9]{8})"
-          editable
-        />
-        <CollegeField
-          collegeCode={collegeCode}
-          setCollegeCode={setCollegeCode}
-        />
-        <MajorField majorCode={majorCode} setMajorCode={setMajorCode} />
-        <DOEntryField doEntry={doEntry} setDoEntry={setDoEntry} />
-        <DOGradField doGrad={doGrad} setDoGrad={setDoGrad} />
-        <div className="is-pulled-right buttons pt-4">
-          <Button color="primary" onClick={promptConfirm}>
-            Add
-          </Button>
-          <Button color="danger" onClick={onClose}>
-            Cancel
-          </Button>
-        </div>
+        <PreventDefaultForm onSubmit={promptConfirm}>
+          <>
+            <Heading className="has-text-centered">New Registration</Heading>
+            <TextField
+              value={sid}
+              setValue={setSID}
+              pattern="^\d{10}$"
+              label="Student ID"
+              editable
+            />
+            <TextField
+              value={englishName}
+              setValue={setEnglishName}
+              label="English Name"
+              placeholder="English Name as in CU Link Card"
+              editable
+            />
+            <TextField
+              value={chineseName}
+              setValue={setChineseName}
+              label="Chinese Name"
+              placeholder="Chinese Name as in CU Link Card"
+              editable
+            />
+            <GenderField gender={gender} setGender={setGender} />
+            <DateField
+              label="Date of Birth"
+              dateValue={dob}
+              setDateValue={setDob}
+              editable
+            />
+            <TextField
+              value={email}
+              setValue={setEmail}
+              label="Email"
+              placeholder="Email address"
+              type="email"
+              editable
+            />
+            <TextField
+              value={phone}
+              setValue={setPhone}
+              label="Phone Number"
+              placeholder="Phone Number"
+              type="tel"
+              pattern="(?:\+[0-9]{2,3}-[0-9]{1,15})|(?:[0-9]{8})"
+              editable
+            />
+            <CollegeField
+              collegeCode={collegeCode}
+              setCollegeCode={setCollegeCode}
+            />
+            <MajorField majorCode={majorCode} setMajorCode={setMajorCode} />
+            <DOEntryField doEntry={doEntry} setDoEntry={setDoEntry} />
+            <DOGradField doGrad={doGrad} setDoGrad={setDoGrad} />
+            <div className="is-pulled-right buttons pt-4">
+              <Button color="primary" type="submit">
+                Add
+              </Button>
+              <Button color="danger" onClick={onClose}>
+                Cancel
+              </Button>
+            </div>
+          </>
+        </PreventDefaultForm>
       </Modal.Content>
       {openConfirmModal && (
         <PromptModal
