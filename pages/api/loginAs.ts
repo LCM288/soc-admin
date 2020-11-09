@@ -7,7 +7,7 @@ export default async (
   res: NextApiResponse
 ): Promise<void> => {
   if (process.env.NODE_ENV !== "development") {
-    res.status(404).end();
+    res.status(404).end("404 Not Found");
     return;
   }
   const { sid, name } = req.query;
