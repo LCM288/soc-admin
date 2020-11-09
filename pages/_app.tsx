@@ -9,7 +9,7 @@ import "styles/react-select-label.scss";
 import "react-day-picker/lib/style.css";
 import "easymde/dist/easymde.min.css";
 import { AppProps } from "next/app";
-import React from "react";
+import React, { useRef, useCallback } from "react";
 import { ToastContainer } from "react-toastify";
 import {
   ApolloClient,
@@ -34,7 +34,6 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 
 export const ClipCountContext = React.createContext({
-  count: 0,
   add: () => {},
   remove: () => {},
 });
@@ -44,19 +43,26 @@ function App({ Component, pageProps }: AppProps): React.ReactElement {
     ((Component as unknown) as {
       Layout: React.ComponentType;
     }).Layout ?? React.Fragment;
-  const [clipCount, setClipCount] = React.useState(0);
-  const addClipCount = React.useCallback(() => {
-    setClipCount(clipCount + 1);
-  }, [clipCount]);
-  const removeClipCount = React.useCallback(() => {
-    setClipCount(clipCount - 1);
-  }, [clipCount]);
+
+  const clipCount = useRef(0);
+  const addClipCount = useCallback(() => {
+    if (clipCount.current === 0) {
+      document.scrollingElement?.classList.add("is-clipped");
+    }
+    clipCount.current += 1;
+  }, []);
+  const removeClipCount = useCallback(() => {
+    clipCount.current -= 1;
+    if (clipCount.current === 0) {
+      document.scrollingElement?.classList.remove("is-clipped");
+    }
+  }, []);
+
   return (
     <>
       <ApolloProvider client={client}>
         <ClipCountContext.Provider
           value={{
-            count: clipCount,
             add: addClipCount,
             remove: removeClipCount,
           }}
