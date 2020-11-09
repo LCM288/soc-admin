@@ -114,8 +114,8 @@ export default function Register({
           toast.danger(err.message, {
             position: toast.POSITION.TOP_LEFT,
           });
-        })
-        .finally(() => setIsSubmitting(false));
+          setIsSubmitting(false);
+        });
     },
     [user, personQueryResult.data?.person, newPerson, updatePerson, router]
   );
