@@ -1,5 +1,10 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useRef } from "react";
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useMemo,
+} from "react";
 import { useRouter } from "next/router";
 import { User } from "@/types/datasources";
 import { useQuery, useMutation } from "@apollo/react-hooks";
@@ -7,7 +12,7 @@ import toast from "utils/toast";
 import { Button, Section, Container, Heading } from "react-bulma-components";
 import { Major } from "@/models/Major";
 import { College } from "@/models/College";
-import { Person } from "@/models/Person";
+import { PersonModelAttributes } from "@/models/Person";
 
 import DOEntryField from "components/register/doEntryField";
 import TextField from "components/register/textField";
@@ -21,8 +26,6 @@ import { PreventDefaultForm } from "utils/domEventHelpers";
 import updatePersonMutation from "../apollo/queries/person/updatePerson.gql";
 import newPersonMutation from "../apollo/queries/person/newPerson.gql";
 import personQuery from "../apollo/queries/person/person.gql";
-import collegesQuery from "../apollo/queries/college/colleges.gql";
-import majorsQuery from "../apollo/queries/major/majors.gql";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
@@ -32,17 +35,11 @@ export default function Register({
   user: User | null;
 }): React.ReactElement {
   const router = useRouter();
-  const majorsQueryResult = useQuery(majorsQuery);
-  const collegesQueryResult = useQuery(collegesQuery);
   const personQueryResult = useQuery(personQuery, {
     variables: { sid: user?.sid },
   });
-  const [newPerson] = useMutation(newPersonMutation, {
-    onCompleted: () => router.push("/"),
-  });
-  const [updatePerson] = useMutation(updatePersonMutation, {
-    onCompleted: () => router.push("/"),
-  });
+  const [newPerson] = useMutation(newPersonMutation);
+  const [updatePerson] = useMutation(updatePersonMutation);
 
   const [chineseName, setChineseName] = useState("");
   const [gender, setGender] = useState("None");
@@ -56,32 +53,9 @@ export default function Register({
   const personLoaded = useRef(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // TODO: toast
-  if (
-    majorsQueryResult.error ||
-    collegesQueryResult.error ||
-    personQueryResult.error
-  ) {
-    const error =
-      majorsQueryResult.error ||
-      collegesQueryResult.error ||
-      personQueryResult.error;
-    toast.danger(error?.message, {
-      position: toast.POSITION.TOP_LEFT,
-    });
-  }
-  if (
-    majorsQueryResult.loading ||
-    collegesQueryResult.loading ||
-    personQueryResult.loading
-  ) {
-    return <div>loading</div>;
-  }
-  if (!user) {
-    return <div>no user</div>;
-  }
-  const { person } = personQueryResult.data as { person?: Person };
-  const setData = () => {
+  const setData = useCallback(() => {
+    const person =
+      personQueryResult.data?.person ?? (null as PersonModelAttributes | null);
     setChineseName(person?.chineseName ?? "");
     setGender(person?.gender ?? "None");
     setDob(person?.dateOfBirth ?? "");
@@ -91,20 +65,36 @@ export default function Register({
     setMajorCode((person?.major as Major | undefined)?.code ?? "");
     setDoEntry(person?.dateOfEntry ?? "");
     setDoGrad(person?.expectedGraduationDate ?? "");
-  };
-  if (!personLoaded.current && person) {
-    setData();
-  }
-  personLoaded.current = true;
-  const validDate = (date: string) => {
-    return /^\d{4}-\d{2}-\d{2}$/g.test(date) ? date : null;
-  };
-  const onSubmit = () => {
-    setIsSubmitting(true);
-    const options = {
-      variables: {
-        sid: user.sid,
-        englishName: user.name,
+  }, [personQueryResult.data?.person, user?.sid]);
+
+  useEffect(() => {
+    if (!personLoaded.current && personQueryResult.data?.person) {
+      setData();
+      personLoaded.current = true;
+    }
+  }, [personQueryResult.data?.person, setData]);
+
+  /* eslint-disable @typescript-eslint/no-shadow */
+  const onSubmit = useCallback(
+    ({
+      chineseName,
+      gender,
+      dob,
+      email,
+      phone,
+      collegeCode,
+      majorCode,
+      doEntry,
+      doGrad,
+    }) => {
+      /* eslint-enable @typescript-eslint/no-shadow */
+      const validDate = (date: string) => {
+        return /^\d{4}-\d{2}-\d{2}$/g.test(date) ? date : null;
+      };
+      setIsSubmitting(true);
+      const variables = {
+        sid: user?.sid,
+        englishName: user?.name,
         chineseName,
         gender,
         dateOfBirth: validDate(dob),
@@ -114,32 +104,56 @@ export default function Register({
         major: majorCode,
         dateOfEntry: validDate(doEntry),
         expectedGraduationDate: validDate(doGrad),
-      },
-    };
-    if (person) {
-      updatePerson(options)
+      };
+      const mutation = personQueryResult.data?.person
+        ? updatePerson
+        : newPerson;
+      mutation({ variables })
+        .then(() => router.push("/"))
         .catch((err) => {
           toast.danger(err.message, {
             position: toast.POSITION.TOP_LEFT,
           });
         })
         .finally(() => setIsSubmitting(false));
-    } else {
-      newPerson(options)
-        .catch((err) => {
-          toast.danger(err.message, {
-            position: toast.POSITION.TOP_LEFT,
-          });
-        })
-        .finally(() => setIsSubmitting(false));
-    }
-  };
+    },
+    [user, personQueryResult.data?.person, newPerson, updatePerson, router]
+  );
+
+  const submitButtonText = useMemo(
+    () => (personQueryResult.data?.person ? "Update" : "Register"),
+    [personQueryResult.data?.person]
+  );
+
+  if (personQueryResult.error) {
+    toast.danger(personQueryResult.error.message, {
+      position: toast.POSITION.TOP_LEFT,
+    });
+  }
+
+  if (!user) {
+    return <a href="/login">Please login first </a>;
+  }
   return (
     <div>
       <Section>
         <Container>
           <Heading>Register</Heading>
-          <PreventDefaultForm onSubmit={onSubmit}>
+          <PreventDefaultForm
+            onSubmit={() =>
+              onSubmit({
+                chineseName,
+                gender,
+                dob,
+                email,
+                phone,
+                collegeCode,
+                majorCode,
+                doEntry,
+                doGrad,
+              })
+            }
+          >
             <>
               <TextField
                 value={user?.sid}
@@ -190,11 +204,11 @@ export default function Register({
               <DOEntryField doEntry={doEntry} setDoEntry={setDoEntry} />
               <DOGradField doGrad={doGrad} setDoGrad={setDoGrad} />
               <Button.Group>
-                <Button type="button" onClick={() => setData()}>
+                <Button type="button" onClick={setData}>
                   Reset
                 </Button>
                 <Button color="primary" type="submit" disabled={isSubmitting}>
-                  {person ? "Update" : "Register"}
+                  {submitButtonText}
                 </Button>
               </Button.Group>
             </>
