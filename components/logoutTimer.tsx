@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import printf from "printf";
 import { useRouter } from "next/router";
 import { DateTime } from "luxon";
@@ -11,10 +11,21 @@ const LogoutTimer: React.FunctionComponent<Props> = ({ time }: Props) => {
   const [now, setNow] = useState(DateTime.local());
   const router = useRouter();
 
-  if (time < now) {
-    router.push("/");
-    return <div>00:00</div>;
-  }
+  useEffect(() => {
+    const { millisecond } = DateTime.local();
+    const disposable = setTimeout(() => {
+      setNow(DateTime.local());
+    }, 1000 - millisecond);
+    return () => {
+      clearTimeout(disposable);
+    };
+  });
+
+  useEffect(() => {
+    if (time < now) {
+      router.push("/");
+    }
+  });
 
   // drop milliseconds
   const { minutes, seconds } = time.diff(now, [
@@ -22,10 +33,6 @@ const LogoutTimer: React.FunctionComponent<Props> = ({ time }: Props) => {
     "seconds",
     "milliseconds",
   ]);
-
-  setTimeout(() => {
-    setNow(DateTime.local());
-  }, 1000);
 
   return <div>{printf("%02d:%02d", minutes, seconds)}</div>;
 };
