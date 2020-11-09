@@ -1,36 +1,41 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { DateTime } from "luxon";
 import Layout from "layouts/admin";
+import Link from "next/link";
 import { ServerSideProps } from "utils/getServerSideProps";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
 export default function Index({ user }: ServerSideProps): React.ReactElement {
-  const getGreetingTime = () => {
+  const greeting = useMemo(() => {
     // ref: https://gist.github.com/James1x0/8443042
-    let g = null; // return g
 
     const splitMoring = 5; // 24hr time to split the afternoon
     const splitAfternoon = 12; // 24hr time to split the afternoon
     const splitEvening = 17; // 24hr time to split the evening
     const currentHour = DateTime.local().hour;
 
-    if (currentHour >= splitAfternoon && currentHour <= splitEvening) {
-      g = "Good afternoon";
-    } else if (currentHour >= splitEvening || currentHour <= splitMoring) {
-      g = "Good evening";
-    } else {
-      g = "Good morning";
-    }
+    const userName = user?.name ?? "";
 
-    return g;
-  };
+    if (splitAfternoon <= currentHour && currentHour <= splitEvening) {
+      return `Good afternoon, ${userName}`;
+    }
+    if (currentHour <= splitMoring || splitEvening <= currentHour) {
+      return `Good evening, ${userName}`;
+    }
+    return `Good morning, ${userName}`;
+  }, [user]);
 
   if (user) {
     return (
-      <div>
-        {getGreetingTime()}, {user.name}
-      </div>
+      <>
+        <div className="mb-2">{greeting}</div>
+        <Link href="/">
+          <a href="/" className="button is-info">
+            Member Page
+          </a>
+        </Link>
+      </>
     );
   }
   return <a href="/login">Please login first </a>;

@@ -1,23 +1,35 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { DateTime } from "luxon";
-import { useRouter } from "next/router";
-import { Person } from "@/models/Person";
+import Link from "next/link";
+import {
+  PersonModelAttributes,
+  statusOf,
+  MemberStatusEnum,
+} from "@/utils/Person";
 import { useQuery } from "@apollo/react-hooks";
 import { Button, Section, Container, Heading } from "react-bulma-components";
 import { ServerSideProps } from "utils/getServerSideProps";
 import ReactMarkdown from "react-markdown/with-html";
 import toast from "utils/toast";
-import executiveQuery from "apollo/queries/executive/executive.gql";
 import ExecutiveSetup from "components/executiveSetup";
-import { SOC_NAME, WELCOME_MESSAGE, INACTIVE_MESSAGE } from "utils/socSettings";
+import {
+  SOC_NAME,
+  WELCOME_MESSAGE,
+  NON_REGISTERED_MESSAGE,
+  ACTIVATED_MESSAGE,
+  UNACTIVATED_MESSAGE,
+  EXPIRED_MESSAGE,
+} from "utils/socSettings";
 import personQuery from "../apollo/queries/person/person.gql";
 import countExecutivesQuery from "../apollo/queries/executive/countExecutives.gql";
 import socSettingsQuery from "../apollo/queries/socSetting/socSettings.gql";
 
 export { getServerSideProps } from "utils/getServerSideProps";
 
-export default function Index({ user }: ServerSideProps): React.ReactElement {
-  const router = useRouter();
+export default function Index({
+  user,
+  isAdmin,
+}: ServerSideProps): React.ReactElement {
   const personQueryResult = useQuery(personQuery, {
     variables: { sid: user?.sid },
     fetchPolicy: "network-only",
@@ -28,151 +40,172 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
   const countExecutivesQueryResult = useQuery(countExecutivesQuery, {
     fetchPolicy: "network-only",
   });
-  const executiveQueryResult = useQuery(executiveQuery, {
-    variables: { sid: user?.sid },
-  });
 
-  const logout = () => {
-    router.push("/api/logout");
-  };
-  const register = () => {
-    router.push("/register");
-  };
-  const isActiveMember = (person: Person) => {
-    if (!person.memberSince) return false;
-    if (!person.memberUntil) {
-      return DateTime.fromISO(person.expectedGraduationDate) > DateTime.local();
-    }
-    return DateTime.fromISO(person.memberUntil) > DateTime.local();
-  };
-
-  const memberStatus = (person: Person | null) => {
-    // TODO: get strings from socSetting for payment methods
-    if (!person) {
-      return (
-        <div>
-          <p>You have not registered</p>
-          <ReactMarkdown
-            source={
-              socSettingsQueryResult.data.socSettings.find(
-                (s: { key: string; value: string }) =>
-                  s.key === WELCOME_MESSAGE.key
-              )?.value
-            }
-            escapeHtml={false}
-          />
-        </div>
-      );
-    }
-    if (isActiveMember(person)) {
-      return <div> You are a member </div>;
-    }
-    return (
-      <div>
-        <p> You are not active member </p>
-        <ReactMarkdown
-          source={
-            socSettingsQueryResult.data.socSettings.find(
-              (s: { key: string; value: string }) =>
-                s.key === INACTIVE_MESSAGE.key
-            )?.value
-          }
-          escapeHtml={false}
-        />
-      </div>
-    );
-  };
-  const getGreetingTime = () => {
+  const greeting = useMemo(() => {
     // ref: https://gist.github.com/James1x0/8443042
-    let g = null; // return g
 
     const splitMoring = 5; // 24hr time to split the afternoon
     const splitAfternoon = 12; // 24hr time to split the afternoon
     const splitEvening = 17; // 24hr time to split the evening
     const currentHour = DateTime.local().hour;
 
-    if (currentHour >= splitAfternoon && currentHour <= splitEvening) {
-      g = "Good afternoon";
-    } else if (currentHour >= splitEvening || currentHour <= splitMoring) {
-      g = "Good evening";
-    } else {
-      g = "Good morning";
+    const userName = user?.name ?? "";
+
+    if (splitAfternoon <= currentHour && currentHour <= splitEvening) {
+      return `Good afternoon, ${userName}`;
     }
+    if (currentHour <= splitMoring || splitEvening <= currentHour) {
+      return `Good evening, ${userName}`;
+    }
+    return `Good morning, ${userName}`;
+  }, [user]);
 
-    return g;
-  };
+  const memberStatus = useMemo(() => {
+    const person = (personQueryResult.data?.person ||
+      null) as PersonModelAttributes | null;
+    if (!person) {
+      return "Non-registered";
+    }
+    return statusOf(person);
+  }, [personQueryResult.data]);
 
-  if (executiveQueryResult.data?.executive) {
-    router.replace("/admin");
-    return <></>;
-  }
+  const registerButtonText = useMemo(() => {
+    switch (memberStatus) {
+      case MemberStatusEnum.Activated:
+        return "";
+      case MemberStatusEnum.Expired:
+        return "Renew";
+      default:
+        return "Register";
+    }
+  }, [memberStatus]);
 
-  if (
-    countExecutivesQueryResult.loading ||
-    personQueryResult.loading ||
-    socSettingsQueryResult.loading ||
-    executiveQueryResult.loading
-  )
-    return <p>loading</p>;
+  const customMessage = useMemo(() => {
+    let messageKey: string;
+    switch (memberStatus) {
+      case MemberStatusEnum.Activated:
+        messageKey = ACTIVATED_MESSAGE.key;
+        break;
+      case MemberStatusEnum.Unactivated:
+        messageKey = UNACTIVATED_MESSAGE.key;
+        break;
+      case MemberStatusEnum.Expired:
+        messageKey = EXPIRED_MESSAGE.key;
+        break;
+      default:
+        messageKey = NON_REGISTERED_MESSAGE.key;
+        break;
+    }
+    return socSettingsQueryResult.data?.socSettings.find(
+      (socSetting: { key: string; value: string }) =>
+        socSetting.key === messageKey
+    )?.value;
+  }, [memberStatus, socSettingsQueryResult.data]);
+
+  const welcomeMessage = useMemo(
+    () =>
+      socSettingsQueryResult.data?.socSettings.find(
+        (s: { key: string; value: string }) => s.key === WELCOME_MESSAGE.key
+      )?.value,
+    [socSettingsQueryResult.data?.socSettings]
+  );
+
+  const socName = useMemo(
+    () =>
+      socSettingsQueryResult.data?.socSettings.find(
+        (s: { key: string; value: string }) => s.key === SOC_NAME.key
+      )?.value,
+    [socSettingsQueryResult.data?.socSettings]
+  );
+
+  const isLoading = useMemo(
+    () =>
+      countExecutivesQueryResult.loading ||
+      personQueryResult.loading ||
+      socSettingsQueryResult.loading,
+    [
+      countExecutivesQueryResult.loading,
+      personQueryResult.loading,
+      socSettingsQueryResult.loading,
+    ]
+  );
+
   if (
     countExecutivesQueryResult.error ||
     personQueryResult.error ||
-    socSettingsQueryResult.error ||
-    executiveQueryResult.error
+    socSettingsQueryResult.error
   ) {
-    const error =
-      countExecutivesQueryResult.error ||
-      personQueryResult.error ||
-      socSettingsQueryResult.error ||
-      executiveQueryResult.error;
-    toast.danger(error?.message, {
-      position: toast.POSITION.TOP_LEFT,
-    });
+    const errors = [
+      countExecutivesQueryResult.error,
+      personQueryResult.error,
+      socSettingsQueryResult.error,
+    ].filter((error) => error);
+    errors.forEach((error) =>
+      toast.danger(error?.message, {
+        position: toast.POSITION.TOP_LEFT,
+      })
+    );
+    return <p>Error</p>;
   }
-  if (!countExecutivesQueryResult.data.countExecutives && user) {
+
+  if (!user) {
+    return <a href="/login">Please login first </a>;
+  }
+
+  if (countExecutivesQueryResult.data?.countExecutives === 0) {
     return (
       <div>
         <Section>
           <Container>
             <Heading>Set youself as an executive.</Heading>
-            <div>
-              {getGreetingTime()}, {user.name}
-            </div>
+            <div>{greeting}</div>
             <ExecutiveSetup user={user} />
           </Container>
         </Section>
       </div>
     );
   }
-  if (user) {
-    return (
-      <div>
-        <Section>
-          <Container>
-            <Heading>
-              {
-                socSettingsQueryResult.data.socSettings.find(
-                  (s: { key: string; value: string }) => s.key === SOC_NAME.key
-                )?.value
-              }
-            </Heading>
-            <Heading>
-              {personQueryResult.data ? "Welcome Back" : "Hello"}
-            </Heading>
-            <p>
-              {getGreetingTime()}, {user.name}
-            </p>
-            {memberStatus(personQueryResult.data.person)}
-            <Button.Group>
-              <Button onClick={logout}>logout</Button>
-              <Button color="primary" onClick={register}>
-                register
-              </Button>
-            </Button.Group>
-          </Container>
-        </Section>
-      </div>
-    );
-  }
-  return <a href="/login">Please login first </a>;
+
+  return (
+    <div>
+      <Section>
+        <Container>
+          {isLoading && <Heading>Loading...</Heading>}
+          {socName && <Heading>{socName}</Heading>}
+          <div className="mb-2">{greeting}</div>
+          {welcomeMessage && (
+            <div className="mb-2">
+              <ReactMarkdown source={welcomeMessage} escapeHtml={false} />
+            </div>
+          )}
+          {customMessage && (
+            <div className="mb-2">
+              <ReactMarkdown source={customMessage} escapeHtml={false} />
+            </div>
+          )}
+          <Button.Group>
+            <Link href="/api/logout">
+              <a href="/api/logout" className="button">
+                Logout
+              </a>
+            </Link>
+            {registerButtonText && (
+              <Link href="/register">
+                <a href="/register" className="button is-primary">
+                  {registerButtonText}
+                </a>
+              </Link>
+            )}
+            {isAdmin && (
+              <Link href="/admin">
+                <a href="/admin" className="button is-info">
+                  Admin Portal
+                </a>
+              </Link>
+            )}
+          </Button.Group>
+        </Container>
+      </Section>
+    </div>
+  );
 }
