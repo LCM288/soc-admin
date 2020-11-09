@@ -17,7 +17,7 @@ import EditCell from "components/admin/table/editCell";
 import TableRow from "components/admin/table/tableRow";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
 
-export { getServerSideProps } from "utils/getServerSideProps";
+export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
 const { Input, Field, Label, Control, Select } = Form;
 

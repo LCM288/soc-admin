@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import Layout from "layouts/admin";
 import { ServerSideProps } from "utils/getServerSideProps";
 
-export { getServerSideProps } from "utils/getServerSideProps";
+export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
 export default function Index({ user }: ServerSideProps): React.ReactElement {
   const getGreetingTime = () => {

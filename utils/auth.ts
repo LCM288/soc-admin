@@ -46,6 +46,21 @@ export const getSettingWithTime = async (
 };
 
 /**
+ * Check whether the user is an executive
+ * @async
+ * @param user - The user object to be checked
+ * @returns whether the user is an executive
+ */
+export const isAdmin = async (user: User | null): Promise<boolean> => {
+  if (!user) {
+    return false;
+  }
+  return Boolean(
+    await executiveStore.findOne({ where: { sid: user.sid }, raw: true })
+  );
+};
+
+/**
  * Get the number of executives from the database
  * @async
  * @returns Number of executives

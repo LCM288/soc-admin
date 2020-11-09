@@ -21,7 +21,7 @@ import useRegistrationTable, {
 } from "utils/useRegistrationTable";
 import AddRegistration from "components/admin/registrations/addRegistration";
 
-export { getServerSideProps } from "utils/getServerSideProps";
+export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
 const { Input, Field, Label, Control, Select } = Form;
 

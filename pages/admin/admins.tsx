@@ -12,7 +12,7 @@ import executivesQuery from "apollo/queries/executive/executives.gql";
 import ActionsCell from "components/admin/admins/actionsCell";
 import AddAdmin from "components/admin/admins/addAdmin";
 
-export { getServerSideProps } from "utils/getServerSideProps";
+export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
 const getSortDirectionIndicatior = (column: AdminColumnInstance): string => {
   if (column.isSorted) {

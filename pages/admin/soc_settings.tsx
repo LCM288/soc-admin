@@ -12,7 +12,7 @@ import toast from "utils/toast";
 import socSettingsQuery from "apollo/queries/socSetting/socSettings.gql";
 import allSocSettings from "utils/socSettings";
 
-export { getServerSideProps } from "utils/getServerSideProps";
+export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
 const mergeByKey = (
   a1: Record<string, string>[],

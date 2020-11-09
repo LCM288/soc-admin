@@ -16,6 +16,8 @@ import initClientKeysMutation from "apollo/queries/socSetting/initClientKeys.gql
 
 const { Input, Field, Control, Label } = Form;
 
+export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
+
 const Authentication = (): React.ReactElement => {
   const router = useRouter();
   const [

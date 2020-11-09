@@ -26,7 +26,7 @@ import ImportEditCell from "components/admin/table/importEditCell";
 import TableRow from "components/admin/table/tableRow";
 import Loading from "components/loading";
 
-export { getServerSideProps } from "utils/getServerSideProps";
+export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
 const { InputFile, Input, Field, Label, Control, Select } = Form;
 
