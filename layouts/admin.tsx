@@ -68,7 +68,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
       />
       <div ref={navBarRef}>
         <Navbar
-          color="primary"
+          color="info"
           fixed="top"
           active={isActive}
           onClick={() => {
