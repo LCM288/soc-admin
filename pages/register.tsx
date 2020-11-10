@@ -109,7 +109,24 @@ export default function Register({
         ? updatePerson
         : newPerson;
       mutation({ variables })
-        .then(() => router.push("/"))
+        .then((payload) => {
+          if (
+            !payload.data?.newPerson?.success &&
+            !payload.data?.updatePerson?.success
+          ) {
+            throw new Error(
+              payload.data?.newPerson?.message ??
+                payload.data?.updatePerson?.message ??
+                "Some error occurred"
+            );
+          }
+          toast.success(
+            payload.data?.newPerson?.message ??
+              payload.data?.updatePerson?.message ??
+              "Successful Operation"
+          );
+          router.push("/");
+        })
         .catch((err) => {
           toast.danger(err.message, {
             position: toast.POSITION.TOP_LEFT,
