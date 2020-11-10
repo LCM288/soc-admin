@@ -1,13 +1,10 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React, { useMemo } from "react";
-import { Form } from "react-bulma-components";
-import ReactSelect from "react-select";
+import React, { useMemo, useCallback } from "react";
+import { Level } from "react-bulma-components";
 import { College } from "@/models/College";
 import { useQuery } from "@apollo/react-hooks";
 import toast from "utils/toast";
 import collegesQuery from "apollo/queries/college/colleges.gql";
-
-const { Field, Control, Label } = Form;
+import SelectField from "components/register/selectField";
 
 interface Props {
   collegeCode: string;
@@ -19,56 +16,73 @@ const CollegeField: React.FunctionComponent<Props> = ({
   setCollegeCode,
 }: Props) => {
   const collegesQueryResult = useQuery(collegesQuery);
-  const college = useMemo(() => {
-    const foundCollege = collegesQueryResult.data?.colleges.find(
-      (c: College) => c.code === collegeCode
-    );
-    if (!foundCollege) {
-      return { value: "", label: "" };
-    }
-    return {
-      value: foundCollege.code,
-      label: `${foundCollege.englishName} ${foundCollege.chineseName}`,
-    };
-  }, [collegesQueryResult, collegeCode]);
-  const colleges = useMemo(() => {
-    return collegesQueryResult.data?.colleges.map((a: College) => ({
-      value: a.code,
-      label: `${a.englishName} ${a.chineseName}`,
-    }));
-  }, [collegesQueryResult]);
+
+  interface CollegeOption {
+    value: string;
+    chineseLabel: string;
+    englishLabel: string;
+  }
+
+  const collegeOpions: CollegeOption[] = useMemo(
+    () =>
+      collegesQueryResult.data?.colleges.map(
+        ({
+          code: value,
+          englishName: englishLabel,
+          chineseName: chineseLabel,
+        }: College) => ({
+          value,
+          chineseLabel,
+          englishLabel,
+        })
+      ) ?? [],
+    [collegesQueryResult.data?.colleges]
+  );
+
+  const selectedCollege = useMemo(
+    () =>
+      collegeOpions.find(({ value }) => value === collegeCode) ?? {
+        value: "",
+        label: "",
+      },
+    [collegeOpions, collegeCode]
+  );
+
+  const formatCollegeOptionLabel = useCallback(
+    ({ chineseLabel, englishLabel }: CollegeOption) => (
+      <Level className="is-mobile react-select-college-label">
+        <Level.Side align="left">
+          <Level.Item>{englishLabel}</Level.Item>
+          <Level.Item>{chineseLabel}</Level.Item>
+        </Level.Side>
+        <div />
+      </Level>
+    ),
+    []
+  );
+
+  const onChange = useCallback(
+    (input: CollegeOption) => setCollegeCode(input.value),
+    [setCollegeCode]
+  );
+
   if (collegesQueryResult.error) {
     toast.danger(collegesQueryResult.error.message, {
       position: toast.POSITION.TOP_LEFT,
     });
   }
-  if (collegesQueryResult.loading) {
-    return <div>loading</div>;
-  }
 
   return (
-    <Field>
-      <Label>College</Label>
-      <Control>
-        <div>
-          <ReactSelect
-            value={college}
-            options={colleges}
-            onChange={(input: { value: string; label: string }): void => {
-              setCollegeCode(input.value);
-            }}
-          />
-          <input
-            tabIndex={-1}
-            autoComplete="off"
-            className="hidden-input"
-            value={collegeCode}
-            onChange={() => {}}
-            required
-          />
-        </div>
-      </Control>
-    </Field>
+    <SelectField
+      label="College"
+      selectedOption={selectedCollege}
+      options={collegeOpions}
+      inputValue={collegeCode}
+      onChange={onChange}
+      formatOptionLabel={formatCollegeOptionLabel}
+      isLoading={collegesQueryResult.loading}
+      required
+    />
   );
 };
 

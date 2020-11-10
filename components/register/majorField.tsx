@@ -38,7 +38,7 @@ const MajorField: React.FunctionComponent<Props> = ({
           })
         ),
       })) ?? [],
-    [majorsQueryResult]
+    [majorsQueryResult.data?.majors]
   );
 
   const selectedMajor = useMemo(
