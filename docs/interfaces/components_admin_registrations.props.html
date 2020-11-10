@@ -84,10 +84,9 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_registrations.props.html#englishname" class="tsd-kind-icon">english<wbr>Name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_registrations.props.html#oncancel" class="tsd-kind-icon">on<wbr>Cancel</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_registrations.props.html#onconfirm" class="tsd-kind-icon">on<wbr>Confirm</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_registrations.props.html#sid" class="tsd-kind-icon">sid</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_registrations.props.html#loading" class="tsd-kind-icon">loading</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_registrations.props.html#onclose" class="tsd-kind-icon">on<wbr>Close</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_registrations.props.html#onsave" class="tsd-kind-icon">on<wbr>Save</a></li>
 							</ul>
 						</section>
 					</div>
@@ -96,22 +95,22 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="englishname" class="tsd-anchor"></a>
-					<h3>english<wbr>Name</h3>
-					<div class="tsd-signature tsd-kind-icon">english<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="loading" class="tsd-anchor"></a>
+					<h3>loading</h3>
+					<div class="tsd-signature tsd-kind-icon">loading<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/99cb158/components/admin/registrations/approveModal.tsx#L10">components/admin/registrations/approveModal.tsx:10</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/components/admin/registrations/addRegistrationModal.tsx#L20">components/admin/registrations/addRegistrationModal.tsx:20</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="oncancel" class="tsd-anchor"></a>
-					<h3>on<wbr>Cancel</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Cancel<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<a name="onclose" class="tsd-anchor"></a>
+					<h3>on<wbr>Close</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Close<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/99cb158/components/admin/registrations/approveModal.tsx#L12">components/admin/registrations/approveModal.tsx:12</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/components/admin/registrations/addRegistrationModal.tsx#L19">components/admin/registrations/addRegistrationModal.tsx:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -131,12 +130,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="onconfirm" class="tsd-anchor"></a>
-					<h3>on<wbr>Confirm</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Confirm<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>memberUntil<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<a name="onsave" class="tsd-anchor"></a>
+					<h3>on<wbr>Save</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Save<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>person<span class="tsd-signature-symbol">: </span><a href="../modules/person.html#personcreationattributes-1" class="tsd-signature-type">PersonCreationAttributes</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/99cb158/components/admin/registrations/approveModal.tsx#L11">components/admin/registrations/approveModal.tsx:11</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/components/admin/registrations/addRegistrationModal.tsx#L18">components/admin/registrations/addRegistrationModal.tsx:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -144,14 +143,14 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>memberUntil<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>person<span class="tsd-signature-symbol">: </span><a href="../modules/person.html#personcreationattributes-1" class="tsd-signature-type">PersonCreationAttributes</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
 											<li>
-												<h5>memberUntil: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
+												<h5>person: <a href="../modules/person.html#personcreationattributes-1" class="tsd-signature-type">PersonCreationAttributes</a></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -160,16 +159,6 @@
 							</li>
 						</ul>
 					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="sid" class="tsd-anchor"></a>
-					<h3>sid</h3>
-					<div class="tsd-signature tsd-kind-icon">sid<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/99cb158/components/admin/registrations/approveModal.tsx#L9">components/admin/registrations/approveModal.tsx:9</a></li>
-						</ul>
-					</aside>
 				</section>
 			</section>
 		</div>
@@ -222,7 +211,7 @@
 						<a href="../modules/components_admin_table.html">components\admin\table</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/components_register.html">components\register</a>
+						<a href="../modules/components_fields.html">components\fields</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/layouts.html">layouts</a>
@@ -238,6 +227,9 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/pages_api.html">pages\api</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/pages_member.html">pages\member</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/tests.html">tests</a>
@@ -261,38 +253,29 @@
 						<a href="components_admin_registrations.props.html" class="tsd-kind-icon">Props</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="components_admin_registrations.props.html#englishname" class="tsd-kind-icon">english<wbr>Name</a>
+								<a href="components_admin_registrations.props.html#loading" class="tsd-kind-icon">loading</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="components_admin_registrations.props.html#oncancel" class="tsd-kind-icon">on<wbr>Cancel</a>
+								<a href="components_admin_registrations.props.html#onclose" class="tsd-kind-icon">on<wbr>Close</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="components_admin_registrations.props.html#onconfirm" class="tsd-kind-icon">on<wbr>Confirm</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="components_admin_registrations.props.html#sid" class="tsd-kind-icon">sid</a>
+								<a href="components_admin_registrations.props.html#onsave" class="tsd-kind-icon">on<wbr>Save</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
+						<a href="components_admin_registrations.props-1.html" class="tsd-kind-icon">Props</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/components_admin_registrations.html#props-1" class="tsd-kind-icon">Props</a>
+						<a href="../modules/components_admin_registrations.html#props-2" class="tsd-kind-icon">Props</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/components_admin_registrations.html#checkbox" class="tsd-kind-icon">Checkbox</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="../modules/components_admin_registrations.html#addregistration" class="tsd-kind-icon">Add<wbr>Registration</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/components_admin_registrations.html#control" class="tsd-kind-icon">Control</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/components_admin_registrations.html#field" class="tsd-kind-icon">Field</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/components_admin_registrations.html#input" class="tsd-kind-icon">Input</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/components_admin_registrations.html#label" class="tsd-kind-icon">Label</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="../modules/components_admin_registrations.html#addregistrationmodal" class="tsd-kind-icon">Add<wbr>Registration<wbr>Modal</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="../modules/components_admin_registrations.html#approvecell" class="tsd-kind-icon">Approve<wbr>Cell</a>
