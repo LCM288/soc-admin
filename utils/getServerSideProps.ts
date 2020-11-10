@@ -7,12 +7,12 @@ export interface ServerSideProps {
   isAdmin: boolean;
 }
 
-export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (
+export const getMemberPageServerSideProps: GetServerSideProps<ServerSideProps> = async (
   ctx
 ) => {
   const user = await getUserAndRefreshToken(ctx);
   if (!user) {
-    return { redirect: { permanent: false, destination: "/login" } };
+    return { redirect: { permanent: false, destination: "/" } };
   }
   return {
     props: { user, isAdmin: await isAdmin(user) }, // will be passed to the page component as props
@@ -20,11 +20,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (
 };
 
 export const getAdminPageServerSideProps: GetServerSideProps = async (ctx) => {
-  const { props } = (await getServerSideProps(ctx)) as {
-    props?: ServerSideProps;
-  };
-  if (!props?.isAdmin) {
+  const result = await getMemberPageServerSideProps(ctx);
+  if (!(result as { props: ServerSideProps }).props?.isAdmin) {
     return { notFound: true };
   }
-  return { props };
+  return result;
 };

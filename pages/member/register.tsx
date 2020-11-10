@@ -23,11 +23,11 @@ import DateField from "components/register/dateField";
 import MajorField from "components/register/majorField";
 import Loading from "components/loading";
 import { PreventDefaultForm } from "utils/domEventHelpers";
-import updatePersonMutation from "../apollo/queries/person/updatePerson.gql";
-import newPersonMutation from "../apollo/queries/person/newPerson.gql";
-import personQuery from "../apollo/queries/person/person.gql";
+import updatePersonMutation from "apollo/queries/person/updatePerson.gql";
+import newPersonMutation from "apollo/queries/person/newPerson.gql";
+import personQuery from "apollo/queries/person/person.gql";
 
-export { getServerSideProps } from "utils/getServerSideProps";
+export { getMemberPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
 export default function Register({
   user,
@@ -125,7 +125,7 @@ export default function Register({
               payload.data?.updatePerson?.message ??
               "Successful Operation"
           );
-          router.push("/");
+          router.push("/member");
         })
         .catch((err) => {
           toast.danger(err.message, {
@@ -149,7 +149,7 @@ export default function Register({
   }
 
   if (!user) {
-    return <a href="/login">Please login first </a>;
+    return <a href="/">Please login first </a>;
   }
   return (
     <div>

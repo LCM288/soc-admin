@@ -30,8 +30,8 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
     return (
       <>
         <div className="mb-2">{greeting}</div>
-        <Link href="/">
-          <a href="/" className="button is-warning">
+        <Link href="/member">
+          <a href="/member" className="button is-warning">
             Member Page
           </a>
         </Link>
