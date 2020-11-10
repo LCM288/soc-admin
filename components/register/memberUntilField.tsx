@@ -23,10 +23,17 @@ const MemberUntilField: React.FunctionComponent<Props> = ({
   const [isNull, setIsNull] = useState(dateValue === null);
   const [stringValue, setStringValue] = useState((dateValue ?? "") as string);
 
-  const onNullChange = () => {
-    setIsNull(!isNull);
-    if (isNull) setDateValue(null);
-  };
+  const onNullChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.checked) {
+        setDateValue(null);
+        setIsNull(true);
+      } else {
+        setIsNull(false);
+      }
+    },
+    [setDateValue]
+  );
 
   const setStringValueCallback = useCallback(
     (string: string) => {
