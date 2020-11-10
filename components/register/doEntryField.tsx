@@ -1,39 +1,25 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React, { useMemo } from "react";
-import { Form, Tag } from "react-bulma-components";
-import ReactSelect from "react-select";
+import React, { useMemo, useCallback } from "react";
+import { Tag } from "react-bulma-components";
 import { DateTime } from "luxon";
-
-const { Field, Control, Label } = Form;
+import SelectField from "components/register/selectField";
 
 interface Props {
   doEntry: string;
   setDoEntry: (value: string) => void;
 }
 
-interface Option {
-  value: string;
-  label: string;
-  month: string;
-}
-
-const formatOptionLabel = ({ label, month }: Option) => (
-  <div className="is-flex">
-    <div>{label}</div>
-    {month && (
-      <Tag className="ml-2" color="info">
-        {month}
-      </Tag>
-    )}
-  </div>
-);
-
 const DOEntryField: React.FunctionComponent<Props> = ({
   doEntry,
   setDoEntry,
 }: Props) => {
-  const termStarts = useMemo<Option[]>(() => {
-    const calcTermStart = (yearDiff: number) => {
+  interface DOEntryOption {
+    value: string;
+    label: string;
+    month: string;
+  }
+
+  const termOptions: DOEntryOption[] = useMemo(() => {
+    const calcTermStart = (yearDiff: number): DOEntryOption[] => {
       const year = yearDiff + DateTime.local().year;
       return [
         {
@@ -53,7 +39,7 @@ const DOEntryField: React.FunctionComponent<Props> = ({
       .flat();
   }, []);
 
-  const termStart = useMemo<Option>(() => {
+  const selectedTerm: DOEntryOption = useMemo(() => {
     if (/^\d{4}-0(1|9)-01$/.test(doEntry)) {
       const [year, month] = doEntry.split("-").map((s) => parseInt(s, 10));
       if (month === 1) {
@@ -76,30 +62,35 @@ const DOEntryField: React.FunctionComponent<Props> = ({
     };
   }, [doEntry]);
 
+  const formatTermOptionLabel = useCallback(
+    ({ label, month }: DOEntryOption) => (
+      <div className="is-flex">
+        <div>{label}</div>
+        {month && (
+          <Tag className="ml-2" color="info">
+            {month}
+          </Tag>
+        )}
+      </div>
+    ),
+    []
+  );
+
+  const onChange = useCallback(
+    (input: DOEntryOption) => setDoEntry(input.value),
+    [setDoEntry]
+  );
+
   return (
-    <Field>
-      <Label>Year of Entry</Label>
-      <Control>
-        <div>
-          <ReactSelect
-            value={termStart}
-            options={termStarts}
-            onChange={(input: Option): void => {
-              setDoEntry(input.value);
-            }}
-            formatOptionLabel={formatOptionLabel}
-          />
-          <input
-            tabIndex={-1}
-            autoComplete="off"
-            className="hidden-input"
-            value={doEntry}
-            onChange={() => {}}
-            required
-          />
-        </div>
-      </Control>
-    </Field>
+    <SelectField
+      label="Year of Entry"
+      selectedOption={selectedTerm}
+      options={termOptions}
+      inputValue={doEntry}
+      onChange={onChange}
+      formatOptionLabel={formatTermOptionLabel}
+      required
+    />
   );
 };
 
