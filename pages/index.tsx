@@ -184,8 +184,8 @@ export default function Index({
             </div>
           )}
           <Button.Group>
-            <Link href="/api/logout">
-              <a href="/api/logout" className="button">
+            <Link href="/logout">
+              <a href="/logout" className="button">
                 Logout
               </a>
             </Link>

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
 import toast from "utils/toast";
 
 import { Button, Form } from "react-bulma-components";
 import { User } from "@/types/datasources";
 import { useMutation } from "@apollo/react-hooks";
+import Link from "next/link";
 import newExecutiveMutation from "../apollo/queries/executive/newExecutive.gql";
 
 const { Input, Field, Control, Label } = Form;
@@ -14,8 +14,6 @@ interface Props {
 }
 
 const ExecutiveSetup: React.FunctionComponent<Props> = ({ user }: Props) => {
-  const router = useRouter();
-
   const [
     newExecutive,
     { loading: newExecutiveMutationLoading, error: newExecutiveMutationError },
@@ -51,10 +49,6 @@ const ExecutiveSetup: React.FunctionComponent<Props> = ({ user }: Props) => {
     }
   };
 
-  const logout = () => {
-    router.push("/api/logout");
-  };
-
   return (
     <form onSubmit={(e) => setExecutive(e)}>
       <Field>
@@ -83,7 +77,11 @@ const ExecutiveSetup: React.FunctionComponent<Props> = ({ user }: Props) => {
       </Field>
       <div>
         <Button.Group>
-          <Button onClick={logout}>logout</Button>
+          <Link href="/logout">
+            <a href="/logout" className="button">
+              Logout
+            </a>
+          </Link>
           <Button color="primary" type="submit">
             Submit
           </Button>

@@ -122,8 +122,8 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
               </Link>
             </Navbar.Container>
             <Navbar.Container position="end">
-              <Link href="/api/logout">
-                <a href="/api/logout" className="navbar-item">
+              <Link href="/logout">
+                <a href="/logout" className="navbar-item">
                   Logout
                 </a>
               </Link>
