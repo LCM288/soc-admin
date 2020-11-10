@@ -12,7 +12,9 @@ export const getMemberPageServerSideProps: GetServerSideProps<ServerSideProps> =
 ) => {
   const user = await getUserAndRefreshToken(ctx);
   if (!user) {
-    return { redirect: { permanent: false, destination: "/" } };
+    ctx.res.statusCode = 307;
+    ctx.res.setHeader("Location", "/");
+    return { props: { user: null, isAdmin: false } };
   }
   return {
     props: { user, isAdmin: await isAdmin(user) }, // will be passed to the page component as props
@@ -20,9 +22,9 @@ export const getMemberPageServerSideProps: GetServerSideProps<ServerSideProps> =
 };
 
 export const getAdminPageServerSideProps: GetServerSideProps = async (ctx) => {
-  const result = await getMemberPageServerSideProps(ctx);
-  if (!(result as { props: ServerSideProps }).props?.isAdmin) {
-    return { notFound: true };
+  const { props } = await getMemberPageServerSideProps(ctx);
+  if (!props.isAdmin) {
+    throw new Error("Unauthorized");
   }
-  return result;
+  return { props };
 };

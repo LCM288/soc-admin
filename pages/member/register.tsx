@@ -146,7 +146,7 @@ const Register = ({ user }: { user: User | null }): React.ReactElement => {
   }
 
   if (!user) {
-    return <a href="/">Please login first </a>;
+    return <></>;
   }
   return (
     <div>

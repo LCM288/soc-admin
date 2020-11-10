@@ -4,7 +4,9 @@ import { setJwtHeader } from "utils/auth";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   setJwtHeader("", ctx.res);
-  return { redirect: { permanent: false, destination: "/" } };
+  ctx.res.statusCode = 307;
+  ctx.res.setHeader("Location", "/");
+  return { props: {} };
 };
 
 export default (): React.ReactElement => <></>;

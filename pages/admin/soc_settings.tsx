@@ -139,7 +139,7 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
       </Table>
     );
   }
-  return <a href="/login">Please login first </a>;
+  return <></>;
 };
 
 SocSettings.Layout = AdminLayout;

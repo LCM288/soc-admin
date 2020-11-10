@@ -133,7 +133,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       </div>
     );
   }
-  return <a href="/login">Please login first </a>;
+  return <></>;
 };
 
 Members.Layout = AdminLayout;

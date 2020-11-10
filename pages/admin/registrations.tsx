@@ -353,7 +353,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
       </>
     );
   }
-  return <a href="/login">Please login first </a>;
+  return <></>;
 };
 
 Registrations.Layout = AdminLayout;

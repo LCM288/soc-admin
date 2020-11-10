@@ -19,9 +19,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const user = await getUserAndRefreshToken(ctx);
   if (user) {
     if (await isAdmin(user)) {
-      return { redirect: { permanent: false, destination: "/admin" } };
+      ctx.res.statusCode = 307;
+      ctx.res.setHeader("Location", "/admin");
+      return { props: { baseUrl: "", clientId: "" } };
     }
-    return { redirect: { permanent: false, destination: "/member" } };
+    ctx.res.statusCode = 307;
+    ctx.res.setHeader("Location", "/member");
+    return { props: { baseUrl: "", clientId: "" } };
   }
   const { host = "" } = ctx.req.headers;
   const protocol = /^localhost/g.test(host) ? "http" : "https";
@@ -30,7 +34,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const clientId = await getSetting(CLIENT_ID_KEY);
   const executives = await countExecutives();
   if (!executives) {
-    return { redirect: { permanent: false, destination: "/initialise" } };
+    ctx.res.statusCode = 307;
+    ctx.res.setHeader("Location", "/initialise");
+    return { props: { baseUrl: "", clientId: "" } };
   }
   if (newClientId.value && newClientId.updatedAt) {
     if (

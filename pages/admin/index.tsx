@@ -38,7 +38,7 @@ const Index = ({ user }: ServerSideProps): React.ReactElement => {
       </>
     );
   }
-  return <a href="/login">Please login first </a>;
+  return <></>;
 };
 
 Index.Layout = AdminLayout;

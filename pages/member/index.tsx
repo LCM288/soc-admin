@@ -147,7 +147,7 @@ const Index = ({ user, isAdmin }: ServerSideProps): React.ReactElement => {
   }
 
   if (!user) {
-    return <a href="/login">Please login first </a>;
+    return <></>;
   }
 
   if (countExecutivesQueryResult.data?.countExecutives === 0) {
