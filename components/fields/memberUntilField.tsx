@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useCallback } from "react";
 import { Form } from "react-bulma-components";
-import DateField from "components/register/dateField";
+import DateField from "components/fields/dateField";
 
 const { Checkbox } = Form;
 

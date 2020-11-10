@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from "react";
 import { Form } from "react-bulma-components";
 import DayPickerInput from "react-day-picker/DayPickerInput";

@@ -5,7 +5,7 @@ import { Faculty } from "@/models/Faculty";
 import { useQuery } from "@apollo/react-hooks";
 import toast from "utils/toast";
 import majorsQuery from "apollo/queries/major/majors.gql";
-import SelectField from "components/register/selectField";
+import SelectField from "components/fields/selectField";
 
 interface Props {
   majorCode: string;

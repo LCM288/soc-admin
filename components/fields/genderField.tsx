@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from "react";
-import SelectField from "components/register/selectField";
+import SelectField from "components/fields/selectField";
 
 interface Props {
   gender: string;

@@ -14,7 +14,7 @@ import personQuery from "apollo/queries/person/person.gql";
 import { PersonAttributes } from "@/models/Person";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
-import TextField from "components/register/textField";
+import TextField from "components/fields/textField";
 import { PreventDefaultForm } from "utils/domEventHelpers";
 import useClipped from "utils/useClipped";
 

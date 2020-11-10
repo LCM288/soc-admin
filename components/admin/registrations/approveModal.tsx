@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button, Heading } from "react-bulma-components";
-import MemberUntilField from "components/register/memberUntilField";
+import MemberUntilField from "components/fields/memberUntilField";
 import { PreventDefaultForm } from "utils/domEventHelpers";
 
 interface Props {

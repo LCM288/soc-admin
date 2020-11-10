@@ -2,7 +2,7 @@ import React, { useCallback, useState, useMemo } from "react";
 import { Heading, Modal, Button } from "react-bulma-components";
 import Loading from "components/loading";
 import { ExecutiveUpdateAttributes } from "@/models/Executive";
-import TextField from "components/register/textField";
+import TextField from "components/fields/textField";
 import { PreventDefaultForm } from "utils/domEventHelpers";
 
 interface Props {

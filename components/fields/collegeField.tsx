@@ -4,7 +4,7 @@ import { College } from "@/models/College";
 import { useQuery } from "@apollo/react-hooks";
 import toast from "utils/toast";
 import collegesQuery from "apollo/queries/college/colleges.gql";
-import SelectField from "components/register/selectField";
+import SelectField from "components/fields/selectField";
 
 interface Props {
   collegeCode: string;

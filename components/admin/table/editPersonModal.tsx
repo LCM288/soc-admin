@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from "react";
 import Loading from "components/loading";
-import TextField from "components/register/textField";
-import DOEntryField from "components/register/doEntryField";
-import CollegeField from "components/register/collegeField";
-import DOGradField from "components/register/doGradField";
-import GenderField from "components/register/genderField";
-import DateField from "components/register/dateField";
-import MemberUntilField from "components/register/memberUntilField";
-import MajorField from "components/register/majorField";
+import TextField from "components/fields/textField";
+import DOEntryField from "components/fields/doEntryField";
+import CollegeField from "components/fields/collegeField";
+import DOGradField from "components/fields/doGradField";
+import GenderField from "components/fields/genderField";
+import DateField from "components/fields/dateField";
+import MemberUntilField from "components/fields/memberUntilField";
+import MajorField from "components/fields/majorField";
 import { Modal, Section, Button, Heading } from "react-bulma-components";
 import { PreventDefaultForm } from "utils/domEventHelpers";
 import {

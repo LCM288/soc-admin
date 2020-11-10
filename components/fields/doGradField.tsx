@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from "react";
 import { Tag } from "react-bulma-components";
 import { DateTime } from "luxon";
-import SelectField from "components/register/selectField";
+import SelectField from "components/fields/selectField";
 
 interface Props {
   doGrad: string;
