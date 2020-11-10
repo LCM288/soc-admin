@@ -1,6 +1,7 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 import {
+  isAdmin,
   getUserAndRefreshToken,
   getSetting,
   getSettingWithTime,
@@ -17,6 +18,9 @@ import { Section, Container } from "react-bulma-components";
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const user = await getUserAndRefreshToken(ctx);
   if (user) {
+    if (await isAdmin(user)) {
+      return { redirect: { permanent: false, destination: "/admin" } };
+    }
     return { redirect: { permanent: false, destination: "/member" } };
   }
   const { host = "" } = ctx.req.headers;
