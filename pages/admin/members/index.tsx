@@ -3,7 +3,7 @@ import useResizeAware from "react-resize-aware";
 import { Row, CellProps } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
-import Layout from "layouts/admin";
+import AdminLayout from "layouts/adminLayout";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
@@ -461,6 +461,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   return <a href="/login">Please login first </a>;
 };
 
-Members.Layout = Layout;
+Members.Layout = AdminLayout;
 
 export default Members;

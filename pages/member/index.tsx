@@ -12,6 +12,7 @@ import { ServerSideProps } from "utils/getServerSideProps";
 import ReactMarkdown from "react-markdown/with-html";
 import toast from "utils/toast";
 import ExecutiveSetup from "components/executiveSetup";
+import MemberLayout from "layouts/memberLayout";
 import {
   SOC_NAME,
   WELCOME_MESSAGE,
@@ -26,10 +27,7 @@ import socSettingsQuery from "apollo/queries/socSetting/socSettings.gql";
 
 export { getMemberPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
-export default function Index({
-  user,
-  isAdmin,
-}: ServerSideProps): React.ReactElement {
+const Index = ({ user, isAdmin }: ServerSideProps): React.ReactElement => {
   const personQueryResult = useQuery(personQuery, {
     variables: { sid: user?.sid },
     fetchPolicy: "network-only",
@@ -184,11 +182,6 @@ export default function Index({
             </div>
           )}
           <Button.Group>
-            <Link href="/logout">
-              <a href="/logout" className="button">
-                Logout
-              </a>
-            </Link>
             {registerButtonText && (
               <Link href="/member/register">
                 <a href="/member/register" className="button is-primary">
@@ -208,4 +201,8 @@ export default function Index({
       </Section>
     </div>
   );
-}
+};
+
+Index.Layout = MemberLayout;
+
+export default Index;

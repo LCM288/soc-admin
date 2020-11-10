@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/react-hooks";
-import Layout from "layouts/admin";
+import AdminLayout from "layouts/adminLayout";
 import toast from "utils/toast";
 import { getMicrosoftLoginLink } from "utils/microsoftLogin";
 
@@ -97,6 +97,6 @@ const Authentication = (): React.ReactElement => {
   );
 };
 
-Authentication.Layout = Layout;
+Authentication.Layout = AdminLayout;
 
 export default Authentication;

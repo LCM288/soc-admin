@@ -12,7 +12,7 @@ interface Props {
   children: React.ReactElement;
 }
 
-const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
+const MemberLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
   const navBarRef = useRef<HTMLDivElement | null>(null);
   const oldChildren = useRef(children);
   const [isActive, setActive] = useState(false);
@@ -68,7 +68,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
       />
       <div ref={navBarRef}>
         <Navbar
-          color="info"
+          color="warning"
           fixed="top"
           active={isActive}
           onClick={() => {
@@ -76,8 +76,8 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
           }}
         >
           <Navbar.Brand>
-            <Link href="/admin">
-              <a href="/admin" className="navbar-item">
+            <Link href="/member">
+              <a href="/member" className="navbar-item">
                 {loading && <p>loading</p>}
                 {error && <p>error</p>}
                 {data?.socName || <></>}
@@ -89,38 +89,6 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
             <Navbar.Burger onClick={toggleActive} />
           </Navbar.Brand>
           <Navbar.Menu>
-            <Navbar.Container>
-              <Link href="/admin/admins">
-                <a href="/admin/admins" className="navbar-item">
-                  Admins
-                </a>
-              </Link>
-              <Link href="/admin/members">
-                <a href="/admin/members" className="navbar-item">
-                  Members
-                </a>
-              </Link>
-              <Link href="/admin/members/import">
-                <a href="/admin/members/import" className="navbar-item">
-                  Import Member
-                </a>
-              </Link>
-              <Link href="/admin/registrations">
-                <a href="/admin/registrations" className="navbar-item">
-                  Registrations
-                </a>
-              </Link>
-              <Link href="/admin/soc_settings">
-                <a href="/admin/soc_settings" className="navbar-item">
-                  Settings
-                </a>
-              </Link>
-              <Link href="/admin/authentication">
-                <a href="/admin/authentication" className="navbar-item">
-                  Authentication
-                </a>
-              </Link>
-            </Navbar.Container>
             <Navbar.Container position="end">
               <Link href="/logout">
                 <a href="/logout" className="navbar-item">
@@ -136,4 +104,4 @@ const Layout: React.FunctionComponent<Props> = ({ children }: Props) => {
   );
 };
 
-export default Layout;
+export default MemberLayout;

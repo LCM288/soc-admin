@@ -1,11 +1,9 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
 import React, { useMemo, useState, useEffect } from "react";
 import useResizeAware from "react-resize-aware";
 import { Row, CellProps } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
-import Layout from "layouts/admin";
+import AdminLayout from "layouts/adminLayout";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { College } from "@/models/College";
 import { Major } from "@/models/Major";
@@ -358,6 +356,6 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   return <a href="/login">Please login first </a>;
 };
 
-Registrations.Layout = Layout;
+Registrations.Layout = AdminLayout;
 
 export default Registrations;

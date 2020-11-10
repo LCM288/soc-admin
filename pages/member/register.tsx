@@ -22,6 +22,7 @@ import GenderField from "components/register/genderField";
 import DateField from "components/register/dateField";
 import MajorField from "components/register/majorField";
 import Loading from "components/loading";
+import MemberLayout from "layouts/memberLayout";
 import { PreventDefaultForm } from "utils/domEventHelpers";
 import updatePersonMutation from "apollo/queries/person/updatePerson.gql";
 import newPersonMutation from "apollo/queries/person/newPerson.gql";
@@ -29,11 +30,7 @@ import personQuery from "apollo/queries/person/person.gql";
 
 export { getMemberPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
-export default function Register({
-  user,
-}: {
-  user: User | null;
-}): React.ReactElement {
+const Register = ({ user }: { user: User | null }): React.ReactElement => {
   const router = useRouter();
   const personQueryResult = useQuery(personQuery, {
     variables: { sid: user?.sid },
@@ -235,4 +232,8 @@ export default function Register({
       <Loading loading={isSubmitting} />
     </div>
   );
-}
+};
+
+Register.Layout = MemberLayout;
+
+export default Register;

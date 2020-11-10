@@ -15,7 +15,7 @@ import Papa from "papaparse";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { useMutation } from "@apollo/react-hooks";
-import Layout from "layouts/admin";
+import AdminLayout from "layouts/adminLayout";
 import toast from "utils/toast";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { Level, Table, Button, Form } from "react-bulma-components";
@@ -30,7 +30,7 @@ export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServ
 
 const { InputFile, Input, Field, Label, Control, Select } = Form;
 
-const Members = ({ user }: ServerSideProps): React.ReactElement => {
+const Import = ({ user }: ServerSideProps): React.ReactElement => {
   const statusOptions = useMemo(() => ["All", "Activated", "Expired"], []);
   const pageSizeOptions = useMemo(() => [1, 2, 5, 10, 20, 50], []);
   const getSortDirectionIndicatior = useCallback(
@@ -537,6 +537,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   return <a href="/login">Please login first </a>;
 };
 
-Members.Layout = Layout;
+Import.Layout = AdminLayout;
 
-export default Members;
+export default Import;

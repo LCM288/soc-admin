@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
 import { DateTime } from "luxon";
-import Layout from "layouts/admin";
+import AdminLayout from "layouts/adminLayout";
 import Link from "next/link";
 import { ServerSideProps } from "utils/getServerSideProps";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
-export default function Index({ user }: ServerSideProps): React.ReactElement {
+const Index = ({ user }: ServerSideProps): React.ReactElement => {
   const greeting = useMemo(() => {
     // ref: https://gist.github.com/James1x0/8443042
 
@@ -39,6 +39,8 @@ export default function Index({ user }: ServerSideProps): React.ReactElement {
     );
   }
   return <a href="/login">Please login first </a>;
-}
+};
 
-Index.Layout = Layout;
+Index.Layout = AdminLayout;
+
+export default Index;

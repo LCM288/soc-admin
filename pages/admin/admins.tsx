@@ -1,10 +1,8 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
 import React, { useMemo, useState } from "react";
 import useAdminTable, { AdminColumnInstance } from "utils/useAdminTable";
 import { CellProps } from "react-table";
 import { useQuery } from "@apollo/react-hooks";
-import Layout from "layouts/admin";
+import AdminLayout from "layouts/adminLayout";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { Table, Level } from "react-bulma-components";
 import toast from "utils/toast";
@@ -138,6 +136,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   return <a href="/login">Please login first </a>;
 };
 
-Members.Layout = Layout;
+Members.Layout = AdminLayout;
 
 export default Members;
