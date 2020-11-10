@@ -1,60 +1,63 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React from "react";
-import { Form } from "react-bulma-components";
-import ReactSelect from "react-select";
-
-const { Field, Control, Label } = Form;
+import React, { useMemo, useCallback } from "react";
+import SelectField from "components/register/selectField";
 
 interface Props {
   gender: string;
   setGender: (value: string) => void;
 }
 
-const genders = [
-  {
-    value: "Male",
-    label: "Male",
-  },
-  {
-    value: "Female",
-    label: "Female",
-  },
-  {
-    value: "None",
-    label: "Prefer not to say",
-  },
-];
-
-const DEFAULT_GENDER = genders.find((g) => g.value === "None");
-
 const GenderField: React.FunctionComponent<Props> = ({
   gender,
   setGender,
 }: Props) => {
+  interface GenderOption {
+    value: string;
+    label: string;
+  }
+
+  const defaultOption = useMemo(
+    () => ({
+      value: "None",
+      label: "Prefer not to say",
+    }),
+    []
+  );
+
+  const genderOptions: GenderOption[] = useMemo(
+    () => [
+      {
+        value: "Male",
+        label: "Male",
+      },
+      {
+        value: "Female",
+        label: "Female",
+      },
+      defaultOption,
+    ],
+    [defaultOption]
+  );
+
+  const selectedGender = useMemo(
+    () => genderOptions.find(({ value }) => value === gender) ?? defaultOption,
+    [genderOptions, gender, defaultOption]
+  );
+
+  const onChange = useCallback(
+    (input: GenderOption) => setGender(input.value),
+    [setGender]
+  );
+
   return (
-    <Field>
-      <Label>Gender</Label>
-      <Control>
-        <div>
-          <ReactSelect
-            defaultValue={DEFAULT_GENDER}
-            value={genders.find((g) => g.value === gender)}
-            options={genders}
-            onChange={(input: { value: string }): void => {
-              setGender(input.value);
-            }}
-          />
-          <input
-            tabIndex={-1}
-            autoComplete="off"
-            style={{ position: "absolute", opacity: 0, height: 0 }}
-            value={gender}
-            onChange={() => {}}
-            required
-          />
-        </div>
-      </Control>
-    </Field>
+    <SelectField
+      label="Gender"
+      selectedOption={selectedGender}
+      options={genderOptions}
+      inputValue={gender}
+      onChange={onChange}
+      defaultOption={defaultOption}
+      required
+    />
   );
 };
 

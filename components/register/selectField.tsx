@@ -10,8 +10,8 @@ interface Props<SelectOption extends { value: string } = { value: string }> {
   options: SelectOption[];
   inputValue: string;
   onChange: (newOption: SelectOption) => void;
-  formatOptionLabel: (option: SelectOption) => React.ReactNode;
-  defaultValue?: SelectOption | null;
+  formatOptionLabel?: ((option: SelectOption) => React.ReactNode) | undefined;
+  defaultOption?: SelectOption | null;
   isLoading?: boolean;
   required?: boolean;
 }
@@ -23,7 +23,7 @@ const SelectField = ({
   inputValue,
   onChange,
   formatOptionLabel,
-  defaultValue = null,
+  defaultOption = null,
   isLoading = false,
   required = false,
 }: Props): React.ReactElement => {
@@ -32,7 +32,7 @@ const SelectField = ({
       <Label>{label}</Label>
       <div>
         <ReactSelect
-          defaultValue={defaultValue}
+          defaultValue={defaultOption}
           value={selectedOption}
           options={options}
           onChange={onChange}
@@ -72,7 +72,8 @@ const SelectField = ({
 };
 
 SelectField.defaultProps = {
-  defaultValue: null,
+  formatOptionLabel: undefined,
+  defaultOption: null,
   isLoading: false,
   required: false,
 };
