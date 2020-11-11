@@ -12,7 +12,13 @@ import toast from "utils/toast";
 import { Button, Section, Container, Heading } from "react-bulma-components";
 import { Major } from "@/models/Major";
 import { College } from "@/models/College";
-import { PersonModelAttributes } from "@/models/Person";
+import {
+  PersonAttributes,
+  PersonCreationAttributes,
+  PersonUpdateAttributes,
+  GenderEnum,
+  CollegeEnum,
+} from "@/models/Person";
 
 import DOEntryField from "components/fields/doEntryField";
 import TextField from "components/fields/textField";
@@ -51,8 +57,8 @@ const Register = ({ user }: { user: User | null }): React.ReactElement => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const setData = useCallback(() => {
-    const person =
-      personQueryResult.data?.person ?? (null as PersonModelAttributes | null);
+    const person = (personQueryResult.data?.person ??
+      null) as PersonAttributes | null;
     setChineseName(person?.chineseName ?? "");
     setGender(person?.gender ?? "None");
     setDob(person?.dateOfBirth ?? "");
@@ -71,37 +77,14 @@ const Register = ({ user }: { user: User | null }): React.ReactElement => {
     }
   }, [personQueryResult.data?.person, setData]);
 
-  /* eslint-disable @typescript-eslint/no-shadow */
+  const validDate = useCallback((date: string) => {
+    return /^\d{4}-\d{2}-\d{2}$/g.test(date) ? date : null;
+  }, []);
+
   const onSubmit = useCallback(
-    ({
-      chineseName,
-      gender,
-      dob,
-      email,
-      phone,
-      collegeCode,
-      majorCode,
-      doEntry,
-      doGrad,
-    }) => {
-      /* eslint-enable @typescript-eslint/no-shadow */
-      const validDate = (date: string) => {
-        return /^\d{4}-\d{2}-\d{2}$/g.test(date) ? date : null;
-      };
+    (person: PersonCreationAttributes | PersonUpdateAttributes) => {
       setIsSubmitting(true);
-      const variables = {
-        sid: user?.sid,
-        englishName: user?.name,
-        chineseName,
-        gender,
-        dateOfBirth: validDate(dob),
-        email,
-        phone,
-        college: collegeCode,
-        major: majorCode,
-        dateOfEntry: validDate(doEntry),
-        expectedGraduationDate: validDate(doGrad),
-      };
+      const variables = person;
       const mutation = personQueryResult.data?.person
         ? updatePerson
         : newPerson;
@@ -131,7 +114,7 @@ const Register = ({ user }: { user: User | null }): React.ReactElement => {
           setIsSubmitting(false);
         });
     },
-    [user, personQueryResult.data?.person, newPerson, updatePerson, router]
+    [personQueryResult.data?.person, newPerson, updatePerson, router]
   );
 
   const submitButtonText = useMemo(
@@ -139,11 +122,13 @@ const Register = ({ user }: { user: User | null }): React.ReactElement => {
     [personQueryResult.data?.person]
   );
 
-  if (personQueryResult.error) {
-    toast.danger(personQueryResult.error.message, {
-      position: toast.POSITION.TOP_LEFT,
-    });
-  }
+  useEffect(() => {
+    if (personQueryResult.error) {
+      toast.danger(personQueryResult.error.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, [personQueryResult.error]);
 
   if (!user) {
     return <></>;
@@ -156,15 +141,17 @@ const Register = ({ user }: { user: User | null }): React.ReactElement => {
           <PreventDefaultForm
             onSubmit={() =>
               onSubmit({
+                sid: user?.sid,
+                englishName: user?.name,
                 chineseName,
-                gender,
-                dob,
+                gender: gender as GenderEnum,
+                dateOfBirth: validDate(dob),
                 email,
                 phone,
-                collegeCode,
-                majorCode,
-                doEntry,
-                doGrad,
+                college: collegeCode as CollegeEnum,
+                major: majorCode,
+                dateOfEntry: validDate(doEntry) || "",
+                expectedGraduationDate: validDate(doGrad) || "",
               })
             }
           >

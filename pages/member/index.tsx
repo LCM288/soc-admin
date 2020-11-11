@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import {
@@ -38,6 +38,30 @@ const Index = ({ user, isAdmin }: ServerSideProps): React.ReactElement => {
   const countExecutivesQueryResult = useQuery(countExecutivesQuery, {
     fetchPolicy: "network-only",
   });
+
+  useEffect(() => {
+    if (countExecutivesQueryResult.error) {
+      toast.danger(countExecutivesQueryResult.error.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, [countExecutivesQueryResult.error]);
+
+  useEffect(() => {
+    if (personQueryResult.error) {
+      toast.danger(personQueryResult.error.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, [personQueryResult.error]);
+
+  useEffect(() => {
+    if (socSettingsQueryResult.error) {
+      toast.danger(socSettingsQueryResult.error.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, [socSettingsQueryResult.error]);
 
   const greeting = useMemo(() => {
     // ref: https://gist.github.com/James1x0/8443042
@@ -127,24 +151,6 @@ const Index = ({ user, isAdmin }: ServerSideProps): React.ReactElement => {
       socSettingsQueryResult.loading,
     ]
   );
-
-  if (
-    countExecutivesQueryResult.error ||
-    personQueryResult.error ||
-    socSettingsQueryResult.error
-  ) {
-    const errors = [
-      countExecutivesQueryResult.error,
-      personQueryResult.error,
-      socSettingsQueryResult.error,
-    ].filter((error) => error);
-    errors.forEach((error) =>
-      toast.danger(error?.message, {
-        position: toast.POSITION.TOP_LEFT,
-      })
-    );
-    return <p>Error</p>;
-  }
 
   if (!user) {
     return <></>;
