@@ -18,25 +18,28 @@ const DOGradField: React.FunctionComponent<Props> = ({
     month: string;
   }
 
-  const termOptions: DOGradOption[] = useMemo(() => {
-    const calcTermEnd = (yearDiff: number): DOGradOption[] => {
-      const year = yearDiff + DateTime.local().year;
-      // `value` corresponds to the date where student status becomes ineffective
-      return [
-        {
-          value: `${year + 1}-01-01`,
-          label: `${year}-${year + 1} Term 1`,
-          month: `Dec ${year}`,
-        },
-        {
-          value: `${year + 1}-08-01`,
-          label: `${year}-${year + 1} Term 2`,
-          month: `Jul ${year + 1}`,
-        },
-      ];
-    };
-    return [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8].map(calcTermEnd).flat();
-  }, []);
+  const termOptions: DOGradOption[] = useMemo(
+    () =>
+      [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8]
+        .map((yearDiff: number): DOGradOption[] => {
+          const year = yearDiff + DateTime.local().year;
+          // `value` corresponds to the date where student status becomes ineffective
+          return [
+            {
+              value: `${year + 1}-01-01`,
+              label: `${year}-${year + 1} Term 1`,
+              month: `Dec ${year}`,
+            },
+            {
+              value: `${year + 1}-08-01`,
+              label: `${year}-${year + 1} Term 2`,
+              month: `Jul ${year + 1}`,
+            },
+          ];
+        })
+        .flat(),
+    []
+  );
 
   const selectedTerm: DOGradOption = useMemo(() => {
     if (/^\d{4}-0(1|8)-01$/.test(doGrad)) {

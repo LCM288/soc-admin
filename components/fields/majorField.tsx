@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useEffect } from "react";
 import { Tag, Level } from "react-bulma-components";
 import { Major } from "@/models/Major";
 import { Faculty } from "@/models/Faculty";
@@ -16,14 +16,22 @@ const MajorField: React.FunctionComponent<Props> = ({
   majorCode,
   setMajorCode,
 }: Props) => {
-  const majorsQueryResult = useQuery(majorsQuery);
-
   interface MajorOption {
     value: string;
     chineseLabel: string;
     englishLabel: string;
     faculties: { value: string; label: string }[];
   }
+
+  const majorsQueryResult = useQuery(majorsQuery);
+
+  useEffect(() => {
+    if (majorsQueryResult.error) {
+      toast.danger(majorsQueryResult.error.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, [majorsQueryResult.error]);
 
   const majorOptions: MajorOption[] = useMemo(
     () =>
@@ -96,12 +104,6 @@ const MajorField: React.FunctionComponent<Props> = ({
     (input: MajorOption) => setMajorCode(input.value),
     [setMajorCode]
   );
-
-  if (majorsQueryResult.error) {
-    toast.danger(majorsQueryResult.error.message, {
-      position: toast.POSITION.TOP_LEFT,
-    });
-  }
 
   return (
     <SelectField

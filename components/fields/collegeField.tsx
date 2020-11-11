@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useEffect } from "react";
 import { Level } from "react-bulma-components";
 import { College } from "@/models/College";
 import { useQuery } from "@apollo/react-hooks";
@@ -15,13 +15,21 @@ const CollegeField: React.FunctionComponent<Props> = ({
   collegeCode,
   setCollegeCode,
 }: Props) => {
-  const collegesQueryResult = useQuery(collegesQuery);
-
   interface CollegeOption {
     value: string;
     chineseLabel: string;
     englishLabel: string;
   }
+
+  const collegesQueryResult = useQuery(collegesQuery);
+
+  useEffect(() => {
+    if (collegesQueryResult.error) {
+      toast.danger(collegesQueryResult.error.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, [collegesQueryResult.error]);
 
   const collegeOpions: CollegeOption[] = useMemo(
     () =>
@@ -65,12 +73,6 @@ const CollegeField: React.FunctionComponent<Props> = ({
     (input: CollegeOption) => setCollegeCode(input.value),
     [setCollegeCode]
   );
-
-  if (collegesQueryResult.error) {
-    toast.danger(collegesQueryResult.error.message, {
-      position: toast.POSITION.TOP_LEFT,
-    });
-  }
 
   return (
     <SelectField

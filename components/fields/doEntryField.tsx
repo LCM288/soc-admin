@@ -18,26 +18,27 @@ const DOEntryField: React.FunctionComponent<Props> = ({
     month: string;
   }
 
-  const termOptions: DOEntryOption[] = useMemo(() => {
-    const calcTermStart = (yearDiff: number): DOEntryOption[] => {
-      const year = yearDiff + DateTime.local().year;
-      return [
-        {
-          value: `${year + 1}-01-01`,
-          label: `${year}-${year + 1} Term 2`,
-          month: `Jan ${year + 1}`,
-        },
-        {
-          value: `${year}-09-01`,
-          label: `${year}-${year + 1} Term 1`,
-          month: `Sept ${year}`,
-        },
-      ];
-    };
-    return [0, -1, -2, -3, -4, -5, -6, -7, -8]
-      .map((i) => calcTermStart(i))
-      .flat();
-  }, []);
+  const termOptions: DOEntryOption[] = useMemo(
+    () =>
+      [0, -1, -2, -3, -4, -5, -6, -7, -8]
+        .map((yearDiff): DOEntryOption[] => {
+          const year = yearDiff + DateTime.local().year;
+          return [
+            {
+              value: `${year + 1}-01-01`,
+              label: `${year}-${year + 1} Term 2`,
+              month: `Jan ${year + 1}`,
+            },
+            {
+              value: `${year}-09-01`,
+              label: `${year}-${year + 1} Term 1`,
+              month: `Sept ${year}`,
+            },
+          ];
+        })
+        .flat(),
+    []
+  );
 
   const selectedTerm: DOEntryOption = useMemo(() => {
     if (/^\d{4}-0(1|9)-01$/.test(doEntry)) {
