@@ -24,7 +24,9 @@ export const getMemberPageServerSideProps: GetServerSideProps<ServerSideProps> =
 export const getAdminPageServerSideProps: GetServerSideProps = async (ctx) => {
   const { props } = await getMemberPageServerSideProps(ctx);
   if (!props.isAdmin) {
-    throw new Error("Unauthorized");
+    ctx.res.statusCode = 307;
+    ctx.res.setHeader("Location", "/");
+    return { props: { user: null, isAdmin: false } };
   }
   return { props };
 };

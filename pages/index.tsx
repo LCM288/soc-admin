@@ -53,7 +53,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     deleteNewAPIKey();
   }
   if (!clientId) {
-    throw new Error("Cannot get client id");
+    ctx.res.statusCode = 503;
+    ctx.res.end("503 Cannot get client id");
+    return { props: { baseUrl: "", clientId: "" } };
   }
   return {
     props: {
