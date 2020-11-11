@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import useResizeAware from "react-resize-aware";
 import { Row, CellProps } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
@@ -18,26 +18,30 @@ import useRegistrationTable, {
   RegistrationColumnInstance,
 } from "utils/useRegistrationTable";
 import AddRegistration from "components/admin/registrations/addRegistration";
+import Loading from "components/loading";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
 const { Input, Field, Label, Control, Select } = Form;
 
-const typeOptions = ["All", "New", "Renewal"];
-const pageSizeOptions = [1, 2, 5, 10, 20, 50];
-const getSortDirectionIndicatior = (
-  column: RegistrationColumnInstance
-): string => {
-  if (column.isSorted) {
-    if (column.isSortedDesc) {
-      return " 🔽";
-    }
-    return " 🔼";
-  }
-  return "";
-};
-
 const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
+  // constant
+  const typeOptions = useMemo(() => ["All", "New", "Renewal"], []);
+  const pageSizeOptions = useMemo(() => [1, 2, 5, 10, 20, 50], []);
+  const getSortDirectionIndicatior = useCallback(
+    (column: RegistrationColumnInstance): string => {
+      if (column.isSorted) {
+        if (column.isSortedDesc) {
+          return " 🔽";
+        }
+        return " 🔼";
+      }
+      return "";
+    },
+    []
+  );
+
+  // data
   const { data, loading, error } = useQuery(registrationsQuery, {
     fetchPolicy: "cache-and-network",
     pollInterval: 5000,
@@ -47,8 +51,16 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     { registrations: Record<string, unknown>[] } | undefined
   >(undefined);
 
-  const [resizeListener, sizes] = useResizeAware();
+  useEffect(() => setRegistrationsData(data), [data]);
+  useEffect(() => {
+    if (error) {
+      toast.danger(error.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, [error]);
 
+  // table
   const typeFilter = useMemo(
     () => (
       rows: Array<Row<Record<string, unknown>>>,
@@ -193,6 +205,9 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
     setFilter("registrationType", value || undefined);
   }, 500);
 
+  // resize
+  const [resizeListener, sizes] = useResizeAware();
+
   useEffect(() => {
     if (sizes.width < 640) {
       setHiddenColumns([
@@ -235,19 +250,6 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
       setHiddenColumns([]);
     }
   }, [sizes.width, setHiddenColumns, visibleColumns]);
-
-  if (data && data !== registrationsData) {
-    setRegistrationsData(data);
-  }
-
-  if (!registrationsData) {
-    if (loading) return <p>loading</p>;
-    if (error) return <p>{error.message}</p>;
-  } else if (error) {
-    toast.danger(error.message, {
-      position: toast.POSITION.TOP_LEFT,
-    });
-  }
 
   if (user) {
     return (
@@ -350,6 +352,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
             <AddRegistration />
           </Level.Side>
         </Level>
+        <Loading loading={loading} />
       </>
     );
   }

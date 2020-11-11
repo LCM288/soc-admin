@@ -1,6 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useTable, CellProps } from "react-table";
 import { useQuery } from "@apollo/react-hooks";
 import AdminLayout from "layouts/adminLayout";
@@ -11,6 +9,7 @@ import EditCell from "components/admin/socSettings/editCell";
 import toast from "utils/toast";
 import socSettingsQuery from "apollo/queries/socSetting/socSettings.gql";
 import allSocSettings from "utils/socSettings";
+import Loading from "components/loading";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
@@ -32,6 +31,15 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
   const [socSettingsData, setSocSettingsData] = useState<
     { socSettings: Record<string, string>[] } | undefined
   >(undefined);
+
+  useEffect(() => setSocSettingsData(data), [data]);
+  useEffect(() => {
+    if (error) {
+      toast.danger(error.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, [error]);
 
   const tableColumns = useMemo(
     () => [
@@ -77,10 +85,6 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
     );
   }, [socSettingsData]);
 
-  /* const tableGetRowId = useMemo(() => {
-    return (row: Record<string, unknown>) => (row.id as number).toString();
-  }, []); */
-
   const tableInstance = useTable({
     columns: tableColumns,
     data: tableData,
@@ -88,19 +92,6 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
       hiddenColumns: ["desc", "type"],
     },
   });
-
-  if (data && data !== socSettingsData) {
-    setSocSettingsData(data);
-  }
-
-  if (!socSettingsData) {
-    if (loading) return <p>loading</p>;
-    if (error) return <p>{error.message}</p>;
-  } else if (error) {
-    toast.danger(error.message, {
-      position: toast.POSITION.TOP_LEFT,
-    });
-  }
 
   const {
     getTableProps,
@@ -112,31 +103,36 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
 
   if (user) {
     return (
-      <Table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
+      <>
+        <Table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+        <Loading loading={loading} />
+      </>
     );
   }
   return <></>;

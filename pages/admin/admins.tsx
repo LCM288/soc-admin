@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import useAdminTable, { AdminColumnInstance } from "utils/useAdminTable";
 import { CellProps } from "react-table";
 import { useQuery } from "@apollo/react-hooks";
@@ -9,20 +9,26 @@ import toast from "utils/toast";
 import executivesQuery from "apollo/queries/executive/executives.gql";
 import ActionsCell from "components/admin/admins/actionsCell";
 import AddAdmin from "components/admin/admins/addAdmin";
+import Loading from "components/loading";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
-const getSortDirectionIndicatior = (column: AdminColumnInstance): string => {
-  if (column.isSorted) {
-    if (column.isSortedDesc) {
-      return " 🔽";
-    }
-    return " 🔼";
-  }
-  return "";
-};
-
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
+  // constants
+  const getSortDirectionIndicatior = useCallback(
+    (column: AdminColumnInstance) => {
+      if (column.isSorted) {
+        if (column.isSortedDesc) {
+          return " 🔽";
+        }
+        return " 🔼";
+      }
+      return "";
+    },
+    []
+  );
+
+  // data
   const { data, loading, error } = useQuery(executivesQuery, {
     fetchPolicy: "cache-and-network",
     pollInterval: 5000,
@@ -32,6 +38,18 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     { executives: Record<string, unknown>[] } | undefined
   >(undefined);
 
+  useEffect(() => {
+    setExecutivesData(data);
+  }, [data]);
+  useEffect(() => {
+    if (error) {
+      toast.danger(error.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, [error]);
+
+  // table
   const tableColumns = useMemo(
     () => [
       {
@@ -72,19 +90,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     getRowId: tableGetRowId,
   });
 
-  if (data && data !== executivesData) {
-    setExecutivesData(data);
-  }
-
-  if (!executivesData) {
-    if (loading) return <p>loading</p>;
-    if (error) return <p>{error.message}</p>;
-  } else if (error) {
-    toast.danger(error.message, {
-      position: toast.POSITION.TOP_LEFT,
-    });
-  }
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -95,7 +100,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
 
   if (user) {
     return (
-      <div>
+      <>
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
@@ -130,7 +135,8 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             <AddAdmin />
           </Level.Side>
         </Level>
-      </div>
+        <Loading loading={loading} />
+      </>
     );
   }
   return <></>;

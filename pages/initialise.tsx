@@ -16,6 +16,7 @@ export default function Initialise(): React.ReactElement {
   }
 
   const router = useRouter();
+
   const [
     initClientKeys,
     {
