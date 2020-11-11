@@ -8,6 +8,7 @@ interface Props {
 
 const Loading: React.FunctionComponent<Props> = ({ loading }: Props) => {
   useClipped(loading);
+
   return (
     <Modal
       show={loading}

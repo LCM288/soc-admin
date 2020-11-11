@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useCallback } from "react";
 import { Form } from "react-bulma-components";
 import { DateTime, Info } from "luxon";
 
@@ -13,20 +13,26 @@ interface Props {
 const YearMonthForm: React.FunctionComponent<Props> = ({
   date,
   onChange,
-  yearRange,
+  yearRange: [from, to],
 }: Props) => {
-  const [from, to] = yearRange;
-  const months = Info.months("long");
+  const months = useMemo(() => Info.months("long"), []);
 
-  const years = Array.from(
-    { length: to - from + 1 },
-    (_, i) => i + DateTime.local().plus({ year: from }).year
+  const years = useMemo(
+    () =>
+      Array.from(
+        { length: to - from + 1 },
+        (_, i) => i + DateTime.local().plus({ year: from }).year
+      ),
+    [from, to]
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { year, month } = e.target.form as HTMLFormElement;
-    onChange(new Date(year.value, month.value));
-  };
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const { year, month } = event.target.form as HTMLFormElement;
+      onChange(new Date(year.value, month.value));
+    },
+    [onChange]
+  );
 
   return (
     <div className="DayPicker-Caption">

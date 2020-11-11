@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { Modal, Section, Button } from "react-bulma-components";
 
@@ -17,9 +17,9 @@ const LogoutReminderModal: React.FunctionComponent<Props> = ({
     if (open) router.prefetch(window.location.pathname);
   }, [open, router]);
 
-  const refresh = () => {
+  const refresh = useCallback(() => {
     router.reload();
-  };
+  }, [router]);
 
   return (
     <Modal show={open} closeOnEsc={false} showClose={false} onClose={refresh}>

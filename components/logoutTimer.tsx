@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import printf from "printf";
 import { useRouter } from "next/router";
 import { DateTime } from "luxon";
@@ -8,8 +8,9 @@ interface Props {
 }
 
 const LogoutTimer: React.FunctionComponent<Props> = ({ time }: Props) => {
-  const [now, setNow] = useState(DateTime.local());
   const router = useRouter();
+
+  const [now, setNow] = useState(DateTime.local());
 
   useEffect(() => {
     const { millisecond } = DateTime.local();
@@ -28,11 +29,10 @@ const LogoutTimer: React.FunctionComponent<Props> = ({ time }: Props) => {
   });
 
   // drop milliseconds
-  const { minutes, seconds } = time.diff(now, [
-    "minutes",
-    "seconds",
-    "milliseconds",
-  ]);
+  const { minutes, seconds } = useMemo(
+    () => time.diff(now, ["minutes", "seconds", "milliseconds"]),
+    [time, now]
+  );
 
   return <div>{printf("%02d:%02d", minutes, seconds)}</div>;
 };

@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import toast from "utils/toast";
 
-import { Button, Form } from "react-bulma-components";
+import { Button } from "react-bulma-components";
 import { User } from "@/types/datasources";
 import { useMutation } from "@apollo/react-hooks";
 import Link from "next/link";
+import { ExecutiveCreationAttributes } from "@/models/Executive";
+import { PreventDefaultForm } from "utils/domEventHelpers";
+import TextField from "components/fields/textField";
 import newExecutiveMutation from "../apollo/queries/executive/newExecutive.gql";
-
-const { Input, Field, Control, Label } = Form;
 
 interface Props {
   user: User;
@@ -20,62 +21,53 @@ const ExecutiveSetup: React.FunctionComponent<Props> = ({ user }: Props) => {
   ] = useMutation(newExecutiveMutation);
 
   const [nickname, setNickname] = useState("");
-  const [position, setPosition] = useState("");
+  const [pos, setPos] = useState("");
 
-  const setExecutive = async (e: React.FormEvent<HTMLElement>) => {
-    e.preventDefault();
-    if (!user) {
-      toast.danger("User is not found", {
-        position: toast.POSITION.TOP_LEFT,
-      });
-    } else {
-      try {
-        const newExecutivePayload = await newExecutive({
-          variables: {
-            sid: user.sid,
-            nickname,
-            pos: position,
-          },
+  const setExecutive = useCallback(
+    (person: ExecutiveCreationAttributes) => {
+      newExecutive({
+        variables: person,
+      })
+        .then((newExecutivePayload) => {
+          if (!newExecutivePayload.data.newExecutive.success) {
+            throw new Error(newExecutivePayload.data.newExecutive.message);
+          }
+          window.location.reload();
+        })
+        .catch((error) => {
+          toast.danger(error.message, {
+            position: toast.POSITION.TOP_LEFT,
+          });
         });
-        if (!newExecutivePayload.data.newExecutive.success) {
-          throw new Error(newExecutivePayload.data.newExecutive.message);
-        }
-        window.location.reload();
-      } catch (err) {
-        toast.danger(err.message, {
-          position: toast.POSITION.TOP_LEFT,
-        });
-      }
-    }
-  };
+    },
+    [newExecutive]
+  );
 
   return (
-    <form onSubmit={(e) => setExecutive(e)}>
-      <Field>
-        <Label>Nickname</Label>
-        <Control>
-          <Input
-            value={nickname}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-              setNickname(event.target.value)
-            }
-            required
-          />
-        </Control>
-      </Field>
-      <Field>
-        <Label>Position</Label>
-        <Control>
-          <Input
-            value={position}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-              setPosition(event.target.value)
-            }
-            required
-          />
-        </Control>
-      </Field>
-      <div>
+    <PreventDefaultForm
+      onSubmit={() =>
+        setExecutive({
+          sid: user.sid,
+          nickname,
+          pos,
+        })
+      }
+    >
+      <>
+        <TextField
+          value={nickname}
+          setValue={setNickname}
+          label="Nickname"
+          placeholder="Nickname"
+          editable
+        />
+        <TextField
+          value={pos}
+          setValue={setPos}
+          label="Position"
+          placeholder="Position"
+          editable
+        />
         <Button.Group>
           <Link href="/logout">
             <a href="/logout" className="button">
@@ -86,10 +78,10 @@ const ExecutiveSetup: React.FunctionComponent<Props> = ({ user }: Props) => {
             Submit
           </Button>
         </Button.Group>
-      </div>
-      {newExecutiveMutationLoading && <p>Loading...</p>}
-      {newExecutiveMutationError && <p>Error :( Please try again</p>}
-    </form>
+        {newExecutiveMutationLoading && <p>Loading...</p>}
+        {newExecutiveMutationError && <p>Error :( Please try again</p>}
+      </>
+    </PreventDefaultForm>
   );
 };
 
