@@ -1,21 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/react-hooks";
 import toast from "utils/toast";
 import { getMicrosoftLoginLink } from "utils/microsoftLogin";
+import TextField from "components/fields/textField";
+import { PreventDefaultForm } from "utils/domEventHelpers";
 
-import {
-  Button,
-  Form,
-  Section,
-  Container,
-  Heading,
-} from "react-bulma-components";
+import { Button, Section, Container, Heading } from "react-bulma-components";
 import initClientKeysMutation from "../apollo/queries/socSetting/initClientKeys.gql";
 
-const { Input, Field, Control, Label } = Form;
-
 export default function Initialise(): React.ReactElement {
+  interface InitialiseClientSettings {
+    clientId: string;
+    clientSecret: string;
+  }
+
   const router = useRouter();
   const [
     initClientKeys,
@@ -27,62 +26,66 @@ export default function Initialise(): React.ReactElement {
 
   const [clientId, setClientId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
-  const formSubmit = async (e: React.FormEvent<HTMLElement>) => {
-    e.preventDefault();
-    try {
-      const updateSocSettingPayload = await initClientKeys({
+
+  const formSubmit = useCallback(
+    (settings: InitialiseClientSettings) => {
+      initClientKeys({
         variables: {
-          id: clientId,
-          secret: clientSecret,
+          id: settings.clientId,
+          secret: settings.clientSecret,
         },
-      });
-      if (!updateSocSettingPayload.data.initClientKeys.success) {
-        throw new Error(updateSocSettingPayload.data.initClientKeys.message);
-      }
-      const link = getMicrosoftLoginLink({
-        baseUrl: window.location.origin,
-        clientId,
-      });
-      router.push(link);
-    } catch (err) {
-      toast.danger(err.message, {
-        position: toast.POSITION.TOP_LEFT,
-      });
-    }
-  };
+      })
+        .then((updateSocSettingPayload) => {
+          if (!updateSocSettingPayload.data.initClientKeys.success) {
+            throw new Error(
+              updateSocSettingPayload.data.initClientKeys.message
+            );
+          }
+          const link = getMicrosoftLoginLink({
+            baseUrl: window.location.origin,
+            clientId: settings.clientId,
+          });
+          router.push(link);
+        })
+        .catch((error) => {
+          toast.danger(error.message, {
+            position: toast.POSITION.TOP_LEFT,
+          });
+        });
+    },
+    [initClientKeys, router]
+  );
 
   return (
     <div>
       <Section>
         <Container>
           <Heading>Initialise</Heading>
-          <form onSubmit={(e) => formSubmit(e)}>
-            <Field>
-              <Label>Client ID</Label>
-              <Control>
-                <Input
-                  value={clientId}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>
-                  ): void => setClientId(event.target.value)}
-                />
-              </Control>
-            </Field>
-            <Field>
-              <Label>Client Secret</Label>
-              <Control>
-                <Input
-                  value={clientSecret}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>
-                  ): void => setClientSecret(event.target.value)}
-                />
-              </Control>
-            </Field>
-            <Button color="primary" type="submit">
-              Initialise
-            </Button>
-          </form>
+          <PreventDefaultForm
+            onSubmit={() => formSubmit({ clientId, clientSecret })}
+          >
+            <>
+              <TextField
+                value={clientId}
+                setValue={setClientId}
+                label="Client ID"
+                placeholder="Client ID"
+                editable
+                required
+              />
+              <TextField
+                value={clientSecret}
+                setValue={setClientSecret}
+                label="Client Secret"
+                placeholder="Client Secret"
+                editable
+                required
+              />
+              <Button color="primary" type="submit">
+                Initialise
+              </Button>
+            </>
+          </PreventDefaultForm>
           {initClientKeysMutationLoading && <p>Loading...</p>}
           {initClientKeysMutationError && <p>Error :( Please try again</p>}
         </Container>
