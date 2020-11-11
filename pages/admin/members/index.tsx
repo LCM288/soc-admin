@@ -16,12 +16,14 @@ import PaginationControl from "components/admin/table/paginationControl";
 import EditCell from "components/admin/table/editCell";
 import TableRow from "components/admin/table/tableRow";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
+import Loading from "components/loading";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
 const { Input, Field, Label, Control, Select } = Form;
 
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
+  // constant
   const statusOptions = useMemo(() => ["All", "Activated", "Expired"], []);
   const pageSizeOptions = useMemo(() => [1, 2, 5, 10, 20, 50], []);
   const getSortDirectionIndicatior = useCallback(
@@ -37,6 +39,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
+  // data
   const { data, loading, error } = useQuery(membersQuery, {
     fetchPolicy: "cache-and-network",
     pollInterval: 5000,
@@ -45,8 +48,17 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   const [membersData, setMembersData] = useState<
     { members: Record<string, unknown>[] } | undefined
   >(undefined);
-  const [resizeListener, sizes] = useResizeAware();
 
+  useEffect(() => setMembersData(data), [data]);
+  useEffect(() => {
+    if (error) {
+      toast.danger(error.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, [error]);
+
+  // table
   const statusFilter = useCallback(
     (
       rows: Array<Row<Record<string, unknown>>>,
@@ -196,6 +208,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     setFilter("status", value || undefined);
   }, 500);
 
+  // export files
   const [isFileProcessing, setIsFileProcessing] = useState(false);
 
   const onExport = useCallback((exportData: Record<string, unknown>[]) => {
@@ -288,6 +301,9 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     }
   }, [rows, onExport]);
 
+  // resize
+  const [resizeListener, sizes] = useResizeAware();
+
   useEffect(() => {
     if (sizes.width < 640) {
       setHiddenColumns([
@@ -334,19 +350,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       setHiddenColumns([]);
     }
   }, [sizes.width, setHiddenColumns, visibleColumns]);
-
-  if (data && data !== membersData) {
-    setMembersData(data);
-  }
-
-  if (!membersData) {
-    if (loading) return <p>loading</p>;
-    if (error) return <p>{error.message}</p>;
-  } else if (error) {
-    toast.danger(error.message, {
-      position: toast.POSITION.TOP_LEFT,
-    });
-  }
 
   if (user) {
     return (
@@ -455,6 +458,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
           pageIndex={pageIndex}
           pageCount={pageCount}
         />
+        <Loading loading={loading} />
       </>
     );
   }

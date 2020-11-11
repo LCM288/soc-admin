@@ -31,6 +31,7 @@ export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServ
 const { InputFile, Input, Field, Label, Control, Select } = Form;
 
 const Import = ({ user }: ServerSideProps): React.ReactElement => {
+  // constant
   const statusOptions = useMemo(() => ["All", "Activated", "Expired"], []);
   const pageSizeOptions = useMemo(() => [1, 2, 5, 10, 20, 50], []);
   const getSortDirectionIndicatior = useCallback(
@@ -46,25 +47,12 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
+  // data
   const [importPeople] = useMutation(importPeopleMutation);
 
   const [membersData, setMembersData] = useState<
     { members: Record<string, unknown>[] } | undefined
   >(undefined);
-
-  const [resizeListener, sizes] = useResizeAware();
-
-  const statusFilter = useCallback(
-    (
-      rows: Array<Row<Record<string, unknown>>>,
-      id: string,
-      filterValue: string
-    ) =>
-      filterValue === "All"
-        ? rows
-        : rows.filter((row) => row.values[id] === filterValue),
-    []
-  );
 
   const updateMemberData = useCallback(
     (rowIndex: number, updatedPerson: PersonUpdateAttributes) => {
@@ -76,6 +64,19 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
       setMembersData({ members: updatedMembers });
     },
     [membersData]
+  );
+
+  // table
+  const statusFilter = useCallback(
+    (
+      rows: Array<Row<Record<string, unknown>>>,
+      id: string,
+      filterValue: string
+    ) =>
+      filterValue === "All"
+        ? rows
+        : rows.filter((row) => row.values[id] === filterValue),
+    []
   );
 
   const tableColumns = useMemo(
@@ -179,6 +180,46 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    state: { globalFilter, filters, pageIndex, pageSize },
+    setGlobalFilter,
+    setFilter,
+    setHiddenColumns,
+    allColumns,
+    visibleColumns,
+    page,
+    pageCount,
+    setPageSize,
+    gotoPage,
+  } = useMemberTable({
+    columns: tableColumns,
+    data: tableData,
+    getRowId: tableGetRowId,
+    autoResetFilters: false,
+    autoResetGlobalFilter: false,
+    initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
+    autoResetPage: false,
+  });
+
+  const [globalFilterInput, setGlobalFilterInput] = useState(globalFilter);
+
+  const [statusFilterInput, setStatusFilterInput] = useState(
+    filters.find(({ id }) => id === "status")?.value
+  );
+
+  const onGlobalFilterChange = useAsyncDebounce((value) => {
+    setGlobalFilter(value || undefined);
+  }, 500);
+
+  const onStatusFilterChange = useAsyncDebounce((value) => {
+    setFilter("status", value || undefined);
+  }, 500);
+
+  // import & upload
   const [isUploading, setIsUploading] = useState(false);
   const [isFileProcessing, setIsFileProcessing] = useState(false);
 
@@ -268,45 +309,6 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
     });
   }, [importPeople, membersData]);
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    prepareRow,
-    state: { globalFilter, filters, pageIndex, pageSize },
-    setGlobalFilter,
-    setFilter,
-    setHiddenColumns,
-    allColumns,
-    visibleColumns,
-    page,
-    pageCount,
-    setPageSize,
-    gotoPage,
-  } = useMemberTable({
-    columns: tableColumns,
-    data: tableData,
-    getRowId: tableGetRowId,
-    autoResetFilters: false,
-    autoResetGlobalFilter: false,
-    initialState: { filters: initialFilters, pageSize: 10, pageIndex: 0 },
-    autoResetPage: false,
-  });
-
-  const [globalFilterInput, setGlobalFilterInput] = useState(globalFilter);
-
-  const [statusFilterInput, setStatusFilterInput] = useState(
-    filters.find(({ id }) => id === "status")?.value
-  );
-
-  const onGlobalFilterChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
-  }, 500);
-
-  const onStatusFilterChange = useAsyncDebounce((value) => {
-    setFilter("status", value || undefined);
-  }, 500);
-
   const onImport = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setIsFileProcessing(true);
@@ -368,6 +370,9 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
       });
     }
   }, []);
+
+  // resize
+  const [resizeListener, sizes] = useResizeAware();
 
   useEffect(() => {
     if (sizes.width < 640) {
