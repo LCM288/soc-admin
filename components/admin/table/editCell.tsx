@@ -17,9 +17,12 @@ const EditCell = ({ row, value: title }: Props): React.ReactElement => {
   const [updatePerson] = useMutation(updatePersonMutation, {
     refetchQueries: [{ query: membersQuery }, { query: registrationsQuery }],
   });
+
   const [editLoading, setEditLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+
   useClipped(openModal);
+
   const onSave = useCallback(
     (person: PersonUpdateAttributes) => {
       setEditLoading(true);
@@ -44,12 +47,15 @@ const EditCell = ({ row, value: title }: Props): React.ReactElement => {
     },
     [updatePerson]
   );
+
   const promptEdit = useCallback(() => {
     setOpenModal(true);
   }, []);
+
   const cancelEdit = useCallback(() => {
     setOpenModal(false);
   }, []);
+
   return (
     <StopClickDiv>
       <>

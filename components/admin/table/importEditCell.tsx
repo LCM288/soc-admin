@@ -21,7 +21,9 @@ const ImportEditCell = ({
 }: Props): React.ReactElement => {
   const [editLoading, setEditLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+
   useClipped(openModal);
+
   const onSave = useCallback(
     (person: PersonUpdateAttributes) => {
       if (person.sid.length !== 10) {
@@ -35,12 +37,15 @@ const ImportEditCell = ({
     },
     [row, updateMemberData]
   );
+
   const promptEdit = useCallback(() => {
     setOpenModal(true);
   }, []);
+
   const cancelEdit = useCallback(() => {
     setOpenModal(false);
   }, []);
+
   return (
     <StopClickDiv>
       <>

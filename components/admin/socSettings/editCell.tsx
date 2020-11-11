@@ -1,5 +1,12 @@
 import dynamic from "next/dynamic";
-import React, { useState, useRef } from "react";
+import React, {
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+  useReducer,
+  useEffect,
+} from "react";
 import { CellProps } from "react-table";
 import { Form, Button, Content, Tile } from "react-bulma-components";
 import ReactMarkdown from "react-markdown/with-html";
@@ -23,25 +30,33 @@ const EditCell = ({
   const [updateSocSetting] = useMutation(updateSocSettingMutation, {
     refetchQueries: [{ query: socSettingsQuery }, { query: socNameQuery }],
   });
+
   const oldValue = useRef<string | undefined>();
-  const [keyValue, setKeyValue] = useState(value);
+  const [editingValue, setEditingValue] = useState(value);
   // https://github.com/RIP21/react-simplemde-editor/issues/79
-  const [forceRefresh, setForceRefresh] = useState(0);
+  const [refreshState, dispatchForceRefresh] = useReducer(
+    (state) => state + 1,
+    0
+  );
   const [isSaving, setIsSaving] = useState(false);
 
-  if (oldValue.current !== value) {
-    if (keyValue === oldValue.current) {
-      setKeyValue(value);
+  useEffect(() => {
+    if (editingValue === oldValue.current && editingValue !== value) {
+      setEditingValue(value);
     }
     oldValue.current = value;
-  }
-  const resetValue = () => {
-    setForceRefresh(forceRefresh + 1);
-    setKeyValue(value);
-  };
-  const updateValue = () => {
+  }, [editingValue, value]);
+
+  const resetValue = useCallback(() => {
+    dispatchForceRefresh();
+    setEditingValue(value);
+  }, [value]);
+
+  const updateValue = useCallback(() => {
     setIsSaving(true);
-    updateSocSetting({ variables: { key: row.values.key, value: keyValue } })
+    updateSocSetting({
+      variables: { key: row.values.key, value: editingValue },
+    })
       .then((payload) => {
         if (!payload.data?.updateSocSetting.success) {
           throw new Error(
@@ -58,10 +73,8 @@ const EditCell = ({
       .finally(() => {
         setIsSaving(false);
       });
-  };
-  const extraKeys = {
-    "Ctrl-S": updateValue,
-  };
+  }, [updateSocSetting, row.values.key, editingValue]);
+
   switch (row.values.type) {
     case "string":
       return (
@@ -69,9 +82,9 @@ const EditCell = ({
           <Control className="is-expanded">
             <Input
               placeholder="No values set..."
-              value={keyValue}
+              value={editingValue}
               onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-                setKeyValue(event.target.value)
+                setEditingValue(event.target.value)
               }
             />
           </Control>
@@ -85,7 +98,7 @@ const EditCell = ({
               color="success"
               onClick={updateValue}
               loading={isSaving}
-              disabled={value === keyValue}
+              disabled={value === editingValue}
             >
               Update
             </Button>
@@ -102,22 +115,21 @@ const EditCell = ({
                 <Tile kind="child">
                   <SimpleMDE
                     id={row.values.key}
-                    key={forceRefresh}
-                    value={keyValue}
-                    onChange={(newValue: string) => setKeyValue(newValue)}
+                    key={refreshState}
+                    value={editingValue}
+                    onChange={setEditingValue}
                     options={{
                       minHeight: "10rem",
                       maxHeight: "20rem",
                       previewClass: ["editor-preview", "content"],
                     }}
-                    extraKeys={extraKeys}
                   />
                 </Tile>
               </Tile>
               <Tile kind="parent" vertical>
                 <Tile kind="child" className="box preview-content">
                   <Content>
-                    <ReactMarkdown source={keyValue} escapeHtml={false} />
+                    <ReactMarkdown source={editingValue} escapeHtml={false} />
                   </Content>
                 </Tile>
               </Tile>
@@ -131,7 +143,7 @@ const EditCell = ({
               color="success"
               onClick={updateValue}
               loading={isSaving}
-              disabled={value === keyValue}
+              disabled={value === editingValue}
             >
               Update
             </Button>

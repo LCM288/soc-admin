@@ -56,6 +56,7 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
   const [memberUntil, setMemberUntil] = useState(
     row.memberUntil ? (row.memberUntil as string) : null
   );
+
   const onReset = useCallback(() => {
     setSID(row.sid as string);
     setEnglishName((row.englishName ?? "") as string);
@@ -71,43 +72,37 @@ const EditPersonModal: React.FunctionComponent<Props> = ({
     setMemberSince((row.memberSince ?? "") as string);
     setMemberUntil(row.memberUntil ? (row.memberUntil as string) : null);
   }, [row]);
-  const onConfirm = useCallback(() => {
-    onSave({
-      sid,
-      englishName,
-      chineseName: chineseName || null,
-      gender: (gender as GenderEnum) || null,
-      dateOfBirth: dob || null,
-      email: email || null,
-      phone: phone || null,
-      college: (collegeCode as CollegeEnum) || undefined,
-      major: majorCode || undefined,
-      dateOfEntry: doEntry || undefined,
-      expectedGraduationDate: doGrad || undefined,
-      memberSince: memberSince || undefined,
-      memberUntil: memberUntil || undefined,
-    });
-  }, [
-    onSave,
-    sid,
-    englishName,
-    chineseName,
-    gender,
-    dob,
-    email,
-    phone,
-    collegeCode,
-    majorCode,
-    doEntry,
-    doGrad,
-    memberSince,
-    memberUntil,
-  ]);
+
+  const onConfirm = useCallback(
+    (person: PersonUpdateAttributes) => {
+      onSave(person);
+    },
+    [onSave]
+  );
+
   return (
     <>
       <Modal show closeOnEsc={false} showClose={false} onClose={onCancel}>
         <Modal.Content className="has-background-white box">
-          <PreventDefaultForm onSubmit={onConfirm}>
+          <PreventDefaultForm
+            onSubmit={() =>
+              onConfirm({
+                sid,
+                englishName,
+                chineseName: chineseName || null,
+                gender: (gender as GenderEnum) || null,
+                dateOfBirth: dob || null,
+                email: email || null,
+                phone: phone || null,
+                college: (collegeCode as CollegeEnum) || undefined,
+                major: majorCode || undefined,
+                dateOfEntry: doEntry || undefined,
+                expectedGraduationDate: doGrad || undefined,
+                memberSince: memberSince || undefined,
+                memberUntil: memberUntil || undefined,
+              })
+            }
+          >
             <>
               <Heading className="has-text-centered">Edit {title}</Heading>
               <Section className="pt-4">

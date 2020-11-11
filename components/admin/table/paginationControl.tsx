@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Form, Level, Button } from "react-bulma-components";
 
 interface Props {
@@ -9,31 +9,30 @@ interface Props {
 
 const { Field, Control } = Form;
 
-const getPageIndices = (currentPage: number, pageCount: number): number[] => {
-  if (pageCount <= 0) {
-    return [];
-  }
-  const len = Math.ceil(Math.log(pageCount));
-  const diff = Array(len)
-    .fill(0)
-    .map((_, idx) => 2 ** (idx + 1) - 1);
-
-  return [
-    ...diff.map((d) => currentPage - d),
-    currentPage,
-    ...diff.map((d) => currentPage + d),
-  ]
-    .filter((x) => x > 0 && x < pageCount - 1)
-    .concat(pageCount === 1 ? [0] : [0, pageCount - 1])
-    .sort((a, b) => a - b);
-};
-
 const PaginationControl = ({
   gotoPage,
   pageIndex,
   pageCount,
 }: Props): React.ReactElement => {
-  const pageIndices = getPageIndices(pageIndex, pageCount);
+  const pageIndices = useMemo(() => {
+    if (pageCount <= 0) {
+      return [];
+    }
+    const len = Math.ceil(Math.log(pageCount));
+    const diff = Array(len)
+      .fill(0)
+      .map((_, idx) => 2 ** (idx + 1) - 1);
+
+    return [
+      ...diff.map((d) => pageIndex - d),
+      pageIndex,
+      ...diff.map((d) => pageIndex + d),
+    ]
+      .filter((x) => x > 0 && x < pageCount - 1)
+      .concat(pageCount === 1 ? [0] : [0, pageCount - 1])
+      .sort((a, b) => a - b);
+  }, [pageIndex, pageCount]);
+
   return (
     <Level>
       <Level.Item>
