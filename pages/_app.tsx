@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import "react-toastify/dist/ReactToastify.css";
 import "bulma/bulma.sass";
 import "styles/select-fix.css";
@@ -45,12 +44,14 @@ function App({ Component, pageProps }: AppProps): React.ReactElement {
     }).Layout ?? React.Fragment;
 
   const clipCount = useRef(0);
+
   const addClipCount = useCallback(() => {
     if (clipCount.current === 0) {
       document.scrollingElement?.classList.add("is-clipped");
     }
     clipCount.current += 1;
   }, []);
+
   const removeClipCount = useCallback(() => {
     clipCount.current -= 1;
     if (clipCount.current === 0) {
