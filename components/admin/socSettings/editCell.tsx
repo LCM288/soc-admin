@@ -2,7 +2,6 @@ import dynamic from "next/dynamic";
 import React, {
   useState,
   useRef,
-  useMemo,
   useCallback,
   useReducer,
   useEffect,
