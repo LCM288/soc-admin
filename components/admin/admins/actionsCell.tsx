@@ -29,8 +29,10 @@ const ActionsCell = ({ row, user }: Props): React.ReactElement => {
   const [loading, setLoading] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
   useClipped(openEditModal);
   useClipped(openDeleteModal);
+
   const onSave = useCallback(
     (executive: ExecutiveUpdateAttributes) => {
       setLoading(true);
@@ -55,37 +57,44 @@ const ActionsCell = ({ row, user }: Props): React.ReactElement => {
     },
     [updateExecutive]
   );
+
   const promptEdit = useCallback(() => {
     setOpenEditModal(true);
   }, []);
+
   const cancelEdit = useCallback(() => {
     setOpenEditModal(false);
   }, []);
-  const onDelete = () => {
-    const { sid } = row.values;
-    setOpenDeleteModal(false);
-    setLoading(true);
-    deleteExecutive({ variables: { sid } })
-      .then((payload) => {
-        if (!payload.data?.deleteExecutive.success) {
-          throw new Error(
-            payload.data?.deleteExecutive.message ?? "some error occurs"
-          );
-        }
-        toast.success(payload.data.deleteExecutive.message, {
-          position: toast.POSITION.TOP_LEFT,
+
+  const onDelete = useCallback(
+    (sid: string) => {
+      setOpenDeleteModal(false);
+      setLoading(true);
+      deleteExecutive({ variables: { sid } })
+        .then((payload) => {
+          if (!payload.data?.deleteExecutive.success) {
+            throw new Error(
+              payload.data?.deleteExecutive.message ?? "some error occurs"
+            );
+          }
+          toast.success(payload.data.deleteExecutive.message, {
+            position: toast.POSITION.TOP_LEFT,
+          });
+        })
+        .catch((err) => {
+          toast.danger(err.message, { position: toast.POSITION.TOP_LEFT });
+        })
+        .finally(() => {
+          setLoading(false);
         });
-      })
-      .catch((err) => {
-        toast.danger(err.message, { position: toast.POSITION.TOP_LEFT });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+    },
+    [deleteExecutive]
+  );
+
   const promptDelete = useCallback(() => {
     setOpenDeleteModal(true);
   }, []);
+
   const cancelDelete = useCallback(() => {
     setOpenDeleteModal(false);
   }, []);
@@ -104,7 +113,7 @@ const ActionsCell = ({ row, user }: Props): React.ReactElement => {
         {openDeleteModal && (
           <PromptModal
             message={`Are you sure to remove ${row.values.sid} from the admin list ?`}
-            onConfirm={onDelete}
+            onConfirm={() => onDelete(row.values.sid)}
             onCancel={cancelDelete}
           />
         )}

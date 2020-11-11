@@ -10,11 +10,13 @@ import { StopClickDiv } from "utils/domEventHelpers";
 import useClipped from "utils/useClipped";
 
 const AddAdmin: React.FunctionComponent = () => {
-  const [loading, setLoading] = useState(false);
   const [newExecutive] = useMutation(newExecutiveMutation, {
     refetchQueries: [{ query: executivesQuery }],
   });
+
+  const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
   useClipped(modalOpen);
 
   const promptAdd = useCallback(() => {

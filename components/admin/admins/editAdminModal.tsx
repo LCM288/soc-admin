@@ -18,23 +18,27 @@ const EditAdminModal: React.FunctionComponent<Props> = ({
   row,
   loading,
 }: Props) => {
-  const sid = useMemo(() => row.sid as string, [row.sid]);
   const [nickname, setNickname] = useState((row.nickname ?? "") as string);
   const [pos, setPos] = useState((row.pos ?? "") as string);
+
+  const sid = useMemo(() => row.sid as string, [row.sid]);
 
   const onReset = useCallback(() => {
     setNickname((row.nickname ?? "") as string);
     setPos((row.pos ?? "") as string);
   }, [row]);
 
-  const onConfirm = useCallback(() => {
-    onSave({ sid, nickname, pos });
-  }, [onSave, sid, nickname, pos]);
+  const onConfirm = useCallback(
+    (person: ExecutiveUpdateAttributes) => {
+      onSave(person);
+    },
+    [onSave]
+  );
 
   return (
     <Modal show closeOnEsc={false} onClose={onCancel}>
       <Modal.Content className="has-background-white box">
-        <PreventDefaultForm onSubmit={onConfirm}>
+        <PreventDefaultForm onSubmit={() => onConfirm({ sid, nickname, pos })}>
           <>
             <Heading className="has-text-centered">Edit Admin</Heading>
             <TextField

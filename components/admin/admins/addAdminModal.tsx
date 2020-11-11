@@ -29,15 +29,18 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
   onClose,
   loading,
 }: Props) => {
-  const [sid, setSID] = useState("");
   const [
     getMember,
     { loading: memberLoading, data: memberData, error },
   ] = useLazyQuery(personQuery);
+
+  const [sid, setSID] = useState("");
   const [nickname, setNickname] = useState("");
   const [pos, setPos] = useState("");
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
+
   useClipped(openConfirmModal);
+
   const messageElement = useMemo(() => {
     const person = (memberData?.person as PersonAttributes) || null;
     return (
@@ -68,15 +71,22 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
     );
   }, [sid, memberLoading, memberData, error]);
 
-  const onConfirm = useCallback(() => {
-    onSave({ sid, nickname, pos });
-    setOpenConfirmModal(false);
-  }, [onSave, sid, nickname, pos]);
+  const onConfirm = useCallback(
+    (person: ExecutiveCreationAttributes) => {
+      onSave(person);
+      setOpenConfirmModal(false);
+    },
+    [onSave]
+  );
 
-  const promptConfirm = useCallback(() => {
-    getMember({ variables: { sid } });
-    setOpenConfirmModal(true);
-  }, [sid, getMember]);
+  const promptConfirm = useCallback(
+    (confirmSid: string) => {
+      getMember({ variables: { confirmSid } });
+      setOpenConfirmModal(true);
+    },
+    [getMember]
+  );
+
   const cancelConfirm = useCallback(() => {
     setOpenConfirmModal(false);
   }, []);
@@ -84,7 +94,7 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
   return (
     <Modal show closeOnEsc={false} onClose={onClose}>
       <Modal.Content className="has-background-white box">
-        <PreventDefaultForm onSubmit={promptConfirm}>
+        <PreventDefaultForm onSubmit={() => promptConfirm(sid)}>
           <>
             <Heading className="has-text-centered">New Admin</Heading>
             <TextField
@@ -124,7 +134,7 @@ const AddAdminModal: React.FunctionComponent<Props> = ({
       {openConfirmModal && (
         <PromptModal
           message={messageElement}
-          onConfirm={onConfirm}
+          onConfirm={() => onConfirm({ sid, nickname, pos })}
           onCancel={cancelConfirm}
         />
       )}
