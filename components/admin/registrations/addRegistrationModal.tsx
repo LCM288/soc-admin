@@ -37,48 +37,25 @@ const AddRegistrationModal: React.FunctionComponent<Props> = ({
   const [doEntry, setDoEntry] = useState("");
   const [doGrad, setDoGrad] = useState("");
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
+
   useClipped(openConfirmModal);
 
   const validDate = useCallback((date: string) => {
     return /^\d{4}-\d{2}-\d{2}$/g.test(date) ? date : null;
   }, []);
 
-  const onConfirm = useCallback(() => {
-    onSave({
-      sid,
-      englishName: englishName || "",
-      chineseName,
-      gender: gender as GenderEnum,
-      dateOfBirth: validDate(dob),
-      email,
-      phone,
-      college: collegeCode as CollegeEnum,
-      major: majorCode,
-      dateOfEntry: validDate(doEntry) || "",
-      expectedGraduationDate: validDate(doGrad) || "",
-      memberSince: null,
-      memberUntil: null,
-    });
-    setOpenConfirmModal(false);
-  }, [
-    onSave,
-    validDate,
-    sid,
-    englishName,
-    chineseName,
-    gender,
-    dob,
-    email,
-    phone,
-    collegeCode,
-    majorCode,
-    doEntry,
-    doGrad,
-  ]);
+  const onConfirm = useCallback(
+    (person: PersonCreationAttributes) => {
+      onSave(person);
+      setOpenConfirmModal(false);
+    },
+    [onSave]
+  );
 
   const promptConfirm = useCallback(() => {
     setOpenConfirmModal(true);
   }, []);
+
   const cancelConfirm = useCallback(() => {
     setOpenConfirmModal(false);
   }, []);
@@ -156,7 +133,23 @@ const AddRegistrationModal: React.FunctionComponent<Props> = ({
       {openConfirmModal && (
         <PromptModal
           message={`Are you sure to add a registration of ${englishName} (sid: ${sid})`}
-          onConfirm={onConfirm}
+          onConfirm={() =>
+            onConfirm({
+              sid,
+              englishName: englishName || "",
+              chineseName,
+              gender: gender as GenderEnum,
+              dateOfBirth: validDate(dob),
+              email,
+              phone,
+              college: collegeCode as CollegeEnum,
+              major: majorCode,
+              dateOfEntry: validDate(doEntry) || "",
+              expectedGraduationDate: validDate(doGrad) || "",
+              memberSince: null,
+              memberUntil: null,
+            })
+          }
           onCancel={cancelConfirm}
         />
       )}

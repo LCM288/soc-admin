@@ -15,14 +15,17 @@ const ApproveCell = ({ row }: Props): React.ReactElement => {
   const [approveMembership] = useMutation(approveMembershipMutation, {
     refetchQueries: [{ query: registrationsQuery }],
   });
+
   const [approveLoading, setApproveLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+
   useClipped(openModal);
+
   const approve = useCallback(
-    (memberUntil: string | null) => {
+    (sid: string, memberUntil: string | null) => {
       setApproveLoading(true);
       approveMembership({
-        variables: { sid: row.values.sid as string, memberUntil },
+        variables: { sid, memberUntil },
       })
         .then((payload) => {
           if (!payload.data?.approveMembership.success) {
@@ -42,14 +45,17 @@ const ApproveCell = ({ row }: Props): React.ReactElement => {
           setApproveLoading(false);
         });
     },
-    [approveMembership, row.values.sid]
+    [approveMembership]
   );
+
   const promptApprove = useCallback(() => {
     setOpenModal(true);
   }, []);
+
   const cancelApprove = useCallback(() => {
     setOpenModal(false);
   }, []);
+
   return (
     <StopClickDiv>
       <>

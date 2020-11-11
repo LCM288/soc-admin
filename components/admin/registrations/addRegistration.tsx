@@ -10,11 +10,13 @@ import { StopClickDiv } from "utils/domEventHelpers";
 import useClipped from "utils/useClipped";
 
 const AddRegistration: React.FunctionComponent = () => {
-  const [loading, setLoading] = useState(false);
   const [newPerson] = useMutation(newPersonMutation, {
     refetchQueries: [{ query: registrationsQuery }],
   });
+
+  const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
   useClipped(modalOpen);
 
   const promptAdd = useCallback(() => {

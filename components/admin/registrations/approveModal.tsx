@@ -6,7 +6,7 @@ import { PreventDefaultForm } from "utils/domEventHelpers";
 interface Props {
   sid: string;
   englishName: string;
-  onConfirm: (memberUntil: string | null) => void;
+  onConfirm: (sid: string, memberUntil: string | null) => void;
   onCancel: () => void;
 }
 
@@ -21,7 +21,7 @@ const ApproveModal = ({
   return (
     <Modal show closeOnEsc onClose={onCancel} className="modal-ovrflowing">
       <Modal.Content className="has-background-white box">
-        <PreventDefaultForm onSubmit={() => onConfirm(memberUntil)}>
+        <PreventDefaultForm onSubmit={() => onConfirm(sid, memberUntil)}>
           <>
             <Heading className="has-text-centered" size={5}>
               {`You are going to approve ${englishName}'s (sid: ${sid}) membership.`}
