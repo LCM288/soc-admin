@@ -11,10 +11,10 @@ interface Props {
   setCollegeCode: (value: string) => void;
 }
 
-const CollegeField: React.FunctionComponent<Props> = ({
+const CollegeField = ({
   collegeCode,
   setCollegeCode,
-}: Props) => {
+}: Props): React.ReactElement => {
   interface CollegeOption {
     value: string;
     chineseLabel: string;

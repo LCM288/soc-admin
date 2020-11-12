@@ -6,7 +6,7 @@ interface Props {
   loading: boolean;
 }
 
-const Loading: React.FunctionComponent<Props> = ({ loading }: Props) => {
+const Loading = ({ loading }: Props): React.ReactElement => {
   useClipped(loading);
 
   return (

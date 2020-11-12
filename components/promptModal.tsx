@@ -7,11 +7,11 @@ interface Props {
   onCancel: () => void;
 }
 
-const PromptModal: React.FunctionComponent<Props> = ({
+const PromptModal = ({
   message,
   onConfirm,
   onCancel,
-}: Props) => (
+}: Props): React.ReactElement => (
   <Modal show closeOnEsc onClose={onCancel}>
     <Modal.Content className="has-background-white box">
       {(typeof message === "string" && (

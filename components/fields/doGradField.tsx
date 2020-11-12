@@ -8,10 +8,7 @@ interface Props {
   setDoGrad: (value: string) => void;
 }
 
-const DOGradField: React.FunctionComponent<Props> = ({
-  doGrad,
-  setDoGrad,
-}: Props) => {
+const DOGradField = ({ doGrad, setDoGrad }: Props): React.ReactElement => {
   interface DOGradOption {
     value: string;
     label: string;

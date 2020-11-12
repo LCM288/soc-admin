@@ -15,7 +15,12 @@ import { DateTime } from "luxon";
 
 import { Section, Container } from "react-bulma-components";
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+interface Props {
+  baseUrl: string;
+  clientId: string;
+}
+
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const user = await getUserAndRefreshToken(ctx);
   if (user) {
     if (await isAdmin(user)) {
@@ -65,13 +70,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-function Index({
-  baseUrl,
-  clientId,
-}: {
-  baseUrl: string;
-  clientId: string;
-}): React.ReactElement {
+function Index({ baseUrl, clientId }: Props): React.ReactElement {
   const link = getMicrosoftLoginLink({ baseUrl, clientId });
   return (
     <div>

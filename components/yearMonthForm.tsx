@@ -10,11 +10,11 @@ interface Props {
   yearRange: number[];
 }
 
-const YearMonthForm: React.FunctionComponent<Props> = ({
+const YearMonthForm = ({
   date,
   onChange,
   yearRange: [from, to],
-}: Props) => {
+}: Props): React.ReactElement => {
   const months = useMemo(() => Info.months("long"), []);
 
   const years = useMemo(

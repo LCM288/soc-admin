@@ -8,10 +8,7 @@ interface Props {
   setDoEntry: (value: string) => void;
 }
 
-const DOEntryField: React.FunctionComponent<Props> = ({
-  doEntry,
-  setDoEntry,
-}: Props) => {
+const DOEntryField = ({ doEntry, setDoEntry }: Props): React.ReactElement => {
   interface DOEntryOption {
     value: string;
     label: string;

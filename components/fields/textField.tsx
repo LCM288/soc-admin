@@ -15,7 +15,7 @@ interface Props {
   required?: boolean;
 }
 
-const TextField: React.FunctionComponent<Props> = ({
+const TextField = ({
   value,
   setValue = () => {},
   label,
@@ -24,7 +24,7 @@ const TextField: React.FunctionComponent<Props> = ({
   type = "text",
   pattern = null,
   required = false,
-}: Props) => {
+}: Props): React.ReactElement => {
   return (
     <>
       <Field>

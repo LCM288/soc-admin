@@ -14,7 +14,7 @@ interface Props {
   user: User;
 }
 
-const ExecutiveSetup: React.FunctionComponent<Props> = ({ user }: Props) => {
+const ExecutiveSetup = ({ user }: Props): React.ReactElement => {
   const [
     newExecutive,
     { loading: newExecutiveMutationLoading, error: newExecutiveMutationError },

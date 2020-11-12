@@ -24,11 +24,11 @@ interface Props {
   loading: boolean;
 }
 
-const AddAdminModal: React.FunctionComponent<Props> = ({
+const AddAdminModal = ({
   onSave,
   onClose,
   loading,
-}: Props) => {
+}: Props): React.ReactElement => {
   const [
     getMember,
     { loading: memberLoading, data: memberData, error },

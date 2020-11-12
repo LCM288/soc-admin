@@ -13,16 +13,8 @@ import Loading from "components/loading";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
-const mergeByKey = (
-  a1: Record<string, string>[],
-  a2: Record<string, string>[]
-) =>
-  a1.map((itm) => ({
-    ...a2.find((item) => item.key && itm.key && item.key === itm.key),
-    ...itm,
-  }));
-
 const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
+  // data
   const { data, loading, error } = useQuery(socSettingsQuery, {
     fetchPolicy: "cache-and-network",
     pollInterval: 5000,
@@ -41,6 +33,7 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
     }
   }, [error]);
 
+  // table
   const tableColumns = useMemo(
     () => [
       {
@@ -74,16 +67,18 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  const tableData = useMemo(() => {
-    return (
-      (socSettingsData &&
-        mergeByKey(
-          Object.values(allSocSettings),
-          socSettingsData.socSettings
-        )) ||
-      []
-    );
-  }, [socSettingsData]);
+  const tableData = useMemo(
+    () =>
+      socSettingsData
+        ? Object.values(allSocSettings).map((item1) => ({
+            ...socSettingsData.socSettings.find(
+              (item2) => item1.key && item2.key && item1.key === item2.key
+            ),
+            ...item1,
+          }))
+        : [],
+    [socSettingsData]
+  );
 
   const tableInstance = useTable({
     columns: tableColumns,

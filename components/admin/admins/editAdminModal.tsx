@@ -12,12 +12,12 @@ interface Props {
   loading: boolean;
 }
 
-const EditAdminModal: React.FunctionComponent<Props> = ({
+const EditAdminModal = ({
   onSave,
   onCancel,
   row,
   loading,
-}: Props) => {
+}: Props): React.ReactElement => {
   const [nickname, setNickname] = useState((row.nickname ?? "") as string);
   const [pos, setPos] = useState((row.pos ?? "") as string);
 

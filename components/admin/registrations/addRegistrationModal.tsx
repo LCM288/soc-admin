@@ -20,11 +20,11 @@ interface Props {
   loading: boolean;
 }
 
-const AddRegistrationModal: React.FunctionComponent<Props> = ({
+const AddRegistrationModal = ({
   onSave,
   onClose,
   loading,
-}: Props) => {
+}: Props): React.ReactElement => {
   const [sid, setSID] = useState("");
   const [englishName, setEnglishName] = useState("");
   const [chineseName, setChineseName] = useState("");

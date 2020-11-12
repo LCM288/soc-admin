@@ -15,14 +15,14 @@ interface Props {
   required?: boolean;
 }
 
-const DateField: React.FunctionComponent<Props> = ({
+const DateField = ({
   label,
   dateValue,
   setDateValue = () => {},
   editable = false,
   yearRange = [-30, 0],
   required = false,
-}: Props) => {
+}: Props): React.ReactElement => {
   const [calMonth, setCalMonth] = useState(new Date());
 
   return (

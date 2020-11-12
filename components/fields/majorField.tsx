@@ -12,10 +12,7 @@ interface Props {
   setMajorCode: (value: string) => void;
 }
 
-const MajorField: React.FunctionComponent<Props> = ({
-  majorCode,
-  setMajorCode,
-}: Props) => {
+const MajorField = ({ majorCode, setMajorCode }: Props): React.ReactElement => {
   interface MajorOption {
     value: string;
     chineseLabel: string;

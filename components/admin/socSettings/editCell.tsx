@@ -22,10 +22,9 @@ const SimpleMDE = dynamic<SimpleMDEEditorProps>(
 
 const { Input, Field, Control } = Form;
 
-const EditCell = ({
-  row,
-  value,
-}: CellProps<Record<string, unknown>, string>): React.ReactElement => {
+type Props = CellProps<Record<string, unknown>, string>;
+
+const EditCell = ({ row, value }: Props): React.ReactElement => {
   const [updateSocSetting] = useMutation(updateSocSettingMutation, {
     refetchQueries: [{ query: socSettingsQuery }, { query: socNameQuery }],
   });

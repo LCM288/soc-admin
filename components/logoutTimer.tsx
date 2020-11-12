@@ -7,7 +7,7 @@ interface Props {
   time: DateTime;
 }
 
-const LogoutTimer: React.FunctionComponent<Props> = ({ time }: Props) => {
+const LogoutTimer = ({ time }: Props): React.ReactElement => {
   const router = useRouter();
 
   const [now, setNow] = useState(DateTime.local());

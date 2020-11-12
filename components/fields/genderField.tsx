@@ -6,10 +6,7 @@ interface Props {
   setGender: (value: string) => void;
 }
 
-const GenderField: React.FunctionComponent<Props> = ({
-  gender,
-  setGender,
-}: Props) => {
+const GenderField = ({ gender, setGender }: Props): React.ReactElement => {
   interface GenderOption {
     value: string;
     label: string;

@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import useResizeAware from "react-resize-aware";
 import { Row, CellProps } from "react-table";

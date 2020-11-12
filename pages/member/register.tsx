@@ -29,6 +29,7 @@ import DateField from "components/fields/dateField";
 import MajorField from "components/fields/majorField";
 import Loading from "components/loading";
 import MemberLayout from "layouts/memberLayout";
+import { ServerSideProps } from "utils/getServerSideProps";
 import { PreventDefaultForm } from "utils/domEventHelpers";
 import updatePersonMutation from "apollo/queries/person/updatePerson.gql";
 import newPersonMutation from "apollo/queries/person/newPerson.gql";
@@ -36,7 +37,7 @@ import personQuery from "apollo/queries/person/person.gql";
 
 export { getMemberPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
-const Register = ({ user }: { user: User | null }): React.ReactElement => {
+const Register = ({ user }: ServerSideProps): React.ReactElement => {
   const router = useRouter();
   const personQueryResult = useQuery(personQuery, {
     variables: { sid: user?.sid },

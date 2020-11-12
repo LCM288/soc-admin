@@ -9,7 +9,7 @@ import toast from "utils/toast";
 import { StopClickDiv } from "utils/domEventHelpers";
 import useClipped from "utils/useClipped";
 
-const AddAdmin: React.FunctionComponent = () => {
+const AddAdmin = (): React.ReactElement => {
   const [newExecutive] = useMutation(newExecutiveMutation, {
     refetchQueries: [{ query: executivesQuery }],
   });

@@ -13,13 +13,13 @@ interface Props {
   editable?: boolean;
 }
 
-const MemberUntilField: React.FunctionComponent<Props> = ({
+const MemberUntilField = ({
   label,
   nullLabel = null,
   dateValue,
   setDateValue,
   editable = false,
-}: Props) => {
+}: Props): React.ReactElement => {
   const [isNull, setIsNull] = useState(dateValue === null);
   const [stringValue, setStringValue] = useState((dateValue ?? "") as string);
 

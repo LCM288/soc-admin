@@ -25,14 +25,14 @@ interface Props {
   fullyEditable?: boolean;
 }
 
-const EditPersonModal: React.FunctionComponent<Props> = ({
+const EditPersonModal = ({
   onSave,
   onCancel,
   row,
   loading,
   title,
   fullyEditable = false,
-}: Props) => {
+}: Props): React.ReactElement => {
   const [sid, setSID] = useState(row.sid as string);
   const [englishName, setEnglishName] = useState(
     (row.englishName ?? "") as string

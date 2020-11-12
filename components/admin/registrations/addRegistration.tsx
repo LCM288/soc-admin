@@ -9,7 +9,7 @@ import toast from "utils/toast";
 import { StopClickDiv } from "utils/domEventHelpers";
 import useClipped from "utils/useClipped";
 
-const AddRegistration: React.FunctionComponent = () => {
+const AddRegistration = (): React.ReactElement => {
   const [newPerson] = useMutation(newPersonMutation, {
     refetchQueries: [{ query: registrationsQuery }],
   });

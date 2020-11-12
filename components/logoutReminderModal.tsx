@@ -7,10 +7,7 @@ interface Props {
   onClose: () => void;
 }
 
-const LogoutReminderModal: React.FunctionComponent<Props> = ({
-  open,
-  onClose,
-}: Props) => {
+const LogoutReminderModal = ({ open, onClose }: Props): React.ReactElement => {
   const router = useRouter();
 
   useEffect(() => {
