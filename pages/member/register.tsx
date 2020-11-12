@@ -6,7 +6,6 @@ import React, {
   useMemo,
 } from "react";
 import { useRouter } from "next/router";
-import { User } from "@/types/datasources";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import toast from "utils/toast";
 import { Button, Section, Container, Heading } from "react-bulma-components";
