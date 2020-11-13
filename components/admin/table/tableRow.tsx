@@ -27,9 +27,12 @@ const TableRow = ({
       return (
         <td colSpan={visibleColumns.length}>
           {hiddenColumns.map((column) => (
-            <p key={column.id}>
-              <strong>{column.Header}:</strong> {row.values[column.id]}
-            </p>
+            <div key={column.id}>
+              <strong>{column.Header}:</strong>
+              {row.allCells
+                .find((cell) => cell.column.id === column.id)
+                ?.render("Cell") ?? ""}
+            </div>
           ))}
         </td>
       );
