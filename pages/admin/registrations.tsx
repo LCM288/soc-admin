@@ -12,12 +12,14 @@ import toast from "utils/toast";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import ApproveCell from "components/admin/registrations/approveCell";
 import EditCell from "components/admin/table/editCell";
+import TableHead from "components/admin/table/tableHead";
 import TableRow from "components/admin/table/tableRow";
 import PaginationControl from "components/admin/table/paginationControl";
 import useRegistrationTable, {
   RegistrationColumnInstance,
 } from "utils/useRegistrationTable";
 import AddRegistration from "components/admin/registrations/addRegistration";
+import { cloneDeep, compact } from "lodash";
 import Loading from "components/loading";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
@@ -78,64 +80,90 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "ID",
         accessor: "id",
+        width: 50,
+        maxWidth: 50,
       },
       {
         Header: "SID",
         accessor: "sid",
+        width: 110,
+        maxWidth: 110,
       },
       {
         Header: "Chinese Name",
         accessor: "chineseName",
+        width: 140,
+        maxWidth: 140,
       },
       {
         Header: "English Name",
         accessor: "englishName",
+        width: 300,
+        maxWidth: 300,
       },
       {
         Header: "Gender",
         accessor: "gender",
+        width: 70,
+        maxWidth: 70,
       },
       {
         Header: "Date of Birth",
         accessor: "dateOfBirth",
+        width: 130,
+        maxWidth: 130,
       },
       {
         Header: "Email",
         accessor: "email",
+        width: 300,
+        maxWidth: 300,
       },
       {
         Header: "Phone",
         accessor: "phone",
+        width: 145,
+        maxWidth: 145,
       },
       {
         Header: "College",
         accessor: (row: Record<string, unknown>) =>
           (row.college as College).code,
         id: "college",
+        width: 80,
+        maxWidth: 80,
       },
       {
         Header: "Major",
         accessor: (row: Record<string, unknown>) => (row.major as Major).code,
         id: "major",
+        width: 80,
+        maxWidth: 80,
       },
       {
         Header: "Date of Entry",
         accessor: "dateOfEntry",
+        width: 140,
+        maxWidth: 140,
       },
       {
         Header: "Expected Graduation",
         accessor: "expectedGraduationDate",
+        width: 190,
+        maxWidth: 190,
       },
       {
         Header: "Type",
         accessor: "registrationType",
         filter: typeFilter,
         disableSortBy: true,
+        width: 60,
+        maxWidth: 60,
       },
       {
         Header: "Action",
         accessor: () => "Registration",
-        id: "approve",
+        id: "action",
         Cell: (cellPrpos: CellProps<Record<string, unknown>, string>) => (
           <div className="buttons">
             <ApproveCell {...cellPrpos} />
@@ -143,6 +171,9 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
           </div>
         ),
         disableSortBy: true,
+        minWidth: 200,
+        width: 200,
+        maxWidth: 200,
       },
     ],
     [typeFilter]
@@ -208,48 +239,39 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   // resize
   const [resizeListener, sizes] = useResizeAware();
 
+  const hideColumnOrder = useMemo(
+    () => [
+      ["gender", "dateOfBirth", "dateOfEntry", "expectedGraduationDate"],
+      ["id", "email"],
+      ["phone"],
+      ["chineseName"],
+      ["major", "college"],
+      ["registrationType", "action"],
+    ],
+    []
+  );
+
   useEffect(() => {
-    if (sizes.width < 640) {
-      setHiddenColumns([
-        "id",
-        "chineseName",
-        "gender",
-        "dateOfBirth",
-        "email",
-        "phone",
-        "dateOfEntry",
-        "expectedGraduationDate",
-      ]);
-    } else if (sizes.width < 768) {
-      setHiddenColumns([
-        "id",
-        "gender",
-        "dateOfBirth",
-        "email",
-        "phone",
-        "dateOfEntry",
-        "expectedGraduationDate",
-      ]);
-    } else if (sizes.width < 1024) {
-      setHiddenColumns([
-        "id",
-        "gender",
-        "dateOfBirth",
-        "email",
-        "dateOfEntry",
-        "expectedGraduationDate",
-      ]);
-    } else if (sizes.width < 1440) {
-      setHiddenColumns([
-        "gender",
-        "dateOfBirth",
-        "dateOfEntry",
-        "expectedGraduationDate",
-      ]);
-    } else {
-      setHiddenColumns([]);
+    let newHideColumn: string[] = [];
+    let maxWidth = tableColumns
+      .map((column) => column.maxWidth)
+      .reduce((a, b) => a + b, 0);
+    const columnsToHide = cloneDeep(hideColumnOrder);
+    while (sizes.width < maxWidth && columnsToHide.length) {
+      newHideColumn = newHideColumn.concat(columnsToHide[0]);
+      maxWidth -= compact(
+        columnsToHide[0].map((columnId) =>
+          tableColumns.find(
+            (column) => column.id === columnId || column.accessor === columnId
+          )
+        )
+      )
+        .map((column) => column.maxWidth)
+        .reduce((a, b) => a + b, 0);
+      columnsToHide.splice(0, 1);
     }
-  }, [sizes.width, setHiddenColumns, visibleColumns]);
+    setHiddenColumns(newHideColumn);
+  }, [sizes.width, hideColumnOrder, tableColumns, setHiddenColumns]);
 
   if (user) {
     return (
@@ -260,7 +282,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
           pageIndex={pageIndex}
           pageCount={pageCount}
         />
-        <Level>
+        <Level className="is-mobile is-flex-wrap-wrap">
           <Level.Side align="left">
             <Field kind="addons">
               <Control>
@@ -293,7 +315,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
             </Field>
           </Level.Side>
           <Level.Side align="right">
-            <Field horizontal>
+            <Field horizontal className="is-flex">
               <Label className="mr-2" style={{ alignSelf: "center" }}>
                 Result per page
               </Label>
@@ -315,18 +337,10 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
           </Level.Side>
         </Level>
         <Table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                    {column.render("Header")}
-                    <span>{getSortDirectionIndicatior(column)}</span>
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
+          <TableHead
+            headerGroups={headerGroups}
+            getSortDirectionIndicatior={getSortDirectionIndicatior}
+          />
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);
@@ -346,7 +360,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
           pageIndex={pageIndex}
           pageCount={pageCount}
         />
-        <Level>
+        <Level className="is-mobile">
           <div />
           <Level.Side align="right">
             <AddRegistration />

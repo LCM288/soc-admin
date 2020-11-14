@@ -1,7 +1,8 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
 import React, { useState, useMemo, useCallback } from "react";
 import { Row, ColumnInstance } from "react-table";
+import TableCell from "components/admin/table/tableCell";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 
 import _ from "lodash";
 
@@ -25,7 +26,13 @@ const TableRow = ({
   const expandedHiddenColumns = useMemo(() => {
     if (hiddenColumns.length) {
       return (
-        <td colSpan={visibleColumns.length}>
+        <td
+          colSpan={visibleColumns.length}
+          style={{
+            maxWidth: "1px", // this is a hack for table data cell
+            overflow: "auto",
+          }}
+        >
           {hiddenColumns.map((column) => (
             <div key={column.id}>
               <strong>{column.Header}: </strong>
@@ -57,8 +64,13 @@ const TableRow = ({
     <>
       <tr {...row.getRowProps()} onClick={onRowClick} style={rowStyle}>
         {row.cells.map((cell) => (
-          <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+          <TableCell cell={cell} key={cell.column.id} />
         ))}
+        {Boolean(hiddenColumns.length) && (
+          <td style={{ width: 1, maxWidth: 1 }}>
+            <FontAwesomeIcon icon={isExpanded ? faMinus : faPlus} />
+          </td>
+        )}
       </tr>
       <tr className={!isExpanded ? "is-hidden" : ""} />
       <tr className={!isExpanded ? "is-hidden" : ""}>
