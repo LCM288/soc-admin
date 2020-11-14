@@ -28,7 +28,7 @@ const TableRow = ({
         <td colSpan={visibleColumns.length}>
           {hiddenColumns.map((column) => (
             <div key={column.id}>
-              <strong>{column.Header}:</strong>
+              <strong>{column.Header}: </strong>
               {row.allCells
                 .find((cell) => cell.column.id === column.id)
                 ?.render("Cell") ?? ""}
