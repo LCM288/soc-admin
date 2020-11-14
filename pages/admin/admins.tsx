@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
+import useResizeAware from "react-resize-aware";
 import useAdminTable, { AdminColumnInstance } from "utils/useAdminTable";
 import { CellProps } from "react-table";
 import { useQuery } from "@apollo/react-hooks";
@@ -9,6 +10,8 @@ import toast from "utils/toast";
 import executivesQuery from "apollo/queries/executive/executives.gql";
 import ActionsCell from "components/admin/admins/actionsCell";
 import AddAdmin from "components/admin/admins/addAdmin";
+import TableRow from "components/admin/table/tableRow";
+import { cloneDeep, compact } from "lodash";
 import Loading from "components/loading";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
@@ -55,22 +58,31 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "SID",
         accessor: "sid",
+        width: 110,
+        maxWidth: 110,
       },
       {
         Header: "Nickname",
         accessor: "nickname",
+        width: 300,
+        maxWidth: 300,
       },
       {
         Header: "Position",
         accessor: "pos",
+        width: 300,
+        maxWidth: 300,
       },
       {
         Header: "Action",
-        id: "edit",
+        id: "action",
         Cell: (props: CellProps<Record<string, unknown>, string>) => (
           <ActionsCell {...props} user={user} />
         ),
         disableSortBy: true,
+        minWidth: 170,
+        width: 170,
+        maxWidth: 170,
       },
     ],
     [user]
@@ -96,17 +108,58 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     headerGroups,
     rows,
     prepareRow,
+    setHiddenColumns,
+    allColumns,
+    visibleColumns,
   } = tableInstance;
+
+  // resize
+  const [resizeListener, sizes] = useResizeAware();
+
+  const hideColumnOrder = useMemo(
+    () => [["pos"], ["nickname"], ["action"]],
+    []
+  );
+
+  useEffect(() => {
+    let newHideColumn: string[] = [];
+    let maxWidth =
+      54 +
+      tableColumns.map((column) => column.maxWidth).reduce((a, b) => a + b, 0);
+    const columnsToHide = cloneDeep(hideColumnOrder);
+    while (sizes.width < maxWidth && columnsToHide.length) {
+      newHideColumn = newHideColumn.concat(columnsToHide[0]);
+      maxWidth -= compact(
+        columnsToHide[0].map((columnId) =>
+          tableColumns.find(
+            (column) => column.id === columnId || column.accessor === columnId
+          )
+        )
+      )
+        .map((column) => column.maxWidth)
+        .reduce((a, b) => a + b, 0);
+      columnsToHide.splice(0, 1);
+    }
+    setHiddenColumns(newHideColumn);
+  }, [sizes.width, hideColumnOrder, tableColumns, setHiddenColumns]);
 
   if (user) {
     return (
       <>
+        {resizeListener}
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    style={{
+                      width: column.width,
+                      maxWidth: column.maxWidth,
+                      minWidth: column.minWidth,
+                    }}
+                  >
                     {column.render("Header")}
                     <span>{getSortDirectionIndicatior(column)}</span>
                   </th>
@@ -118,18 +171,17 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             {rows.map((row) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
+                <TableRow
+                  key={row.id}
+                  row={row}
+                  allColumns={allColumns}
+                  visibleColumns={visibleColumns}
+                />
               );
             })}
           </tbody>
         </Table>
-        <Level>
+        <Level className="is-mobile">
           <div />
           <Level.Side align="right">
             <AddAdmin />

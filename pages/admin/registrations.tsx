@@ -12,7 +12,6 @@ import toast from "utils/toast";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import ApproveCell from "components/admin/registrations/approveCell";
 import EditCell from "components/admin/table/editCell";
-import TableHead from "components/admin/table/tableHead";
 import TableRow from "components/admin/table/tableRow";
 import PaginationControl from "components/admin/table/paginationControl";
 import useRegistrationTable, {
@@ -253,9 +252,9 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
 
   useEffect(() => {
     let newHideColumn: string[] = [];
-    let maxWidth = tableColumns
-      .map((column) => column.maxWidth)
-      .reduce((a, b) => a + b, 0);
+    let maxWidth =
+      54 +
+      tableColumns.map((column) => column.maxWidth).reduce((a, b) => a + b, 0);
     const columnsToHide = cloneDeep(hideColumnOrder);
     while (sizes.width < maxWidth && columnsToHide.length) {
       newHideColumn = newHideColumn.concat(columnsToHide[0]);
@@ -337,10 +336,25 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
           </Level.Side>
         </Level>
         <Table {...getTableProps()}>
-          <TableHead
-            headerGroups={headerGroups}
-            getSortDirectionIndicatior={getSortDirectionIndicatior}
-          />
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    style={{
+                      width: column.width,
+                      maxWidth: column.maxWidth,
+                      minWidth: column.minWidth,
+                    }}
+                  >
+                    {column.render("Header")}
+                    <span>{getSortDirectionIndicatior(column)}</span>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);
