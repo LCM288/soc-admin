@@ -158,6 +158,26 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
                     minHeight: "10rem",
                     maxHeight: "20rem",
                     previewClass: ["editor-preview", "content"],
+                    toolbar: [
+                      "bold",
+                      "italic",
+                      "strikethrough",
+                      "|",
+                      "heading-smaller",
+                      "heading-bigger",
+                      "|",
+                      "code",
+                      "quote",
+                      "unordered-list",
+                      "ordered-list",
+                      "|",
+                      "link",
+                      "image",
+                      "table",
+                      "horizontal-rule",
+                      "|",
+                      "guide",
+                    ],
                   }}
                 />
               </Tile>
