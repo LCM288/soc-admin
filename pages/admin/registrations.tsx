@@ -103,8 +103,8 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "Gender",
         accessor: "gender",
-        width: 70,
-        maxWidth: 70,
+        width: 80,
+        maxWidth: 80,
       },
       {
         Header: "Date of Birth",
