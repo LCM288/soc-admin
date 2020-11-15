@@ -137,20 +137,37 @@ export default class PersonAPI extends DataSource<ContextBase> {
    * @returns An instance of the new person
    */
   public async addNewPerson(
-    arg: PersonCreationAttributes
+    arg: PersonCreationAttributes,
+    who: string | undefined
   ): Promise<PersonModelAttributes> {
-    const person = await this.store.findOne({
-      where: { sid: arg.sid },
-      raw: true,
-    });
-    if (person) {
-      if (person.status === MemberStatusEnum.Unactivated) {
-        throw new Error(`SID ${arg.sid} has a registration already`);
-      } else {
-        throw new Error(`SID ${arg.sid} is a member already`);
+    return this.sequelize.transaction(async (transaction) => {
+      const person = await this.store.findOne({
+        where: { sid: arg.sid },
+        raw: true,
+        transaction,
+      });
+      if (person) {
+        if (person.status === MemberStatusEnum.Unactivated) {
+          throw new Error(`SID ${arg.sid} has a registration already`);
+        } else {
+          throw new Error(`SID ${arg.sid} is a member already`);
+        }
       }
-    }
-    return (await this.store.create(arg)).get({ plain: true });
+      const newPerson = (await this.store.create(arg, { transaction })).get({
+        plain: true,
+      });
+      await this.logger.insertLogEntry(
+        {
+          who,
+          table: this.store.tableName,
+          description: "A new person has been added",
+          oldValue: null,
+          newValue: JSON.stringify(newPerson),
+        },
+        transaction
+      );
+      return newPerson;
+    });
   }
 
   /**
@@ -162,20 +179,43 @@ export default class PersonAPI extends DataSource<ContextBase> {
    */
   public async updatePerson(
     arg: PersonUpdateAttributes,
-    onlyNewRegistration: boolean
+    onlyNewRegistration: boolean,
+    who: string | undefined
   ): Promise<PersonModelAttributes> {
-    const conditions: Sequelize.WhereOptions<PersonModelAttributes> = {
-      sid: arg.sid,
-      ...(onlyNewRegistration ? { memberSince: { [Op.eq]: null } } : null),
-    };
-    const [count, people] = await this.store.update(arg, {
-      where: conditions,
-      returning: true,
+    return this.sequelize.transaction(async (transaction) => {
+      const conditions: Sequelize.WhereOptions<PersonModelAttributes> = {
+        sid: arg.sid,
+        ...(onlyNewRegistration ? { memberSince: { [Op.eq]: null } } : null),
+      };
+      const oldPerson = await this.store.findOne({
+        where: conditions,
+        raw: true,
+        transaction,
+      });
+      if (!oldPerson) {
+        throw new Error(`SID ${arg.sid} is not on the list`);
+      }
+      const [count, people] = await this.store.update(arg, {
+        where: conditions,
+        returning: true,
+        transaction,
+      });
+      if (!count) {
+        throw new Error(`Cannot update person record for sid ${arg.sid}`);
+      }
+      const newPerson = people[0].get({ plain: true });
+      await this.logger.insertLogEntry(
+        {
+          who,
+          table: this.store.tableName,
+          description: `Student ${arg.sid} has been updated`,
+          oldValue: JSON.stringify(oldPerson),
+          newValue: JSON.stringify(newPerson),
+        },
+        transaction
+      );
+      return newPerson;
     });
-    if (!count) {
-      throw new Error(`Cannot update person record for sid ${arg.sid}`);
-    }
-    return people[0].get({ plain: true });
   }
 
   /**
@@ -184,11 +224,11 @@ export default class PersonAPI extends DataSource<ContextBase> {
    * @param {ApproveMembershipAttribute} arg - The arg for the approval
    * @returns The updated person
    */
-  public async approveMembership({
-    sid,
-    memberUntil,
-  }: ApproveMembershipAttribute): Promise<PersonModelAttributes> {
-    const result = await this.sequelize.transaction(async (t) => {
+  public async approveMembership(
+    { sid, memberUntil }: ApproveMembershipAttribute,
+    who: string | undefined
+  ): Promise<PersonModelAttributes> {
+    const result = await this.sequelize.transaction(async (transaction) => {
       const person = await this.store.findOne({
         where: {
           [Op.and]: {
@@ -218,20 +258,32 @@ export default class PersonAPI extends DataSource<ContextBase> {
             ],
           },
         },
-        transaction: t,
+        transaction,
       });
       if (!person) {
         throw new Error(`Cannot find registration record for sid ${sid}`);
       }
+      const oldPerson = person.get({ plain: true });
       await person
         .set("memberUntil", memberUntil)
         .set("memberSince", DateTime.local().toISO())
-        .save({ transaction: t });
-      return this.store.findOne({
+        .save({ transaction });
+      const newPerson = await this.store.findOne({
         where: { sid },
-        transaction: t,
+        transaction,
         raw: true,
       });
+      await this.logger.insertLogEntry(
+        {
+          who,
+          table: this.store.tableName,
+          description: `Student ${sid}'s registration has been approved`,
+          oldValue: JSON.stringify(oldPerson),
+          newValue: JSON.stringify(newPerson),
+        },
+        transaction
+      );
+      return newPerson;
     });
     if (!result) {
       throw new Error(`Cannot update record for sid ${sid}`);

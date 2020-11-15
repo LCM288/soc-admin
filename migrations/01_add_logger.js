@@ -26,10 +26,10 @@ async function up(queryInterface) {
           allowNull: false,
         },
         oldValue: {
-          type: DataTypes.STRING,
+          type: DataTypes.TEXT,
         },
         newValue: {
-          type: DataTypes.STRING,
+          type: DataTypes.TEXT,
         },
         createdAt: {
           type: DataTypes.DATE,
