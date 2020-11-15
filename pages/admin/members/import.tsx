@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import useResizeAware from "react-resize-aware";
 import { Row, CellProps } from "react-table";
 import {
@@ -10,7 +10,7 @@ import {
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import PaginationControl from "components/admin/table/paginationControl";
 import Papa from "papaparse";
-import _, { cloneDeep, compact } from "lodash";
+import { omit, chunk, difference } from "lodash";
 import { DateTime } from "luxon";
 import { useMutation } from "@apollo/react-hooks";
 import AdminLayout from "layouts/adminLayout";
@@ -22,6 +22,7 @@ import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
 import { PersonUpdateAttributes } from "@/models/Person";
 import ImportEditCell from "components/admin/table/importEditCell";
 import TableRow from "components/admin/table/tableRow";
+import useHideColumn from "utils/useHideColumn";
 
 import Loading from "components/loading";
 
@@ -83,84 +84,98 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "ID",
         accessor: "id",
+        id: "id",
         width: 50,
         maxWidth: 50,
       },
       {
         Header: "SID",
         accessor: "sid",
+        id: "sid",
         width: 110,
         maxWidth: 110,
       },
       {
         Header: "Chinese Name",
         accessor: "chineseName",
+        id: "chineseName",
         width: 140,
         maxWidth: 140,
       },
       {
         Header: "English Name",
         accessor: "englishName",
+        id: "englishName",
         width: 300,
         maxWidth: 300,
       },
       {
         Header: "Gender",
         accessor: "gender",
+        id: "gender",
         width: 80,
         maxWidth: 80,
       },
       {
         Header: "Date of Birth",
         accessor: "dateOfBirth",
+        id: "dateOfBirth",
         width: 130,
         maxWidth: 130,
       },
       {
         Header: "Email",
         accessor: "email",
+        id: "email",
         width: 300,
         maxWidth: 300,
       },
       {
         Header: "Phone",
         accessor: "phone",
+        id: "phone",
         width: 145,
         maxWidth: 145,
       },
       {
         Header: "College",
         accessor: "college",
+        id: "college",
         width: 80,
         maxWidth: 80,
       },
       {
         Header: "Major",
         accessor: "major",
+        id: "major",
         width: 80,
         maxWidth: 80,
       },
       {
         Header: "Date of Entry",
         accessor: "dateOfEntry",
+        id: "dateOfEntry",
         width: 140,
         maxWidth: 140,
       },
       {
         Header: "Expected Graduation",
         accessor: "expectedGraduationDate",
+        id: "expectedGraduationDate",
         width: 190,
         maxWidth: 190,
       },
       {
         Header: "Member Since",
         accessor: "memberSince",
+        id: "memberSince",
         width: 140,
         maxWidth: 140,
       },
       {
         Header: "Member Until",
         accessor: "memberUntil",
+        id: "memberUntil",
         width: 140,
         maxWidth: 140,
       },
@@ -168,6 +183,7 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Status",
         accessor: (row: Record<string, unknown>) =>
           statusOf(row as PersonModelAttributes),
+        id: "status",
         filter: statusFilter,
         disableSortBy: true,
         width: 120,
@@ -264,13 +280,13 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
       return;
     }
     const members = membersData.members.map((member) => {
-      const result = _.omit(member, "id");
+      const result = omit(member, "id");
       const { memberSince } = result;
       result.memberSince = memberSince ?? DateTime.local().toISODate();
       return result;
     });
     setIsUploading(true);
-    const importPeoplePromises = _.chunk(members, 100).map(
+    const importPeoplePromises = chunk(members, 100).map(
       (people, batch) =>
         new Promise<string[]>((resolve) =>
           importPeople({
@@ -317,7 +333,7 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
     Promise.all(importPeoplePromises).then((importPeopleSuccessSIDBatches) => {
       const importPeopleSuccessSIDFlat = importPeopleSuccessSIDBatches.flat();
       const importedCount = importPeopleSuccessSIDFlat.length;
-      const failedUploadSID = _.difference(
+      const failedUploadSID = difference(
         membersData.members.map((member) => member.sid as string),
         importPeopleSuccessSIDFlat
       );
@@ -418,27 +434,7 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  useEffect(() => {
-    let newHideColumn: string[] = [];
-    let maxWidth =
-      54 +
-      tableColumns.map((column) => column.width).reduce((a, b) => a + b, 0);
-    const columnsToHide = cloneDeep(hideColumnOrder);
-    while (sizes.width < maxWidth && columnsToHide.length) {
-      newHideColumn = newHideColumn.concat(columnsToHide[0]);
-      maxWidth -= compact(
-        columnsToHide[0].map((columnId) =>
-          tableColumns.find(
-            (column) => column.id === columnId || column.accessor === columnId
-          )
-        )
-      )
-        .map((column) => column.width)
-        .reduce((a, b) => a + b, 0);
-      columnsToHide.splice(0, 1);
-    }
-    setHiddenColumns(newHideColumn);
-  }, [sizes.width, hideColumnOrder, tableColumns, setHiddenColumns]);
+  useHideColumn(sizes.width, hideColumnOrder, tableColumns, setHiddenColumns);
 
   if (user) {
     return (
@@ -534,6 +530,13 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
                       maxWidth: column.maxWidth,
                       minWidth: column.minWidth,
                     }}
+                    className={
+                      tableColumns.find(
+                        (tableColumn) => tableColumn.id === column.id
+                      )?.disableSortBy
+                        ? ""
+                        : "is-clickable"
+                    }
                   >
                     {column.render("Header")}
                     <span>{getSortDirectionIndicatior(column)}</span>

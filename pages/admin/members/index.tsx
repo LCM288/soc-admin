@@ -16,8 +16,8 @@ import PaginationControl from "components/admin/table/paginationControl";
 import EditCell from "components/admin/table/editCell";
 import TableRow from "components/admin/table/tableRow";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
-import { cloneDeep, compact } from "lodash";
 import Loading from "components/loading";
+import useHideColumn from "utils/useHideColumn";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
@@ -77,48 +77,56 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "ID",
         accessor: "id",
+        id: "id",
         width: 50,
         maxWidth: 50,
       },
       {
         Header: "SID",
         accessor: "sid",
+        id: "sid",
         width: 110,
         maxWidth: 110,
       },
       {
         Header: "Chinese Name",
         accessor: "chineseName",
+        id: "chineseName",
         width: 140,
         maxWidth: 140,
       },
       {
         Header: "English Name",
         accessor: "englishName",
+        id: "englishName",
         width: 300,
         maxWidth: 300,
       },
       {
         Header: "Gender",
         accessor: "gender",
+        id: "gender",
         width: 80,
         maxWidth: 80,
       },
       {
         Header: "Date of Birth",
         accessor: "dateOfBirth",
+        id: "dateOfBirth",
         width: 130,
         maxWidth: 130,
       },
       {
         Header: "Email",
         accessor: "email",
+        id: "email",
         width: 300,
         maxWidth: 300,
       },
       {
         Header: "Phone",
         accessor: "phone",
+        id: "phone",
         width: 145,
         maxWidth: 145,
       },
@@ -140,30 +148,35 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "Date of Entry",
         accessor: "dateOfEntry",
+        id: "dateOfEntry",
         width: 140,
         maxWidth: 140,
       },
       {
         Header: "Expected Graduation",
         accessor: "expectedGraduationDate",
+        id: "expectedGraduationDate",
         width: 190,
         maxWidth: 190,
       },
       {
         Header: "Member Since",
         accessor: "memberSince",
+        id: "memberSince",
         width: 140,
         maxWidth: 140,
       },
       {
         Header: "Member Until",
         accessor: "memberUntil",
+        id: "memberUntil",
         width: 140,
         maxWidth: 140,
       },
       {
         Header: "Status",
         accessor: "status",
+        id: "status",
         filter: statusFilter,
         disableSortBy: true,
         width: 100,
@@ -350,27 +363,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  useEffect(() => {
-    let newHideColumn: string[] = [];
-    let maxWidth =
-      54 +
-      tableColumns.map((column) => column.width).reduce((a, b) => a + b, 0);
-    const columnsToHide = cloneDeep(hideColumnOrder);
-    while (sizes.width < maxWidth && columnsToHide.length) {
-      newHideColumn = newHideColumn.concat(columnsToHide[0]);
-      maxWidth -= compact(
-        columnsToHide[0].map((columnId) =>
-          tableColumns.find(
-            (column) => column.id === columnId || column.accessor === columnId
-          )
-        )
-      )
-        .map((column) => column.width)
-        .reduce((a, b) => a + b, 0);
-      columnsToHide.splice(0, 1);
-    }
-    setHiddenColumns(newHideColumn);
-  }, [sizes.width, hideColumnOrder, tableColumns, setHiddenColumns]);
+  useHideColumn(sizes.width, hideColumnOrder, tableColumns, setHiddenColumns);
 
   if (user) {
     return (
@@ -459,6 +452,13 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                       maxWidth: column.maxWidth,
                       minWidth: column.minWidth,
                     }}
+                    className={
+                      tableColumns.find(
+                        (tableColumn) => tableColumn.id === column.id
+                      )?.disableSortBy
+                        ? ""
+                        : "is-clickable"
+                    }
                   >
                     {column.render("Header")}
                     <span>{getSortDirectionIndicatior(column)}</span>

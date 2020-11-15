@@ -11,8 +11,8 @@ import TableRow from "components/admin/table/tableRow";
 import toast from "utils/toast";
 import socSettingsQuery from "apollo/queries/socSetting/socSettings.gql";
 import allSocSettings from "utils/socSettings";
-import { cloneDeep, compact } from "lodash";
 import Loading from "components/loading";
+import useHideColumn from "utils/useHideColumn";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
@@ -65,12 +65,14 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "Description",
         accessor: "desc",
+        id: "desc",
         width: 0,
         maxWidth: 0,
       },
       {
         Header: "Type",
         accessor: "type",
+        id: "type",
         width: 0,
         maxWidth: 0,
       },
@@ -124,33 +126,13 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
   // resizeListener
   const hideColumnOrder = useMemo(() => [["value"]], []);
 
-  useEffect(() => {
-    let newHideColumn: string[] = alwaysHiddenColumns;
-    let maxWidth =
-      54 +
-      tableColumns.map((column) => column.width).reduce((a, b) => a + b, 0);
-    const columnsToHide = cloneDeep(hideColumnOrder);
-    while (sizes.width < maxWidth && columnsToHide.length) {
-      newHideColumn = newHideColumn.concat(columnsToHide[0]);
-      maxWidth -= compact(
-        columnsToHide[0].map((columnId) =>
-          tableColumns.find(
-            (column) => column.id === columnId || column.accessor === columnId
-          )
-        )
-      )
-        .map((column) => column.width)
-        .reduce((a, b) => a + b, 0);
-      columnsToHide.splice(0, 1);
-    }
-    setHiddenColumns(newHideColumn);
-  }, [
-    alwaysHiddenColumns,
+  useHideColumn(
     sizes.width,
     hideColumnOrder,
     tableColumns,
     setHiddenColumns,
-  ]);
+    alwaysHiddenColumns
+  );
 
   if (user) {
     return (

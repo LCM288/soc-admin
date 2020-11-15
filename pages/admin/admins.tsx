@@ -11,8 +11,8 @@ import executivesQuery from "apollo/queries/executive/executives.gql";
 import ActionsCell from "components/admin/admins/actionsCell";
 import AddAdmin from "components/admin/admins/addAdmin";
 import TableRow from "components/admin/table/tableRow";
-import { cloneDeep, compact } from "lodash";
 import Loading from "components/loading";
+import useHideColumn from "utils/useHideColumn";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
@@ -58,18 +58,21 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "SID",
         accessor: "sid",
+        id: "sid",
         width: 110,
         maxWidth: 110,
       },
       {
         Header: "Nickname",
         accessor: "nickname",
+        id: "nickname",
         width: 300,
         maxWidth: 300,
       },
       {
         Header: "Position",
         accessor: "pos",
+        id: "pos",
         width: 300,
         maxWidth: 300,
       },
@@ -121,27 +124,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  useEffect(() => {
-    let newHideColumn: string[] = [];
-    let maxWidth =
-      54 +
-      tableColumns.map((column) => column.width).reduce((a, b) => a + b, 0);
-    const columnsToHide = cloneDeep(hideColumnOrder);
-    while (sizes.width < maxWidth && columnsToHide.length) {
-      newHideColumn = newHideColumn.concat(columnsToHide[0]);
-      maxWidth -= compact(
-        columnsToHide[0].map((columnId) =>
-          tableColumns.find(
-            (column) => column.id === columnId || column.accessor === columnId
-          )
-        )
-      )
-        .map((column) => column.width)
-        .reduce((a, b) => a + b, 0);
-      columnsToHide.splice(0, 1);
-    }
-    setHiddenColumns(newHideColumn);
-  }, [sizes.width, hideColumnOrder, tableColumns, setHiddenColumns]);
+  useHideColumn(sizes.width, hideColumnOrder, tableColumns, setHiddenColumns);
 
   if (user) {
     return (
@@ -159,6 +142,13 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                       maxWidth: column.maxWidth,
                       minWidth: column.minWidth,
                     }}
+                    className={
+                      tableColumns.find(
+                        (tableColumn) => tableColumn.id === column.id
+                      )?.disableSortBy
+                        ? ""
+                        : "is-clickable"
+                    }
                   >
                     {column.render("Header")}
                     <span>{getSortDirectionIndicatior(column)}</span>
