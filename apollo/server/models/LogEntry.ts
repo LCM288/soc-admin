@@ -22,7 +22,10 @@ export interface LogEntryAttributes {
 }
 
 /** All the attributes needed to create an instance of the LogEntry model */
-export type LogEntryCreationAttributes = Optional<LogEntryAttributes, "id">;
+export type LogEntryCreationAttributes = Optional<
+  LogEntryAttributes,
+  "id" | "createdAt" | "updatedAt"
+>;
 
 /** A class for the LogEntry model */
 export class LogEntry
@@ -107,7 +110,7 @@ export const typeDefs = gql`
     id: ID!
     who: String!
     table: String!
-    details: String!
+    description: String!
     oldValue: String
     newValue: String
     updatedAt: DateTime!

@@ -10,7 +10,7 @@ import {
   LogEntryCreationAttributes,
 } from "@/models/LogEntry";
 import { ContextBase } from "@/types/datasources";
-import { Transaction } from "sequelize";
+import { Transaction, Optional } from "sequelize";
 
 /** An API to retrieve data from the LogEntry store */
 export default class LogEntryAPI extends DataSource<ContextBase> {
@@ -33,10 +33,25 @@ export default class LogEntryAPI extends DataSource<ContextBase> {
    * @param transaction - The database transaction
    */
   public async insertLogEntry(
-    arg: LogEntryCreationAttributes,
+    {
+      who,
+      table,
+      description,
+      oldValue,
+      newValue,
+    }: Optional<LogEntryCreationAttributes, "who">,
     transaction: Transaction
   ): Promise<LogEntryAttributes> {
-    return this.store.create(arg, { transaction });
+    return this.store.create(
+      {
+        who: who ?? "God",
+        table,
+        description,
+        oldValue,
+        newValue,
+      },
+      { transaction }
+    );
   }
 
   /**

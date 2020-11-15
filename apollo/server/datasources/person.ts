@@ -223,7 +223,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
       if (!person) {
         throw new Error(`Cannot find registration record for sid ${sid}`);
       }
-      person
+      await person
         .set("memberUntil", memberUntil)
         .set("memberSince", DateTime.local().toISO())
         .save({ transaction: t });
