@@ -7,11 +7,11 @@ import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import gql from "graphql-tag";
 
 /** All the attributes in the SocSetting model */
-export interface SocSettingAttributes {
+export type SocSettingAttributes = {
   id: number;
   key: string;
   value: string;
-}
+};
 
 /** All the attributes needed to create an instance of the SocSetting model */
 export type SocSettingCreationAttributes = Optional<SocSettingAttributes, "id">;

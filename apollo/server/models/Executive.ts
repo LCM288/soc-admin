@@ -7,14 +7,14 @@ import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import gql from "graphql-tag";
 
 /** All the attributes in the Executive model */
-export interface ExecutiveAttributes {
+export type ExecutiveAttributes = {
   id: number;
   /** Thd student id of the executive member */
   sid: string;
   nickname: string | null;
   /** Thd position of the executive member */
   pos: string | null;
-}
+};
 
 /** All the attributes needed to create an instance of the Executive model */
 export type ExecutiveCreationAttributes = Optional<ExecutiveAttributes, "id">;

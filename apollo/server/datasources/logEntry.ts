@@ -4,13 +4,10 @@
  */
 
 import { DataSource } from "apollo-datasource";
-import {
-  LogEntry,
-  LogEntryAttributes,
-  LogEntryCreationAttributes,
-} from "@/models/LogEntry";
+import { LogEntry, LogEntryAttributes } from "@/models/LogEntry";
 import { ContextBase } from "@/types/datasources";
-import { Transaction, Optional } from "sequelize";
+import { Transaction } from "sequelize";
+import { union, pick } from "lodash";
 
 /** An API to retrieve data from the LogEntry store */
 export default class LogEntryAPI extends DataSource<ContextBase> {
@@ -39,16 +36,25 @@ export default class LogEntryAPI extends DataSource<ContextBase> {
       description,
       oldValue,
       newValue,
-    }: Optional<LogEntryCreationAttributes, "who">,
+    }: {
+      who: string | undefined;
+      table: string;
+      description: string;
+      oldValue: Record<string, unknown> | null;
+      newValue: Record<string, unknown> | null;
+    },
     transaction: Transaction
   ): Promise<LogEntryAttributes> {
+    const keys = union(
+      Object.keys(oldValue ?? {}).concat(Object.keys(newValue ?? {}))
+    ).filter((key) => oldValue?.[key] !== newValue?.[key]);
     return this.store.create(
       {
         who: who ?? "God",
         table,
         description,
-        oldValue,
-        newValue,
+        oldValue: JSON.stringify(pick(oldValue, keys)),
+        newValue: JSON.stringify(pick(newValue, keys)),
       },
       { transaction }
     );

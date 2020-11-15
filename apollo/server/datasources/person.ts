@@ -162,7 +162,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
           table: this.store.tableName,
           description: "A new person has been added",
           oldValue: null,
-          newValue: JSON.stringify(newPerson),
+          newValue: newPerson,
         },
         transaction
       );
@@ -209,8 +209,8 @@ export default class PersonAPI extends DataSource<ContextBase> {
           who,
           table: this.store.tableName,
           description: `Student ${arg.sid} has been updated`,
-          oldValue: JSON.stringify(oldPerson),
-          newValue: JSON.stringify(newPerson),
+          oldValue: oldPerson as PersonModelAttributes,
+          newValue: newPerson,
         },
         transaction
       );
@@ -278,8 +278,8 @@ export default class PersonAPI extends DataSource<ContextBase> {
           who,
           table: this.store.tableName,
           description: `Student ${sid}'s registration has been approved`,
-          oldValue: JSON.stringify(oldPerson),
-          newValue: JSON.stringify(newPerson),
+          oldValue: oldPerson,
+          newValue: newPerson as PersonModelAttributes | null,
         },
         transaction
       );

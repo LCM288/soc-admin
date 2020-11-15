@@ -88,8 +88,11 @@ export default class SocSettingAPI extends DataSource<ContextBase> {
           description: `Setting ${arg.key} has been ${
             oldSetting ? "updated" : "created"
           }`,
-          oldValue: isPublic && oldSetting ? JSON.stringify(oldSetting) : null,
-          newValue: isPublic ? JSON.stringify(newSetting) : null,
+          oldValue:
+            isPublic && oldSetting
+              ? (oldSetting as SocSettingAttributes)
+              : null,
+          newValue: isPublic ? newSetting : null,
         },
         transaction
       );
@@ -123,7 +126,7 @@ export default class SocSettingAPI extends DataSource<ContextBase> {
             who,
             table: this.store.tableName,
             description: `Setting ${key} has been removed`,
-            oldValue: isPublic ? JSON.stringify(oldSetting) : null,
+            oldValue: isPublic ? (oldSetting as SocSettingAttributes) : null,
             newValue: null,
           },
           transaction
