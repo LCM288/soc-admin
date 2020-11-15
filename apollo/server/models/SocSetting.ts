@@ -7,14 +7,20 @@ import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import gql from "graphql-tag";
 
 /** All the attributes in the SocSetting model */
-export interface SocSettingAttributes {
+export type SocSettingAttributes = {
   id: number;
   key: string;
   value: string;
-}
+  // Timestamps
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 /** All the attributes needed to create an instance of the SocSetting model */
-export type SocSettingCreationAttributes = Optional<SocSettingAttributes, "id">;
+export type SocSettingCreationAttributes = Optional<
+  SocSettingAttributes,
+  "id" | "createdAt" | "updatedAt"
+>;
 
 /** A class for the SocSetting model */
 export class SocSetting
@@ -52,7 +58,15 @@ export const SocSettingFactory = (sequelize: Sequelize): typeof SocSetting => {
         unique: true,
       },
       value: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
         allowNull: false,
       },
     },

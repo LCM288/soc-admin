@@ -3,7 +3,7 @@
 const { DataTypes } = require("sequelize");
 
 async function up(queryInterface) {
-  await queryInterface.sequelize.transaction(async (t) => {
+  await queryInterface.sequelize.transaction(async (transaction) => {
     await queryInterface.createTable(
       "people",
       {
@@ -83,7 +83,7 @@ async function up(queryInterface) {
         },
       },
       {
-        transaction: t,
+        transaction,
       }
     );
     await queryInterface.createTable(
@@ -116,7 +116,7 @@ async function up(queryInterface) {
         },
       },
       {
-        transaction: t,
+        transaction,
       }
     );
     await queryInterface.createTable(
@@ -147,17 +147,17 @@ async function up(queryInterface) {
         },
       },
       {
-        transaction: t,
+        transaction,
       }
     );
   });
 }
 
 async function down(queryInterface) {
-  await queryInterface.sequelize.transaction(async (t) => {
-    await queryInterface.dropTable("soc_settings", { transaction: t });
-    await queryInterface.dropTable("executives", { transaction: t });
-    await queryInterface.dropTable("people", { transaction: t });
+  await queryInterface.sequelize.transaction(async (transaction) => {
+    await queryInterface.dropTable("soc_settings", { transaction });
+    await queryInterface.dropTable("executives", { transaction });
+    await queryInterface.dropTable("people", { transaction });
   });
 }
 

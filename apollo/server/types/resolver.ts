@@ -5,6 +5,7 @@ import MajorAPI from "@/datasources/major";
 import PersonAPI from "@/datasources/person";
 import ExecutiveAPI from "@/datasources/executive";
 import SocSettingAPI from "@/datasources/socSetting";
+import LogEntryAPI from "@/datasources/logEntry";
 import { Major } from "@/models/Major";
 import { PersonModelAttributes } from "@/models/Person";
 import { DataSources } from "apollo-server-core/src/graphqlOptions";
@@ -18,6 +19,8 @@ export interface ResolverDatasource extends DataSources<ContextBase> {
   executiveAPI: ExecutiveAPI;
   /** The API for SocSetting */
   socSettingAPI: SocSettingAPI;
+  /** The API for LogEntry */
+  logEntryAPI: LogEntryAPI;
   /** The API for Major */
   majorAPI: MajorAPI;
   /** The API for Faculty */

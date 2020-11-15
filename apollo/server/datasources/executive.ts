@@ -11,19 +11,33 @@ import {
   ExecutiveUpdateAttributes,
 } from "@/models/Executive";
 import { ContextBase } from "@/types/datasources";
+import LogEntryAPI from "@/datasources/logEntry";
+import Sequelize from "sequelize";
 
 /** An API to retrieve data from the Executive store */
 export default class ExecutiveAPI extends DataSource<ContextBase> {
   /** The {@link Executive} store */
   private store: typeof Executive;
 
+  /** The logger */
+  private logger: LogEntryAPI;
+
+  /** The sequelize connection */
+  private sequelize: Sequelize.Sequelize;
+
   /**
    * Create the API instance.
    * @param {typeof Executive} executiveStore - A Executive store.
    */
-  constructor(executiveStore: typeof Executive) {
+  constructor(
+    executiveStore: typeof Executive,
+    logger: LogEntryAPI,
+    sequelize: Sequelize.Sequelize
+  ) {
     super();
     this.store = executiveStore;
+    this.logger = logger;
+    this.sequelize = sequelize;
   }
 
   /**
@@ -56,49 +70,114 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
   /**
    * Add a new executive
    * @async
-   * @param {ExecutiveCreationAttributes} arg - The arg for the new executive
-   * @returns {Promise<ExecutiveAttributes>} An instance of the new executive
+   * @param arg - The arg for the new executive
+   * @param who - Who performed the action
+   * @returns An instance of the new executive
    */
   public async addNewExecutive(
-    arg: ExecutiveCreationAttributes
+    arg: ExecutiveCreationAttributes,
+    who: string | undefined
   ): Promise<ExecutiveAttributes> {
-    const executive = await this.store.findOne({
-      where: { sid: arg.sid },
-      raw: true,
+    return this.sequelize.transaction(async (transaction) => {
+      const executive = await this.store.findOne({
+        where: { sid: arg.sid },
+        raw: true,
+        transaction,
+      });
+      if (executive) {
+        throw new Error(`SID ${arg.sid} is an executive already`);
+      }
+      const newExecutive = (await this.store.create(arg, { transaction })).get({
+        plain: true,
+      });
+      await this.logger.insertLogEntry(
+        {
+          who,
+          table: this.store.tableName,
+          description: "A new executive has been added",
+          oldValue: null,
+          newValue: newExecutive,
+        },
+        transaction
+      );
+      return newExecutive;
     });
-    if (executive) {
-      throw new Error(`SID ${arg.sid} is an executive already`);
-    }
-    return (await this.store.create(arg)).get({ plain: true });
   }
 
   /**
    * Update an executive
    * @async
    * @param arg - The arg for updating the executive
+   * @param who - Who performed the action
    * @returns The updated executive
    */
   public async updateExecutive(
-    arg: ExecutiveUpdateAttributes
+    arg: ExecutiveUpdateAttributes,
+    who: string | undefined
   ): Promise<ExecutiveAttributes> {
-    const [count, executives] = await this.store.update(arg, {
-      where: { sid: arg.sid },
-      returning: true,
+    return this.sequelize.transaction(async (transaction) => {
+      const oldExecutive = await this.store.findOne({
+        where: { sid: arg.sid },
+        raw: true,
+        transaction,
+      });
+      if (!oldExecutive) {
+        throw new Error(`SID ${arg.sid} is not an executive`);
+      }
+      const [count, executives] = await this.store.update(arg, {
+        where: { sid: arg.sid },
+        returning: true,
+        transaction,
+      });
+      if (!count) {
+        throw new Error(`Cannot update executive record for sid ${arg.sid}`);
+      }
+      const newExecutive = executives[0].get({ plain: true });
+      await this.logger.insertLogEntry(
+        {
+          who,
+          table: this.store.tableName,
+          description: `Executive ${arg.sid} has been updated`,
+          oldValue: oldExecutive as ExecutiveAttributes,
+          newValue: newExecutive,
+        },
+        transaction
+      );
+      return newExecutive;
     });
-    if (!count) {
-      throw new Error(`Cannot update executive record for sid ${arg.sid}`);
-    }
-    return executives[0].get({ plain: true });
   }
 
   /**
    * Remove executive
    * @async
    * @param sid - The arg for the executive
+   * @param who - Who performed the action
    * @returns Number of executives deleted
    */
-  public async removeExecutive(sid: string): Promise<number> {
-    const count = await this.store.destroy({ where: { sid } });
-    return count;
+  public async removeExecutive(
+    sid: string,
+    who: string | undefined
+  ): Promise<number> {
+    return this.sequelize.transaction(async (transaction) => {
+      const oldExecutive = await this.store.findOne({
+        where: { sid },
+        raw: true,
+        transaction,
+      });
+      const count = await this.store.destroy({ where: { sid }, transaction });
+      if (oldExecutive) {
+        await this.logger.insertLogEntry(
+          {
+            who,
+            table: this.store.tableName,
+            description: `Executive ${sid} has been removed`,
+            oldValue: oldExecutive as ExecutiveAttributes,
+            newValue: null,
+          },
+          transaction
+        );
+      }
+      return count;
+    });
   }
 }

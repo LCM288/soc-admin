@@ -10,19 +10,34 @@ import {
   SocSettingCreationAttributes,
 } from "@/models/SocSetting";
 import { ContextBase } from "@/types/datasources";
+import LogEntryAPI from "@/datasources/logEntry";
+import Sequelize from "sequelize";
+import publicSocSettings from "utils/socSettings";
 
 /** An API to retrieve data from the SocSetting store */
 export default class SocSettingAPI extends DataSource<ContextBase> {
   /** The {@link SocSetting} store */
   private store: typeof SocSetting;
 
+  /** The logger */
+  private logger: LogEntryAPI;
+
+  /** The sequelize connection */
+  private sequelize: Sequelize.Sequelize;
+
   /**
    * Create the API instance.
    * @param {typeof SocSetting} socSettingStore - A SocSetting store.
    */
-  constructor(socSettingStore: typeof SocSetting) {
+  constructor(
+    socSettingStore: typeof SocSetting,
+    logger: LogEntryAPI,
+    sequelize: Sequelize.Sequelize
+  ) {
     super();
     this.store = socSettingStore;
+    this.logger = logger;
+    this.sequelize = sequelize;
   }
 
   /**
@@ -52,20 +67,72 @@ export default class SocSettingAPI extends DataSource<ContextBase> {
    * @returns {Promise<SocSettingAttributes>} An instance of the soc setting
    */
   public async updateSocSetting(
-    arg: SocSettingCreationAttributes
+    arg: SocSettingCreationAttributes,
+    who: string | undefined
   ): Promise<SocSettingAttributes> {
-    const [socSetting] = await this.store.upsert(arg);
-    return socSetting.get({ plain: true });
+    return this.sequelize.transaction(async (transaction) => {
+      const oldSetting = await this.store.findOne({
+        where: { key: arg.key },
+        raw: true,
+        transaction,
+      });
+      const [socSetting] = await this.store.upsert(arg, { transaction });
+      const newSetting = socSetting.get({ plain: true });
+      const isPublic = Object.values(publicSocSettings)
+        .map((setting) => setting.key)
+        .includes(arg.key);
+      await this.logger.insertLogEntry(
+        {
+          who,
+          table: this.store.tableName,
+          description: `Setting ${arg.key} has been ${
+            oldSetting ? "updated" : "created"
+          }`,
+          oldValue:
+            isPublic && oldSetting
+              ? (oldSetting as SocSettingAttributes)
+              : null,
+          newValue: isPublic ? newSetting : null,
+        },
+        transaction
+      );
+      return newSetting;
+    });
   }
 
   /**
    * Delete soc settings
    * @async
-   * @param {{ key: string }} arg - The arg for the soc setting
-   * @returns {Promise<number>} Number of soc settings deleted
+   * @param key - The key for the soc setting
+   * @returns Number of soc settings deleted
    */
-  public async deleteSocSetting(arg: { key: string }): Promise<number> {
-    const count = await this.store.destroy({ where: arg });
-    return count;
+  public async deleteSocSetting(
+    key: string,
+    who: string | undefined
+  ): Promise<number> {
+    return this.sequelize.transaction(async (transaction) => {
+      const oldSetting = await this.store.findOne({
+        where: { key },
+        raw: true,
+        transaction,
+      });
+      const count = await this.store.destroy({ where: { key }, transaction });
+      if (oldSetting) {
+        const isPublic = Object.values(publicSocSettings)
+          .map((setting) => setting.key)
+          .includes(key);
+        await this.logger.insertLogEntry(
+          {
+            who,
+            table: this.store.tableName,
+            description: `Setting ${key} has been removed`,
+            oldValue: isPublic ? (oldSetting as SocSettingAttributes) : null,
+            newValue: null,
+          },
+          transaction
+        );
+      }
+      return count;
+    });
   }
 }

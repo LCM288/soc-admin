@@ -192,11 +192,14 @@ const newPersonResolver: ResolverFn<
     return { success: false, message: "You have no permission to do this" };
   }
   try {
-    const person = await dataSources.personAPI.addNewPerson({
-      ...arg,
-      memberSince: null,
-      memberUntil: null,
-    });
+    const person = await dataSources.personAPI.addNewPerson(
+      {
+        ...arg,
+        memberSince: null,
+        memberUntil: null,
+      },
+      user?.sid
+    );
     return { success: true, message: "success", person };
   } catch (err) {
     return { success: false, message: err.message };
@@ -223,7 +226,8 @@ const updatePersonResolver: ResolverFn<
   try {
     const person = await dataSources.personAPI.updatePerson(
       omit(arg, isAdmin ? ["memberSince"] : ["memberSince", "memberUntil"]),
-      !isAdmin
+      !isAdmin,
+      user?.sid
     );
     return {
       success: true,
@@ -260,7 +264,7 @@ const importPeopleResolver: ResolverFn<
     (person) =>
       new Promise<PersonUpdateResponse>((resolve) => {
         dataSources.personAPI
-          .addNewPerson(person)
+          .addNewPerson(person, user?.sid)
           .then((personResult) =>
             resolve({
               success: true,
@@ -295,7 +299,10 @@ const approveMembershipResolver: ResolverFn<
     };
   }
   try {
-    const person = await dataSources.personAPI.approveMembership(arg);
+    const person = await dataSources.personAPI.approveMembership(
+      arg,
+      user?.sid
+    );
     return {
       success: true,
       message: `Hooray!🎉 ${person.englishName} is now a member of us`,

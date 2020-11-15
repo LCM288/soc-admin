@@ -117,14 +117,20 @@ const initClientKeysResolver: ResolverFn<
     return { success: false, message: "You have no permission to do this" };
   }
 
-  const idResult = await dataSources.socSettingAPI.updateSocSetting({
-    key: NEW_CLIENT_ID_KEY,
-    value: id,
-  });
-  const secretResult = await dataSources.socSettingAPI.updateSocSetting({
-    key: NEW_CLIENT_SECRET_KEY,
-    value: secret,
-  });
+  const idResult = await dataSources.socSettingAPI.updateSocSetting(
+    {
+      key: NEW_CLIENT_ID_KEY,
+      value: id,
+    },
+    user?.sid
+  );
+  const secretResult = await dataSources.socSettingAPI.updateSocSetting(
+    {
+      key: NEW_CLIENT_SECRET_KEY,
+      value: secret,
+    },
+    user?.sid
+  );
   if (!idResult || !secretResult) {
     return { success: false, message: "Something wrong happened" };
   }
@@ -153,7 +159,10 @@ const updateSocSettingResolver: ResolverFn<
     return { success: false, message: "You have no permission to do this" };
   }
   try {
-    const socSetting = await dataSources.socSettingAPI.updateSocSetting(arg);
+    const socSetting = await dataSources.socSettingAPI.updateSocSetting(
+      arg,
+      user?.sid
+    );
     return { success: true, message: "success", socSetting };
   } catch (err) {
     return { success: false, message: err.message };
@@ -181,7 +190,10 @@ const deleteSocSettingResolver: ResolverFn<
   if (!isAdmin || !editableKeys.includes(key)) {
     return { success: false, message: "You have no permission to do this" };
   }
-  const count = await dataSources.socSettingAPI.deleteSocSetting({ key });
+  const count = await dataSources.socSettingAPI.deleteSocSetting(
+    key,
+    user?.sid
+  );
   if (!count) {
     return { success: false, message: `cannot remove setting ${key}` };
   }

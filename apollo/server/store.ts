@@ -2,6 +2,7 @@ import { Sequelize, Transaction } from "sequelize";
 import { PersonFactory } from "@/models/Person";
 import { ExecutiveFactory } from "@/models/Executive";
 import { SocSettingFactory } from "@/models/SocSetting";
+import { LogEntryFactory } from "@/models/LogEntry";
 
 /**
  * The url to the database
@@ -33,3 +34,8 @@ export const executiveStore = ExecutiveFactory(sequelize);
  * A store for the SocSetting model
  */
 export const socSettingStore = SocSettingFactory(sequelize);
+
+/**
+ * A store for the Log model
+ */
+export const logEntryStore = LogEntryFactory(sequelize);

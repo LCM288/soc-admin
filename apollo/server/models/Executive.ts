@@ -7,17 +7,23 @@ import { Sequelize, Model, DataTypes, Optional } from "sequelize";
 import gql from "graphql-tag";
 
 /** All the attributes in the Executive model */
-export interface ExecutiveAttributes {
+export type ExecutiveAttributes = {
   id: number;
   /** Thd student id of the executive member */
   sid: string;
   nickname: string | null;
   /** Thd position of the executive member */
   pos: string | null;
-}
+  // Timestamps
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 /** All the attributes needed to create an instance of the Executive model */
-export type ExecutiveCreationAttributes = Optional<ExecutiveAttributes, "id">;
+export type ExecutiveCreationAttributes = Optional<
+  ExecutiveAttributes,
+  "id" | "createdAt" | "updatedAt"
+>;
 
 /** All the attributes needed to update an instance of the Executive model */
 export type ExecutiveUpdateAttributes = Partial<ExecutiveAttributes> &
@@ -67,6 +73,14 @@ export const ExecutiveFactory = (sequelize: Sequelize): typeof Executive => {
       },
       pos: {
         type: DataTypes.STRING(20),
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
       },
     },
     {

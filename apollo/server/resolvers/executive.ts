@@ -123,7 +123,10 @@ const newExecutiveResolver: ResolverFn<
         throw new Error(`SID ${arg.sid} is not a member`);
       }
     }
-    const executive = await dataSources.executiveAPI.addNewExecutive(arg);
+    const executive = await dataSources.executiveAPI.addNewExecutive(
+      arg,
+      user?.sid
+    );
     return { success: true, message: "success", executive };
   } catch (err) {
     return { success: false, message: err.message };
@@ -148,7 +151,10 @@ const updateExecutiveResolver: ResolverFn<
     return { success: false, message: "You have no permission to do this" };
   }
   try {
-    const executive = await dataSources.executiveAPI.updateExecutive(arg);
+    const executive = await dataSources.executiveAPI.updateExecutive(
+      arg,
+      user?.sid
+    );
     return {
       success: true,
       message: `success`,
@@ -183,7 +189,7 @@ const deleteExecutiveResolver: ResolverFn<
   if (user?.sid === sid) {
     return { success: false, message: "You cannot remove yourself" };
   }
-  const count = await dataSources.executiveAPI.removeExecutive(sid);
+  const count = await dataSources.executiveAPI.removeExecutive(sid, user?.sid);
   if (!count) {
     return { success: false, message: `cannot remove executive ${sid}` };
   }

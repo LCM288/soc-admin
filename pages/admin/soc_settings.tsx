@@ -83,7 +83,7 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
         ),
         minWidth: 300,
         width: 0.7 * sizes.width,
-        maxWidth: 10000,
+        maxWidth: 0.7 * sizes.width,
       },
     ],
     [sizes.width]
