@@ -140,8 +140,11 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
             className="mb-1"
             style={{ maxWidth: "calc(100% - 1.5rem)" }}
           >
-            <Tile kind="parent">
-              <Tile kind="child">
+            <Tile
+              kind="parent"
+              style={{ maxWidth: windowWidth > 768 ? "50%" : "100%" }}
+            >
+              <Tile kind="child" style={{ maxWidth: "100%" }}>
                 <SimpleMDE
                   id={row.values.key}
                   key={refreshState}
@@ -175,8 +178,16 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
                 />
               </Tile>
             </Tile>
-            <Tile kind="parent" vertical>
-              <Tile kind="child" className="box preview-content">
+            <Tile
+              kind="parent"
+              vertical
+              style={{ maxWidth: windowWidth > 768 ? "50%" : "100%" }}
+            >
+              <Tile
+                kind="child"
+                className="box preview-content"
+                style={{ maxWidth: "100%" }}
+              >
                 <Content>
                   <ReactMarkdown source={editingValue} escapeHtml={false} />
                 </Content>
