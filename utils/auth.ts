@@ -3,7 +3,12 @@ import { IncomingMessage, ServerResponse } from "http";
 import { parseCookies } from "nookies";
 import jwt from "jsonwebtoken";
 import { User } from "@/types/datasources";
-import { sequelize, socSettingStore, executiveStore } from "@/store";
+import {
+  sequelize,
+  socSettingStore,
+  executiveStore,
+  logEntryStore,
+} from "@/store";
 
 import { getClientIp } from "request-ip";
 
@@ -183,15 +188,25 @@ export const getUser = async (req: IncomingMessage): Promise<User | null> => {
  * @async
  */
 export const deleteNewAPIKey = async (): Promise<void> => {
-  await sequelize.transaction(async (t) => {
+  await sequelize.transaction(async (transaction) => {
     await socSettingStore.destroy({
       where: { key: NEW_CLIENT_ID_KEY },
-      transaction: t,
+      transaction,
     });
     await socSettingStore.destroy({
       where: { key: NEW_CLIENT_SECRET_KEY },
-      transaction: t,
+      transaction,
     });
+    await logEntryStore.create(
+      {
+        who: "God",
+        table: socSettingStore.tableName,
+        description: "New client id & secret has been discarded",
+        oldValue: null,
+        newValue: null,
+      },
+      { transaction }
+    );
   });
 };
 
@@ -200,35 +215,45 @@ export const deleteNewAPIKey = async (): Promise<void> => {
  * @async
  */
 export const swapAPIKey = async (): Promise<void> => {
-  await sequelize.transaction(async (t) => {
+  await sequelize.transaction(async (transaction) => {
     const newID = await socSettingStore.findOne({
       where: { key: NEW_CLIENT_ID_KEY },
-      transaction: t,
+      transaction,
     });
-    const newIDKey = newID?.getDataValue("value");
+    const newIDValue = newID?.getDataValue("value");
     const newSecret = await socSettingStore.findOne({
       where: { key: NEW_CLIENT_SECRET_KEY },
-      transaction: t,
+      transaction,
     });
-    const newSecretKey = newSecret?.getDataValue("value");
-    if (!newIDKey || !newSecretKey) {
-      throw new Error("Invalid Key");
+    const newSecretValue = newSecret?.getDataValue("value");
+    if (!newIDValue || !newSecretValue) {
+      throw new Error("Invalid Value");
     }
     await socSettingStore.upsert(
-      { key: CLIENT_ID_KEY, value: newIDKey },
-      { transaction: t }
+      { key: CLIENT_ID_KEY, value: newIDValue },
+      { transaction }
     );
     await socSettingStore.upsert(
-      { key: CLIENT_SECRET_KEY, value: newSecretKey },
-      { transaction: t }
+      { key: CLIENT_SECRET_KEY, value: newSecretValue },
+      { transaction }
     );
     await socSettingStore.destroy({
       where: { key: NEW_CLIENT_ID_KEY },
-      transaction: t,
+      transaction,
     });
     await socSettingStore.destroy({
       where: { key: NEW_CLIENT_SECRET_KEY },
-      transaction: t,
+      transaction,
     });
+    await logEntryStore.create(
+      {
+        who: "God",
+        table: socSettingStore.tableName,
+        description: "New client id & secret has been activated",
+        oldValue: null,
+        newValue: JSON.stringify({ key: CLIENT_ID_KEY, value: newIDValue }),
+      },
+      { transaction }
+    );
   });
 };
