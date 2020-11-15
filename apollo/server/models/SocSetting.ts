@@ -52,7 +52,7 @@ export const SocSettingFactory = (sequelize: Sequelize): typeof SocSetting => {
         unique: true,
       },
       value: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
     },
