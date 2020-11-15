@@ -1,13 +1,11 @@
 import React, { useMemo } from "react";
-import { Form, Level, Button } from "react-bulma-components";
+import { Button } from "react-bulma-components";
 
 interface Props {
   gotoPage: (page: number) => void;
   pageIndex: number;
   pageCount: number;
 }
-
-const { Field, Control } = Form;
 
 const PaginationControl = ({
   gotoPage,
