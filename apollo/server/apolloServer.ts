@@ -73,15 +73,18 @@ import { ResolverDatasource } from "./types/resolver";
  * @returns a datasource object
  * @internal
  */
-const dataSources = (): ResolverDatasource => ({
-  facultyAPI: new FacultyAPI(),
-  collegeAPI: new CollegeAPI(),
-  majorAPI: new MajorAPI(),
-  personAPI: new PersonAPI(personStore, sequelize),
-  executiveAPI: new ExecutiveAPI(executiveStore),
-  socSettingAPI: new SocSettingAPI(socSettingStore),
-  logEntryAPI: new LogEntryAPI(logEntryStore),
-});
+const dataSources = (): ResolverDatasource => {
+  const logger = new LogEntryAPI(logEntryStore);
+  return {
+    facultyAPI: new FacultyAPI(),
+    collegeAPI: new CollegeAPI(),
+    majorAPI: new MajorAPI(),
+    personAPI: new PersonAPI(personStore, logger, sequelize),
+    executiveAPI: new ExecutiveAPI(executiveStore, logger, sequelize),
+    socSettingAPI: new SocSettingAPI(socSettingStore, logger, sequelize),
+    logEntryAPI: logger,
+  };
+};
 
 /**
  * The function that sets up the global context for each resolver, using the req

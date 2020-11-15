@@ -200,18 +200,20 @@ export const deleteNewAPIKey = async (): Promise<void> => {
  * @async
  */
 export const swapAPIKey = async (): Promise<void> => {
-  const newID = await socSettingStore.findOne({
-    where: { key: NEW_CLIENT_ID_KEY },
-  });
-  const newIDKey = newID?.getDataValue("value");
-  const newSecret = await socSettingStore.findOne({
-    where: { key: NEW_CLIENT_SECRET_KEY },
-  });
-  const newSecretKey = newSecret?.getDataValue("value");
-  if (!newIDKey || !newSecretKey) {
-    throw new Error("Invalid Key");
-  }
   await sequelize.transaction(async (t) => {
+    const newID = await socSettingStore.findOne({
+      where: { key: NEW_CLIENT_ID_KEY },
+      transaction: t,
+    });
+    const newIDKey = newID?.getDataValue("value");
+    const newSecret = await socSettingStore.findOne({
+      where: { key: NEW_CLIENT_SECRET_KEY },
+      transaction: t,
+    });
+    const newSecretKey = newSecret?.getDataValue("value");
+    if (!newIDKey || !newSecretKey) {
+      throw new Error("Invalid Key");
+    }
     await socSettingStore.upsert(
       { key: CLIENT_ID_KEY, value: newIDKey },
       { transaction: t }

@@ -4,8 +4,13 @@
  */
 
 import { DataSource } from "apollo-datasource";
-import { LogEntry, LogEntryAttributes } from "@/models/LogEntry";
+import {
+  LogEntry,
+  LogEntryAttributes,
+  LogEntryCreationAttributes,
+} from "@/models/LogEntry";
 import { ContextBase } from "@/types/datasources";
+import { Transaction } from "sequelize";
 
 /** An API to retrieve data from the LogEntry store */
 export default class LogEntryAPI extends DataSource<ContextBase> {
@@ -19,6 +24,19 @@ export default class LogEntryAPI extends DataSource<ContextBase> {
   constructor(logEntryStore: typeof LogEntry) {
     super();
     this.store = logEntryStore;
+  }
+
+  /**
+   * Insert a new log entry
+   * @async
+   * @param arg - The arg for the new entry
+   * @param transaction - The database transaction
+   */
+  public async insertLogEntry(
+    arg: LogEntryCreationAttributes,
+    transaction: Transaction
+  ): Promise<LogEntryAttributes> {
+    return this.store.create(arg, { transaction });
   }
 
   /**

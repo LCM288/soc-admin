@@ -12,6 +12,7 @@ import {
   MemberStatusEnum,
 } from "@/models/Person";
 import { ContextBase } from "@/types/datasources";
+import LogEntryAPI from "@/datasources/logEntry";
 import Sequelize, { Op } from "sequelize";
 import { DateTime } from "luxon";
 
@@ -25,6 +26,9 @@ export default class PersonAPI extends DataSource<ContextBase> {
   /** The {@link Person} store */
   private store: typeof Person;
 
+  /** The logger */
+  private logger: LogEntryAPI;
+
   /** The sequelize connection */
   private sequelize: Sequelize.Sequelize;
 
@@ -33,9 +37,14 @@ export default class PersonAPI extends DataSource<ContextBase> {
    * @param {typeof Person} personStore - A Person store.
    * @param {Sequelize.Sequelize} sequelize - The sequelize connection.
    */
-  constructor(personStore: typeof Person, sequelize: Sequelize.Sequelize) {
+  constructor(
+    personStore: typeof Person,
+    logger: LogEntryAPI,
+    sequelize: Sequelize.Sequelize
+  ) {
     super();
     this.store = personStore;
+    this.logger = logger;
     this.sequelize = sequelize;
   }
 

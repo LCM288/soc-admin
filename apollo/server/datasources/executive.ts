@@ -11,19 +11,33 @@ import {
   ExecutiveUpdateAttributes,
 } from "@/models/Executive";
 import { ContextBase } from "@/types/datasources";
+import LogEntryAPI from "@/datasources/logEntry";
+import Sequelize from "sequelize";
 
 /** An API to retrieve data from the Executive store */
 export default class ExecutiveAPI extends DataSource<ContextBase> {
   /** The {@link Executive} store */
   private store: typeof Executive;
 
+  /** The logger */
+  private logger: LogEntryAPI;
+
+  /** The sequelize connection */
+  private sequelize: Sequelize.Sequelize;
+
   /**
    * Create the API instance.
    * @param {typeof Executive} executiveStore - A Executive store.
    */
-  constructor(executiveStore: typeof Executive) {
+  constructor(
+    executiveStore: typeof Executive,
+    logger: LogEntryAPI,
+    sequelize: Sequelize.Sequelize
+  ) {
     super();
     this.store = executiveStore;
+    this.logger = logger;
+    this.sequelize = sequelize;
   }
 
   /**

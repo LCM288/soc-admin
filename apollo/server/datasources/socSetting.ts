@@ -10,19 +10,33 @@ import {
   SocSettingCreationAttributes,
 } from "@/models/SocSetting";
 import { ContextBase } from "@/types/datasources";
+import LogEntryAPI from "@/datasources/logEntry";
+import Sequelize from "sequelize";
 
 /** An API to retrieve data from the SocSetting store */
 export default class SocSettingAPI extends DataSource<ContextBase> {
   /** The {@link SocSetting} store */
   private store: typeof SocSetting;
 
+  /** The logger */
+  private logger: LogEntryAPI;
+
+  /** The sequelize connection */
+  private sequelize: Sequelize.Sequelize;
+
   /**
    * Create the API instance.
    * @param {typeof SocSetting} socSettingStore - A SocSetting store.
    */
-  constructor(socSettingStore: typeof SocSetting) {
+  constructor(
+    socSettingStore: typeof SocSetting,
+    logger: LogEntryAPI,
+    sequelize: Sequelize.Sequelize
+  ) {
     super();
     this.store = socSettingStore;
+    this.logger = logger;
+    this.sequelize = sequelize;
   }
 
   /**
