@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { CellProps } from "react-table";
 import { Button } from "react-bulma-components";
-import EditPersonModal from "components/admin/table/editPersonModal";
+import EditPersonModal from "components/admin/members/editPersonModal";
 import { PersonUpdateAttributes } from "@/models/Person";
 import updatePersonMutation from "apollo/queries/person/updatePerson.gql";
 import { useMutation } from "@apollo/react-hooks";
@@ -13,7 +13,7 @@ import useClipped from "utils/useClipped";
 
 type Props = CellProps<Record<string, unknown>, string>;
 
-const EditCell = ({ row, value: title }: Props): React.ReactElement => {
+const EditPersonCell = ({ row, value: title }: Props): React.ReactElement => {
   const [updatePerson] = useMutation(updatePersonMutation, {
     refetchQueries: [{ query: membersQuery }, { query: registrationsQuery }],
   });
@@ -76,4 +76,4 @@ const EditCell = ({ row, value: title }: Props): React.ReactElement => {
   );
 };
 
-export default EditCell;
+export default EditPersonCell;

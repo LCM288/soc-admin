@@ -11,7 +11,7 @@ import { Table, Form, Level } from "react-bulma-components";
 import toast from "utils/toast";
 import registrationsQuery from "apollo/queries/person/registrations.gql";
 import ApproveCell from "components/admin/registrations/approveCell";
-import EditCell from "components/admin/table/editCell";
+import EditPersonCell from "components/admin/members/editPersonCell";
 import TableRow from "components/admin/table/tableRow";
 import PaginationControl from "components/admin/table/paginationControl";
 import useRegistrationTable, {
@@ -177,7 +177,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
         Cell: (cellPrpos: CellProps<Record<string, unknown>, string>) => (
           <div className="buttons">
             <ApproveCell {...cellPrpos} />
-            <EditCell {...cellPrpos} />
+            <EditPersonCell {...cellPrpos} />
           </div>
         ),
         disableSortBy: true,

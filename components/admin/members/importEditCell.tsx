@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Button } from "react-bulma-components";
-import EditPersonModal from "components/admin/table/editPersonModal";
+import EditPersonModal from "components/admin/members/editPersonModal";
 import { PersonUpdateAttributes } from "@/models/Person";
 import { CellProps } from "react-table";
 import toast from "utils/toast";

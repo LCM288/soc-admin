@@ -20,7 +20,7 @@ import { Level, Table, Button, Form } from "react-bulma-components";
 import importPeopleMutation from "apollo/queries/person/importPeople.gql";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
 import { PersonUpdateAttributes } from "@/models/Person";
-import ImportEditCell from "components/admin/table/importEditCell";
+import ImportEditCell from "components/admin/members/importEditCell";
 import TableRow from "components/admin/table/tableRow";
 import useHideColumn from "utils/useHideColumn";
 

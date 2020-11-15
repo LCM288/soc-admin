@@ -13,7 +13,7 @@ import { DateTime } from "luxon";
 import toast from "utils/toast";
 import membersQuery from "apollo/queries/person/members.gql";
 import PaginationControl from "components/admin/table/paginationControl";
-import EditCell from "components/admin/table/editCell";
+import EditPersonCell from "components/admin/members/editPersonCell";
 import TableRow from "components/admin/table/tableRow";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
 import Loading from "components/loading";
@@ -187,7 +187,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
         accessor: () => "Member",
         id: "action",
         Cell: (cellProps: CellProps<Record<string, unknown>, string>) => (
-          <EditCell {...cellProps} />
+          <EditPersonCell {...cellProps} />
         ),
         disableSortBy: true,
         minWidth: 85,
