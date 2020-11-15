@@ -75,6 +75,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="apollo_server.html#apolloserver" class="tsd-kind-icon">apollo<wbr>Server</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="apollo_server.html#executivestore" class="tsd-kind-icon">executive<wbr>Store</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="apollo_server.html#logentrystore" class="tsd-kind-icon">log<wbr>Entry<wbr>Store</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="apollo_server.html#personstore" class="tsd-kind-icon">person<wbr>Store</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="apollo_server.html#sequelize" class="tsd-kind-icon">sequelize</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="apollo_server.html#socsettingstore" class="tsd-kind-icon">soc<wbr>Setting<wbr>Store</a></li>
@@ -88,10 +89,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="apolloserver" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> apollo<wbr>Server</h3>
-					<div class="tsd-signature tsd-kind-icon">apollo<wbr>Server<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ApolloServer</span><span class="tsd-signature-symbol"> = new apolloServerMicro.ApolloServer({typeDefs: [baseTypeDefs,personTypeDefs,personResolverTypeDefs,executiveTypeDefs,executiveResolverTypeDefs,socSettingTypeDefs,socSettingResolverTypeDefs,majorTypeDefs,majorResolverTypeDefs,facultyTypeDefs,facultyResolverTypeDefs,collegeTypeDefs,collegeResolverTypeDefs,],resolvers: [{ Date: DateResolver, DateTime: DateTimeResolver },personResolvers,executiveResolvers,socSettingResolvers,facultyResolvers,majorResolvers,collegeResolvers,],dataSources,context,playground: {settings: {&quot;request.credentials&quot;: &quot;same-origin&quot;,},},})</span></div>
+					<div class="tsd-signature tsd-kind-icon">apollo<wbr>Server<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ApolloServer</span><span class="tsd-signature-symbol"> = new apolloServerMicro.ApolloServer({typeDefs: [baseTypeDefs,personTypeDefs,personResolverTypeDefs,executiveTypeDefs,executiveResolverTypeDefs,socSettingTypeDefs,socSettingResolverTypeDefs,logEntryTypeDefs,logEntryResolverTypeDefs,majorTypeDefs,majorResolverTypeDefs,facultyTypeDefs,facultyResolverTypeDefs,collegeTypeDefs,collegeResolverTypeDefs,],resolvers: [{ Date: DateResolver, DateTime: DateTimeResolver },personResolvers,executiveResolvers,socSettingResolvers,logEntryResolvers,facultyResolvers,majorResolvers,collegeResolvers,],dataSources,context,playground: {settings: {&quot;request.credentials&quot;: &quot;same-origin&quot;,},},})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/apollo/server/apolloServer.ts#L105">apollo/server/apolloServer.ts:105</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/apolloServer.ts#L116">apollo/server/apolloServer.ts:116</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -106,7 +107,7 @@
 					<div class="tsd-signature tsd-kind-icon">executive<wbr>Store<span class="tsd-signature-symbol">:</span> <a href="../classes/executive.executive-1.html" class="tsd-signature-type">Executive</a><span class="tsd-signature-symbol"> = ExecutiveFactory(sequelize)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/apollo/server/store.ts#L30">apollo/server/store.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/store.ts#L31">apollo/server/store.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -116,12 +117,27 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="logentrystore" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> log<wbr>Entry<wbr>Store</h3>
+					<div class="tsd-signature tsd-kind-icon">log<wbr>Entry<wbr>Store<span class="tsd-signature-symbol">:</span> <a href="../classes/logentry.logentry-1.html" class="tsd-signature-type">LogEntry</a><span class="tsd-signature-symbol"> = LogEntryFactory(sequelize)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/store.ts#L41">apollo/server/store.ts:41</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A store for the Log model</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="personstore" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> person<wbr>Store</h3>
 					<div class="tsd-signature tsd-kind-icon">person<wbr>Store<span class="tsd-signature-symbol">:</span> <a href="../classes/person.person-1.html" class="tsd-signature-type">Person</a><span class="tsd-signature-symbol"> = PersonFactory(sequelize)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/apollo/server/store.ts#L25">apollo/server/store.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/store.ts#L26">apollo/server/store.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -136,7 +152,7 @@
 					<div class="tsd-signature tsd-kind-icon">sequelize<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Sequelize</span><span class="tsd-signature-symbol"> = new Sequelize(socAdminDB, {timezone: &quot;Asia/Hong_Kong&quot;,isolationLevel: Transaction.ISOLATION_LEVELS.REPEATABLE_READ,})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/apollo/server/store.ts#L17">apollo/server/store.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/store.ts#L18">apollo/server/store.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -151,7 +167,7 @@
 					<div class="tsd-signature tsd-kind-icon">soc<wbr>Setting<wbr>Store<span class="tsd-signature-symbol">:</span> <a href="../classes/socsetting.socsetting-1.html" class="tsd-signature-type">SocSetting</a><span class="tsd-signature-symbol"> = SocSettingFactory(sequelize)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/apollo/server/store.ts#L35">apollo/server/store.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/store.ts#L36">apollo/server/store.ts:36</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -168,80 +184,8 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Internals</span>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="college.html">College</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="executive.html">Executive</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="faculty.html">Faculty</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="major.html">Major</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="person.html">Person</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="socsetting.html">Soc<wbr>Setting</a>
-					</li>
 					<li class="current tsd-kind-module">
 						<a href="apollo_server.html">apollo\server</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="apollo_server_types.html">apollo\server\types</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components.html">components</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_admin_admins.html">components\admin\admins</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_admin_registrations.html">components\admin\registrations</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_admin_socsettings.html">components\admin\soc<wbr>Settings</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_admin_table.html">components\admin\table</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_fields.html">components\fields</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="layouts.html">layouts</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="pages.html">pages</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="pages_admin.html">pages\admin</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="pages_admin_members.html">pages\admin\members</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="pages_api.html">pages\api</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="pages_member.html">pages\member</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="tests.html">tests</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="utils.html">utils</a>
-					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="apollo_server_json.html">apollo\server\json</a>
 					</li>
 				</ul>
 			</nav>
@@ -252,6 +196,9 @@
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="apollo_server.html#executivestore" class="tsd-kind-icon">executive<wbr>Store</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="apollo_server.html#logentrystore" class="tsd-kind-icon">log<wbr>Entry<wbr>Store</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="apollo_server.html#personstore" class="tsd-kind-icon">person<wbr>Store</a>

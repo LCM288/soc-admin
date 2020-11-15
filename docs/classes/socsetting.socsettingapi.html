@@ -102,6 +102,8 @@
 						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="socsetting.socsettingapi.html#logger" class="tsd-kind-icon">logger</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="socsetting.socsettingapi.html#sequelize" class="tsd-kind-icon">sequelize</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="socsetting.socsettingapi.html#store" class="tsd-kind-icon">store</a></li>
 							</ul>
 						</section>
@@ -124,13 +126,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Soc<wbr>SettingAPI<span class="tsd-signature-symbol">(</span>socSettingStore<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">SocSetting</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="socsetting.socsettingapi.html" class="tsd-signature-type">SocSettingAPI</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Soc<wbr>SettingAPI<span class="tsd-signature-symbol">(</span>socSettingStore<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">SocSetting</span>, logger<span class="tsd-signature-symbol">: </span><a href="logentry.logentryapi.html" class="tsd-signature-type">LogEntryAPI</a>, sequelize<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Sequelize</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="socsetting.socsettingapi.html" class="tsd-signature-type">SocSettingAPI</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/apollo/server/datasources/socSetting.ts#L17">apollo/server/datasources/socSetting.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/datasources/socSetting.ts#L26">apollo/server/datasources/socSetting.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -148,6 +150,12 @@
 										</div>
 									</div>
 								</li>
+								<li>
+									<h5>logger: <a href="logentry.logentryapi.html" class="tsd-signature-type">LogEntryAPI</a></h5>
+								</li>
+								<li>
+									<h5>sequelize: <span class="tsd-signature-type">Sequelize</span></h5>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="socsetting.socsettingapi.html" class="tsd-signature-type">SocSettingAPI</a></h4>
 						</li>
@@ -157,12 +165,42 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="logger" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> logger</h3>
+					<div class="tsd-signature tsd-kind-icon">logger<span class="tsd-signature-symbol">:</span> <a href="logentry.logentryapi.html" class="tsd-signature-type">LogEntryAPI</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/datasources/socSetting.ts#L23">apollo/server/datasources/socSetting.ts:23</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The logger</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="sequelize" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> sequelize</h3>
+					<div class="tsd-signature tsd-kind-icon">sequelize<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Sequelize</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/datasources/socSetting.ts#L26">apollo/server/datasources/socSetting.ts:26</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The sequelize connection</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="store" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> store</h3>
 					<div class="tsd-signature tsd-kind-icon">store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">SocSetting</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/apollo/server/datasources/socSetting.ts#L17">apollo/server/datasources/socSetting.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/datasources/socSetting.ts#L20">apollo/server/datasources/socSetting.ts:20</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -178,13 +216,13 @@
 					<a name="deletesocsetting" class="tsd-anchor"></a>
 					<h3>delete<wbr>Soc<wbr>Setting</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">delete<wbr>Soc<wbr>Setting<span class="tsd-signature-symbol">(</span>arg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Soc<wbr>Setting<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, who<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/apollo/server/datasources/socSetting.ts#L67">apollo/server/datasources/socSetting.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/datasources/socSetting.ts#L109">apollo/server/datasources/socSetting.ts:109</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -199,15 +237,13 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>arg: <span class="tsd-signature-symbol">{ </span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The arg for the soc setting</p>
+										<p>The key for the soc setting</p>
 									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter">
-											<h5>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-										</li>
-									</ul>
+								</li>
+								<li>
+									<h5>who: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -219,13 +255,13 @@
 					<a name="findsocsetting" class="tsd-anchor"></a>
 					<h3>find<wbr>Soc<wbr>Setting</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">find<wbr>Soc<wbr>Setting<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">find<wbr>Soc<wbr>Setting<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/socsetting.html#socsettingattributes" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/apollo/server/datasources/socSetting.ts#L42">apollo/server/datasources/socSetting.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/datasources/socSetting.ts#L57">apollo/server/datasources/socSetting.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -243,7 +279,7 @@
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/socsetting.html#socsettingattributes" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>The sepecified soc settings or null</p>
 						</li>
 					</ul>
@@ -252,13 +288,13 @@
 					<a name="findsocsettings" class="tsd-anchor"></a>
 					<h3>find<wbr>Soc<wbr>Settings</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">find<wbr>Soc<wbr>Settings<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">find<wbr>Soc<wbr>Settings<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/socsetting.html#socsettingattributes" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/apollo/server/datasources/socSetting.ts#L33">apollo/server/datasources/socSetting.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/datasources/socSetting.ts#L48">apollo/server/datasources/socSetting.ts:48</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -270,7 +306,7 @@
 									<dd></dd>
 								</dl>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/socsetting.html#socsettingattributes" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>An array of soc settings</p>
 						</li>
 					</ul>
@@ -303,13 +339,13 @@
 					<a name="updatesocsetting" class="tsd-anchor"></a>
 					<h3>update<wbr>Soc<wbr>Setting</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">update<wbr>Soc<wbr>Setting<span class="tsd-signature-symbol">(</span>arg<span class="tsd-signature-symbol">: </span><a href="../modules/socsetting.html#socsettingcreationattributes" class="tsd-signature-type">SocSettingCreationAttributes</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">update<wbr>Soc<wbr>Setting<span class="tsd-signature-symbol">(</span>arg<span class="tsd-signature-symbol">: </span><a href="../modules/socsetting.html#socsettingcreationattributes" class="tsd-signature-type">SocSettingCreationAttributes</a>, who<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/socsetting.html#socsettingattributes" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/981d883/apollo/server/datasources/socSetting.ts#L54">apollo/server/datasources/socSetting.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/apollo/server/datasources/socSetting.ts#L69">apollo/server/datasources/socSetting.ts:69</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -329,8 +365,11 @@
 										<p>The arg for the soc setting</p>
 									</div>
 								</li>
+								<li>
+									<h5>who: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
+								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/socsetting.html#socsettingattributes" class="tsd-signature-type">SocSettingAttributes</a><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>An instance of the soc setting</p>
 						</li>
 					</ul>
@@ -343,80 +382,8 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Internals</span>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/college.html">College</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/executive.html">Executive</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/faculty.html">Faculty</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/major.html">Major</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/person.html">Person</a>
-					</li>
 					<li class="current tsd-kind-module">
 						<a href="../modules/socsetting.html">Soc<wbr>Setting</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/apollo_server.html">apollo\server</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/apollo_server_types.html">apollo\server\types</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/components.html">components</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/components_admin_admins.html">components\admin\admins</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/components_admin_registrations.html">components\admin\registrations</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/components_admin_socsettings.html">components\admin\soc<wbr>Settings</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/components_admin_table.html">components\admin\table</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/components_fields.html">components\fields</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/layouts.html">layouts</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/pages.html">pages</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/pages_admin.html">pages\admin</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/pages_admin_members.html">pages\admin\members</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/pages_api.html">pages\api</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/pages_member.html">pages\member</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/tests.html">tests</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/utils.html">utils</a>
-					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="../modules/apollo_server_json.html">apollo\server\json</a>
 					</li>
 				</ul>
 			</nav>
@@ -432,6 +399,12 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="socsetting.socsettingapi.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="socsetting.socsettingapi.html#logger" class="tsd-kind-icon">logger</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="socsetting.socsettingapi.html#sequelize" class="tsd-kind-icon">sequelize</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="socsetting.socsettingapi.html#store" class="tsd-kind-icon">store</a>
@@ -461,14 +434,14 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../interfaces/socsetting.clientkeysupdateresponse.html" class="tsd-kind-icon">Client<wbr>Keys<wbr>Update<wbr>Response</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/socsetting.socsettingattributes.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Attributes</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../interfaces/socsetting.socsettingdeleteresponse.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Delete<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../interfaces/socsetting.socsettingupdateresponse.html" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Update<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/socsetting.html#socsettingattributes" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Attributes</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="../modules/socsetting.html#socsettingcreationattributes" class="tsd-kind-icon">Soc<wbr>Setting<wbr>Creation<wbr>Attributes</a>
