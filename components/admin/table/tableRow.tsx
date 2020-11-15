@@ -27,7 +27,7 @@ const TableRow = ({
     if (hiddenColumns.length) {
       return (
         <td
-          colSpan={visibleColumns.length}
+          colSpan={visibleColumns.length + 1}
           style={{
             maxWidth: "1px", // this is a hack for table data cell
             overflow: "auto",

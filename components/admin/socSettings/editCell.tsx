@@ -5,7 +5,6 @@ import React, {
   useCallback,
   useReducer,
   useEffect,
-  useMemo,
 } from "react";
 import { CellProps } from "react-table";
 import { Form, Button, Content, Tile } from "react-bulma-components";
@@ -47,16 +46,6 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
     }
     oldValue.current = value;
   }, [editingValue, value]);
-
-  const editorMinWidth = useMemo(() => {
-    if (windowWidth <= 400) {
-      return "90vw";
-    }
-    if (windowWidth <= 768) {
-      return "70vw";
-    }
-    return "max(35vw, calc(50vw - 12rem))";
-  }, [windowWidth]);
 
   const resetValue = useCallback(() => {
     dispatchForceRefresh();
@@ -146,9 +135,13 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
     default:
       return (
         <>
-          <Tile kind="ancestor" className="mb-1">
-            <Tile kind="parent" style={{ width: editorMinWidth }}>
-              <Tile kind="child" style={{ width: "100%" }}>
+          <Tile
+            kind="ancestor"
+            className="mb-1"
+            style={{ maxWidth: "calc(100% - 1.5rem)" }}
+          >
+            <Tile kind="parent">
+              <Tile kind="child">
                 <SimpleMDE
                   id={row.values.key}
                   key={refreshState}
@@ -182,12 +175,8 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
                 />
               </Tile>
             </Tile>
-            <Tile kind="parent" vertical style={{ width: editorMinWidth }}>
-              <Tile
-                kind="child"
-                className="box preview-content"
-                style={{ width: "100%" }}
-              >
+            <Tile kind="parent" vertical>
+              <Tile kind="child" className="box preview-content">
                 <Content>
                   <ReactMarkdown source={editingValue} escapeHtml={false} />
                 </Content>

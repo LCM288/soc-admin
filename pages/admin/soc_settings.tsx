@@ -11,6 +11,7 @@ import TableRow from "components/admin/table/tableRow";
 import toast from "utils/toast";
 import socSettingsQuery from "apollo/queries/socSetting/socSettings.gql";
 import allSocSettings from "utils/socSettings";
+import { cloneDeep, compact } from "lodash";
 import Loading from "components/loading";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
@@ -47,6 +48,7 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
       {
         Header: "Key",
         accessor: "key",
+        id: "key",
         Cell: ({ row, value }: CellProps<Record<string, unknown>, string>) => {
           return (
             <div>
@@ -57,21 +59,31 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
             </div>
           );
         },
+        width: 300,
+        maxWidth: 300,
       },
       {
         Header: "Description",
         accessor: "desc",
+        width: 0,
+        maxWidth: 0,
       },
       {
         Header: "Type",
         accessor: "type",
+        width: 0,
+        maxWidth: 0,
       },
       {
         Header: "Value",
         accessor: "value",
+        id: "value",
         Cell: (props: CellProps<Record<string, unknown>, string>) => (
           <EditCell {...props} windowWidth={sizes.width} />
         ),
+        minWidth: 300,
+        width: 0.7 * sizes.width,
+        maxWidth: 10000,
       },
     ],
     [sizes.width]
@@ -110,13 +122,35 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
   } = tableInstance;
 
   // resizeListener
+  const hideColumnOrder = useMemo(() => [["value"]], []);
+
   useEffect(() => {
-    if (sizes.width < 400) {
-      setHiddenColumns(["value"].concat(alwaysHiddenColumns));
-    } else {
-      setHiddenColumns(alwaysHiddenColumns);
+    let newHideColumn: string[] = alwaysHiddenColumns;
+    let maxWidth =
+      54 +
+      tableColumns.map((column) => column.width).reduce((a, b) => a + b, 0);
+    const columnsToHide = cloneDeep(hideColumnOrder);
+    while (sizes.width < maxWidth && columnsToHide.length) {
+      newHideColumn = newHideColumn.concat(columnsToHide[0]);
+      maxWidth -= compact(
+        columnsToHide[0].map((columnId) =>
+          tableColumns.find(
+            (column) => column.id === columnId || column.accessor === columnId
+          )
+        )
+      )
+        .map((column) => column.width)
+        .reduce((a, b) => a + b, 0);
+      columnsToHide.splice(0, 1);
     }
-  }, [setHiddenColumns, alwaysHiddenColumns, sizes.width]);
+    setHiddenColumns(newHideColumn);
+  }, [
+    alwaysHiddenColumns,
+    sizes.width,
+    hideColumnOrder,
+    tableColumns,
+    setHiddenColumns,
+  ]);
 
   if (user) {
     return (
@@ -127,7 +161,14 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
+                  <th
+                    {...column.getHeaderProps()}
+                    style={{
+                      width: column.width,
+                      maxWidth: column.maxWidth,
+                      minWidth: column.minWidth,
+                    }}
+                  >
                     {column.render("Header")}
                   </th>
                 ))}

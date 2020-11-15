@@ -29,11 +29,14 @@ const TableCell = ({ cell }: Props): React.ReactElement => {
         minWidth: cell.column.minWidth,
       }}
     >
-      <div className="dropdown is-hoverable" style={{ maxWidth: "100%" }}>
+      <div
+        className="dropdown is-hoverable"
+        style={{ width: "100%", maxWidth: "100%" }}
+      >
         <div
           ref={dataCell}
           className="dropdown-trigger"
-          style={{ overflow: "hidden" }}
+          style={{ width: "100%", overflow: "hidden" }}
         >
           {cell.render("Cell")}
         </div>

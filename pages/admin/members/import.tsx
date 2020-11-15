@@ -422,7 +422,7 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
     let newHideColumn: string[] = [];
     let maxWidth =
       54 +
-      tableColumns.map((column) => column.maxWidth).reduce((a, b) => a + b, 0);
+      tableColumns.map((column) => column.width).reduce((a, b) => a + b, 0);
     const columnsToHide = cloneDeep(hideColumnOrder);
     while (sizes.width < maxWidth && columnsToHide.length) {
       newHideColumn = newHideColumn.concat(columnsToHide[0]);
@@ -433,7 +433,7 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
           )
         )
       )
-        .map((column) => column.maxWidth)
+        .map((column) => column.width)
         .reduce((a, b) => a + b, 0);
       columnsToHide.splice(0, 1);
     }
