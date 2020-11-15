@@ -17,6 +17,7 @@ export interface LogEntryAttributes {
   oldValue: string | null;
   /** in JSON format */
   newValue: string | null;
+  // Timestamps
   createdAt: Date;
   updatedAt: Date;
 }
