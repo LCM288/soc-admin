@@ -90,24 +90,29 @@ const AdminLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
           </Navbar.Brand>
           <Navbar.Menu>
             <Navbar.Container>
+              <Navbar.Item dropdown hoverable>
+                <Navbar.Link>Members</Navbar.Link>
+                <Navbar.Dropdown>
+                  <Link href="/admin/members/import">
+                    <a href="/admin/members/import" className="navbar-item">
+                      Import Member
+                    </a>
+                  </Link>
+                  <Link href="/admin/members">
+                    <a href="/admin/members" className="navbar-item">
+                      Member List
+                    </a>
+                  </Link>
+                  <Link href="/admin/registrations">
+                    <a href="/admin/registrations" className="navbar-item">
+                      Member Registrations
+                    </a>
+                  </Link>
+                </Navbar.Dropdown>
+              </Navbar.Item>
               <Link href="/admin/admins">
                 <a href="/admin/admins" className="navbar-item">
                   Admins
-                </a>
-              </Link>
-              <Link href="/admin/members">
-                <a href="/admin/members" className="navbar-item">
-                  Members
-                </a>
-              </Link>
-              <Link href="/admin/members/import">
-                <a href="/admin/members/import" className="navbar-item">
-                  Import Member
-                </a>
-              </Link>
-              <Link href="/admin/registrations">
-                <a href="/admin/registrations" className="navbar-item">
-                  Registrations
                 </a>
               </Link>
               <Link href="/admin/soc_settings">
