@@ -34,22 +34,30 @@ const PaginationControl = ({
   }, [pageIndex, pageCount]);
 
   return (
-    <Level>
-      <Level.Item>
-        <Field kind="addons">
-          {pageIndices.map((p) => (
-            <Control key={p}>
-              <Button
-                onClick={() => gotoPage(p)}
-                className={pageIndex === p ? "is-info" : ""}
-              >
-                {p + 1}
-              </Button>
-            </Control>
-          ))}
-        </Field>
-      </Level.Item>
-    </Level>
+    <nav
+      className="pagination is-centered"
+      role="navigation"
+      aria-label="pagination"
+    >
+      <ul className="pagination-list">
+        {pageIndices.map((p) => (
+          <li key={p}>
+            <Button
+              onClick={() => gotoPage(p)}
+              className={
+                pageIndex === p
+                  ? "pagination-link is-current"
+                  : "pagination-link"
+              }
+              aria-label={`Page ${p + 1}`}
+              aria-current={pageIndex === p ? "page" : undefined}
+            >
+              {p + 1}
+            </Button>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 
