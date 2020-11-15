@@ -7,6 +7,7 @@ import { getUser } from "utils/auth";
 import { typeDefs as personTypeDefs } from "@/models/Person";
 import { typeDefs as executiveTypeDefs } from "@/models/Executive";
 import { typeDefs as socSettingTypeDefs } from "@/models/SocSetting";
+import { typeDefs as logEntryTypeDefs } from "@/models/LogEntry";
 import { typeDefs as majorTypeDefs } from "@/models/Major";
 import { typeDefs as facultyTypeDefs } from "@/models/Faculty";
 import { typeDefs as collegeTypeDefs } from "@/models/College";
@@ -31,6 +32,10 @@ import {
   resolvers as socSettingResolvers,
 } from "@/resolvers/socSetting";
 import {
+  resolverTypeDefs as logEntryResolverTypeDefs,
+  resolvers as logEntryResolvers,
+} from "@/resolvers/logEntry";
+import {
   resolverTypeDefs as facultyResolverTypeDefs,
   resolvers as facultyResolvers,
 } from "@/resolvers/faculty";
@@ -47,6 +52,7 @@ import {
 import PersonAPI from "@/datasources/person";
 import ExecutiveAPI from "@/datasources/executive";
 import SocSettingAPI from "@/datasources/socSetting";
+import LogEntryAPI from "@/datasources/logEntry";
 import FacultyAPI from "@/datasources/faculty";
 import MajorAPI from "@/datasources/major";
 import CollegeAPI from "@/datasources/college";
@@ -57,6 +63,7 @@ import {
   personStore,
   executiveStore,
   socSettingStore,
+  logEntryStore,
 } from "@/store";
 import { ContextBase } from "./types/datasources";
 import { ResolverDatasource } from "./types/resolver";
@@ -73,6 +80,7 @@ const dataSources = (): ResolverDatasource => ({
   personAPI: new PersonAPI(personStore, sequelize),
   executiveAPI: new ExecutiveAPI(executiveStore),
   socSettingAPI: new SocSettingAPI(socSettingStore),
+  logEntryAPI: new LogEntryAPI(logEntryStore),
 });
 
 /**
@@ -111,6 +119,8 @@ const apolloServer = new apolloServerMicro.ApolloServer({
     executiveResolverTypeDefs,
     socSettingTypeDefs,
     socSettingResolverTypeDefs,
+    logEntryTypeDefs,
+    logEntryResolverTypeDefs,
     majorTypeDefs,
     majorResolverTypeDefs,
     facultyTypeDefs,
@@ -123,6 +133,7 @@ const apolloServer = new apolloServerMicro.ApolloServer({
     personResolvers,
     executiveResolvers,
     socSettingResolvers,
+    logEntryResolvers,
     facultyResolvers,
     majorResolvers,
     collegeResolvers,

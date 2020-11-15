@@ -221,6 +221,6 @@ export const typeDefs = gql`
     memberUntil: Date
     status: MemberStatus_ENUM!
     registrationType: RegistrationType_ENUM
-    updatedAt: DateTime
+    updatedAt: DateTime!
   }
 `;
