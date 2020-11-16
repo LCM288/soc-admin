@@ -49,7 +49,7 @@ const AddAdminModal = ({
           {`Are you sure to add ${sid} as an admin ?`}
         </Heading>
         {memberLoading && <Loader />}
-        {error && <div>error.message</div>}
+        {error && <div>{error.message}</div>}
         {!person && <div>{sid} cannot be found on the member list</div>}
         {person && (
           <Columns className="has-text-centered">
