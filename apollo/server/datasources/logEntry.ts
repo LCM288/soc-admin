@@ -48,6 +48,18 @@ export default class LogEntryAPI extends DataSource<ContextBase> {
     const keys = union(
       Object.keys(oldValue ?? {}).concat(Object.keys(newValue ?? {}))
     ).filter((key) => oldValue?.[key] !== newValue?.[key]);
+    switch (table) {
+      case "people":
+      case "executives":
+        keys.push("sid");
+        break;
+      case "soc_settings":
+        keys.push("key");
+        break;
+      default:
+        keys.push("id");
+        break;
+    }
     return this.store.create(
       {
         who: who ?? "God",
