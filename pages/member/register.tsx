@@ -84,11 +84,10 @@ const Register = ({ user }: ServerSideProps): React.ReactElement => {
   const onSubmit = useCallback(
     (person: PersonCreationAttributes | PersonUpdateAttributes) => {
       setIsSubmitting(true);
-      const variables = person;
       const mutation = personQueryResult.data?.person
         ? updatePerson
         : newPerson;
-      mutation({ variables })
+      mutation({ variables: person })
         .then((payload) => {
           if (
             !payload.data?.newPerson?.success &&

@@ -9,7 +9,7 @@ import {
 import Loading from "components/loading";
 import { ExecutiveCreationAttributes } from "@/models/Executive";
 import PromptModal from "components/promptModal";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/react-hooks";
 import personQuery from "apollo/queries/person/person.gql";
 import { PersonAttributes } from "@/models/Person";
 import { College } from "@/models/College";
@@ -81,7 +81,7 @@ const AddAdminModal = ({
 
   const promptConfirm = useCallback(
     (confirmSid: string) => {
-      getMember({ variables: { confirmSid } });
+      getMember({ variables: { sid: confirmSid } });
       setOpenConfirmModal(true);
     },
     [getMember]
