@@ -20,6 +20,7 @@ import useRegistrationTable, {
 import AddRegistration from "components/admin/registrations/addRegistration";
 import Loading from "components/loading";
 import useHideColumn from "utils/useHideColumn";
+import { RegistrationTypeEnum } from "@/utils/Person";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
@@ -27,7 +28,13 @@ const { Input, Field, Label, Control, Select } = Form;
 
 const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   // constant
-  const typeOptions = useMemo(() => ["All", "New", "Renewal"], []);
+  const typeOptions = useMemo(
+    () =>
+      Object.values(RegistrationTypeEnum as Record<string, string>).concat([
+        "All",
+      ]),
+    []
+  );
   const pageSizeOptions = useMemo(() => [1, 2, 5, 10, 20, 50], []);
   const getSortDirectionIndicatior = useCallback(
     (column: RegistrationColumnInstance): string => {
