@@ -87,6 +87,7 @@ export default class LogEntryAPI extends DataSource<ContextBase> {
       where: criteria,
       limit,
       offset,
+      order: ["updatedAt"],
       raw: true,
     });
     return { count, entries };
