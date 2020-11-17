@@ -8,6 +8,7 @@ import { LogEntry, LogEntryAttributes } from "@/models/LogEntry";
 import { ContextBase } from "@/types/datasources";
 import { Transaction } from "sequelize";
 import { union, pick } from "lodash";
+import tableData from "@/json/tables.json";
 
 /** An API to retrieve data from the LogEntry store */
 export default class LogEntryAPI extends DataSource<ContextBase> {
@@ -48,18 +49,9 @@ export default class LogEntryAPI extends DataSource<ContextBase> {
     const keys = union(
       Object.keys(oldValue ?? {}).concat(Object.keys(newValue ?? {}))
     ).filter((key) => oldValue?.[key] !== newValue?.[key]);
-    switch (table) {
-      case "people":
-      case "executives":
-        keys.push("sid");
-        break;
-      case "soc_settings":
-        keys.push("key");
-        break;
-      default:
-        keys.push("id");
-        break;
-    }
+    keys.push(
+      (tableData as Record<string, { key: string }>)[table]?.key ?? "id"
+    );
     return this.store.create(
       {
         who: who ?? "God",
