@@ -1,0 +1,14 @@
+query($limit: Int!, $offset: Int!, $table: String) {
+  logEntries(limit: $limit, offset: $offset, table: $table) {
+    count
+    entries {
+      id
+      updatedAt
+      who
+      table
+      description
+      oldValue
+      newValue
+    }
+  }
+}
