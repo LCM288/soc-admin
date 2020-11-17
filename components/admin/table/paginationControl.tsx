@@ -14,7 +14,7 @@ const PaginationControl = ({
 }: Props): React.ReactElement => {
   const pageIndices = useMemo(() => {
     if (pageCount <= 0) {
-      return [];
+      return [pageIndex];
     }
     const len = Math.ceil(Math.log(pageCount));
     const diff = Array(len)
