@@ -16,7 +16,7 @@ import useHideColumn from "utils/useHideColumn";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
-const Members = ({ user }: ServerSideProps): React.ReactElement => {
+const Admins = ({ user }: ServerSideProps): React.ReactElement => {
   // constants
   const getSortDirectionIndicatior = useCallback(
     (column: AdminColumnInstance) => {
@@ -44,6 +44,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   useEffect(() => {
     setExecutivesData(data);
   }, [data]);
+
   useEffect(() => {
     if (error) {
       toast.danger(error.message, {
@@ -184,6 +185,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   return <></>;
 };
 
-Members.Layout = AdminLayout;
+Admins.Layout = AdminLayout;
 
-export default Members;
+export default Admins;
