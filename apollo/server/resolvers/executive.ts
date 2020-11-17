@@ -29,7 +29,7 @@ interface ExecutiveDeleteResponse {
   message: string;
 }
 
-/** The input arguments for the faculty query's resolver */
+/** The input arguments for the executive query's resolver */
 interface ExecutiveResolverArgs {
   sid: string;
 }
