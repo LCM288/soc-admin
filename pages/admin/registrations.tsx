@@ -60,6 +60,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   >(undefined);
 
   useEffect(() => setRegistrationsData(data), [data]);
+
   useEffect(() => {
     if (error) {
       toast.danger(error.message, {
