@@ -10,6 +10,14 @@ import { Transaction } from "sequelize";
 import { union, pick } from "lodash";
 import tableData from "@/json/tables.json";
 
+/** The response when querying log entries */
+export interface LogEntriesResponse {
+  /** Total count of log entries */
+  count: number;
+  /** The log entries for the current filter and page */
+  entries: LogEntryAttributes[];
+}
+
 /** An API to retrieve data from the LogEntry store */
 export default class LogEntryAPI extends DataSource<ContextBase> {
   /** The {@link LogEntry} store */
@@ -65,20 +73,22 @@ export default class LogEntryAPI extends DataSource<ContextBase> {
   }
 
   /**
-   * Count number of log entries
-   * @async
-   * @returns Number of log entries
-   */
-  public async countLogEntries(): Promise<number> {
-    return this.store.count();
-  }
-
-  /**
    * Find all log entries
    * @async
    * @returns An array of log entries
    */
-  public async findLogEntries(): Promise<LogEntryAttributes[]> {
-    return this.store.findAll({ raw: true });
+  public async findLogEntries(
+    limit: number,
+    offset: number,
+    table: string | undefined
+  ): Promise<LogEntriesResponse> {
+    const criteria = table ? { table } : {};
+    const { count, rows: entries } = await this.store.findAndCountAll({
+      where: criteria,
+      limit,
+      offset,
+      raw: true,
+    });
+    return { count, entries };
   }
 }

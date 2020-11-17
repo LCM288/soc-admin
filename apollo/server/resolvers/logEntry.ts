@@ -5,54 +5,42 @@
 
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
-import { LogEntryAttributes } from "@/models/LogEntry";
+import { LogEntriesResponse } from "@/datasources/logEntry";
+
+/** The input arguments for the logEntries query's resolver */
+interface LogEntriesResolverArgs {
+  limit: number;
+  offset: number;
+  table?: string;
+}
 
 // Query resolvers
-
-/**
- * The resolver for countLogEntries Query
- * @async
- * @returns Number of log entries
- * @category Query Resolver
- */
-const countLogEntriesResolver: ResolverFn<null, number> = async (
-  _,
-  __,
-  { user, dataSources }
-): Promise<number> => {
-  const isAdmin = Boolean(
-    user && (await dataSources.executiveAPI.findExecutive(user.sid))
-  );
-  if (!isAdmin) {
-    throw new Error("You have no permission to do this");
-  }
-  return dataSources.logEntryAPI.countLogEntries();
-};
 
 /**
  * The resolver for logEntries Query
  * @returns All the log entries
  * @category Query Resolver
  */
-const logEntriesResolver: ResolverFn<unknown, LogEntryAttributes[]> = async (
+const logEntriesResolver: ResolverFn<
+  LogEntriesResolverArgs,
+  LogEntriesResponse
+> = async (
   _,
-  __,
+  { limit, offset, table }: LogEntriesResolverArgs,
   { user, dataSources }
-): Promise<LogEntryAttributes[]> => {
+): Promise<LogEntriesResponse> => {
   const isAdmin = Boolean(
     user && (await dataSources.executiveAPI.findExecutive(user.sid))
   );
   if (!isAdmin) {
     throw new Error("You have no permission to do this");
   }
-  return dataSources.logEntryAPI.findLogEntries();
+  return dataSources.logEntryAPI.findLogEntries(limit, offset, table);
 };
 
 /** The resolvers associated with the LogEntry model */
 export const resolvers: Resolvers = {
   Query: {
-    /** see {@link countLogEntriesResolver} */
-    countLogEntries: countLogEntriesResolver,
     /** see {@link logEntriesResolver} */
     logEntries: logEntriesResolver,
   },
@@ -64,7 +52,11 @@ export const resolvers: Resolvers = {
  */
 export const resolverTypeDefs = gql`
   extend type Query {
-    countLogEntries: Int!
-    logEntries: [LogEntry!]!
+    logEntries(limit: Int!, offset: Int!, table: String): LogEntriesResponse!
+  }
+
+  type LogEntriesResponse {
+    count: Int!
+    entries: [LogEntry!]!
   }
 `;
