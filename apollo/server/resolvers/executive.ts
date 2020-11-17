@@ -241,12 +241,17 @@ export const resolverTypeDefs = gql`
       nickname: String
       pos: String
     ): ExecutiveUpdateResponse!
-    deleteExecutive(sid: String!): ExecutiveUpdateResponse!
+    deleteExecutive(sid: String!): ExecutiveDeleteResponse!
   }
 
   type ExecutiveUpdateResponse {
     success: Boolean!
     message: String!
     executive: Executive
+  }
+
+  type ExecutiveDeleteResponse {
+    success: Boolean!
+    message: String!
   }
 `;
