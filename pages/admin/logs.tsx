@@ -26,8 +26,6 @@ const Logs = ({ user }: ServerSideProps): React.ReactElement => {
   const initialPageSize = useMemo(() => 10, []);
 
   // data
-  const [tableFilter, setTableFilter] = useState("All");
-
   const [
     getLogEntries,
     { loading: logEntriesLoading, data: logEntriesData, error },
@@ -99,14 +97,7 @@ const Logs = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
 
-  const pageCount = useMemo(
-    () =>
-      Math.ceil(
-        (logEntriesData?.logEntries.count ?? 0) /
-          (logEntriesData?.logEntries.entries.length || 1)
-      ),
-    [logEntriesData]
-  );
+  const [pageCount, setPageCount] = useState(1);
 
   const {
     getTableProps,
@@ -140,6 +131,17 @@ const Logs = ({ user }: ServerSideProps): React.ReactElement => {
   useHideColumn(sizes.width, hideColumnOrder, tableColumns, setHiddenColumns);
 
   // refetch data
+  const [tableFilter, setTableFilter] = useState("All");
+
+  useEffect(() => {
+    setPageCount(
+      Math.ceil((logEntriesData?.logEntries.count ?? 0) / (pageSize || 1))
+    );
+  }, [logEntriesData, pageSize]);
+
+  useEffect(() => {
+    gotoPage(0);
+  }, [tableFilter, gotoPage]);
 
   useEffect(() => {
     getLogEntries({
