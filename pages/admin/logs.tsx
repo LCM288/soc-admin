@@ -11,7 +11,9 @@ import TableRow from "components/admin/table/tableRow";
 import Loading from "components/loading";
 import useHideColumn from "utils/useHideColumn";
 import tables from "@/json/tables.json";
+import { DateTime } from "luxon";
 import { useLazyQuery } from "@apollo/react-hooks";
+import DetailsCell from "components/admin/logs/detailsCell";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
@@ -29,7 +31,10 @@ const Logs = ({ user }: ServerSideProps): React.ReactElement => {
   const [
     getLogEntries,
     { loading: logEntriesLoading, data: logEntriesData, error },
-  ] = useLazyQuery(logEntriesQuery);
+  ] = useLazyQuery(logEntriesQuery, {
+    fetchPolicy: "cache-and-network",
+    pollInterval: 5000,
+  });
 
   useEffect(() => {
     if (error) {
@@ -43,65 +48,56 @@ const Logs = ({ user }: ServerSideProps): React.ReactElement => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: "id",
-        accessor: "id",
-        id: "id",
-        width: 300,
-        maxWidth: 300,
+        Header: "Date",
+        accessor: (row: Record<string, unknown>) =>
+          DateTime.fromISO(row.updatedAt as string).toISODate(),
+        id: "date",
+        width: 110,
+        maxWidth: 110,
       },
       {
-        Header: "updatedAt",
-        accessor: "updatedAt",
-        id: "updatedAt",
-        width: 300,
-        maxWidth: 300,
+        Header: "Time",
+        accessor: (row: Record<string, unknown>) =>
+          DateTime.fromISO(row.updatedAt as string).toLocaleString(
+            DateTime.TIME_24_WITH_SECONDS
+          ),
+        id: "time",
+        width: 85,
+        maxWidth: 85,
       },
       {
-        Header: "who",
-        accessor: "who",
-        id: "who",
-        width: 300,
-        maxWidth: 300,
-      },
-      {
-        Header: "table",
-        accessor: "table",
-        id: "table",
-        width: 300,
-        maxWidth: 300,
-      },
-      {
-        Header: "description",
+        Header: "Description",
         accessor: "description",
         id: "description",
         width: 300,
         maxWidth: 300,
       },
       {
-        Header: "oldValue",
-        accessor: "oldValue",
-        id: "oldValue",
-        width: 300,
-        maxWidth: 300,
+        Header: "Who?",
+        accessor: (row: Record<string, unknown>) => `by ${row.who}`,
+        id: "who",
+        width: 110,
+        maxWidth: 110,
       },
       {
-        Header: "newValue",
-        accessor: "newValue",
-        id: "newValue",
-        width: 300,
-        maxWidth: 300,
+        Header: "Details",
+        id: "details",
+        Cell: DetailsCell,
+        width: 100000,
+        maxWidth: 100000,
       },
     ],
     []
   );
 
-  const tableData = useMemo(() => {
-    return logEntriesData?.logEntries.entries ?? [];
-  }, [logEntriesData]);
+  const tableData = useMemo(() => logEntriesData?.logEntries.entries ?? [], [
+    logEntriesData,
+  ]);
 
-  const tableGetRowId = useMemo(() => {
-    return (row: Record<string, unknown>) => row.id as string;
-  }, []);
+  const tableGetRowId = useCallback(
+    (row: Record<string, unknown>) => row.id as string,
+    []
+  );
 
   const pageCount = useMemo(
     () =>
@@ -137,7 +133,7 @@ const Logs = ({ user }: ServerSideProps): React.ReactElement => {
   const [resizeListener, sizes] = useResizeAware();
 
   const hideColumnOrder = useMemo(
-    () => [["oldValue", "newValue"], ["description"]],
+    () => [["details"], ["description", "who"]],
     []
   );
 
@@ -238,6 +234,14 @@ const Logs = ({ user }: ServerSideProps): React.ReactElement => {
             })}
           </tbody>
         </Table>
+        <div>
+          All time shown is in{" "}
+          <i>
+            {`${DateTime.local().offsetNameLong} (${
+              DateTime.local().offsetNameShort
+            })`}
+          </i>
+        </div>
         <PaginationControl
           gotoPage={gotoPage}
           pageIndex={pageIndex}
