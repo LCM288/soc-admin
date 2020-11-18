@@ -471,6 +471,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                     <span>{getSortDirectionIndicatior(column)}</span>
                   </th>
                 ))}
+                <td style={{ width: "1px", maxWidth: "1px", padding: 0 }} />
               </tr>
             ))}
           </thead>

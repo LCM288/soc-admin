@@ -217,6 +217,7 @@ const Logs = ({ user }: ServerSideProps): React.ReactElement => {
                     {column.render("Header")}
                   </th>
                 ))}
+                <td style={{ width: "1px", maxWidth: "1px", padding: 0 }} />
               </tr>
             ))}
           </thead>
