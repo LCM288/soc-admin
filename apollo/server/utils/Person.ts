@@ -36,6 +36,8 @@ export enum MemberStatusEnum {
   Expired = "Expired",
 }
 
+export const NON_MEMBER_STATUS = MemberStatusEnum.Unactivated;
+
 export enum RegistrationTypeEnum {
   New = "New",
   Renewal = "Renewal",

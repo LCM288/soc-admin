@@ -161,7 +161,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
           who,
           table: this.store.tableName,
           description: "A new person has been added",
-          oldValue: null,
+          oldValue: {},
           newValue: newPerson,
         },
         transaction
@@ -279,7 +279,7 @@ export default class PersonAPI extends DataSource<ContextBase> {
           table: this.store.tableName,
           description: `Student ${sid}'s registration has been approved`,
           oldValue: oldPerson,
-          newValue: newPerson as PersonModelAttributes | null,
+          newValue: (newPerson ?? {}) as Partial<PersonModelAttributes>,
         },
         transaction
       );

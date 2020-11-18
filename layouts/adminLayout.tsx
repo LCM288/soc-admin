@@ -120,6 +120,11 @@ const AdminLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
                   Settings
                 </a>
               </Link>
+              <Link href="/admin/logs">
+                <a href="/admin/logs" className="navbar-item">
+                  Logs
+                </a>
+              </Link>
               <Link href="/admin/authentication">
                 <a href="/admin/authentication" className="navbar-item">
                   Authentication

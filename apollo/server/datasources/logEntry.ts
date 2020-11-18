@@ -8,6 +8,16 @@ import { LogEntry, LogEntryAttributes } from "@/models/LogEntry";
 import { ContextBase } from "@/types/datasources";
 import { Transaction } from "sequelize";
 import { union, pick } from "lodash";
+import tableData from "@/json/tables.json";
+import { DateTime } from "luxon";
+
+/** The response when querying log entries */
+export interface LogEntriesResponse {
+  /** Total count of log entries */
+  count: number;
+  /** The log entries for the current filter and page */
+  entries: LogEntryAttributes[];
+}
 
 /** An API to retrieve data from the LogEntry store */
 export default class LogEntryAPI extends DataSource<ContextBase> {
@@ -40,26 +50,21 @@ export default class LogEntryAPI extends DataSource<ContextBase> {
       who: string | undefined;
       table: string;
       description: string;
-      oldValue: Record<string, unknown> | null;
-      newValue: Record<string, unknown> | null;
+      oldValue: Record<string, unknown>;
+      newValue: Record<string, unknown>;
     },
     transaction: Transaction
   ): Promise<LogEntryAttributes> {
-    const keys = union(
-      Object.keys(oldValue ?? {}).concat(Object.keys(newValue ?? {}))
-    ).filter((key) => oldValue?.[key] !== newValue?.[key]);
-    switch (table) {
-      case "people":
-      case "executives":
-        keys.push("sid");
-        break;
-      case "soc_settings":
-        keys.push("key");
-        break;
-      default:
-        keys.push("id");
-        break;
-    }
+    const keys = [
+      (tableData as Record<string, { key: string }>)[table]?.key ?? "id",
+    ].concat(
+      union(Object.keys(oldValue).concat(Object.keys(newValue))).filter((key) =>
+        oldValue[key] instanceof Date && newValue[key] instanceof Date
+          ? DateTime.fromJSDate(oldValue[key] as Date).valueOf() !==
+            DateTime.fromJSDate(newValue[key] as Date).valueOf()
+          : oldValue[key] !== newValue[key]
+      )
+    );
     return this.store.create(
       {
         who: who ?? "God",
@@ -73,20 +78,23 @@ export default class LogEntryAPI extends DataSource<ContextBase> {
   }
 
   /**
-   * Count number of log entries
-   * @async
-   * @returns Number of log entries
-   */
-  public async countLogEntries(): Promise<number> {
-    return this.store.count();
-  }
-
-  /**
    * Find all log entries
    * @async
    * @returns An array of log entries
    */
-  public async findLogEntries(): Promise<LogEntryAttributes[]> {
-    return this.store.findAll({ raw: true });
+  public async findLogEntries(
+    limit: number,
+    offset: number,
+    table: string | undefined
+  ): Promise<LogEntriesResponse> {
+    const criteria = table ? { table } : {};
+    const { count, rows: entries } = await this.store.findAndCountAll({
+      where: criteria,
+      limit,
+      offset,
+      order: [["updatedAt", "DESC"]],
+      raw: true,
+    });
+    return { count, entries };
   }
 }

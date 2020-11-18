@@ -1,30 +1,35 @@
 import React from "react";
-import { Modal, Loader } from "react-bulma-components";
-import useClipped from "utils/useClipped";
+import { Loader } from "react-bulma-components";
 
 interface Props {
   loading: boolean;
 }
 
 const Loading = ({ loading }: Props): React.ReactElement => {
-  useClipped(loading);
-
   return (
-    <Modal
-      show={loading}
-      closeOnEsc={false}
-      showClose={false}
-      onClose={() => {}}
-    >
-      <Loader
-        style={{
-          position: "absolute",
-          margin: "auto",
-          height: "50vmin",
-          width: "50vmin",
-        }}
-      />
-    </Modal>
+    <>
+      {loading && (
+        <div
+          style={{
+            position: "fixed",
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            background: "rgba(10, 10, 10, 0.2)",
+          }}
+        >
+          <Loader
+            style={{
+              top: "calc((100vh - 50vmin) / 2)",
+              left: " calc((100vw - 50vmin) / 2)",
+              height: "50vmin",
+              width: "50vmin",
+            }}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

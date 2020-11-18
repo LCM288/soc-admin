@@ -6,6 +6,8 @@ import {
   PersonModelAttributes,
   GenderEnum,
   CollegeEnum,
+  MemberStatusEnum,
+  NON_MEMBER_STATUS,
 } from "@/utils/Person";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import PaginationControl from "components/admin/table/paginationControl";
@@ -32,7 +34,13 @@ const { InputFile, Input, Field, Label, Control, Select } = Form;
 
 const Import = ({ user }: ServerSideProps): React.ReactElement => {
   // constant
-  const statusOptions = useMemo(() => ["All", "Activated", "Expired"], []);
+  const statusOptions = useMemo(
+    () =>
+      Object.values(MemberStatusEnum as Record<string, string>)
+        .filter((status) => status !== NON_MEMBER_STATUS.valueOf())
+        .concat(["All"]),
+    []
+  );
   const pageSizeOptions = useMemo(() => [1, 2, 5, 10, 20, 50], []);
   const getSortDirectionIndicatior = useCallback(
     (column: MemberColumnInstance) => {
@@ -542,6 +550,7 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
                     <span>{getSortDirectionIndicatior(column)}</span>
                   </th>
                 ))}
+                <td style={{ width: "1px", maxWidth: "1px", padding: 0 }} />
               </tr>
             ))}
           </thead>

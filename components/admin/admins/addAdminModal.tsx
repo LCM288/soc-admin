@@ -32,7 +32,9 @@ const AddAdminModal = ({
   const [
     getMember,
     { loading: memberLoading, data: memberData, error },
-  ] = useLazyQuery(personQuery);
+  ] = useLazyQuery(personQuery, {
+    fetchPolicy: "network-only",
+  });
 
   const [sid, setSID] = useState("");
   const [nickname, setNickname] = useState("");
@@ -81,7 +83,9 @@ const AddAdminModal = ({
 
   const promptConfirm = useCallback(
     (confirmSid: string) => {
-      getMember({ variables: { sid: confirmSid } });
+      getMember({
+        variables: { sid: confirmSid },
+      });
       setOpenConfirmModal(true);
     },
     [getMember]

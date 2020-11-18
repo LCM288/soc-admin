@@ -18,6 +18,7 @@ import TableRow from "components/admin/table/tableRow";
 import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
 import Loading from "components/loading";
 import useHideColumn from "utils/useHideColumn";
+import { MemberStatusEnum, NON_MEMBER_STATUS } from "@/utils/Person";
 
 export { getAdminPageServerSideProps as getServerSideProps } from "utils/getServerSideProps";
 
@@ -25,7 +26,13 @@ const { Input, Field, Label, Control, Select } = Form;
 
 const Members = ({ user }: ServerSideProps): React.ReactElement => {
   // constant
-  const statusOptions = useMemo(() => ["All", "Activated", "Expired"], []);
+  const statusOptions = useMemo(
+    () =>
+      Object.values(MemberStatusEnum as Record<string, string>)
+        .filter((status) => status !== NON_MEMBER_STATUS.valueOf())
+        .concat(["All"]),
+    []
+  );
   const pageSizeOptions = useMemo(() => [1, 2, 5, 10, 20, 50], []);
   const getSortDirectionIndicatior = useCallback(
     (column: MemberColumnInstance) => {
@@ -464,6 +471,7 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
                     <span>{getSortDirectionIndicatior(column)}</span>
                   </th>
                 ))}
+                <td style={{ width: "1px", maxWidth: "1px", padding: 0 }} />
               </tr>
             ))}
           </thead>
