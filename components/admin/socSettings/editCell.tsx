@@ -138,7 +138,7 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
           <Tile
             kind="ancestor"
             className="mb-1"
-            style={{ maxWidth: "calc(100% - 1.5rem)" }}
+            style={{ width: "100vw", maxWidth: "calc(100% - 1.5rem)" }}
           >
             <Tile
               kind="parent"

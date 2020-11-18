@@ -36,7 +36,7 @@ const TableCell = ({ cell }: Props): React.ReactElement => {
         <div
           ref={dataCell}
           className="dropdown-trigger"
-          style={{ width: "100%", overflow: "hidden" }}
+          style={{ overflow: "hidden" }}
         >
           {cell.render("Cell")}
         </div>
