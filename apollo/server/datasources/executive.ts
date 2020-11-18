@@ -95,7 +95,7 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
           who,
           table: this.store.tableName,
           description: "A new executive has been added",
-          oldValue: null,
+          oldValue: {},
           newValue: newExecutive,
         },
         transaction
@@ -172,7 +172,7 @@ export default class ExecutiveAPI extends DataSource<ContextBase> {
             table: this.store.tableName,
             description: `Executive ${sid} has been removed`,
             oldValue: oldExecutive as ExecutiveAttributes,
-            newValue: null,
+            newValue: {},
           },
           transaction
         );

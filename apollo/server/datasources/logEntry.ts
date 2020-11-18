@@ -9,6 +9,7 @@ import { ContextBase } from "@/types/datasources";
 import { Transaction } from "sequelize";
 import { union, pick } from "lodash";
 import tableData from "@/json/tables.json";
+import { DateTime } from "luxon";
 
 /** The response when querying log entries */
 export interface LogEntriesResponse {
@@ -49,16 +50,20 @@ export default class LogEntryAPI extends DataSource<ContextBase> {
       who: string | undefined;
       table: string;
       description: string;
-      oldValue: Record<string, unknown> | null;
-      newValue: Record<string, unknown> | null;
+      oldValue: Record<string, unknown>;
+      newValue: Record<string, unknown>;
     },
     transaction: Transaction
   ): Promise<LogEntryAttributes> {
-    const keys = union(
-      Object.keys(oldValue ?? {}).concat(Object.keys(newValue ?? {}))
-    ).filter((key) => oldValue?.[key] !== newValue?.[key]);
-    keys.push(
-      (tableData as Record<string, { key: string }>)[table]?.key ?? "id"
+    const keys = [
+      (tableData as Record<string, { key: string }>)[table]?.key ?? "id",
+    ].concat(
+      union(Object.keys(oldValue).concat(Object.keys(newValue))).filter((key) =>
+        oldValue[key] instanceof Date && newValue[key] instanceof Date
+          ? DateTime.fromJSDate(oldValue[key] as Date).valueOf() !==
+            DateTime.fromJSDate(newValue[key] as Date).valueOf()
+          : oldValue[key] !== newValue[key]
+      )
     );
     return this.store.create(
       {

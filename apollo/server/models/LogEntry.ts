@@ -14,9 +14,9 @@ export interface LogEntryAttributes {
   /** a brief description of the action */
   description: string;
   /** in JSON format */
-  oldValue: string | null;
+  oldValue: string;
   /** in JSON format */
-  newValue: string | null;
+  newValue: string;
   // Timestamps
   createdAt: Date;
   updatedAt: Date;
@@ -42,10 +42,10 @@ export class LogEntry
   public description!: string;
 
   /** in JSON format */
-  public oldValue!: string | null;
+  public oldValue!: string;
 
   /** in JSON format */
-  public newValue!: string | null;
+  public newValue!: string;
 
   // timestamps!
   public readonly createdAt!: Date;
@@ -81,9 +81,11 @@ export const LogEntryFactory = (sequelize: Sequelize): typeof LogEntry => {
       },
       oldValue: {
         type: DataTypes.TEXT,
+        allowNull: false,
       },
       newValue: {
         type: DataTypes.TEXT,
+        allowNull: false,
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -112,8 +114,8 @@ export const typeDefs = gql`
     who: String!
     table: String!
     description: String!
-    oldValue: String
-    newValue: String
+    oldValue: String!
+    newValue: String!
     updatedAt: DateTime!
   }
 `;

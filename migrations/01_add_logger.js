@@ -27,9 +27,11 @@ async function up(queryInterface) {
         },
         oldValue: {
           type: DataTypes.TEXT,
+          allowNull: false,
         },
         newValue: {
           type: DataTypes.TEXT,
+          allowNull: false,
         },
         createdAt: {
           type: DataTypes.DATE,

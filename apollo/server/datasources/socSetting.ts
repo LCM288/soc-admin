@@ -81,6 +81,15 @@ export default class SocSettingAPI extends DataSource<ContextBase> {
       const isPublic = Object.values(publicSocSettings)
         .map((setting) => setting.key)
         .includes(arg.key);
+      const getOldValue = (): Partial<SocSettingAttributes> => {
+        if (isPublic && oldSetting) {
+          return oldSetting;
+        }
+        if (oldSetting) {
+          return { key: arg.key };
+        }
+        return {};
+      };
       await this.logger.insertLogEntry(
         {
           who,
@@ -88,11 +97,8 @@ export default class SocSettingAPI extends DataSource<ContextBase> {
           description: `Setting ${arg.key} has been ${
             oldSetting ? "updated" : "created"
           }`,
-          oldValue:
-            isPublic && oldSetting
-              ? (oldSetting as SocSettingAttributes)
-              : null,
-          newValue: isPublic ? newSetting : null,
+          oldValue: getOldValue(),
+          newValue: isPublic ? newSetting : { key: arg.key },
         },
         transaction
       );
@@ -126,8 +132,8 @@ export default class SocSettingAPI extends DataSource<ContextBase> {
             who,
             table: this.store.tableName,
             description: `Setting ${key} has been removed`,
-            oldValue: isPublic ? (oldSetting as SocSettingAttributes) : null,
-            newValue: null,
+            oldValue: isPublic ? (oldSetting as SocSettingAttributes) : { key },
+            newValue: {},
           },
           transaction
         );

@@ -202,8 +202,14 @@ export const deleteNewAPIKey = async (): Promise<void> => {
         who: "God",
         table: socSettingStore.tableName,
         description: "New client id & secret has been discarded",
-        oldValue: null,
-        newValue: null,
+        oldValue: JSON.stringify({
+          "client id": undefined,
+          "client secret": undefined,
+        }),
+        newValue: JSON.stringify({
+          "client id": undefined,
+          "client secret": undefined,
+        }),
       },
       { transaction }
     );
@@ -250,7 +256,7 @@ export const swapAPIKey = async (): Promise<void> => {
         who: "God",
         table: socSettingStore.tableName,
         description: "New client id & secret has been activated",
-        oldValue: null,
+        oldValue: JSON.stringify({ key: CLIENT_ID_KEY }),
         newValue: JSON.stringify({ key: CLIENT_ID_KEY, value: newIDValue }),
       },
       { transaction }
