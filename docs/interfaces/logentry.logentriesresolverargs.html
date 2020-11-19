@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Props | soc-admin</title>
+	<title>LogEntriesResolverArgs | soc-admin</title>
 	<meta name="description" content="Documentation for soc-admin">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,24 +56,31 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/components_admin_table.html">components\admin\table</a>
+					<a href="../modules/logentry.html">LogEntry</a>
 				</li>
 				<li>
-					<a href="components_admin_table.props-4.html">Props</a>
+					<a href="logentry.logentriesresolverargs.html">LogEntriesResolverArgs</a>
 				</li>
 			</ul>
-			<h1>Interface Props</h1>
+			<h1>Interface LogEntriesResolverArgs</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The input arguments for the logEntries query&#39;s resolver</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Props</span>
+						<span class="target">LogEntriesResolverArgs</span>
 					</li>
 				</ul>
 			</section>
@@ -84,9 +91,9 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_table.props-4.html#allcolumns" class="tsd-kind-icon">all<wbr>Columns</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_table.props-4.html#row" class="tsd-kind-icon">row</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="components_admin_table.props-4.html#visiblecolumns" class="tsd-kind-icon">visible<wbr>Columns</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="logentry.logentriesresolverargs.html#limit" class="tsd-kind-icon">limit</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="logentry.logentriesresolverargs.html#offset" class="tsd-kind-icon">offset</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="logentry.logentriesresolverargs.html#table" class="tsd-kind-icon">table</a></li>
 							</ul>
 						</section>
 					</div>
@@ -95,32 +102,32 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="allcolumns" class="tsd-anchor"></a>
-					<h3>all<wbr>Columns</h3>
-					<div class="tsd-signature tsd-kind-icon">all<wbr>Columns<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ColumnInstance</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
+					<a name="limit" class="tsd-anchor"></a>
+					<h3>limit</h3>
+					<div class="tsd-signature tsd-kind-icon">limit<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/components/admin/table/tableRow.tsx#L11">components/admin/table/tableRow.tsx:11</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/62a1f84/apollo/server/resolvers/logEntry.ts#L12">apollo/server/resolvers/logEntry.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="row" class="tsd-anchor"></a>
-					<h3>row</h3>
-					<div class="tsd-signature tsd-kind-icon">row<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Row</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="offset" class="tsd-anchor"></a>
+					<h3>offset</h3>
+					<div class="tsd-signature tsd-kind-icon">offset<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/components/admin/table/tableRow.tsx#L10">components/admin/table/tableRow.tsx:10</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/62a1f84/apollo/server/resolvers/logEntry.ts#L13">apollo/server/resolvers/logEntry.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="visiblecolumns" class="tsd-anchor"></a>
-					<h3>visible<wbr>Columns</h3>
-					<div class="tsd-signature tsd-kind-icon">visible<wbr>Columns<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ColumnInstance</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
+					<a name="table" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> table</h3>
+					<div class="tsd-signature tsd-kind-icon">table<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/56fc82f/components/admin/table/tableRow.tsx#L12">components/admin/table/tableRow.tsx:12</a></li>
+							<li>Defined in <a href="https://github.com/LCM288/soc-admin/blob/62a1f84/apollo/server/resolvers/logEntry.ts#L14">apollo/server/resolvers/logEntry.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -133,62 +140,53 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/components_admin_table.html">components\admin\table</a>
+						<a href="../modules/logentry.html">Log<wbr>Entry</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="components_admin_table.props.html" class="tsd-kind-icon">Props</a>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/logentry.logentry-1.html" class="tsd-kind-icon">Log<wbr>Entry</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="components_admin_table.props-1.html" class="tsd-kind-icon">Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="components_admin_table.props-2.html" class="tsd-kind-icon">Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="components_admin_table.props-3.html" class="tsd-kind-icon">Props</a>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/logentry.logentryapi.html" class="tsd-kind-icon">Log<wbr>EntryAPI</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="components_admin_table.props-4.html" class="tsd-kind-icon">Props</a>
+						<a href="logentry.logentriesresolverargs.html" class="tsd-kind-icon">Log<wbr>Entries<wbr>Resolver<wbr>Args</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="components_admin_table.props-4.html#allcolumns" class="tsd-kind-icon">all<wbr>Columns</a>
+								<a href="logentry.logentriesresolverargs.html#limit" class="tsd-kind-icon">limit</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="components_admin_table.props-4.html#row" class="tsd-kind-icon">row</a>
+								<a href="logentry.logentriesresolverargs.html#offset" class="tsd-kind-icon">offset</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="components_admin_table.props-4.html#visiblecolumns" class="tsd-kind-icon">visible<wbr>Columns</a>
+								<a href="logentry.logentriesresolverargs.html#table" class="tsd-kind-icon">table</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/components_admin_table.html#props-5" class="tsd-kind-icon">Props</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="logentry.logentriesresponse.html" class="tsd-kind-icon">Log<wbr>Entries<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="logentry.logentryattributes.html" class="tsd-kind-icon">Log<wbr>Entry<wbr>Attributes</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/logentry.html#logentrycreationattributes" class="tsd-kind-icon">Log<wbr>Entry<wbr>Creation<wbr>Attributes</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="../modules/logentry.html#logentryfactory" class="tsd-kind-icon">Log<wbr>Entry<wbr>Factory</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/components_admin_table.html#editcell" class="tsd-kind-icon">Edit<wbr>Cell</a>
+						<a href="../modules/logentry.html#logentriesresolver" class="tsd-kind-icon">log<wbr>Entries<wbr>Resolver</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/components_admin_table.html#editpersonmodal" class="tsd-kind-icon">Edit<wbr>Person<wbr>Modal</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/components_admin_table.html#importeditcell" class="tsd-kind-icon">Import<wbr>Edit<wbr>Cell</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/components_admin_table.html#paginationcontrol" class="tsd-kind-icon">Pagination<wbr>Control</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/components_admin_table.html#tablecell" class="tsd-kind-icon">Table<wbr>Cell</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/components_admin_table.html#tablerow" class="tsd-kind-icon">Table<wbr>Row</a>
+					<li class=" tsd-kind-object-literal tsd-parent-kind-module">
+						<a href="../modules/logentry.html#resolvers" class="tsd-kind-icon">resolvers</a>
 					</li>
 				</ul>
 			</nav>
