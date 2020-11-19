@@ -33,14 +33,16 @@ const TableRow = ({
             overflow: "auto",
           }}
         >
-          {hiddenColumns.map((column) => (
-            <div key={column.id}>
-              <strong>{column.Header}: </strong>
-              {row.allCells
-                .find((cell) => cell.column.id === column.id)
-                ?.render("Cell") ?? ""}
-            </div>
-          ))}
+          {row.allCells
+            .filter((cell) =>
+              hiddenColumns.map((column) => column.id).includes(cell.column.id)
+            )
+            .map((cell) => (
+              <div key={cell.column.id}>
+                <strong>{cell.column.Header}: </strong>
+                {cell.render("Cell")}
+              </div>
+            ))}
         </td>
       );
     }

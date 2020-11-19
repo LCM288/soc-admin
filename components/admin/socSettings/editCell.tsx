@@ -5,8 +5,9 @@ import React, {
   useCallback,
   useReducer,
   useEffect,
+  useMemo,
 } from "react";
-import { CellProps } from "react-table";
+import { SocSettingCellProps } from "utils/useSocSettingTable";
 import { Form, Button, Content, Tile } from "react-bulma-components";
 import ReactMarkdown from "react-markdown/with-html";
 import { useMutation } from "@apollo/react-hooks";
@@ -22,17 +23,25 @@ const SimpleMDE = dynamic<SimpleMDEEditorProps>(
 
 const { Input, Field, Control } = Form;
 
-interface Props extends CellProps<Record<string, unknown>, string> {
+interface Props extends SocSettingCellProps<Record<string, unknown>, string> {
   windowWidth: number;
 }
 
 const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
+  const editingValue = useMemo(() => row.state.editingValue, [row.state]);
+
+  const setEditingValue = useCallback(
+    (newEditingValue) => {
+      row.setState({ editingValue: newEditingValue });
+    },
+    [row]
+  );
+
   const [updateSocSetting] = useMutation(updateSocSettingMutation, {
     refetchQueries: [{ query: socSettingsQuery }, { query: socNameQuery }],
   });
 
   const oldValue = useRef<string | undefined>();
-  const [editingValue, setEditingValue] = useState(value);
   // https://github.com/RIP21/react-simplemde-editor/issues/79
   const [refreshState, dispatchForceRefresh] = useReducer(
     (state) => state + 1,
@@ -45,12 +54,12 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
       setEditingValue(value);
     }
     oldValue.current = value;
-  }, [editingValue, value]);
+  }, [editingValue, value, setEditingValue]);
 
   const resetValue = useCallback(() => {
     dispatchForceRefresh();
     setEditingValue(value);
-  }, [value]);
+  }, [value, setEditingValue]);
 
   const updateValue = useCallback(() => {
     setIsSaving(true);
@@ -148,7 +157,7 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
                 <SimpleMDE
                   id={row.values.key}
                   key={refreshState}
-                  value={editingValue}
+                  value={editingValue as string | undefined}
                   onChange={setEditingValue}
                   options={{
                     minHeight: "10rem",
@@ -189,7 +198,10 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
                 style={{ maxWidth: "100%" }}
               >
                 <Content>
-                  <ReactMarkdown source={editingValue} escapeHtml={false} />
+                  <ReactMarkdown
+                    source={editingValue as string | undefined}
+                    escapeHtml={false}
+                  />
                 </Content>
               </Tile>
             </Tile>

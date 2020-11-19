@@ -1,6 +1,8 @@
 import React, { useMemo, useState, useEffect } from "react";
 import useResizeAware from "react-resize-aware";
-import { useTable, CellProps } from "react-table";
+import useSocSettingTable, {
+  SocSettingCellProps,
+} from "utils/useSocSettingTable";
 import { useQuery } from "@apollo/react-hooks";
 import AdminLayout from "layouts/adminLayout";
 import { ServerSideProps } from "utils/getServerSideProps";
@@ -49,7 +51,10 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Key",
         accessor: "key",
         id: "key",
-        Cell: ({ row, value }: CellProps<Record<string, unknown>, string>) => {
+        Cell: ({
+          row,
+          value,
+        }: SocSettingCellProps<Record<string, unknown>, string>) => {
           return (
             <div>
               <p>{value}</p>
@@ -80,7 +85,7 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
         Header: "Value",
         accessor: "value",
         id: "value",
-        Cell: (props: CellProps<Record<string, unknown>, string>) => (
+        Cell: (props: SocSettingCellProps<Record<string, unknown>, string>) => (
           <EditCell {...props} windowWidth={sizes.width} />
         ),
         minWidth: 300,
@@ -104,7 +109,7 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
     [socSettingsData]
   );
 
-  const tableInstance = useTable({
+  const tableInstance = useSocSettingTable({
     columns: tableColumns,
     data: tableData,
     initialState: {
