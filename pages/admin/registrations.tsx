@@ -259,12 +259,15 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
 
   const hideColumnOrder = useMemo(
     () => [
-      ["gender", "dateOfBirth", "dateOfEntry", "expectedGraduationDate"],
-      ["id", "email"],
-      ["phone"],
+      ["dateOfBirth"],
+      ["gender"],
+      ["email", "phone"],
+      ["dateOfEntry", "expectedGraduationDate"],
       ["chineseName"],
       ["major", "college"],
-      ["registrationType", "action"],
+      ["registrationType"],
+      ["englishName"],
+      ["id"],
     ],
     []
   );

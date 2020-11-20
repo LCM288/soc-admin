@@ -432,12 +432,16 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
 
   const hideColumnOrder = useMemo(
     () => [
-      ["gender", "dateOfBirth", "dateOfEntry", "expectedGraduationDate"],
-      ["id", "email"],
-      ["phone", "memberSince", "memberUntil"],
+      ["dateOfBirth"],
+      ["gender"],
+      ["email", "phone"],
+      ["dateOfEntry", "expectedGraduationDate"],
+      ["memberSince", "memberUntil"],
       ["chineseName"],
       ["major", "college"],
-      ["status", "action"],
+      ["status"],
+      ["englishName"],
+      ["id"],
     ],
     []
   );

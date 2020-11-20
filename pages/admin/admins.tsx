@@ -120,10 +120,7 @@ const Admins = ({ user }: ServerSideProps): React.ReactElement => {
   // resize
   const [resizeListener, sizes] = useResizeAware();
 
-  const hideColumnOrder = useMemo(
-    () => [["pos"], ["nickname"], ["action"]],
-    []
-  );
+  const hideColumnOrder = useMemo(() => [["pos"], ["nickname"]], []);
 
   useHideColumn(sizes.width, hideColumnOrder, tableColumns, setHiddenColumns);
 
