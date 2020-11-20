@@ -25,9 +25,15 @@ const { Input, Field, Control } = Form;
 
 interface Props extends SocSettingCellProps<Record<string, unknown>, string> {
   windowWidth: number;
+  isExpanded?: boolean;
 }
 
-const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
+const EditCell = ({
+  row,
+  value,
+  windowWidth,
+  isExpanded = undefined,
+}: Props): React.ReactElement => {
   const editingValue = useMemo(() => row.state.editingValue, [row.state]);
 
   const setEditingValue = useCallback(
@@ -55,6 +61,12 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
     }
     oldValue.current = value;
   }, [editingValue, value, setEditingValue]);
+
+  useEffect(() => {
+    if (isExpanded) {
+      dispatchForceRefresh();
+    }
+  }, [isExpanded]);
 
   const resetValue = useCallback(() => {
     dispatchForceRefresh();
@@ -222,6 +234,10 @@ const EditCell = ({ row, value, windowWidth }: Props): React.ReactElement => {
         </>
       );
   }
+};
+
+EditCell.defaultProps = {
+  isExpanded: undefined,
 };
 
 export default EditCell;

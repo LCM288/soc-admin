@@ -40,14 +40,14 @@ const TableRow = ({
             .map((cell) => (
               <div key={cell.column.id}>
                 <strong>{cell.column.Header}: </strong>
-                {cell.render("Cell")}
+                {cell.render("Cell", { isHidden: true, isExpanded })}
               </div>
             ))}
         </td>
       );
     }
     return <></>;
-  }, [hiddenColumns, row, visibleColumns]);
+  }, [hiddenColumns, row, visibleColumns, isExpanded]);
 
   const rowStyle = useMemo(() => {
     if (hiddenColumns.length) {
