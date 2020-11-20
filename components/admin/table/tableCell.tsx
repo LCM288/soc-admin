@@ -8,6 +8,7 @@ interface Props {
 const TableCell = ({ cell }: Props): React.ReactElement => {
   const dataCell = useRef<HTMLDivElement | null>(null);
   const [dataCellOverflow, setDataCellOverflow] = useState(false);
+
   useEffect(() => {
     if (!dataCell.current) {
       // eslint-disable-next-line no-console
@@ -19,7 +20,8 @@ const TableCell = ({ cell }: Props): React.ReactElement => {
     if (overflow !== dataCellOverflow) {
       setDataCellOverflow(overflow);
     }
-  }, [dataCellOverflow]);
+  }, [dataCellOverflow, cell.value]);
+
   return (
     <td
       {...cell.getCellProps()}
