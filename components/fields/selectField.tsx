@@ -32,6 +32,7 @@ const SelectField = ({
       <Label>{label}</Label>
       <div>
         <ReactSelect
+          instanceId={label}
           defaultValue={defaultOption}
           value={selectedOption}
           options={options}
@@ -41,7 +42,7 @@ const SelectField = ({
           styles={{
             input: (provided) => ({
               ...provided,
-              top: "auto",
+              top: "2px",
               position: "absolute",
             }),
             valueContainer: (provided) => ({
@@ -52,7 +53,7 @@ const SelectField = ({
             singleValue: (provided) => ({
               ...provided,
               position: "relative",
-              top: "calc(50% + 2px)",
+              margin: "2px",
               transform: "none",
               whiteSpace: "normal",
             }),

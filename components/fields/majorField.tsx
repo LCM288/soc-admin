@@ -17,7 +17,7 @@ const MajorField = ({ majorCode, setMajorCode }: Props): React.ReactElement => {
     value: string;
     chineseLabel: string;
     englishLabel: string;
-    faculties: { value: string; label: string }[];
+    faculties: { value: string; chineseLabel: string; englishLabel: string }[];
   }
 
   const majorsQueryResult = useQuery(majorsQuery);
@@ -39,7 +39,8 @@ const MajorField = ({ majorCode, setMajorCode }: Props): React.ReactElement => {
         faculties: (majorProgram.faculties as Faculty[]).map(
           (faculty: Faculty) => ({
             value: faculty.code,
-            label: `${faculty.englishName} ${faculty.chineseName}`,
+            chineseLabel: faculty.chineseName,
+            englishLabel: faculty.englishName,
           })
         ),
       })) ?? [],
@@ -57,18 +58,20 @@ const MajorField = ({ majorCode, setMajorCode }: Props): React.ReactElement => {
     [majorOptions, majorCode]
   );
 
-  const facultyColor = useMemo<{ [index: string]: string }>(
+  const facultyColor = useMemo<{
+    [index: string]: { color: string; isLight: boolean };
+  }>(
     () => ({
-      ART: "dark",
-      BAF: "info",
-      EDU: "danger",
-      ENF: "primary",
-      SLAW: "light",
-      MED: "success",
-      SCF: "warning",
-      SSF: "link",
-      DDP: "black",
-      IDM: "white",
+      ART: { color: "dark", isLight: false },
+      BAF: { color: "info", isLight: false },
+      EDU: { color: "danger", isLight: false },
+      ENF: { color: "primary", isLight: false },
+      SLAW: { color: "light", isLight: false },
+      MED: { color: "success", isLight: false },
+      SCF: { color: "warning", isLight: false },
+      SSF: { color: "link", isLight: false },
+      DDP: { color: "danger", isLight: true },
+      IDM: { color: "primary", isLight: true },
     }),
     []
   );
@@ -80,14 +83,27 @@ const MajorField = ({ majorCode, setMajorCode }: Props): React.ReactElement => {
           <Level.Item>{englishLabel}</Level.Item>
           <Level.Item>{chineseLabel}</Level.Item>
         </Level.Side>
-        <Level.Side align="right">
+        <Level.Side align="right" style={{ width: "max-content" }}>
           {faculties.map((faculty) => (
-            <Level.Item key={faculty.value} className="has-tag">
+            <Level.Item
+              key={faculty.value}
+              className="has-tag"
+              style={{ width: "100%" }}
+            >
               <Tag
-                className="ml-2 has-text-weight-medium"
-                color={facultyColor[faculty.value]}
+                className={`ml-2 has-text-weight-medium py-1 ${
+                  facultyColor[faculty.value].isLight ? "is-light" : ""
+                }`}
+                color={facultyColor[faculty.value].color}
+                style={{
+                  flexWrap: "wrap",
+                  height: "unset",
+                  minHeight: "2em",
+                  width: "100%",
+                }}
               >
-                {faculty.label}
+                <span className="mr-1">{faculty.chineseLabel}</span>
+                <span>{faculty.englishLabel}</span>
               </Tag>
             </Level.Item>
           ))}
