@@ -30,7 +30,6 @@ const TableRow = ({
           colSpan={visibleColumns.length + 1}
           style={{
             maxWidth: "1px", // this is a hack for table data cell
-            overflow: "auto",
           }}
         >
           {row.allCells
@@ -38,8 +37,15 @@ const TableRow = ({
               hiddenColumns.map((column) => column.id).includes(cell.column.id)
             )
             .map((cell) => (
-              <div key={cell.column.id}>
-                <strong>{cell.column.Header}: </strong>
+              <div
+                key={cell.column.id}
+                style={{
+                  overflow: "auto",
+                }}
+              >
+                <strong style={{ position: "sticky", left: 0 }}>
+                  {cell.column.Header}:{" "}
+                </strong>
                 {cell.render("Cell", { isHidden: true, isExpanded })}
               </div>
             ))}
