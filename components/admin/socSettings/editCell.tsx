@@ -5,7 +5,6 @@ import React, {
   useCallback,
   useReducer,
   useEffect,
-  useMemo,
 } from "react";
 import { SocSettingCellProps } from "utils/useSocSettingTable";
 import { Form, Button, Content, Tile } from "react-bulma-components";
