@@ -9,7 +9,7 @@ import { ServerSideProps } from "utils/getServerSideProps";
 import { Table } from "react-bulma-components";
 import EditCell from "components/admin/socSettings/editCell";
 import TableRow from "components/admin/table/tableRow";
-
+import TableHead from "components/admin/table/tableHead";
 import toast from "utils/toast";
 import socSettingsQuery from "apollo/queries/socSetting/socSettings.gql";
 import allSocSettings from "utils/socSettings";
@@ -144,25 +144,11 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
       <>
         {resizeListener}
         <Table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    style={{
-                      width: column.width,
-                      maxWidth: column.maxWidth,
-                      minWidth: column.minWidth,
-                    }}
-                  >
-                    {column.render("Header")}
-                  </th>
-                ))}
-                <td style={{ width: "1px", maxWidth: "1px", padding: 0 }} />
-              </tr>
-            ))}
-          </thead>
+          <TableHead
+            headerGroups={headerGroups}
+            tableColumns={tableColumns}
+            tableSortable={false}
+          />
           <tbody {...getTableBodyProps()}>
             {rows.map((row) => {
               prepareRow(row);

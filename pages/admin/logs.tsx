@@ -8,6 +8,7 @@ import toast from "utils/toast";
 import logEntriesQuery from "apollo/queries/log/logEntries.gql";
 import PaginationControl from "components/admin/table/paginationControl";
 import TableRow from "components/admin/table/tableRow";
+import TableHead from "components/admin/table/tableHead";
 import Loading from "components/loading";
 import useHideColumn from "utils/useHideColumn";
 import tables from "@/json/tables.json";
@@ -204,25 +205,11 @@ const Logs = ({ user }: ServerSideProps): React.ReactElement => {
           </Level.Side>
         </Level>
         <Table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    style={{
-                      width: column.width,
-                      maxWidth: column.maxWidth,
-                      minWidth: column.minWidth,
-                    }}
-                  >
-                    {column.render("Header")}
-                  </th>
-                ))}
-                <td style={{ width: "1px", maxWidth: "1px", padding: 0 }} />
-              </tr>
-            ))}
-          </thead>
+          <TableHead
+            headerGroups={headerGroups}
+            tableColumns={tableColumns}
+            tableSortable={false}
+          />
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);

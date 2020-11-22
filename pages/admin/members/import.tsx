@@ -20,10 +20,11 @@ import toast from "utils/toast";
 import { ServerSideProps } from "utils/getServerSideProps";
 import { Level, Table, Button, Form } from "react-bulma-components";
 import importPeopleMutation from "apollo/queries/person/importPeople.gql";
-import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
+import useMemberTable from "utils/useMemberTable";
 import { PersonUpdateAttributes } from "@/models/Person";
 import ImportEditCell from "components/admin/members/importEditCell";
 import TableRow from "components/admin/table/tableRow";
+import TableHead from "components/admin/table/tableHead";
 import useHideColumn from "utils/useHideColumn";
 
 import Loading from "components/loading";
@@ -42,18 +43,6 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
   const pageSizeOptions = useMemo(() => [1, 2, 5, 10, 20, 50], []);
-  const getSortDirectionIndicatior = useCallback(
-    (column: MemberColumnInstance) => {
-      if (column.isSorted) {
-        if (column.isSortedDesc) {
-          return " 🔽";
-        }
-        return " 🔼";
-      }
-      return "";
-    },
-    []
-  );
 
   // data
   const [importPeople] = useMutation(importPeopleMutation);
@@ -531,33 +520,11 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
           </Level.Side>
         </Level>
         <Table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    style={{
-                      width: column.width,
-                      maxWidth: column.maxWidth,
-                      minWidth: column.minWidth,
-                    }}
-                    className={
-                      tableColumns.find(
-                        (tableColumn) => tableColumn.id === column.id
-                      )?.disableSortBy
-                        ? ""
-                        : "is-clickable"
-                    }
-                  >
-                    {column.render("Header")}
-                    <span>{getSortDirectionIndicatior(column)}</span>
-                  </th>
-                ))}
-                <td style={{ width: "1px", maxWidth: "1px", padding: 0 }} />
-              </tr>
-            ))}
-          </thead>
+          <TableHead
+            headerGroups={headerGroups}
+            tableColumns={tableColumns}
+            tableSortable
+          />
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);

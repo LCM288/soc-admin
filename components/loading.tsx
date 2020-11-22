@@ -17,6 +17,7 @@ const Loading = ({ loading }: Props): React.ReactElement => {
             top: 0,
             bottom: 0,
             background: "rgba(10, 10, 10, 0.2)",
+            zIndex: 40,
           }}
         >
           <Loader

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import useResizeAware from "react-resize-aware";
 import { Row, CellProps } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
@@ -15,7 +15,8 @@ import membersQuery from "apollo/queries/person/members.gql";
 import PaginationControl from "components/admin/table/paginationControl";
 import EditPersonCell from "components/admin/members/editPersonCell";
 import TableRow from "components/admin/table/tableRow";
-import useMemberTable, { MemberColumnInstance } from "utils/useMemberTable";
+import TableHead from "components/admin/table/tableHead";
+import useMemberTable from "utils/useMemberTable";
 import Loading from "components/loading";
 import useHideColumn from "utils/useHideColumn";
 import { MemberStatusEnum, NON_MEMBER_STATUS } from "@/utils/Person";
@@ -34,18 +35,6 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
     []
   );
   const pageSizeOptions = useMemo(() => [1, 2, 5, 10, 20, 50], []);
-  const getSortDirectionIndicatior = useCallback(
-    (column: MemberColumnInstance) => {
-      if (column.isSorted) {
-        if (column.isSortedDesc) {
-          return " 🔽";
-        }
-        return " 🔼";
-      }
-      return "";
-    },
-    []
-  );
 
   // data
   const { data, loading, error } = useQuery(membersQuery, {
@@ -452,33 +441,11 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
           </Level.Side>
         </Level>
         <Table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    style={{
-                      width: column.width,
-                      maxWidth: column.maxWidth,
-                      minWidth: column.minWidth,
-                    }}
-                    className={
-                      tableColumns.find(
-                        (tableColumn) => tableColumn.id === column.id
-                      )?.disableSortBy
-                        ? ""
-                        : "is-clickable"
-                    }
-                  >
-                    {column.render("Header")}
-                    <span>{getSortDirectionIndicatior(column)}</span>
-                  </th>
-                ))}
-                <td style={{ width: "1px", maxWidth: "1px", padding: 0 }} />
-              </tr>
-            ))}
-          </thead>
+          <TableHead
+            headerGroups={headerGroups}
+            tableColumns={tableColumns}
+            tableSortable
+          />
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);
