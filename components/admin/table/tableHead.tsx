@@ -23,7 +23,7 @@ const TableHead = ({
   tableColumns,
   tableSortable,
 }: Props): React.ReactElement => {
-  const sortDirectionIndicatior = useCallback(
+  const getSortDirectionIndicatiorOf = useCallback(
     (column) => {
       if (!tableSortable) {
         return "";
@@ -71,7 +71,7 @@ const TableHead = ({
                   }`}
                 >
                   {column.render("Header")}
-                  <span>{sortDirectionIndicatior}</span>
+                  <span>{getSortDirectionIndicatiorOf(column)}</span>
                 </th>
               )
             )}
