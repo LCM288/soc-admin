@@ -110,26 +110,32 @@ const AdminLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
                   </Link>
                 </Navbar.Dropdown>
               </Navbar.Item>
-              <Link href="/admin/admins">
-                <a href="/admin/admins" className="navbar-item">
-                  Admins
-                </a>
-              </Link>
-              <Link href="/admin/soc_settings">
-                <a href="/admin/soc_settings" className="navbar-item">
-                  Settings
-                </a>
-              </Link>
-              <Link href="/admin/logs">
-                <a href="/admin/logs" className="navbar-item">
-                  Logs
-                </a>
-              </Link>
-              <Link href="/admin/authentication">
-                <a href="/admin/authentication" className="navbar-item">
-                  Authentication
-                </a>
-              </Link>
+
+              <Navbar.Item dropdown hoverable>
+                <Navbar.Link>Admins</Navbar.Link>
+                <Navbar.Dropdown>
+                  <Link href="/admin/admins">
+                    <a href="/admin/admins" className="navbar-item">
+                      Admin List
+                    </a>
+                  </Link>
+                  <Link href="/admin/soc_settings">
+                    <a href="/admin/soc_settings" className="navbar-item">
+                      Change Settings
+                    </a>
+                  </Link>
+                  <Link href="/admin/logs">
+                    <a href="/admin/logs" className="navbar-item">
+                      Check Logs
+                    </a>
+                  </Link>
+                  <Link href="/admin/authentication">
+                    <a href="/admin/authentication" className="navbar-item">
+                      Update Client ID and Client Secret
+                    </a>
+                  </Link>
+                </Navbar.Dropdown>
+              </Navbar.Item>
             </Navbar.Container>
             <Navbar.Container position="end">
               <Link href="/logout">
