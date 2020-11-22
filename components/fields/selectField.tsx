@@ -10,6 +10,7 @@ interface Props<SelectOption extends { value: string } = { value: string }> {
   options: SelectOption[];
   inputValue: string;
   onChange: (newOption: SelectOption) => void;
+  filterOption?: (option: SelectOption, rawInput: string) => boolean;
   formatOptionLabel?: (option: SelectOption) => React.ReactNode;
   defaultOption?: SelectOption;
   isLoading?: boolean;
@@ -24,6 +25,7 @@ const SelectField = ({
   onChange,
   formatOptionLabel,
   defaultOption,
+  filterOption,
   isLoading = false,
   required = false,
 }: Props): React.ReactElement => {
@@ -33,6 +35,7 @@ const SelectField = ({
       <div>
         <ReactSelect
           instanceId={label}
+          filterOption={filterOption}
           defaultValue={defaultOption}
           value={selectedOption}
           options={options}
@@ -74,6 +77,7 @@ const SelectField = ({
 
 SelectField.defaultProps = {
   formatOptionLabel: undefined,
+  filterOption: undefined,
   defaultOption: undefined,
   isLoading: false,
   required: false,

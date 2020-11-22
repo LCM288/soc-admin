@@ -69,6 +69,23 @@ const CollegeField = ({
     []
   );
 
+  const filterOption = useCallback(
+    (
+      {
+        value,
+        data: { chineseLabel, englishLabel },
+      }: { value: string; data: CollegeOption },
+      rawInput: string
+    ) => {
+      return (
+        value.toLowerCase().includes(rawInput.toLowerCase()) ||
+        chineseLabel.toLowerCase().includes(rawInput.toLowerCase()) ||
+        englishLabel.toLowerCase().includes(rawInput.toLowerCase())
+      );
+    },
+    []
+  );
+
   const onChange = useCallback(
     (input: CollegeOption) => setCollegeCode(input.value),
     [setCollegeCode]
@@ -81,6 +98,7 @@ const CollegeField = ({
       options={collegeOpions}
       inputValue={collegeCode}
       onChange={onChange}
+      filterOption={filterOption}
       formatOptionLabel={formatCollegeOptionLabel}
       isLoading={collegesQueryResult.loading}
       required

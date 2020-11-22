@@ -113,6 +113,23 @@ const MajorField = ({ majorCode, setMajorCode }: Props): React.ReactElement => {
     [facultyColor]
   );
 
+  const filterOption = useCallback(
+    (
+      {
+        value,
+        data: { chineseLabel, englishLabel },
+      }: { value: string; data: MajorOption },
+      rawInput: string
+    ) => {
+      return (
+        value.toLowerCase().includes(rawInput.toLowerCase()) ||
+        chineseLabel.toLowerCase().includes(rawInput.toLowerCase()) ||
+        englishLabel.toLowerCase().includes(rawInput.toLowerCase())
+      );
+    },
+    []
+  );
+
   const onChange = useCallback(
     (input: MajorOption) => setMajorCode(input.value),
     [setMajorCode]
@@ -125,6 +142,7 @@ const MajorField = ({ majorCode, setMajorCode }: Props): React.ReactElement => {
       options={majorOptions}
       inputValue={majorCode}
       onChange={onChange}
+      filterOption={filterOption}
       formatOptionLabel={formatMajorOptionLabel}
       isLoading={majorsQueryResult.loading}
       required
