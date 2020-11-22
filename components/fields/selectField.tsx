@@ -45,7 +45,7 @@ const SelectField = ({
           styles={{
             input: (provided) => ({
               ...provided,
-              top: "2px",
+              top: "3px",
               position: "absolute",
             }),
             valueContainer: (provided) => ({
@@ -56,7 +56,7 @@ const SelectField = ({
             singleValue: (provided) => ({
               ...provided,
               position: "relative",
-              margin: "2px",
+              margin: "3px 2px",
               transform: "none",
               whiteSpace: "normal",
             }),
