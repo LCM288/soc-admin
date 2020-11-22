@@ -34,15 +34,6 @@ const EditCell = ({
   windowWidth,
   isExpanded = undefined,
 }: Props): React.ReactElement => {
-  const editingValue = useMemo(() => row.state.editingValue, [row.state]);
-
-  const setEditingValue = useCallback(
-    (newEditingValue) => {
-      row.setState({ editingValue: newEditingValue });
-    },
-    [row]
-  );
-
   const [updateSocSetting] = useMutation(updateSocSettingMutation, {
     refetchQueries: [{ query: socSettingsQuery }, { query: socNameQuery }],
   });
@@ -53,8 +44,17 @@ const EditCell = ({
     (state) => state + 1,
     0
   );
+  const [editingValue, setEditingValue] = useState(
+    row.state.editingValue as string
+  );
   const [isSaving, setIsSaving] = useState(false);
 
+  // set row state when editingValue changed
+  useEffect(() => {
+    row.setState({ editingValue });
+  }, [row, editingValue]);
+
+  // set editingValue to new remote value when remote value changed and editingValue not changed
   useEffect(() => {
     if (editingValue === oldValue.current && editingValue !== value) {
       setEditingValue(value);
