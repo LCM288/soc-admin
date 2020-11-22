@@ -145,10 +145,10 @@ const EditCell = ({
             )}
           </Field>
           {windowWidth <= 768 && (
-            <div className="buttons">
+            <Button.Group position="right" className="mb-0">
               <ResetButton />
               <UpdateButton />
-            </div>
+            </Button.Group>
           )}
         </>
       );
@@ -165,7 +165,7 @@ const EditCell = ({
               kind="parent"
               style={{ maxWidth: windowWidth > 768 ? "50%" : "100%" }}
             >
-              <Tile kind="child" style={{ maxWidth: "100%" }}>
+              <Tile kind="child" style={{ left: "8px", position: "relative" }}>
                 <SimpleMDE
                   id={row.values.key}
                   key={refreshState}
@@ -207,7 +207,7 @@ const EditCell = ({
               <Tile
                 kind="child"
                 className="box preview-content"
-                style={{ maxWidth: "100%" }}
+                style={{ left: "8px", position: "relative" }}
               >
                 <Content>
                   <ReactMarkdown
@@ -218,18 +218,9 @@ const EditCell = ({
               </Tile>
             </Tile>
           </Tile>
-          <Button.Group position="right">
-            <Button color="danger" outlined onClick={resetValue}>
-              Reset
-            </Button>
-            <Button
-              color="success"
-              onClick={updateValue}
-              loading={isSaving}
-              disabled={value === editingValue}
-            >
-              Update
-            </Button>
+          <Button.Group position="right" className="mb-0">
+            <ResetButton />
+            <UpdateButton />
           </Button.Group>
         </>
       );
