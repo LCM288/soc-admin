@@ -69,8 +69,11 @@ const TableRow = ({
           <TableCell cell={cell} key={cell.column.id} />
         ))}
         {Boolean(hiddenColumns.length) && (
-          <td style={{ width: 1, maxWidth: 1 }}>
-            <FontAwesomeIcon icon={isExpanded ? faMinus : faPlus} />
+          <td style={{ width: 1 }}>
+            <FontAwesomeIcon
+              className="is-pulled-right"
+              icon={isExpanded ? faMinus : faPlus}
+            />
           </td>
         )}
       </tr>

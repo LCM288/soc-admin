@@ -13,7 +13,7 @@ const useHideColumn = (
   useEffect(() => {
     let newHideColumn: string[] = alwaysHiddenColumns;
     let maxWidth =
-      54 +
+      70 +
       tableColumns.map((column) => column.width).reduce((a, b) => a + b, 0);
     const columnsToHide = cloneDeep(hideColumnOrder);
     while (width < maxWidth && columnsToHide.length) {
