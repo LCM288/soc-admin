@@ -7,12 +7,13 @@ import {
   MemberStatusEnum,
 } from "@/utils/Person";
 import { useQuery } from "@apollo/react-hooks";
-import { Button, Section, Container, Heading } from "react-bulma-components";
+import { Button, Heading } from "react-bulma-components";
 import { ServerSideProps } from "utils/getServerSideProps";
 import ReactMarkdown from "react-markdown/with-html";
 import toast from "utils/toast";
 import ExecutiveSetup from "components/executiveSetup";
 import MemberLayout from "layouts/memberLayout";
+import IndexWrapper from "components/indexWrapper";
 import {
   SOC_NAME,
   WELCOME_MESSAGE,
@@ -158,54 +159,52 @@ const Index = ({ user, isAdmin }: ServerSideProps): React.ReactElement => {
 
   if (countExecutivesQueryResult.data?.countExecutives === 0) {
     return (
-      <div>
-        <Section>
-          <Container>
-            <Heading>Set youself as an executive.</Heading>
-            <div>{greeting}</div>
-            <ExecutiveSetup user={user} />
-          </Container>
-        </Section>
-      </div>
+      <IndexWrapper>
+        <>
+          {isLoading && <Heading className="p-5 mb-0">Loading...</Heading>}
+          {socName && <Heading className="p-5 mb-0">{socName}</Heading>}
+          <div className="mb-5">{greeting}</div>
+          <Heading className="mb-5">Set youself as an executive.</Heading>
+          <ExecutiveSetup user={user} />
+        </>
+      </IndexWrapper>
     );
   }
 
   return (
-    <div>
-      <Section>
-        <Container>
-          {isLoading && <Heading>Loading...</Heading>}
-          {socName && <Heading>{socName}</Heading>}
-          <div className="mb-2">{greeting}</div>
-          {welcomeMessage && (
-            <div className="mb-2">
-              <ReactMarkdown source={welcomeMessage} escapeHtml={false} />
-            </div>
+    <IndexWrapper>
+      <>
+        {isLoading && <Heading className="p-5 mb-0">Loading...</Heading>}
+        {socName && <Heading className="p-5 mb-0">{socName}</Heading>}
+        <div className="mb-5">{greeting}</div>
+        {welcomeMessage && (
+          <div className="mb-5">
+            <ReactMarkdown source={welcomeMessage} escapeHtml={false} />
+          </div>
+        )}
+        {customMessage && (
+          <div className="mb-5">
+            <ReactMarkdown source={customMessage} escapeHtml={false} />
+          </div>
+        )}
+        <Button.Group className="is-justify-content-center">
+          {registerButtonText && (
+            <Link href="/member/register">
+              <a href="/member/register" className="button is-primary">
+                {registerButtonText}
+              </a>
+            </Link>
           )}
-          {customMessage && (
-            <div className="mb-2">
-              <ReactMarkdown source={customMessage} escapeHtml={false} />
-            </div>
+          {isAdmin && (
+            <Link href="/admin">
+              <a href="/admin" className="button is-info">
+                Admin Portal
+              </a>
+            </Link>
           )}
-          <Button.Group>
-            {registerButtonText && (
-              <Link href="/member/register">
-                <a href="/member/register" className="button is-primary">
-                  {registerButtonText}
-                </a>
-              </Link>
-            )}
-            {isAdmin && (
-              <Link href="/admin">
-                <a href="/admin" className="button is-info">
-                  Admin Portal
-                </a>
-              </Link>
-            )}
-          </Button.Group>
-        </Container>
-      </Section>
-    </div>
+        </Button.Group>
+      </>
+    </IndexWrapper>
   );
 };
 

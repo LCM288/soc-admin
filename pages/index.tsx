@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import {
   isAdmin,
@@ -10,10 +10,16 @@ import {
   NEW_CLIENT_ID_KEY,
   CLIENT_ID_KEY,
 } from "utils/auth";
+import IndexWrapper from "components/indexWrapper";
 import { getMicrosoftLoginLink } from "utils/microsoftLogin";
 import { DateTime } from "luxon";
+import ReactMarkdown from "react-markdown/with-html";
+import toast from "utils/toast";
+import { useQuery } from "@apollo/react-hooks";
+import { SOC_NAME, WELCOME_MESSAGE } from "utils/socSettings";
+import { Heading, Button } from "react-bulma-components";
 
-import { Section, Container } from "react-bulma-components";
+import socSettingsQuery from "apollo/queries/socSetting/socSettings.gql";
 
 interface Props {
   baseUrl: string;
@@ -71,17 +77,54 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 };
 
 function Index({ baseUrl, clientId }: Props): React.ReactElement {
-  const link = getMicrosoftLoginLink({ baseUrl, clientId });
+  const { data, error, loading } = useQuery(socSettingsQuery, {
+    fetchPolicy: "network-only",
+  });
+
+  const link = useMemo(() => getMicrosoftLoginLink({ baseUrl, clientId }), [
+    baseUrl,
+    clientId,
+  ]);
+
+  const welcomeMessage = useMemo(
+    () =>
+      data?.socSettings.find(
+        (s: { key: string; value: string }) => s.key === WELCOME_MESSAGE.key
+      )?.value,
+    [data?.socSettings]
+  );
+
+  const socName = useMemo(
+    () =>
+      data?.socSettings.find(
+        (s: { key: string; value: string }) => s.key === SOC_NAME.key
+      )?.value,
+    [data?.socSettings]
+  );
+
+  useEffect(() => {
+    if (error) {
+      toast.danger(error.message, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
+  }, [error]);
+
   return (
-    <div>
-      <Section>
-        <Container>
-          <a className="button is-primary" href={link}>
-            login
-          </a>
-        </Container>
-      </Section>
-    </div>
+    <IndexWrapper>
+      <>
+        {loading && <Heading className="p-5 mb-0">Loading...</Heading>}
+        {socName && <Heading className="p-5 mb-0">{socName}</Heading>}
+        {welcomeMessage && (
+          <div className="mb-5">
+            <ReactMarkdown source={welcomeMessage} escapeHtml={false} />
+          </div>
+        )}
+        <Button color="primary" href={link} renderAs="a" className="mb-5">
+          login
+        </Button>
+      </>
+    </IndexWrapper>
   );
 }
 
