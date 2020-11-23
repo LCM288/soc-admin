@@ -73,6 +73,7 @@ const AddRegistrationModal = ({
               label="Student ID"
               placeholder="Student ID"
               editable
+              required
             />
             <TextField
               value={englishName}
@@ -80,6 +81,7 @@ const AddRegistrationModal = ({
               label="English Name"
               placeholder="English Name as in CU Link Card"
               editable
+              required
             />
             <TextField
               value={chineseName}
