@@ -157,9 +157,9 @@ export const getUserAndRefreshToken = async (
 };
 
 /**
- * Get user from the request using the authorization header
+ * Get user from the request using the jwt cookie
  * @async
- * @param {string} token - The jwt token
+ * @param req - The incoming HTTP request
  * @returns decoded user or undefined if invalid
  */
 export const getUser = async (req: IncomingMessage): Promise<User | null> => {
