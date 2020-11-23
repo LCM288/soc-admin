@@ -15,6 +15,7 @@ import { ContextBase } from "@/types/datasources";
 import LogEntryAPI from "@/datasources/logEntry";
 import Sequelize, { Op } from "sequelize";
 import { DateTime } from "luxon";
+import { cloneDeep } from "lodash";
 
 export interface ApproveMembershipAttribute {
   sid: string;
@@ -263,23 +264,19 @@ export default class PersonAPI extends DataSource<ContextBase> {
       if (!person) {
         throw new Error(`Cannot find registration record for sid ${sid}`);
       }
-      const oldPerson = person.get({ plain: true });
+      const oldPerson = cloneDeep(person.get({ plain: true }));
       await person
         .set("memberUntil", memberUntil)
         .set("memberSince", DateTime.local().toISO())
         .save({ transaction });
-      const newPerson = await this.store.findOne({
-        where: { sid },
-        transaction,
-        raw: true,
-      });
+      const newPerson = person.get({ plain: true });
       await this.logger.insertLogEntry(
         {
           who,
           table: this.store.tableName,
           description: `Student ${sid}'s registration has been approved`,
           oldValue: oldPerson,
-          newValue: (newPerson ?? {}) as Partial<PersonModelAttributes>,
+          newValue: newPerson,
         },
         transaction
       );
