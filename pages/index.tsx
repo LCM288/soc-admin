@@ -120,8 +120,8 @@ function Index({ baseUrl, clientId }: Props): React.ReactElement {
             <ReactMarkdown source={welcomeMessage} escapeHtml={false} />
           </div>
         )}
-        <Button color="primary" href={link} renderAs="a" className="mb-5">
-          login
+        <Button color="primary" href={link} size="medium" renderAs="a">
+          Login with CUHK OnePass
         </Button>
       </>
     </IndexWrapper>
