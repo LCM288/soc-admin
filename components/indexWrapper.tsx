@@ -18,7 +18,6 @@ const IndexWrapper = ({ children }: Props): React.ReactElement => (
       <Container
         className="has-text-centered"
         style={{
-          width: "max-content",
           minWidth: "75vw",
           borderRadius: ".25rem",
         }}
