@@ -460,6 +460,9 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
             })}
           </tbody>
         </Table>
+        <div style={{ textAlign: "right" }}>
+          Showing {page.length} of {tableData.length} results
+        </div>
         <PaginationControl
           gotoPage={gotoPage}
           pageIndex={pageIndex}

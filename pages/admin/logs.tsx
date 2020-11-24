@@ -224,14 +224,26 @@ const Logs = ({ user }: ServerSideProps): React.ReactElement => {
             })}
           </tbody>
         </Table>
-        <div>
-          All time shown is in{" "}
-          <i>
-            {`${DateTime.local().offsetNameLong} (${
-              DateTime.local().offsetNameShort
-            })`}
-          </i>
-        </div>
+        <Level className="is-mobile is-flex-wrap-wrap">
+          <Level.Side align="left" className="is-flex-shrink-1">
+            <Level.Item className="is-flex-shrink-1">
+              <span>
+                All time shown is in{" "}
+                <i>
+                  {`${DateTime.local().offsetNameLong} (${
+                    DateTime.local().offsetNameShort
+                  })`}
+                </i>
+              </span>
+            </Level.Item>
+          </Level.Side>
+          <Level.Side align="right" style={{ marginLeft: "auto" }}>
+            <Level.Item>
+              Showing {page.length} of {logEntriesData?.logEntries.count ?? 0}{" "}
+              results
+            </Level.Item>
+          </Level.Side>
+        </Level>
         <PaginationControl
           gotoPage={gotoPage}
           pageIndex={pageIndex}
