@@ -78,16 +78,24 @@ const MajorField = ({ majorCode, setMajorCode }: Props): React.ReactElement => {
 
   const formatMajorOptionLabel = useCallback(
     ({ chineseLabel, englishLabel, faculties }: MajorOption) => (
-      <Level className="is-mobile react-select-major-label">
-        <Level.Side align="left">
-          <Level.Item>{englishLabel}</Level.Item>
-          <Level.Item>{chineseLabel}</Level.Item>
+      <Level className="is-mobile is-flex-wrap-wrap">
+        <Level.Side align="left" className="is-flex-wrap-wrap is-flex-shrink-1">
+          <Level.Item className="is-flex-shrink-1 is-flex-grow-0">
+            {englishLabel}
+          </Level.Item>
+          <Level.Item className="is-flex-shrink-1 is-flex-grow-0">
+            {chineseLabel}
+          </Level.Item>
         </Level.Side>
-        <Level.Side align="right" style={{ width: "max-content" }}>
+        <Level.Side
+          align="right"
+          className="is-flex-wrap-wrap is-flex-shrink-1"
+          style={{ marginLeft: "auto", width: "max-content" }}
+        >
           {faculties.map((faculty) => (
             <Level.Item
               key={faculty.value}
-              className="has-tag"
+              className="is-flex-shrink-1 is-flex-grow-0 has-tag mr-0"
               style={{ width: "100%" }}
             >
               <Tag

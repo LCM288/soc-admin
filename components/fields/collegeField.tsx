@@ -58,10 +58,14 @@ const CollegeField = ({
 
   const formatCollegeOptionLabel = useCallback(
     ({ chineseLabel, englishLabel }: CollegeOption) => (
-      <Level className="is-mobile react-select-college-label">
-        <Level.Side align="left">
-          <Level.Item>{englishLabel}</Level.Item>
-          <Level.Item>{chineseLabel}</Level.Item>
+      <Level className="is-mobile is-flex-wrap-wrap">
+        <Level.Side align="left" className="is-flex-wrap-wrap is-flex-shrink-1">
+          <Level.Item className="is-flex-shrink-1 is-flex-grow-0">
+            {englishLabel}
+          </Level.Item>
+          <Level.Item className="is-flex-shrink-1 is-flex-grow-0">
+            {chineseLabel}
+          </Level.Item>
         </Level.Side>
         <div />
       </Level>

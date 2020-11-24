@@ -56,6 +56,7 @@ const SelectField = ({
             singleValue: (provided) => ({
               ...provided,
               position: "relative",
+              width: "100%",
               margin: "3px 2px",
               transform: "none",
               whiteSpace: "normal",
