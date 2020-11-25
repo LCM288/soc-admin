@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import useResizeAware from "react-resize-aware";
+import Head from "next/head";
 import useLogTable from "utils/useLogTable";
 import AdminLayout from "layouts/adminLayout";
 import { ServerSideProps } from "utils/getServerSideProps";
@@ -157,6 +158,9 @@ const Logs = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <>
+        <Head>
+          <title>Check Logs</title>
+        </Head>
         {resizeListener}
         <PaginationControl
           gotoPage={gotoPage}

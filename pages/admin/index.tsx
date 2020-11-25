@@ -9,6 +9,7 @@ import {
   MemberStatusEnum,
 } from "@/utils/Person";
 import Link from "next/link";
+import Head from "next/head";
 import IndexWrapper from "components/indexWrapper";
 import { ServerSideProps } from "utils/getServerSideProps";
 import ReactMarkdown from "react-markdown/with-html";
@@ -127,6 +128,9 @@ const Index = ({ user }: ServerSideProps): React.ReactElement => {
     return (
       <IndexWrapper>
         <>
+          <Head>
+            <title>Welcome to {socName}</title>
+          </Head>
           {isLoading && <Heading className="p-5 mb-0">Loading...</Heading>}
           {socName && <Heading className="p-5 mb-0">{socName}</Heading>}
           <div className="mb-5">{greeting}</div>

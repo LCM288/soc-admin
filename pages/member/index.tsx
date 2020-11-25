@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect } from "react";
 import { DateTime } from "luxon";
 import Link from "next/link";
+import Head from "next/head";
 import {
   PersonModelAttributes,
   statusOf,
@@ -161,6 +162,9 @@ const Index = ({ user, isAdmin }: ServerSideProps): React.ReactElement => {
     return (
       <IndexWrapper>
         <>
+          <Head>
+            <title>Set youself as an executive</title>
+          </Head>
           {isLoading && <Heading className="p-5 mb-0">Loading...</Heading>}
           {socName && <Heading className="p-5 mb-0">{socName}</Heading>}
           <div className="mb-5">{greeting}</div>
@@ -174,6 +178,9 @@ const Index = ({ user, isAdmin }: ServerSideProps): React.ReactElement => {
   return (
     <IndexWrapper>
       <>
+        <Head>
+          <title>Welcome to {socName}</title>
+        </Head>
         {isLoading && <Heading className="p-5 mb-0">Loading...</Heading>}
         {socName && <Heading className="p-5 mb-0">{socName}</Heading>}
         <div className="mb-5">{greeting}</div>

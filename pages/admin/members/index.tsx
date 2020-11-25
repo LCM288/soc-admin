@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import useResizeAware from "react-resize-aware";
+import Head from "next/head";
 import { Row, CellProps } from "react-table";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
@@ -368,6 +369,9 @@ const Members = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <>
+        <Head>
+          <title>Member List</title>
+        </Head>
         {resizeListener}
         <Button.Group position="right">
           <Button onClick={onExportAll} loading={isFileProcessing}>

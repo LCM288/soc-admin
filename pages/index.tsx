@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect } from "react";
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import {
   isAdmin,
   getUserAndRefreshToken,
@@ -113,6 +114,9 @@ function Index({ baseUrl, clientId }: Props): React.ReactElement {
   return (
     <IndexWrapper>
       <>
+        <Head>
+          <title>Welcome to {socName}</title>
+        </Head>
         {loading && <Heading className="p-5 mb-0">Loading...</Heading>}
         {socName && <Heading className="p-5 mb-0">{socName}</Heading>}
         {welcomeMessage && (
@@ -120,7 +124,7 @@ function Index({ baseUrl, clientId }: Props): React.ReactElement {
             <ReactMarkdown source={welcomeMessage} escapeHtml={false} />
           </div>
         )}
-        <Button color="primary" href={link} size="medium" renderAs="a">
+        <Button color="link" href={link} size="medium" renderAs="a">
           Login with CUHK OnePass
         </Button>
       </>

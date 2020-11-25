@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
+import Head from "next/head";
 import useResizeAware from "react-resize-aware";
 import useSocSettingTable, {
   SocSettingCellProps,
@@ -142,6 +143,9 @@ const SocSettings = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <>
+        <Head>
+          <title>Change Settings</title>
+        </Head>
         {resizeListener}
         <Table {...getTableProps()}>
           <TableHead

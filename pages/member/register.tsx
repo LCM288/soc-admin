@@ -6,6 +6,7 @@ import React, {
   useMemo,
 } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import toast from "utils/toast";
 import { Button, Section, Container, Heading } from "react-bulma-components";
@@ -134,6 +135,9 @@ const Register = ({ user }: ServerSideProps): React.ReactElement => {
   }
   return (
     <div>
+      <Head>
+        <title>Member Registration</title>
+      </Head>
       <Section>
         <Container>
           <Heading>Register</Heading>

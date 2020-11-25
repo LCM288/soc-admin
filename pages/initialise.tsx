@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/react-hooks";
+import Head from "next/head";
 import toast from "utils/toast";
 import { getMicrosoftLoginLink } from "utils/microsoftLogin";
 import TextField from "components/fields/textField";
@@ -59,6 +60,9 @@ export default function Initialise(): React.ReactElement {
 
   return (
     <div>
+      <Head>
+        <title>Initialise Client Keys</title>
+      </Head>
       <Section>
         <Container>
           <Heading>Initialise</Heading>

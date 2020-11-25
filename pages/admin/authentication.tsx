@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import { useMutation } from "@apollo/react-hooks";
 import AdminLayout from "layouts/adminLayout";
 import toast from "utils/toast";
@@ -62,6 +63,9 @@ const Authentication = (): React.ReactElement => {
 
   return (
     <div>
+      <Head>
+        <title>Update Client Keys</title>
+      </Head>
       <Section>
         <Container>
           <Heading>Authentication</Heading>

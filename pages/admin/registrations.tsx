@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import useResizeAware from "react-resize-aware";
 import { Row, CellProps } from "react-table";
+import Head from "next/head";
 import useAsyncDebounce from "utils/useAsyncDebounce";
 import { useQuery } from "@apollo/react-hooks";
 import AdminLayout from "layouts/adminLayout";
@@ -264,6 +265,9 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <>
+        <Head>
+          <title>Registration List</title>
+        </Head>
         {resizeListener}
         <PaginationControl
           gotoPage={gotoPage}

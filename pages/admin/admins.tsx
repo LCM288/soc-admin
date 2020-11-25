@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
 import useResizeAware from "react-resize-aware";
+import Head from "next/head";
 import useAdminTable from "utils/useAdminTable";
 import { CellProps } from "react-table";
 import { useQuery } from "@apollo/react-hooks";
@@ -114,6 +115,9 @@ const Admins = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <>
+        <Head>
+          <title>Admin List</title>
+        </Head>
         {resizeListener}
         <Table {...getTableProps()}>
           <TableHead

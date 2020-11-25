@@ -95,7 +95,7 @@ const AdminLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
                 <Navbar.Dropdown>
                   <Link href="/admin/members/import">
                     <a href="/admin/members/import" className="navbar-item">
-                      Import Member
+                      Import Members
                     </a>
                   </Link>
                   <Link href="/admin/members">
@@ -105,7 +105,7 @@ const AdminLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
                   </Link>
                   <Link href="/admin/registrations">
                     <a href="/admin/registrations" className="navbar-item">
-                      Member Registrations
+                      Registration List
                     </a>
                   </Link>
                 </Navbar.Dropdown>
@@ -131,7 +131,7 @@ const AdminLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
                   </Link>
                   <Link href="/admin/authentication">
                     <a href="/admin/authentication" className="navbar-item">
-                      Update Client ID and Client Secret
+                      Update Client Keys
                     </a>
                   </Link>
                 </Navbar.Dropdown>

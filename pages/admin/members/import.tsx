@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useCallback } from "react";
 import useResizeAware from "react-resize-aware";
+import Head from "next/head";
 import { Row, CellProps } from "react-table";
 import {
   statusOf,
@@ -440,6 +441,9 @@ const Import = ({ user }: ServerSideProps): React.ReactElement => {
   if (user) {
     return (
       <>
+        <Head>
+          <title>Import Members</title>
+        </Head>
         {resizeListener}
         <Level className="is-mobile is-flex-wrap-wrap">
           <Level.Side align="left">
