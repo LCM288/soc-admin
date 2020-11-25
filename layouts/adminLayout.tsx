@@ -103,7 +103,7 @@ const AdminLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
                       Member List
                     </a>
                   </Link>
-                  <Link href="/admin/registrations">
+                  <Link href="/admin/members/registrations">
                     <a href="/admin/registrations" className="navbar-item">
                       Registration List
                     </a>
@@ -119,17 +119,17 @@ const AdminLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
                       Admin List
                     </a>
                   </Link>
-                  <Link href="/admin/soc_settings">
+                  <Link href="/admin/admins/soc_settings">
                     <a href="/admin/soc_settings" className="navbar-item">
                       Change Settings
                     </a>
                   </Link>
-                  <Link href="/admin/logs">
+                  <Link href="/admin/admins/logs">
                     <a href="/admin/logs" className="navbar-item">
                       Check Logs
                     </a>
                   </Link>
-                  <Link href="/admin/authentication">
+                  <Link href="/admin/admins/authentication">
                     <a href="/admin/authentication" className="navbar-item">
                       Update Client Keys
                     </a>
