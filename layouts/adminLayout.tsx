@@ -27,15 +27,23 @@ const AdminLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
   }, [isActive]);
 
   useEffect(() => {
-    const handleClickOutside = (event: Event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (navBarRef?.current?.contains(event.target as Node) === false) {
         setActive(false);
       }
     };
 
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setActive(false);
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, [navBarRef]);
 
@@ -86,11 +94,18 @@ const AdminLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
             <Navbar.Item renderAs="div">
               <LogoutTimer time={logoutTime} />
             </Navbar.Item>
-            <Navbar.Burger onClick={toggleActive} />
+            <Navbar.Burger
+              onClick={toggleActive}
+              onKeyPress={(event: React.KeyboardEvent) =>
+                ["Enter", " "].includes(event.key) && toggleActive()
+              }
+              aria-label="Menu"
+              renderAs="a"
+            />
           </Navbar.Brand>
           <Navbar.Menu>
             <Navbar.Container>
-              <Navbar.Item dropdown hoverable>
+              <Navbar.Item dropdown hoverable role="menu" tabIndex="0">
                 <Navbar.Link>Members</Navbar.Link>
                 <Navbar.Dropdown>
                   <Link href="/admin/members/import">
@@ -111,7 +126,7 @@ const AdminLayout: React.FunctionComponent<Props> = ({ children }: Props) => {
                 </Navbar.Dropdown>
               </Navbar.Item>
 
-              <Navbar.Item dropdown hoverable>
+              <Navbar.Item dropdown hoverable role="menu" tabIndex="0">
                 <Navbar.Link>Admins</Navbar.Link>
                 <Navbar.Dropdown>
                   <Link href="/admin/admins">

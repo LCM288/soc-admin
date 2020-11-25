@@ -34,7 +34,7 @@ const LogoutTimer = ({ time }: Props): React.ReactElement => {
     [time, now]
   );
 
-  return <div>{printf("%02d:%02d", minutes, seconds)}</div>;
+  return <div role="timer">{printf("%02d:%02d", minutes, seconds)}</div>;
 };
 
 export default LogoutTimer;
