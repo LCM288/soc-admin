@@ -7,7 +7,7 @@ import "styles/modal-overflowing.css";
 import "react-day-picker/lib/style.css";
 import "easymde/dist/easymde.min.css";
 import { AppProps } from "next/app";
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import {
   ApolloClient,
@@ -57,6 +57,10 @@ function App({ Component, pageProps }: AppProps): React.ReactElement {
       document.scrollingElement?.classList.remove("is-clipped");
     }
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = "en";
+  });
 
   return (
     <>
