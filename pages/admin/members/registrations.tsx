@@ -294,7 +294,7 @@ const Registrations = ({ user }: ServerSideProps): React.ReactElement => {
               </Control>
               <Control fullwidth>
                 <Input
-                  placeholder="Filter for keyword"
+                  placeholder="Filter by keyword"
                   value={globalFilterInput}
                   onChange={(
                     event: React.ChangeEvent<HTMLInputElement>
