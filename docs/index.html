@@ -70,19 +70,81 @@
 					<a href="https://travis-ci.com/LCM288/soc-admin"><img src="https://badgen.net/travis/LCM288/soc-admin?cache=600" alt="Build Status"></a>
 					<a href="https://github.com/LCM288/soc-admin/issues"><img src="https://badgen.net/github/open-issues/LCM288/soc-admin?cache=600" alt="Open Issues"></a>
 				<a href="https://github.com/LCM288/soc-admin/pulls"><img src="https://badgen.net/github/open-prs/LCM288/soc-admin?cache=600" alt="Open PRs"></a></p>
-				<a href="#for-dev" id="for-dev" style="color: inherit; text-decoration: none;">
-					<h1>For dev</h1>
+				<a href="#for-societies39-executive-committees" id="for-societies39-executive-committees" style="color: inherit; text-decoration: none;">
+					<h1>For Societies&#39; Executive Committees</h1>
 				</a>
+				<a href="#prerequisite" id="prerequisite" style="color: inherit; text-decoration: none;">
+					<h2>Prerequisite</h2>
+				</a>
+				<p>You may need a personal or society&#39;s account for</p>
+				<ul>
+					<li><a href="https://portal.azure.com/">Microsoft Azure</a> (please note that the school account (<a href="mailto:&#49;&#x31;&#x35;&#x35;&#x78;&#120;&#x78;&#x78;&#120;&#x78;&#x40;&#108;&#x69;&#x6e;&#x6b;&#x2e;&#99;&#x75;&#x68;&#107;&#46;&#x65;&#100;&#117;&#x2e;&#104;&#107;">&#49;&#x31;&#x35;&#x35;&#x78;&#120;&#x78;&#x78;&#120;&#x78;&#x40;&#108;&#x69;&#x6e;&#x6b;&#x2e;&#99;&#x75;&#x68;&#107;&#46;&#x65;&#100;&#117;&#x2e;&#104;&#107;</a>) is not applicable)</li>
+					<li><a href="https://www.heroku.com/">Heroku</a></li>
+					<li><a href="https://github.com/">Github</a></li>
+				</ul>
 				<a href="#setup-procedure" id="setup-procedure" style="color: inherit; text-decoration: none;">
 					<h2>Setup procedure</h2>
 				</a>
 				<ol>
-					<li>install <code>postgresql</code>, <code>node.js</code> and <code>yarn</code></li>
-					<li>put a <code>.env</code> file in root following the variables in <code>.env.example</code></li>
-					<li>run <code>yarn install</code> to install all dependencies</li>
-					<li>run <code>yarn newdb</code> set up the database</li>
-					<li>run <code>yarn release</code> to generate sync the database and generate jwt secret</li>
-					<li>run <code>yarn dev</code> to start the server</li>
+					<li>Fork this repository</li>
+					<li>Link your Github account with Heroku <a href="https://devcenter.heroku.com/articles/github-integration#enabling-github-integration">tutorial</a></li>
+					<li>On Heroku, create a new app with a custom name, choose the region United States</li>
+					<li><ol>
+							<li>At the new app&#39;s dashboard</li>
+							<li>Go to <code>Overview</code> tab</li>
+							<li>Click <code>Configure Add-ons</code></li>
+							<li>Input <code>Heroku Postgres</code> at the <code>add-on</code> section</li>
+							<li>Choose the plan <code>Hobby Dev - Free</code></li>
+							<li>Submit</li>
+						</ol>
+					</li>
+					<li><ol>
+							<li>At the new app&#39;s dashboard</li>
+							<li>Go to <code>Deploy</code> tab</li>
+							<li>Choose <code>Github</code> as the deployment method, and choose the forked repo</li>
+							<li>You can either enable automatic deploy on the <code>master</code> (or <code>main</code>) branch or deploy the branch manually</li>
+							<li>Wait until the deployment finished</li>
+						</ol>
+					</li>
+					<li>Goto <code>https://your-app-name.herokuapp.com</code> (remember to replace with your app name) to test the deployment</li>
+					<li>If successful, you will be at the <code>Initialise Client keys</code> page</li>
+					<li><ol>
+							<li>Open Azure on another window</li>
+							<li>Search <code>App registrations</code></li>
+							<li>Click <code>+ New registration</code></li>
+							<li>Setup the display name for your application</li>
+							<li>Choose <code>Accounts in any organizational directory (Any Azure AD directory - Multitenant)</code> for <code>Supported account types</code></li>
+							<li>At <code>Redirect URI</code> insert <code>https://your-app-name.herokuapp.com/api/login</code> (remember to replace with your app name)</li>
+							<li>Click <code>Register</code></li>
+							<li>Copy <code>Application (client) ID</code> and paste it onto the <code>Client ID</code> field on the <code>Initialise Client keys</code> page</li>
+							<li>On the Azure&#39;s page, find and go to <code>Certificates &amp; secrets</code> on the left panel</li>
+							<li>Go to section <code>Client secrets</code> and click <code>+ New client secrets</code></li>
+							<li>Input a custom description and choose the exire time as <code>Never</code></li>
+							<li>Click <code>Add</code></li>
+							<li>Copy the <code>Value</code> and paste it onto the <code>Client Secret</code> field on the <code>Initialise Client keys</code> page</li>
+							<li>Click the <code>Initialise</code> button on the <code>Initialise Client keys</code> page</li>
+						</ol>
+					</li>
+					<li>Login with your CUHK link account</li>
+					<li>Accept the permission request if applicable</li>
+					<li>Set yourself as an executive by inputing your nickname and position</li>
+					<li>Submit</li>
+					<li>Import members and setup other admins</li>
+					<li>Done</li>
+				</ol>
+				<a href="#for-developers" id="for-developers" style="color: inherit; text-decoration: none;">
+					<h1>For Developers</h1>
+				</a>
+				<a href="#setup-procedure-1" id="setup-procedure-1" style="color: inherit; text-decoration: none;">
+					<h2>Setup procedure</h2>
+				</a>
+				<ol>
+					<li>Install <code>postgresql</code>, <code>node.js</code> and <code>yarn</code></li>
+					<li>Put a <code>.env</code> file in root following the variables in <code>.env.example</code></li>
+					<li>Run <code>yarn install</code> to install all dependencies</li>
+					<li>Run <code>yarn newdb</code> set up the database</li>
+					<li>Run <code>yarn release</code> to generate sync the database and generate jwt secret</li>
+					<li>Run <code>yarn dev</code> to start the server</li>
 				</ol>
 				<a href="#useful-docs" id="useful-docs" style="color: inherit; text-decoration: none;">
 					<h2>Useful docs</h2>
@@ -164,6 +226,9 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/pages_admin.html">pages\admin</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/pages_admin_admins.html">pages\admin\admins</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/pages_admin_members.html">pages\admin\members</a>
