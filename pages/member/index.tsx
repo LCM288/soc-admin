@@ -169,10 +169,10 @@ const Index = ({ user, isAdmin }: ServerSideProps): React.ReactElement => {
             {isLoading && <Heading className="p-5 mb-0">Loading...</Heading>}
             {socName && <Heading className="p-5 mb-0">{socName}</Heading>}
             <div className="mb-5">{greeting}</div>
+            <Heading className="mb-5">Set youself as an executive.</Heading>
+            <ExecutiveSetup user={user} />
           </>
         </IndexWrapper>
-        <Heading className="mb-5">Set youself as an executive.</Heading>
-        <ExecutiveSetup user={user} />
       </>
     );
   }

@@ -53,7 +53,7 @@ const ExecutiveSetup = ({ user }: Props): React.ReactElement => {
         })
       }
     >
-      <>
+      <div style={{ textAlign: "initial" }}>
         <TextField
           value={nickname}
           setValue={setNickname}
@@ -80,7 +80,7 @@ const ExecutiveSetup = ({ user }: Props): React.ReactElement => {
         </Button.Group>
         {newExecutiveMutationLoading && <p>Loading...</p>}
         {newExecutiveMutationError && <p>Error :( Please try again</p>}
-      </>
+      </div>
     </PreventDefaultForm>
   );
 };
