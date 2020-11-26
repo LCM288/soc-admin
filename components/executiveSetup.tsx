@@ -68,16 +68,9 @@ const ExecutiveSetup = ({ user }: Props): React.ReactElement => {
           placeholder="Position"
           editable
         />
-        <Button.Group>
-          <Link href="/logout">
-            <a href="/logout" className="button">
-              Logout
-            </a>
-          </Link>
-          <Button color="primary" type="submit">
-            Submit
-          </Button>
-        </Button.Group>
+        <Button color="primary" type="submit">
+          Submit
+        </Button>
         {newExecutiveMutationLoading && <p>Loading...</p>}
         {newExecutiveMutationError && <p>Error :( Please try again</p>}
       </div>
