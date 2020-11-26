@@ -17,7 +17,7 @@ You may need a personal or society's account for
 
 ## Setup procedure
 
-1. Fork this repository
+1. [Fork](https://github.com/LCM288/soc-admin/fork) this repository
 2. On Heroku, create a new app with a custom name, choose the region United States
    ![image](https://user-images.githubusercontent.com/17256738/100370100-bc4af000-3040-11eb-9e88-f4c735d9cdac.png) 
    ![image](https://user-images.githubusercontent.com/17256738/100370282-00d68b80-3041-11eb-98e3-ab8acdccd147.png)
