@@ -8,7 +8,11 @@ const socAdminDB =
   process.env.DATABASE_URL ||
   `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDB}`;
 
-const sequelize = new Sequelize(socAdminDB);
+const sequelize = new Sequelize(socAdminDB, {
+  native: true,
+  timezone: "Asia/Hong_Kong",
+  isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.REPEATABLE_READ,
+});
 
 const umzug = new Umzug({
   migrations: {

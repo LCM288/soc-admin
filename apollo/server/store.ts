@@ -16,6 +16,7 @@ const socAdminDB =
  * A database connection
  */
 export const sequelize = new Sequelize(socAdminDB, {
+  native: true,
   timezone: "Asia/Hong_Kong",
   isolationLevel: Transaction.ISOLATION_LEVELS.REPEATABLE_READ,
 });
