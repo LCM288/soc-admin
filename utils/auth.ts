@@ -11,6 +11,7 @@ import {
 } from "@/store";
 
 import { getClientIp } from "request-ip";
+import { loadGetInitialProps } from "next/dist/next-server/lib/utils";
 
 export const JWT_SECRET_KEY = "jwt_secret";
 export const CLIENT_ID_KEY = "client_id";
@@ -164,10 +165,20 @@ export const getUserAndRefreshToken = async (
  */
 export const getUser = async (req: IncomingMessage): Promise<User | null> => {
   const cookies = parseCookies({ req });
-  const token =
+  let token =
     process.env.NODE_ENV === "development"
       ? cookies.jwt
       : cookies["__Host-jwt"];
+  if (!token) {
+    const authorizationHeader = req.headers.authorization?.split(" ");
+    if (
+      authorizationHeader?.length !== 2 ||
+      authorizationHeader[0] !== "Bearer"
+    ) {
+      return null;
+    }
+    [, token] = authorizationHeader;
+  }
   const jwtSecret = await getSetting(JWT_SECRET_KEY);
   if (!jwtSecret) {
     return null;
