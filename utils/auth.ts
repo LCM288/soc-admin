@@ -11,9 +11,9 @@ import {
 } from "@/store";
 
 import { getClientIp } from "request-ip";
-import { loadGetInitialProps } from "next/dist/next-server/lib/utils";
 
-export const JWT_SECRET_KEY = "jwt_secret";
+export const JWT_PUBLIC_KEY = "jwt_public_key";
+export const JWT_PRIVATE_KEY = "jwt_private_key";
 export const CLIENT_ID_KEY = "client_id";
 export const CLIENT_SECRET_KEY = "client_secret";
 export const NEW_CLIENT_ID_KEY = "new_client_id";
@@ -80,21 +80,21 @@ export const countExecutives = async (): Promise<number> => {
  * Issue a jwt token for a user
  * @async
  * @param {User} user - The user object to be encrypted
- * @param {string} secret - The jwt secret
+ * @param {string} privateKey - The jwt private key
  * @returns {Promise<string | undefined>} the issued token
  */
 export const issureJwt = async (
   user: User,
-  secret?: string
+  privateKey?: string
 ): Promise<string | undefined> => {
-  const jwtSecret = secret ?? (await getSetting(JWT_SECRET_KEY));
-  if (!jwtSecret) {
+  const jwtPrivateKey = privateKey ?? (await getSetting(JWT_PRIVATE_KEY));
+  if (!jwtPrivateKey) {
     return undefined;
   }
   const token = jwt.sign(
     { sid: user.sid, name: user.name, addr: user.addr },
-    jwtSecret,
-    { expiresIn: "30m" }
+    jwtPrivateKey,
+    { expiresIn: "30m", algorithm: "RS256" }
   );
   return token;
 };
@@ -132,21 +132,21 @@ export const getUserAndRefreshToken = async (
     process.env.NODE_ENV === "development"
       ? cookies.jwt
       : cookies["__Host-jwt"];
-  const jwtSecret = await getSetting(JWT_SECRET_KEY);
+  const jwtPublicKey = await getSetting(JWT_PUBLIC_KEY);
+  const jwtPrivateKey = await getSetting(JWT_PRIVATE_KEY);
   const addr = getClientIp(ctx.req);
-  if (!jwtSecret) {
+  if (!jwtPublicKey || !jwtPrivateKey) {
     return null;
   }
   try {
-    const { sid, name, addr: jwtAddr } = jwt.verify(token, jwtSecret) as Record<
-      string,
-      unknown
-    >;
+    const { sid, name, addr: jwtAddr } = jwt.verify(token, jwtPublicKey, {
+      algorithms: ["RS256"],
+    }) as Record<string, unknown>;
     const user = { sid, name, addr: jwtAddr } as User;
     if (addr !== user.addr) return null;
 
     // issue new token whenever possible
-    const newToken = await issureJwt(user, jwtSecret);
+    const newToken = await issureJwt(user, jwtPrivateKey);
     if (newToken) {
       setJwtHeader(newToken, ctx.res);
     }
@@ -179,14 +179,16 @@ export const getUser = async (req: IncomingMessage): Promise<User | null> => {
     }
     [, token] = authorizationHeader;
   }
-  const jwtSecret = await getSetting(JWT_SECRET_KEY);
-  if (!jwtSecret) {
+  const jwtPublicKey = await getSetting(JWT_PUBLIC_KEY);
+  if (!jwtPublicKey) {
     return null;
   }
 
   const addr = getClientIp(req);
   try {
-    const user = <User>jwt.verify(token, jwtSecret);
+    const user = <User>(
+      jwt.verify(token, jwtPublicKey, { algorithms: ["RS256"] })
+    );
     if (addr !== user.addr) return null;
     return user;
   } catch {

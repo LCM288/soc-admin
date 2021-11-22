@@ -2,7 +2,7 @@
 
 require("dotenv").config();
 const { Sequelize, DataTypes } = require("sequelize");
-const crypto = require("crypto");
+const keypair = require('keypair');
 
 const socAdminDB =
   process.env.DATABASE_URL ||
@@ -26,20 +26,27 @@ const socSetting = sequelize.define("soc_settings", {
   },
 });
 
-const newSetting = {
-  key: "jwt_secret",
-  value: crypto.randomBytes(32).toString("base64"),
+const pair = keypair();
+
+const publicKeySetting = {
+  key: "jwt_public_key",
+  value: pair.public,
+};
+
+const privateKeySetting = {
+  key: "jwt_private_key",
+  value: pair.private,
 };
 
 module.exports = async () => {
-  const obj = await socSetting.findOne({ where: { key: "jwt_secret" } });
-  if (obj) {
-    // update
-    await obj.update(newSetting);
-    console.log("Update new jwt_secret");
+  const publicKeyObj = await socSetting.findOne({ where: { key: "jwt_public_key" } });
+  const privateKeyObj = await socSetting.findOne({ where: { key: "jwt_private_key" } });
+  const isUpdate = Boolean(publicKeyObj || privateKeyObj);
+  await socSetting.upsert(publicKeySetting);
+  await socSetting.upsert(privateKeySetting);
+  if (isUpdate) {
+    console.log("Updated new key pair");
   } else {
-    // insert
-    await socSetting.create(newSetting);
-    console.log("Insert new jwt_secret");
+    console.log("Inserted new key pair");
   }
 };
