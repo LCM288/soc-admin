@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getClientIp } from "request-ip";
-import { issureJwt, setJwtHeader } from "utils/auth";
+import { issueJwt, setJwtHeader } from "utils/auth";
 
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> => {
-  if (process.env.NODE_ENV !== "development") {
+  if (process.env.LOGIN_AS !== "enabled") {
     res.status(404).end("404 Not Found");
     return;
   }
@@ -22,7 +22,7 @@ export default async (
 
   const addr = getClientIp(req);
   const user = { sid, name, addr };
-  const token = await issureJwt(user);
+  const token = await issueJwt(user);
 
   if (!token) {
     res.status(500).end("Cannot find issue jwt.");

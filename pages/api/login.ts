@@ -3,7 +3,7 @@ import qs from "qs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/types/datasources";
 import {
-  issureJwt,
+  issueJwt,
   setJwtHeader,
   getSetting,
   swapAPIKey,
@@ -139,7 +139,7 @@ export default async (
     return;
   }
 
-  const token = await issureJwt(user);
+  const token = await issueJwt(user);
 
   if (!token) {
     res.status(500).end("Cannot find issue jwt.");

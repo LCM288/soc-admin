@@ -83,7 +83,7 @@ export const countExecutives = async (): Promise<number> => {
  * @param {string} privateKey - The jwt private key
  * @returns {Promise<string | undefined>} the issued token
  */
-export const issureJwt = async (
+export const issueJwt = async (
   user: User,
   privateKey?: string
 ): Promise<string | undefined> => {
@@ -146,7 +146,7 @@ export const getUserAndRefreshToken = async (
     if (addr !== user.addr) return null;
 
     // issue new token whenever possible
-    const newToken = await issureJwt(user, jwtPrivateKey);
+    const newToken = await issueJwt(user, jwtPrivateKey);
     if (newToken) {
       setJwtHeader(newToken, ctx.res);
     }
@@ -161,9 +161,11 @@ export const getUserAndRefreshToken = async (
  * Get user from the request using the jwt cookie
  * @async
  * @param req - The incoming HTTP request
- * @returns decoded user or undefined if invalid
+ * @returns decoded user or null if invalid
  */
-export const getUser = async (req: IncomingMessage): Promise<User | null> => {
+export const getUserFromRequest = async (
+  req: IncomingMessage
+): Promise<User | null> => {
   const cookies = parseCookies({ req });
   let token =
     process.env.NODE_ENV === "development"

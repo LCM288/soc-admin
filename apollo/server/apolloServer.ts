@@ -1,7 +1,7 @@
 import * as apolloServerMicro from "apollo-server-micro";
 import { gql } from "apollo-server";
 import { IncomingMessage } from "http";
-import { getUser } from "utils/auth";
+import { getUserFromRequest } from "utils/auth";
 
 // models
 import { typeDefs as personTypeDefs } from "@/models/Person";
@@ -19,6 +19,10 @@ import {
   DateTimeResolver,
   DateTimeTypeDefinition,
 } from "graphql-scalars";
+import {
+  resolverTypeDefs as authResolverTypeDefs,
+  resolvers as authResolvers,
+} from "@/resolvers/auth";
 import {
   resolverTypeDefs as personResolverTypeDefs,
   resolvers as personResolvers,
@@ -95,7 +99,7 @@ const context = async ({
 }: {
   req: IncomingMessage;
 }): Promise<ContextBase> => {
-  const user = await getUser(req);
+  const user = await getUserFromRequest(req);
   return { user };
 };
 
@@ -116,6 +120,7 @@ const baseTypeDefs = gql`
 const apolloServer = new apolloServerMicro.ApolloServer({
   typeDefs: [
     baseTypeDefs,
+    authResolverTypeDefs,
     personTypeDefs,
     personResolverTypeDefs,
     executiveTypeDefs,
@@ -133,6 +138,7 @@ const apolloServer = new apolloServerMicro.ApolloServer({
   ],
   resolvers: [
     { Date: DateResolver, DateTime: DateTimeResolver },
+    authResolvers,
     personResolvers,
     executiveResolvers,
     socSettingResolvers,

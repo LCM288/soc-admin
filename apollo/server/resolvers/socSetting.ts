@@ -5,11 +5,7 @@
 import lodash from "lodash";
 import { gql } from "apollo-server";
 import { ResolverFn, Resolvers } from "@/types/resolver";
-import {
-  NEW_CLIENT_ID_KEY,
-  NEW_CLIENT_SECRET_KEY,
-  JWT_PUBLIC_KEY,
-} from "utils/auth";
+import { NEW_CLIENT_ID_KEY, NEW_CLIENT_SECRET_KEY } from "utils/auth";
 import {
   SocSettingAttributes,
   SocSettingCreationAttributes,
@@ -92,21 +88,6 @@ const socNameResolver: ResolverFn<unknown, string> = async (
       )
     )?.value ?? "NoName Soc"
   );
-};
-
-/**
- * The resolver for publicKey Query
- * @async
- * @returns The jwt public key
- * @category Query Resolver
- */
-const publicKeyResolver: ResolverFn<unknown, string | undefined> = async (
-  _,
-  __,
-  { dataSources }
-): Promise<string | undefined> => {
-  return (await dataSources.socSettingAPI.findSocSetting(JWT_PUBLIC_KEY))
-    ?.value;
 };
 
 // Mutation resolvers
@@ -229,8 +210,6 @@ export const resolvers: Resolvers = {
     socSettings: socSettingsResolver,
     /** see {@link socNameResolver} */
     socName: socNameResolver,
-    /** see {@link publicKeyResolver} */
-    publicKey: publicKeyResolver,
   },
   Mutation: {
     /** see {@link initClientKeysResolver} */
@@ -250,7 +229,6 @@ export const resolverTypeDefs = gql`
   extend type Query {
     socSettings: [SocSetting!]!
     socName: String!
-    publicKey: String
   }
 
   extend type Mutation {
