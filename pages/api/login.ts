@@ -116,11 +116,11 @@ export default async (
   }
   const { host = "" } = req.headers;
   const protocol = /^localhost/g.test(host) ? "http" : "https";
-  const baseUrl = `${protocol}://${req.headers.host}`;
+  const baseUrl = req.body.baseUrl ?? `${protocol}://${req.headers.host}`;
 
   const accessToken = await getAccessToken(baseUrl, req.body.code).catch(
     (err) => {
-      res.status(500).end(err.message);
+      res.status(500).end(`Authorization error: ${err.message}`);
     }
   );
 
