@@ -167,20 +167,10 @@ export const getUserFromRequest = async (
   req: IncomingMessage
 ): Promise<User | null> => {
   const cookies = parseCookies({ req });
-  let token =
+  const token =
     process.env.NODE_ENV === "development"
       ? cookies.jwt
       : cookies["__Host-jwt"];
-  if (!token) {
-    const authorizationHeader = req.headers.authorization?.split(" ");
-    if (
-      authorizationHeader?.length !== 2 ||
-      authorizationHeader[0] !== "Bearer"
-    ) {
-      return null;
-    }
-    [, token] = authorizationHeader;
-  }
   const jwtPublicKey = await getSetting(JWT_PUBLIC_KEY);
   if (!jwtPublicKey) {
     return null;

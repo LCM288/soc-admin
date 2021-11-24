@@ -147,28 +147,5 @@ export default async (
   }
 
   setJwtHeader(token, res);
-  try {
-    const { state }: Record<string, string> = req.body;
-    if (state) {
-      const { redirectUrl }: Record<string, string> = JSON.parse(state);
-      const redirectUrlWhitelist: string[] = JSON.parse(
-        process.env.REDIRECT_URLS ?? ""
-      );
-      if (!redirectUrlWhitelist.includes(redirectUrl)) {
-        throw new Error("Invalid redirectUrl");
-      }
-      res.end(`
-        <body>
-          <form id="redirect form" action="${redirectUrl}" method="post" hidden>
-            <input type="text" name="jwt" value="${token}" />
-          </form>
-          <script>document.getElementById("redirect form").submit()</script>
-        </body>
-      `);
-      return;
-    }
-  } catch {
-    // intentionally empty
-  }
   res.end("<script>window.location.href='/'</script>");
 };
