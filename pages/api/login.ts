@@ -93,7 +93,8 @@ const getUser = async (
     const [sid] = userDataResponse.data.userPrincipalName.split("@");
     const name = userDataResponse.data.displayName;
     const addr = getClientIp(req);
-    return { sid, name, addr };
+    // we will check whether the user is an admin when issuing jwt
+    return { sid, name, addr, isAdmin: false };
   } catch {
     return undefined;
   }

@@ -54,22 +54,6 @@ const executivesResolver: ResolverFn<null, ExecutiveAttributes[]> = async (
 };
 
 /**
- * The resolver for isAdmin Query
- * @async
- * @returns whether the user is an admin
- * @category Query Resolver
- */
-const isAdminResolver: ResolverFn<null, boolean> = async (
-  _,
-  __,
-  { user, dataSources }
-): Promise<boolean> => {
-  return Boolean(
-    user && (await dataSources.executiveAPI.findExecutive(user.sid))
-  );
-};
-
-/**
  * The resolver for executive Query
  * @async
  * @returns The executive matches the sid or null if not found
@@ -218,8 +202,6 @@ const deleteExecutiveResolver: ResolverFn<
 /** The resolvers associated with the Executive model */
 export const resolvers: Resolvers = {
   Query: {
-    /** see {@link isAdminResolver} */
-    isAdmin: isAdminResolver,
     /** see {@link executivesResolver} */
     executives: executivesResolver,
     /** see {@link executiveResolver} */
@@ -243,7 +225,6 @@ export const resolvers: Resolvers = {
  */
 export const resolverTypeDefs = gql`
   extend type Query {
-    isAdmin: Boolean!
     executives: [Executive!]!
     executive(sid: String): Executive
     countExecutives: Int!

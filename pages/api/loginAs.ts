@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getClientIp } from "request-ip";
-import { issueJwt, setJwtHeader } from "utils/auth";
+import { isAdmin, issueJwt, setJwtHeader } from "utils/auth";
 
 export default async (
   req: NextApiRequest,
@@ -21,7 +21,8 @@ export default async (
   }
 
   const addr = getClientIp(req);
-  const user = { sid, name, addr };
+  // we will check whether the user is an admin when issuing jwt
+  const user = { sid, name, addr, isAdmin: false };
   const token = await issueJwt(user);
 
   if (!token) {

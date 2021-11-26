@@ -58,12 +58,7 @@ export const getSettingWithTime = async (
  * @returns whether the user is an executive
  */
 export const isAdmin = async (user: User | null): Promise<boolean> => {
-  if (!user) {
-    return false;
-  }
-  return Boolean(
-    await executiveStore.findOne({ where: { sid: user.sid }, raw: true })
-  );
+  return Boolean(user?.isAdmin);
 };
 
 /**
@@ -91,8 +86,21 @@ export const issueJwt = async (
   if (!jwtPrivateKey) {
     return undefined;
   }
+  const userIsAdmin = Boolean(
+    await executiveStore.findOne({ where: { sid: user.sid }, raw: true })
+  );
+  console.log(
+    user.sid,
+    await executiveStore.findOne({ where: { sid: user.sid }, raw: true })
+  );
   const token = jwt.sign(
-    { sid: user.sid, name: user.name, addr: user.addr },
+    {
+      sid: user.sid,
+      name: user.name,
+      addr: user.addr,
+      // not using user.isAdmin since the status maybe updated
+      isAdmin: userIsAdmin,
+    },
     jwtPrivateKey,
     { expiresIn: "30m", algorithm: "RS256" }
   );
@@ -147,11 +155,11 @@ export const getUserAndRefreshToken = async (
 
     // issue new token whenever possible
     const newToken = await issueJwt(user, jwtPrivateKey);
-    if (newToken) {
-      setJwtHeader(newToken, ctx.res);
+    if (!newToken) {
+      return null;
     }
-
-    return user;
+    setJwtHeader(newToken, ctx.res);
+    return jwt.decode(newToken) as User;
   } catch {
     return null;
   }
