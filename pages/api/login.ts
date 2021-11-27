@@ -12,7 +12,6 @@ import {
   CLIENT_ID_KEY,
   CLIENT_SECRET_KEY,
 } from "utils/auth";
-import { getClientIp } from "request-ip";
 
 interface AccessTokenProps {
   accessToken: string;
@@ -82,7 +81,7 @@ const getAccessToken = async (
 const getUser = async (
   req: NextApiRequest,
   accessToken: string
-): Promise<User | undefined> => {
+): Promise<Pick<User, "sid" | "name"> | undefined> => {
   try {
     const userDataResponse = await axios.get(
       "https://graph.microsoft.com/v1.0/me",
@@ -92,9 +91,8 @@ const getUser = async (
     );
     const [sid] = userDataResponse.data.userPrincipalName.split("@");
     const name = userDataResponse.data.displayName;
-    const addr = getClientIp(req);
     // we will check whether the user is an admin when issuing jwt
-    return { sid, name, addr, isAdmin: false };
+    return { sid, name };
   } catch {
     return undefined;
   }

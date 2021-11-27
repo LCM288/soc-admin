@@ -6,8 +6,16 @@ import "styles/markdown-edit.css";
 import "styles/modal-overflowing.css";
 import "react-day-picker/lib/style.css";
 import "easymde/dist/easymde.min.css";
+import { DateTime } from "luxon";
 import { AppProps } from "next/app";
-import React, { useRef, useCallback, useEffect } from "react";
+import React, {
+  useRef,
+  useCallback,
+  useEffect,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { ToastContainer } from "react-toastify";
 import {
   ApolloClient,
@@ -15,6 +23,7 @@ import {
   NormalizedCacheObject,
   ApolloProvider,
 } from "@apollo/client";
+import SetLogoutTime from "components/setLogoutTime";
 
 const BulmaCloseBtn = ({
   closeToast,
@@ -35,6 +44,11 @@ export const ClipCountContext = React.createContext({
   add: () => {},
   remove: () => {},
 });
+
+export const TimerContext = React.createContext<{
+  get: () => DateTime;
+  set: Dispatch<SetStateAction<DateTime>>;
+}>({ get: () => DateTime.invalid("Not initialized"), set: () => {} });
 
 function App({ Component, pageProps }: AppProps): React.ReactElement {
   const Layout =
@@ -62,6 +76,8 @@ function App({ Component, pageProps }: AppProps): React.ReactElement {
     document.documentElement.lang = "en";
   });
 
+  const [timer, setTimer] = useState(DateTime.invalid("Not initialized"));
+
   return (
     <>
       <ApolloProvider client={client}>
@@ -71,9 +87,12 @@ function App({ Component, pageProps }: AppProps): React.ReactElement {
             remove: removeClipCount,
           }}
         >
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <TimerContext.Provider value={{ get: () => timer, set: setTimer }}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+            <SetLogoutTime {...pageProps} />
+          </TimerContext.Provider>
         </ClipCountContext.Provider>
       </ApolloProvider>
       <ToastContainer closeButton={BulmaCloseBtn} />

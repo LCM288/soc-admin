@@ -6,8 +6,8 @@ export interface User {
   name: string;
   /** Whether the user is an admin */
   isAdmin: boolean;
-  /** The remote address of the user's last login */
-  addr: string | null;
+  /** Token expiration time in unix timestamp */
+  exp: number;
 }
 
 /** The base context for the apollo server */

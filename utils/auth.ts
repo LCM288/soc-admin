@@ -9,8 +9,7 @@ import {
   executiveStore,
   logEntryStore,
 } from "@/store";
-
-import { getClientIp } from "request-ip";
+import { DateTime } from "luxon";
 
 export const JWT_PUBLIC_KEY = "jwt_public_key";
 export const JWT_PRIVATE_KEY = "jwt_private_key";
@@ -79,7 +78,7 @@ export const countExecutives = async (): Promise<number> => {
  * @returns {Promise<string | undefined>} the issued token
  */
 export const issueJwt = async (
-  user: User,
+  user: Pick<User, "sid" | "name">,
   privateKey?: string
 ): Promise<string | undefined> => {
   const jwtPrivateKey = privateKey ?? (await getSetting(JWT_PRIVATE_KEY));
@@ -89,16 +88,10 @@ export const issueJwt = async (
   const userIsAdmin = Boolean(
     await executiveStore.findOne({ where: { sid: user.sid }, raw: true })
   );
-  console.log(
-    user.sid,
-    await executiveStore.findOne({ where: { sid: user.sid }, raw: true })
-  );
   const token = jwt.sign(
     {
       sid: user.sid,
       name: user.name,
-      addr: user.addr,
-      // not using user.isAdmin since the status maybe updated
       isAdmin: userIsAdmin,
     },
     jwtPrivateKey,
@@ -142,16 +135,19 @@ export const getUserAndRefreshToken = async (
       : cookies["__Host-jwt"];
   const jwtPublicKey = await getSetting(JWT_PUBLIC_KEY);
   const jwtPrivateKey = await getSetting(JWT_PRIVATE_KEY);
-  const addr = getClientIp(ctx.req);
   if (!jwtPublicKey || !jwtPrivateKey) {
     return null;
   }
   try {
-    const { sid, name, addr: jwtAddr } = jwt.verify(token, jwtPublicKey, {
+    const user = jwt.verify(token, jwtPublicKey, {
       algorithms: ["RS256"],
-    }) as Record<string, unknown>;
-    const user = { sid, name, addr: jwtAddr } as User;
-    if (addr !== user.addr) return null;
+    }) as User;
+    if (
+      DateTime.fromMillis(user.exp * 1000) >
+      DateTime.local().plus({ minutes: 15 })
+    ) {
+      return user;
+    }
 
     // issue new token whenever possible
     const newToken = await issueJwt(user, jwtPrivateKey);
@@ -183,14 +179,8 @@ export const getUserFromRequest = async (
   if (!jwtPublicKey) {
     return null;
   }
-
-  const addr = getClientIp(req);
   try {
-    const user = <User>(
-      jwt.verify(token, jwtPublicKey, { algorithms: ["RS256"] })
-    );
-    if (addr !== user.addr) return null;
-    return user;
+    return jwt.verify(token, jwtPublicKey, { algorithms: ["RS256"] }) as User;
   } catch {
     return null;
   }
